@@ -773,17 +773,45 @@ IT 系统内部维护着一张实时更新的“流体网络拓扑图”**（包
 
 为了防止不同厂商的机器人各自为战（形成硬件孤岛），IT 系统必须建立统一的 **机器人集中控制与调度中心（RCS, Robot Control System）**，其架构遵循严格的金字塔分层：
 
-```
-      [ 云端 ERP / 种植管理模块 (MES/WMS) ]
-                       │
-                       ▼ (生产工单: "收割C区100板生菜")
-      [ 中央机器人调度系统 (RCS / 集中控制层) ]
-                       │
-         ┌─────────────┼─────────────┐
-         ▼             ▼             ▼
-    (AMR调度集群)  (天车轨道控制器)  (机械臂路径规划)
-   [地面搬运水培板] [温室全时段巡检]  [柔性抓取与切根]
+```mermaid
+flowchart TD
+    %% 样式定义
+    classDef cloud fill:#e1f5fe,stroke:#0288d1,stroke-width:2px,color:#111;
+    classDef rcs fill:#ede7f6,stroke:#5e35b1,stroke-width:2px,color:#111;
+    classDef system fill:#efebe9,stroke:#5d4037,stroke-width:1px,color:#111;
+    classDef action fill:#fff3e0,stroke:#ef6c00,stroke-width:1px,color:#111;
 
+    %% 节点定义
+    Cloud["💻 云端 ERP / 种植管理模块 (MES / WMS)"]:::cloud
+    RCS["🤖 中央机器人调度系统 (RCS / 集中控制层)"]:::rcs
+
+    subgraph Bottom["🚚 边缘单体执行与调度层"]
+        direction LR
+        subgraph AMR_Col["AMR 调度"]
+            direction TB
+            AMR_Sys["(AMR调度集群)"]:::system
+            AMR_Act["[地面搬运水培板]"]:::action
+            AMR_Sys --> AMR_Act
+        end
+        subgraph Rail_Col["天车调度"]
+            direction TB
+            Rail_Sys["(天车轨道控制器)"]:::system
+            Rail_Act["[温室全时段巡检]"]:::action
+            Rail_Sys --> Rail_Act
+        end
+        subgraph Arm_Col["机械臂控制"]
+            direction TB
+            Arm_Sys["(机械臂路径规划)"]:::system
+            Arm_Act["[柔性抓取与切根]"]:::action
+            Arm_Sys --> Arm_Act
+        end
+    end
+
+    %% 连接关系
+    Cloud -->|生产工单: 收割C区100板生菜| RCS
+    RCS ---> AMR_Sys
+    RCS ---> Rail_Sys
+    RCS ---> Arm_Sys
 ```
 
 * **顶层：云端业务指令层（MES/WMS/ERP）**
