@@ -15,10 +15,11 @@ docs/
 │   ├── 温室与设施构想01.png
 │   └── 总体示意图.png
 │
-├── 01_introduction_and_glossary/                      # 📌 01. 项目背景、术语与认知白皮书
-│   ├── 01_项目背景与愿景.md                           # 项目发起契机、传统痛点与团队分工
-│   ├── 02_多学科术语表.md                             # 跨水产/农艺/IIoT/AI/财务核心术语表
-│   └── 03_鱼菜共生数字工业化白皮书.md                 # 从“生物玄学”到“数字精密工业”顶层认知
+├── 01_introduction_and_glossary/                      # 📌 01. 企业宗旨、背景、认知与术语体系
+│   ├── 01_企业使命愿景与核心价值观.md                 # 🌟 最高纲领：使命愿景、商业哲学与ESG社会责任
+│   ├── 02_项目背景与技术团队分工.md                   # 👥 组织层：传统痛点、转型契机与各团队职责边界
+│   ├── 03_多学科术语表.md                             # 📖 语言层：跨水产/农艺/IIoT/AI/财务核心术语表
+│   └── 04_鱼菜共生数字工业化白皮书.md                 # 🧠 机理层：从“生物玄学”到“数字精密工业”顶层认知
 │
 ├── 02_requirements_and_plans/                         # 📌 02. 需求分析、调研与实施规划
 │   ├── 01_用户故事与需求矩阵.md                       # 基地与集团层典型生产运营场景
@@ -48,9 +49,10 @@ docs/
 ## 🚀 核心文档快速跳转通道
 
 ### 1. 基础入门与认知 (Beginners Start Here)
-* 阅读 [01_项目背景与愿景.md](./01_introduction_and_glossary/01_项目背景与愿景.md) 了解项目发起契机、传统痛点与团队技术分工。
-* 打开 [02_多学科术语表.md](./01_introduction_and_glossary/02_多学科术语表.md) 快速对齐跨学科名词（TAN、DO、FCR、VPD、PPFD、DLI、MPC、Cloudflare D1/R2、ISO 8601 等）。
-* 精读 [03_鱼菜共生数字工业化白皮书.md](./01_introduction_and_glossary/03_鱼菜共生数字工业化白皮书.md) 树立系统的工程机理与 AI 决策心智模型。
+* 研读 [01_企业使命愿景与核心价值观.md](./01_introduction_and_glossary/01_企业使命愿景与核心价值观.md) 了解最高行动宪章、三步走战略与四大核心价值观。
+* 阅读 [02_项目背景与技术团队分工.md](./01_introduction_and_glossary/02_项目背景与技术团队分工.md) 了解项目发起契机、传统痛点与团队技术分工。
+* 打开 [03_多学科术语表.md](./01_introduction_and_glossary/03_多学科术语表.md) 快速对齐跨学科名词（TAN、DO、FCR、VPD、PPFD、DLI、MPC、Cloudflare D1/R2、ISO 8601 等）。
+* 精读 [04_鱼菜共生数字工业化白皮书.md](./01_introduction_and_glossary/04_鱼菜共生数字工业化白皮书.md) 树立系统的工程机理与 AI 决策心智模型。
 
 ### 2. 需求分析与实施规划 (Requirements & Plans)
 * 查阅 [01_用户故事与需求矩阵.md](./02_requirements_and_plans/01_用户故事与需求矩阵.md) 了解养殖长、种植长、工程电工及集团高管的核心诉求与 KPI。
