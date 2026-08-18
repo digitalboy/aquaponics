@@ -9,34 +9,41 @@ flowchart TD
     %% 1. 物理层 (最前线)
     subgraph Layer1["1. 现场物理感知与视频层 (Field Layer)"]
         direction LR
-        SensorA["水质传感器 (RS485)<br>(荧光法DO / 双盐桥pH / 四电极EC)"]
-        SensorB["温室环境传感器 (RS485)<br>(冠层温湿度 / PAR光量子)"]
-        Cams["10路 IP 摄像头<br>(H.265 RTSP 视频流)"]
+        SensorA["🐟 水质传感群 (RVSP 4×0.75)<br>(荧光法DO / 双盐桥pH / 四电极EC)"]
+        SensorB["🌱 室内3D测温柱群 (Cat5e STP)<br>(6根立柱 / 18点温湿度剖面 / PAR)"]
+        SensorC["🌤️ 室外超声微气象站 (Cat5e STP)<br>(风速风向/温湿压/总辐射/雨雪触点)"]
+        Cams["📹 10路 IP 摄像头 (Cat5e PoE)<br>(H.265 RTSP 视频流)"]
     end
 
     %% 2. 边缘控制与本地存储层 (硬件保命与黑匣子)
     subgraph Layer2["2. 现场控制与本地存储中枢 (Edge Control Hub)"]
         direction TB
-        PLC["🔌 汇川 Easy320-1614TN PLC<br>(24V DC / 0.1s 硬件保命硬互锁)"]
+        Hub["🔀 4口 RS485 光电隔离集线器<br>(鱼池/水培/气象/电表 物理四分区隔离)"]
+        PLC["🔌 汇川 Easy320 PLC (含GL10扩展)<br>(24V DC / 0.1s 硬件保命硬互锁)"]
+        PowerMeter["⚡ 威胜 DTSD342-P5 智能电表<br>(三相电压电流/有功功率/TOU峰谷电量)"]
         NVR["📹 16路 NVR + 4TB 监控硬盘<br>(本地循环录制 15 天全量历史)"]
-        Logic["本地硬核保命闭环<br>(DO<4.0 强开气泵 / DO<3.0 切断投喂)"]
+        Logic["本地硬核保命闭环<br>(DO<4.0 强开气泵 / DO<3.0 切断投喂 / 暴雨强关天窗)"]
+        
+        Hub --> PLC
+        PowerMeter -->|RS485 Modbus-RTU| Hub
         PLC --- Logic
     end
 
     %% 3. 数据传输与云端服务层 (IT/AI世界)
     subgraph Layer3["3. 边缘网关与 Cloudflare Serverless 数据中台"]
         direction TB
-        Gateway["💻 智能边缘网关 (研华/研祥)<br>(5s 宽表快照 / 128G 断网自愈缓存)"]
+        Gateway["💻 智能边缘网关 (研华工控机)<br>(5s 宽表快照 / 128G 断网自愈缓存)"]
         CloudAPI["⚡ Cloudflare Workers API<br>(防时钟漂移校验 + 三级告警引擎)"]
-        DB["🗄️ Cloudflare D1 (5s 宽表 SQL)<br>📦 Cloudflare R2 (告警视频切片 & 快照)"]
+        DB["🗄️ Cloudflare D1 (5s 宽表 120+点位 SQL)<br>📦 Cloudflare R2 (告警视频切片 & 快照)"]
         
         Gateway -->|"③ 5s 宽表 JSON (HTTPS 加密)"| CloudAPI
         CloudAPI --> DB
     end
 
     %% 数据流动与通讯协议原理
-    SensorA -->|"① RS-485 (Modbus-RTU 协议)"| PLC
-    SensorB -->|"① RS-485 (Modbus-RTU 协议)"| PLC
+    SensorA -->|"① RS-485 Modbus-RTU"| Hub
+    SensorB -->|"① RS-485 Modbus-RTU"| Hub
+    SensorC -->|"① RS-485 Modbus-RTU"| Hub
     Cams -->|"① 网线 RTSP 视频流"| NVR
     
     PLC <-->|"② 网线直连 (Modbus-TCP 协议)"| Gateway
@@ -72,6 +79,13 @@ flowchart TD
   1. 资产身份标识：`base_id`、`zone_id`、`device_id`。
   2. 物理采集时间：**严格遵循 ISO 8601 的 UTC 毫秒级时间戳**（如 `2026-07-12T16:56:18.000Z`）。
   3. **流体时空对齐标签**（依据《[03_接口与数据契约规范.md](./03_接口与数据契约规范.md)》，附加由流速算出的 `water_origin_timestamp` 和 `lag_seconds`）。
-* **进入数据湖：** 最终，网关将带有高价值时空标签的 JSON 数据加密上传至 Cloudflare Workers，写入 Cloudflare D1 边缘数据库；告警视频切片则写入 Cloudflare R2 对象存储，将云端数据库与流量开支死锁在 **0 元/月**！
+* **进入数据湖：** 最终，网关将带有高价值时空标签的 JSON 数据加密上传至 Cloudflare Workers，写入 Cloudflare D1 边缘数据库；告警视频切片则写入 Cloudflare R2 对象存储，将云端数据库与流量开支死锁在 **0 元/月**（详见 [03_分期实施计划书.md](../02_requirements_and_plans/03_分期实施计划书.md)）！
 
-这就是最简单、绝对能跑通的工业数据闭环。未来的 YOLO11 训练模型、能耗 MPC 算法，全部都是在这个 MVP 拓扑结构稳定运行、源源不断产出干净数据之后，在云边协同端叠加的算力外挂！
+---
+
+## 🔗 相关专项技术规范索引 (Single Source of Truth)
+
+* **水产保命与生物识别**：👉 [01_水产养殖子系统.md](../04_subsystems/01_水产养殖子系统.md) & [01_YOLO11活体生物数据集构建规范.md](../05_specifications/01_YOLO11活体生物数据集构建规范.md)
+* **大空间温湿度立体阵列与温控策略**：👉 [04_大空间温室立体微气候感知与温控策略规范.md](../05_specifications/04_大空间温室立体微气候感知与温控策略规范.md)
+* **现场线缆选型、两级编码与布线施工**：👉 [05_现场弱电线缆选型与布线施工规范.md](../05_specifications/05_现场弱电线缆选型与布线施工规范.md)
+* **实施步骤与采购预算明细**：👉 [03_分期实施计划书.md](../02_requirements_and_plans/03_分期实施计划书.md)
