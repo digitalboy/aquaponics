@@ -9,7 +9,7 @@ flowchart TD
     %% 1. 物理层 (最前线)
     subgraph Layer1["1. 现场物理感知与视频层 (Field Layer)"]
         direction LR
-        SensorA["🐟 水质传感群 (RVSP 4×0.75)<br>(荧光法DO / 双盐桥pH / 四电极EC)"]
+        SensorA["🐟 水质传感群 (RVSP 4×0.75)<br>(荧光法DO / 塞恩在线氨氮三合一 / 工业pH/EC)"]
         SensorB["🌱 室内3D测温柱群 (Cat5e STP)<br>(6根立柱 / 18点温湿度剖面 / PAR)"]
         SensorC["🌤️ 室外超声微气象站 (Cat5e STP)<br>(风速风向/温湿压/总辐射/雨雪触点)"]
         Cams["📹 10路 IP 摄像头 (Cat5e PoE)<br>(H.265 RTSP 视频流)"]
@@ -18,11 +18,11 @@ flowchart TD
     %% 2. 边缘控制与本地存储层 (硬件保命与黑匣子)
     subgraph Layer2["2. 现场控制与本地存储中枢 (Edge Control Hub)"]
         direction TB
-        Hub["🔀 4口 RS485 光电隔离集线器<br>(鱼池/水培/气象/电表 物理四分区隔离)"]
+        Hub["🔀 4口 RS485 光电隔离集线器<br>(鱼池水质/水培/气象/电表 物理四分区隔离)"]
         PLC["🔌 汇川 Easy320 PLC (含GL10扩展)<br>(24V DC / 0.1s 硬件保命硬互锁)"]
         PowerMeter["⚡ 威胜 DTSD342-P5 智能电表<br>(配3只 200/5A DBKCT24 开口互感器 / TOU峰谷电量)"]
         NVR["📹 16路 NVR + 4TB 监控硬盘<br>(本地循环录制 15 天全量历史)"]
-        Logic["本地硬核保命闭环<br>(DO<4.0 强开气泵 / DO<3.0 切断投喂 / 暴雨强关天窗)"]
+        Logic["本地硬核保命闭环<br>(DO<4.0 或 UIA>0.05 强开气泵 & 熔断投喂 / 暴雨强关天窗)"]
         
         Hub --> PLC
         PowerMeter -->|RS485 Modbus-RTU| Hub
