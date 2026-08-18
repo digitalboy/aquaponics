@@ -20,7 +20,7 @@ flowchart TD
         direction TB
         Hub["🔀 4口 RS485 光电隔离集线器<br>(鱼池/水培/气象/电表 物理四分区隔离)"]
         PLC["🔌 汇川 Easy320 PLC (含GL10扩展)<br>(24V DC / 0.1s 硬件保命硬互锁)"]
-        PowerMeter["⚡ 威胜 DTSD342-P5 智能电表<br>(三相电压电流/有功功率/TOU峰谷电量)"]
+        PowerMeter["⚡ 威胜 DTSD342-P5 智能电表<br>(配3只 200/5A DBKCT24 开口互感器 / TOU峰谷电量)"]
         NVR["📹 16路 NVR + 4TB 监控硬盘<br>(本地循环录制 15 天全量历史)"]
         Logic["本地硬核保命闭环<br>(DO<4.0 强开气泵 / DO<3.0 切断投喂 / 暴雨强关天窗)"]
         
