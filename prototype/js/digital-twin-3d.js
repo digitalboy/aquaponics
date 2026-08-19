@@ -26,6 +26,18 @@ const DigitalTwin3D = {
   targetLookAt: null,
   hoveredMesh: null,
 
+  // ---------------------------------------------------------------------------
+  // 🚀 科技感 3 秒自动巡检轮巡状态机 (Auto Cruise Tour Engine)
+  // 循环路径：🐟 鱼池 (fish) ➔ 🥬 菜池 (vege) ➔ ⚡ 强电柜 (cabinet-hv) ➔ 📡 弱电柜 (cabinet-lv)
+  // ---------------------------------------------------------------------------
+  tourSteps: ['fish', 'vege', 'cabinet-hv', 'cabinet-lv'],
+  tourIndex: 0,
+  isTourActive: true,          // 默认开启 3 秒科技感自动轮巡
+  tourRemainingMs: 3000,       // 距离下次切换的剩余毫秒数
+  tourInterval: null,          // 100ms 高频倒计时刷新心跳
+  userManualOverride: false,   // 用户是否正在手动接管
+  manualOverrideTimer: null,   // 手动接管超时恢复定时器
+
   /**
    * 初始化 3D 视口 (清晰明朗、立体高对比度)
    * @param {string} containerId 挂载 DOM 容器 ID
@@ -64,6 +76,11 @@ const DigitalTwin3D = {
       this.controls.minDistance = 15;
       this.controls.maxDistance = 350;
       this.controls.target.set(10, 0, 0);
+
+      // 💡 监听用户鼠标手动拖拽旋转，智能切换为临时接管模式，避免强行打断用户体验
+      this.controls.addEventListener('start', () => {
+        this.pauseTourTemporarily();
+      });
     }
 
     // 5. 光源配置 (强立体阴影与多方向照明)
@@ -92,6 +109,9 @@ const DigitalTwin3D = {
 
     // 11. 启动 60FPS 渲染循环
     this.animate();
+
+    // 12. 启动 3 秒自动轮巡巡检引擎
+    this.startAutoTour();
   },
 
   /**
@@ -639,9 +659,24 @@ const DigitalTwin3D = {
   },
 
   /**
-   * 空间区域快速跳跃导航
+   * 空间区域快速跳跃导航与自动巡检聚焦
+   * @param {string} zoneKey 区域标识 ('fish' | 'vege' | 'nursery' | 'cabinet-hv' | 'cabinet-lv' | 'all')
+   * @param {boolean} isManualClick 是否为用户手动点击触发 (手动点击将进入临时接管模式)
    */
-  jumpToZone(zoneKey) {
+  jumpToZone(zoneKey, isManualClick = true) {
+    if (isManualClick) {
+      this.pauseTourTemporarily();
+      if (this.tourSteps.includes(zoneKey)) {
+        this.tourIndex = this.tourSteps.indexOf(zoneKey);
+      }
+    }
+
+    // 1. 同步顶部空间导航按钮高亮状态
+    this.updateZoneButtons(zoneKey);
+
+    // 2. 更新 3D 浮层状态文字
+    this.updateTourStatusText(zoneKey, isManualClick);
+
     let targetMesh = null;
     if (zoneKey === 'fish') {
       targetMesh = this.interactiveMeshes.find(m => m.userData.id === 'tank-1');
@@ -654,7 +689,7 @@ const DigitalTwin3D = {
     } else if (zoneKey === 'cabinet-lv') {
       targetMesh = this.interactiveMeshes.find(m => m.userData.id === 'cabinet-lv');
     } else {
-      // 全局总览
+      // 全局总览视口
       this.targetLookAt = new THREE.Vector3(10, 0, 0);
       this.targetCameraPos = new THREE.Vector3(-50, 95, 140);
       this.isLerpingCamera = true;
@@ -670,9 +705,163 @@ const DigitalTwin3D = {
   },
 
   /**
+   * 启动 3 秒自动轮巡巡检时钟
+   */
+  startAutoTour() {
+    if (this.tourInterval) clearInterval(this.tourInterval);
+    this.isTourActive = true;
+    this.tourRemainingMs = 3000;
+
+    // 首次将按钮与当前步骤对齐
+    this.updateZoneButtons(this.tourSteps[this.tourIndex]);
+
+    this.tourInterval = setInterval(() => {
+      if (!this.isTourActive) return;
+
+      const countdownEl = document.getElementById('tour-countdown-text');
+      const toggleTextEl = document.getElementById('tour-toggle-text');
+      const toggleIconEl = document.getElementById('tour-toggle-icon');
+      const pingDotEl = document.getElementById('tour-ping-dot');
+
+      if (this.userManualOverride) {
+        if (countdownEl) countdownEl.textContent = '接管中';
+        if (toggleTextEl) toggleTextEl.textContent = '手动暂停';
+        if (toggleIconEl) toggleIconEl.textContent = '⏸️';
+        if (pingDotEl) pingDotEl.className = 'w-2 h-2 rounded-full bg-amber-500 animate-pulse';
+        return;
+      }
+
+      if (toggleTextEl) toggleTextEl.textContent = '3s 自动轮巡';
+      if (toggleIconEl) toggleIconEl.textContent = '⚡';
+      if (pingDotEl) pingDotEl.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-ping';
+
+      this.tourRemainingMs -= 100;
+      if (countdownEl) {
+        countdownEl.textContent = `${(Math.max(0, this.tourRemainingMs) / 1000).toFixed(1)}s`;
+      }
+
+      if (this.tourRemainingMs <= 0) {
+        this.tourRemainingMs = 3000;
+        this.tourIndex = (this.tourIndex + 1) % this.tourSteps.length;
+        const nextZone = this.tourSteps[this.tourIndex];
+        this.jumpToZone(nextZone, false);
+      }
+    }, 100);
+  },
+
+  /**
+   * 用户交互时触发临时暂停 (5 秒无操作后智能平滑恢复)
+   */
+  pauseTourTemporarily() {
+    if (!this.isTourActive) return;
+    this.userManualOverride = true;
+    
+    const statusEl = document.getElementById('three-live-status');
+    const statusDotEl = document.getElementById('live-status-dot');
+    if (statusEl) {
+      statusEl.textContent = '🖱️ 手动接管模式中 • 5秒无操作后将自动恢复 3s 轮巡';
+    }
+    if (statusDotEl) {
+      statusDotEl.className = 'w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse';
+    }
+
+    if (this.manualOverrideTimer) clearTimeout(this.manualOverrideTimer);
+    this.manualOverrideTimer = setTimeout(() => {
+      this.userManualOverride = false;
+      this.tourRemainingMs = 3000;
+      const currentZone = this.tourSteps[this.tourIndex];
+      this.updateTourStatusText(currentZone, false);
+      if (statusDotEl) statusDotEl.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping';
+    }, 5000);
+  },
+
+  /**
+   * 切换自动巡检开关 (开启 / 暂停)
+   */
+  toggleAutoTour() {
+    this.isTourActive = !this.isTourActive;
+    const countdownEl = document.getElementById('tour-countdown-text');
+    const toggleTextEl = document.getElementById('tour-toggle-text');
+    const toggleIconEl = document.getElementById('tour-toggle-icon');
+    const toggleBtnEl = document.getElementById('btn-tour-toggle');
+    const pingDotEl = document.getElementById('tour-ping-dot');
+    const statusEl = document.getElementById('three-live-status');
+    const statusDotEl = document.getElementById('live-status-dot');
+
+    if (this.isTourActive) {
+      this.userManualOverride = false;
+      this.tourRemainingMs = 3000;
+      if (toggleBtnEl) toggleBtnEl.className = "flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition shadow-sm cursor-pointer";
+      if (toggleTextEl) toggleTextEl.textContent = '3s 自动轮巡';
+      if (toggleIconEl) toggleIconEl.textContent = '⚡';
+      if (countdownEl) countdownEl.textContent = '3.0s';
+      if (pingDotEl) pingDotEl.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-ping';
+      if (statusDotEl) statusDotEl.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping';
+      
+      const currentZone = this.tourSteps[this.tourIndex];
+      this.updateTourStatusText(currentZone, false);
+      this.startAutoTour();
+    } else {
+      if (this.manualOverrideTimer) clearTimeout(this.manualOverrideTimer);
+      this.userManualOverride = false;
+      if (toggleBtnEl) toggleBtnEl.className = "flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold transition shadow-sm cursor-pointer";
+      if (toggleTextEl) toggleTextEl.textContent = '已暂停';
+      if (toggleIconEl) toggleIconEl.textContent = '⏸️';
+      if (countdownEl) countdownEl.textContent = 'PAUSED';
+      if (pingDotEl) pingDotEl.className = 'w-2 h-2 rounded-full bg-slate-400';
+      if (statusDotEl) statusDotEl.className = 'w-2.5 h-2.5 rounded-full bg-slate-400';
+      if (statusEl) {
+        statusEl.textContent = '⏸️ 自动巡检已暂停 • 点击【已暂停】按钮可重新恢复 3s 轮巡';
+      }
+    }
+  },
+
+  /**
+   * 同步空间导航按钮高亮
+   */
+  updateZoneButtons(activeKey) {
+    const keys = ['all', 'fish', 'vege', 'nursery', 'cabinet-hv', 'cabinet-lv'];
+    keys.forEach(k => {
+      const btn = document.getElementById(`btn-zone-${k}`);
+      if (btn) {
+        if (k === activeKey) {
+          btn.className = "px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold transition shadow-sm cursor-pointer";
+        } else {
+          btn.className = "px-2.5 py-1 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium cursor-pointer";
+        }
+      }
+    });
+  },
+
+  /**
+   * 更新 3D 浮层状态文字
+   */
+  updateTourStatusText(zoneKey, isManual) {
+    const statusEl = document.getElementById('three-live-status');
+    if (!statusEl) return;
+
+    const names = {
+      fish: '🐟 10座鱼池 (#01 加州鲈鱼成鱼池)',
+      vege: '🥬 4座深水菜池 (#A 奶油生菜跑道)',
+      nursery: '🌱 12座种植试验舱 (#01 试验舱)',
+      'cabinet-hv': '⚡ 强电动力配电柜 (380V主动力/威胜电表)',
+      'cabinet-lv': '📡 弱电自动化控制柜 (汇川 Easy320 PLC)',
+      all: '🌐 全景总览温室视界'
+    };
+
+    const targetName = names[zoneKey] || zoneKey;
+    if (isManual) {
+      statusEl.textContent = `🖱️ 手动聚焦: ${targetName} • 5秒后恢复自动轮巡`;
+    } else {
+      statusEl.textContent = `🚀 自动巡检中 (3s周期) • 当前聚焦: ${targetName}`;
+    }
+  },
+
+  /**
    * 根据池号直接跳转
    */
   selectById(entityId) {
+    this.pauseTourTemporarily();
     const targetMesh = this.interactiveMeshes.find(m => m.userData.id === entityId);
     if (targetMesh) {
       this.focusOnEntity(targetMesh);

@@ -35,26 +35,43 @@ window.ViewTemplates['view-investor'] = `
                 </div>
               </div>
 
-              <!-- 3D 快速空间跳跃导航按钮 -->
-              <div class="flex items-center gap-1.5 bg-emerald-50/80 p-1.5 rounded-xl border border-emerald-200 font-mono text-xs">
-                <button onclick="DigitalTwin3D.jumpToZone('all')" class="px-3 py-1 rounded-lg bg-emerald-600 text-white font-bold transition shadow-sm">
-                  🌐 全景
-                </button>
-                <button onclick="DigitalTwin3D.jumpToZone('fish')" class="px-3 py-1 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium">
-                  🐟 10座鱼池
-                </button>
-                <button onclick="DigitalTwin3D.jumpToZone('vege')" class="px-3 py-1 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium">
-                  🥬 4座菜池
-                </button>
-                <button onclick="DigitalTwin3D.jumpToZone('nursery')" class="px-3 py-1 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium">
-                  🌱 12座试验舱
-                </button>
-                <button onclick="DigitalTwin3D.jumpToZone('cabinet-hv')" class="px-3 py-1 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium">
-                  ⚡ 强电柜
-                </button>
-                <button onclick="DigitalTwin3D.jumpToZone('cabinet-lv')" class="px-3 py-1 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium">
-                  📡 弱电柜
-                </button>
+              <!-- 3D 快速空间跳跃导航按钮与 3s 自动轮巡控制组件 -->
+              <div class="flex flex-wrap items-center gap-2">
+                
+                <!-- 6 大空间实体跳转按钮 -->
+                <div class="flex items-center gap-1.5 bg-emerald-50/80 p-1.5 rounded-xl border border-emerald-200 font-mono text-xs">
+                  <button id="btn-zone-all" onclick="DigitalTwin3D.jumpToZone('all')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium cursor-pointer">
+                    🌐 全景
+                  </button>
+                  <button id="btn-zone-fish" onclick="DigitalTwin3D.jumpToZone('fish')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold transition shadow-sm cursor-pointer">
+                    🐟 10座鱼池
+                  </button>
+                  <button id="btn-zone-vege" onclick="DigitalTwin3D.jumpToZone('vege')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium cursor-pointer">
+                    🥬 4座菜池
+                  </button>
+                  <button id="btn-zone-nursery" onclick="DigitalTwin3D.jumpToZone('nursery')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium cursor-pointer">
+                    🌱 12座试验舱
+                  </button>
+                  <button id="btn-zone-cabinet-hv" onclick="DigitalTwin3D.jumpToZone('cabinet-hv')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium cursor-pointer">
+                    ⚡ 强电柜
+                  </button>
+                  <button id="btn-zone-cabinet-lv" onclick="DigitalTwin3D.jumpToZone('cabinet-lv')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium cursor-pointer">
+                    📡 弱电柜
+                  </button>
+                </div>
+
+                <!-- 🚀 3 秒自动轮巡科技感控制器 -->
+                <div class="flex items-center gap-2 bg-gradient-to-r from-emerald-100/90 to-teal-100/90 px-3 py-1.5 rounded-xl border border-emerald-300 font-mono text-xs shadow-inner backdrop-blur-md">
+                  <button id="btn-tour-toggle" onclick="DigitalTwin3D.toggleAutoTour()" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition shadow-sm cursor-pointer" title="点击暂停或恢复 3 秒自动巡检轮巡">
+                    <span id="tour-toggle-icon" class="animate-pulse">⚡</span>
+                    <span id="tour-toggle-text">3s 自动轮巡</span>
+                  </button>
+                  <div class="flex items-center gap-1 text-emerald-900 font-bold" title="距离下一次自动切换实体剩余时间">
+                    <span id="tour-ping-dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span id="tour-countdown-text" class="font-mono text-emerald-800 font-black">3.0s</span>
+                  </div>
+                </div>
+
               </div>
             </div>
 
@@ -101,9 +118,9 @@ window.ViewTemplates['view-investor'] = `
 
           <!-- 3D WebGL Canvas 渲染视口 (高度 640px) -->
           <div id="three-canvas-container" class="relative rounded-xl overflow-hidden border border-emerald-200 flex-1">
-            <div class="absolute top-3 left-3 z-10 bg-white/90 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-emerald-300 font-sans text-xs text-emerald-900 font-bold flex items-center gap-2 shadow-sm">
-              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
-              <span>WebGL 60FPS • 🖱️ 拖拽旋转 / 点击鱼池菜池运镜聚焦</span>
+            <div class="absolute top-3 left-3 z-10 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-emerald-300 font-sans text-xs text-emerald-900 font-bold flex items-center gap-2 shadow-md">
+              <span id="live-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+              <span id="three-live-status">🚀 自动巡检运行中 • 3s 轮巡: 🐟 鱼池 ➔ 🥬 菜池 ➔ ⚡ 强电柜 ➔ 📡 弱电柜</span>
             </div>
           </div>
 
