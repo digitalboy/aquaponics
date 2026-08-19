@@ -122,13 +122,6 @@
 
   </header>
 
-  <!-- Emergency Banner (应急响应横幅) -->
-  <div id="emergency-banner" class="hidden bg-rose-600 border-b border-rose-700 px-4 py-2.5 text-center text-xs font-bold text-white flex items-center justify-center gap-3 animate-pulse shadow-md">
-    <span class="text-base">🚨</span>
-    <span id="emergency-msg">【现场 PLC 0.1s 硬安全触发】溶解氧跌破 4.0 mg/L，已强制联锁开启备用高压增氧阀并切断自动投喂！</span>
-    <span class="bg-rose-800 px-2.5 py-0.5 rounded border border-rose-300 text-white font-mono text-xs">Hard Safety Interlock: ACTIVE</span>
-  </div>
-
   <!-- ========================================================================= -->
   <!-- 2. 抽屉式侧面菜单栏 (Drawer Sidebar Navigation 白玉温润风格) -->
   <!-- ========================================================================= -->
@@ -226,6 +219,16 @@
             <p class="text-xs text-slate-600 pl-6 leading-relaxed">出厂批次合格放行100%、母婴级低硝酸盐620mg/kg、农残抗生素0检出、e-COA电子合格证</p>
           </div>
 
+          <div id="drawer-item-scientist" onclick="switchRole('scientist')" class="drawer-item p-3.5 rounded-2xl border border-indigo-200 hover:border-indigo-400 cursor-pointer space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <span>🧑‍🔬</span> 研发主管科研与学术中台
+              </span>
+              <span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 text-xs font-mono font-bold">研发主管</span>
+            </div>
+            <p class="text-xs text-slate-600 pl-6 leading-relaxed">论文检索与历史推演、AI新工艺生成、12座试验舱矩阵、生理机理模拟与异常根因穿透</p>
+          </div>
+
           <div id="drawer-item-b2b" onclick="switchRole('b2b')" class="drawer-item p-3.5 rounded-2xl border border-emerald-200 cursor-pointer space-y-1.5">
             <div class="flex items-center justify-between">
               <span class="font-bold text-slate-900 text-sm flex items-center gap-2">
@@ -295,6 +298,7 @@
   <script src="js/views/view-supply-chain.js"></script>
   <script src="js/views/view-b2b-fulfillment.js"></script>
   <script src="js/views/view-quality.js"></script>
+  <script src="js/views/view-scientist.js"></script>
   <script src="js/views/view-retail.js"></script>
   <script src="js/views/view-trace.js"></script>
   <script src="js/views/view-modals.js"></script>

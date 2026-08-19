@@ -22,6 +22,7 @@
     'view-supply-chain',
     'view-b2b-fulfillment',
     'view-quality',
+    'view-scientist',
     'view-b2b',
     'view-b2c'
   ];

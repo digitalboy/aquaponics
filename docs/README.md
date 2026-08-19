@@ -38,7 +38,9 @@ docs/
 │   ├── 03_能耗优化子系统.md                          # 分回路电表感知与 TOU 电价下的 MPC 避峰套利
 │   ├── 04_智能调度与机器人.md                        # RCS 金字塔调度、VDA 5050 与力控具身收割
 │   ├── 05_供应链与业务中台.md                        # APS 以销定产、长慢周期资产错位对冲财务模型
-│   └── 06_销售赋能与客户溯源子系统.md                # 30天可承诺量 ATP、B端商超大屏与C端一物一码溯源
+│   ├── 06_销售赋能与客户溯源子系统.md                # 30天可承诺量 ATP、B端商超大屏与C端一物一码溯源
+│   ├── 07_品质控制与实验室子系统.md                  # IQC/IPQC/OQC三道防线、仪器台账与e-COA防伪存证
+│   └── 08_农艺机理与学术知识支持子系统.md            # Crop Ontology/USDA知识库、FvCB光合/Stanghellini模型、12座试验舱配方R&D与GraphRAG
 │
 └── 05_specifications/                                 # 📌 05. 专项工程技术规范 (Single Source of Truth)
     ├── 01_YOLO11活体生物数据集构建规范.md              # 生物表型分类、D1/SQL Schema 与 YOLO11 标准
@@ -78,6 +80,7 @@ docs/
 * **业务与排产**：[05_供应链与业务中台.md](./04_subsystems/05_供应链与业务中台.md)（APS 以销定产、资产周转错位对冲、冷热数仓隔离）
 * **销售与溯源**：[06_销售赋能与客户溯源子系统.md](./04_subsystems/06_销售赋能与客户溯源子系统.md)（30天可承诺量 ATP、B端商超协同大屏、C端一物一码不可篡改溯源）
 * **品质与实验室**：[07_品质控制与实验室子系统.md](./04_subsystems/07_品质控制与实验室子系统.md)（IQC/IPQC/OQC三道防线、普析分光/原子吸收仪器台账、4°C留样室与e-COA防伪存证）
+* **农艺机理与学术支持**：[08_农艺机理与学术知识支持子系统.md](./04_subsystems/08_农艺机理与学术知识支持子系统.md)（Crop Ontology/USDA本体、FvCB光合与Stanghellini蒸腾动力学、12座试验舱配方R&D与GraphRAG）
 
 ### 5. 专项工程规范 (Engineering Specifications - Single Source of Truth)
 * **YOLO11 数据集与数据库规范**：[01_YOLO11活体生物数据集构建规范.md](./05_specifications/01_YOLO11活体生物数据集构建规范.md)

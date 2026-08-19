@@ -49,7 +49,7 @@ body {
   transform: translateY(-2px);
 }
 
-/* 4. 紧急警报动态呼吸光效 */
+/* 4. 紧急警报动态呼吸光效与工业警戒斑马纹 */
 @keyframes pulse-alarm {
   0%, 100% {
     opacity: 1;
@@ -62,6 +62,43 @@ body {
 }
 .animate-alarm {
   animation: pulse-alarm 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.hazard-stripe-red {
+  background: repeating-linear-gradient(
+    -45deg,
+    #dc2626,
+    #dc2626 12px,
+    #991b1b 12px,
+    #991b1b 24px
+  );
+}
+.hazard-stripe-amber {
+  background: repeating-linear-gradient(
+    -45deg,
+    #d97706,
+    #d97706 12px,
+    #92400e 12px,
+    #92400e 24px
+  );
+}
+.hazard-stripe-purple {
+  background: repeating-linear-gradient(
+    -45deg,
+    #7e22ce,
+    #7e22ce 12px,
+    #581c87 12px,
+    #581c87 24px
+  );
+}
+.hazard-stripe-teal {
+  background: repeating-linear-gradient(
+    -45deg,
+    #0d9488,
+    #0d9488 12px,
+    #115e59 12px,
+    #115e59 24px
+  );
 }
 
 /* 5. 水流与温室生态渐变 */

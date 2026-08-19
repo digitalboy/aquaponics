@@ -14,6 +14,7 @@ const RoleMeta = {
   executive: { name: '集团多基地运营中台', tag: 'COO / CFO / 供应链', icon: '📊' },
   'b2b-fulfillment': { name: 'B2B 大客户与冷链履约中台', tag: 'B2B 业务经理', icon: '🚚' },
   quality: { name: '品质检验与实验室中台', tag: '品质主管 / 驻厂检验', icon: '🔬' },
+  scientist: { name: '研发主管科研中台', tag: '研发主管 / 农艺科研', icon: '🧑‍🔬' },
   b2b: { name: 'B2C 自有品牌与零售运营台', tag: '零售业务经理', icon: '🛍️' },
   b2c: { name: 'C端手机扫码溯源', tag: '终端家庭消费者', icon: '📱' }
 };

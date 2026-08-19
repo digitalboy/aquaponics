@@ -17,111 +17,87 @@ window.ViewTemplates['view-investor'] = `
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         
         <!-- 左侧: 3D 数字孪生全景视口 (占用 7 列) -->
-        <div class="lg:col-span-7 glass-card rounded-2xl p-5 border border-emerald-200 shadow-lg flex flex-col justify-between space-y-4">
+        <div class="lg:col-span-7 glass-card rounded-2xl p-4 border border-emerald-200 shadow-lg flex flex-col justify-between space-y-3">
           
-          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-100 pb-3">
+          <!-- 纯单行顶栏：左侧标题与右侧室外微气象完全水平对齐 (零折行) -->
+          <div class="flex items-center justify-between gap-2 border-b border-emerald-100/80 pb-2">
             
-            <!-- 左侧: 标题与 3D 快速空间跳跃导航按钮 -->
-            <div class="flex flex-wrap items-center gap-3">
-              <div class="flex items-center gap-2.5">
-                <span class="text-xl">🌐</span>
-                <div>
-                  <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
-                    3D 数字孪生全景温室工厂
-                    <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-mono font-bold">
-                      左区48m × 右区116m × 高8.1m
-                    </span>
-                  </h3>
-                </div>
-              </div>
-
-              <!-- 3D 快速空间跳跃导航按钮与 3s 自动轮巡控制组件 -->
-              <div class="flex flex-wrap items-center gap-2">
-                
-                <!-- 6 大空间实体跳转按钮 -->
-                <div class="flex items-center gap-1.5 bg-emerald-50/80 p-1.5 rounded-xl border border-emerald-200 font-mono text-xs">
-                  <button id="btn-zone-all" onclick="DigitalTwin3D.jumpToZone('all')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium cursor-pointer">
-                    🌐 全景
-                  </button>
-                  <button id="btn-zone-fish" onclick="DigitalTwin3D.jumpToZone('fish')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold transition shadow-sm cursor-pointer">
-                    🐟 10座鱼池
-                  </button>
-                  <button id="btn-zone-vege" onclick="DigitalTwin3D.jumpToZone('vege')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium cursor-pointer">
-                    🥬 4座菜池
-                  </button>
-                  <button id="btn-zone-nursery" onclick="DigitalTwin3D.jumpToZone('nursery')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium cursor-pointer">
-                    🌱 12座试验舱
-                  </button>
-                  <button id="btn-zone-cabinet-hv" onclick="DigitalTwin3D.jumpToZone('cabinet-hv')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium cursor-pointer">
-                    ⚡ 强电柜
-                  </button>
-                  <button id="btn-zone-cabinet-lv" onclick="DigitalTwin3D.jumpToZone('cabinet-lv')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium cursor-pointer">
-                    📡 弱电柜
-                  </button>
-                </div>
-
-                <!-- 🚀 3 秒自动轮巡科技感控制器 -->
-                <div class="flex items-center gap-2 bg-gradient-to-r from-emerald-100/90 to-teal-100/90 px-3 py-1.5 rounded-xl border border-emerald-300 font-mono text-xs shadow-inner backdrop-blur-md">
-                  <button id="btn-tour-toggle" onclick="DigitalTwin3D.toggleAutoTour()" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition shadow-sm cursor-pointer" title="点击暂停或恢复 3 秒自动巡检轮巡">
-                    <span id="tour-toggle-icon" class="animate-pulse">⚡</span>
-                    <span id="tour-toggle-text">3s 自动轮巡</span>
-                  </button>
-                  <div class="flex items-center gap-1 text-emerald-900 font-bold" title="距离下一次自动切换实体剩余时间">
-                    <span id="tour-ping-dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                    <span id="tour-countdown-text" class="font-mono text-emerald-800 font-black">3.0s</span>
-                  </div>
-                </div>
-
-              </div>
+            <!-- 左侧: 极简纯粹主标题 -->
+            <div class="flex items-center gap-2 shrink-0">
+              <span class="text-base">🌐</span>
+              <h3 class="font-extrabold text-slate-900 text-sm md:text-base tracking-tight">
+                3D 数字孪生全景温室工厂
+              </h3>
             </div>
 
-            <!-- 右侧红框区: 🌤️ 室外微气象六要素实时遥测站 -->
-            <div class="flex items-center gap-2.5 bg-emerald-50/90 px-3.5 py-1.5 rounded-xl border border-emerald-300 font-mono text-xs shadow-inner backdrop-blur-md">
+            <!-- 右侧: 室外微气象六要素单行胶囊 (与左侧标题严格水平) -->
+            <div class="flex items-center gap-1.5 sm:gap-2 bg-emerald-50/90 px-2.5 sm:px-3 py-1 rounded-xl border border-emerald-200 font-mono text-xs shadow-inner backdrop-blur-md shrink-0">
               <div class="flex items-center gap-1 text-slate-800">
-                <span class="text-sm">🌤️</span>
-                <span class="text-slate-500 font-sans font-bold hidden sm:inline">室外气象:</span>
+                <span class="text-xs">🌤️</span>
+                <span class="text-slate-500 font-sans font-bold hidden md:inline">室外气象:</span>
               </div>
-
-              <!-- 气温与湿度 -->
-              <div class="flex items-center gap-1 text-slate-800" title="室外气温 / 相对湿度">
-                <span id="weather-temp" class="font-black text-slate-900">31.2°C</span>
-                <span class="text-slate-400">/</span>
-                <span id="weather-rh" class="font-bold text-teal-800">58%RH</span>
-              </div>
-
-              <div class="h-3.5 w-px bg-emerald-300"></div>
-
-              <!-- 总辐射 -->
-              <div class="flex items-center gap-1 text-slate-800" title="太阳总辐射">
-                <span class="text-slate-500 font-sans hidden md:inline">辐射:</span>
-                <span id="weather-solar" class="font-black text-amber-700">685 W/m²</span>
-              </div>
-
-              <div class="h-3.5 w-px bg-emerald-300"></div>
-
-              <!-- 风速与风向 -->
-              <div class="flex items-center gap-1 text-slate-800" title="室外风速与风向">
-                <span class="text-slate-500 font-sans hidden md:inline">风速:</span>
-                <span id="weather-wind" class="font-bold text-emerald-800">3.4m/s 东南</span>
-              </div>
-
-              <div class="h-3.5 w-px bg-emerald-300"></div>
-
-              <!-- 压电雨量 -->
-              <div class="flex items-center gap-1 text-slate-800" title="压电雨量计与天窗防雨联锁">
-                <span class="text-slate-500 font-sans hidden lg:inline">雨量:</span>
-                <span id="weather-rain" class="font-bold text-teal-700">0.0mm (无雨)</span>
-              </div>
+              <span id="weather-temp" class="font-black text-slate-900">31.2°C</span>
+              <span class="text-slate-300">/</span>
+              <span id="weather-rh" class="font-bold text-teal-800">58%RH</span>
+              <span class="text-slate-300 hidden sm:inline">|</span>
+              <span class="text-slate-500 font-sans hidden lg:inline">辐射:</span>
+              <span id="weather-solar" class="font-black text-amber-700 hidden sm:inline">685 W/m²</span>
+              <span class="text-slate-300 hidden md:inline">|</span>
+              <span id="weather-wind" class="font-bold text-emerald-800 hidden md:inline">3.4m/s 东南</span>
+              <span class="text-slate-300 hidden xl:inline">|</span>
+              <span id="weather-rain" class="font-bold text-teal-700 hidden xl:inline">0.0mm (无雨)</span>
             </div>
 
           </div>
 
-          <!-- 3D WebGL Canvas 渲染视口 (高度 640px) -->
-          <div id="three-canvas-container" class="relative rounded-xl overflow-hidden border border-emerald-200 flex-1">
-            <div class="absolute top-3 left-3 z-10 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-emerald-300 font-sans text-xs text-emerald-900 font-bold flex items-center gap-2 shadow-md">
-              <span id="live-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
-              <span id="three-live-status">🚀 自动巡检运行中 • 3s 轮巡: 🐟 鱼池 ➔ 🥬 菜池 ➔ ⚡ 强电柜 ➔ 📡 弱电柜</span>
+          <!-- 3D WebGL Canvas 渲染视口 (释放高度，内部集成悬浮玻璃控制台) -->
+          <div id="three-canvas-container" class="relative rounded-xl overflow-hidden border border-emerald-200 flex-1 min-h-[580px]">
+            
+            <!-- 3D 视口左上角轻量状态芯片 -->
+            <div class="absolute top-3 left-3 z-10 bg-white/90 backdrop-blur-md px-3 py-1 rounded-xl border border-emerald-200 font-sans text-xs text-slate-800 font-bold flex items-center gap-2 shadow-md">
+              <span id="live-status-dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+              <span id="three-live-status">🚀 自动巡检中 (3s周期) • 🐟 10座鱼池 (#01 加州鲈鱼成鱼池)</span>
             </div>
+
+            <!-- 3D 视口底部悬浮玻璃态控制台 (严格单行 1 行 Dock，零折行) -->
+            <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex flex-nowrap items-center gap-1.5 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-2xl border border-emerald-300 shadow-xl max-w-[98%] whitespace-nowrap overflow-x-auto scrollbar-none font-mono text-xs">
+              
+              <!-- 6 大空间实体快速跳转按钮 (单行紧凑排列) -->
+              <button id="btn-zone-all" onclick="DigitalTwin3D.jumpToZone('all')" class="px-2 py-0.5 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium cursor-pointer shadow-xs shrink-0">
+                🌐 全景
+              </button>
+              <button id="btn-zone-fish" onclick="DigitalTwin3D.jumpToZone('fish')" class="px-2 py-0.5 rounded-lg bg-emerald-600 text-white font-bold transition shadow-xs cursor-pointer shrink-0">
+                🐟 鱼池
+              </button>
+              <button id="btn-zone-vege" onclick="DigitalTwin3D.jumpToZone('vege')" class="px-2 py-0.5 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium cursor-pointer shadow-xs shrink-0">
+                🥬 菜池
+              </button>
+              <button id="btn-zone-nursery" onclick="DigitalTwin3D.jumpToZone('nursery')" class="px-2 py-0.5 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium cursor-pointer shadow-xs shrink-0">
+                🌱 试验舱
+              </button>
+              <button id="btn-zone-cabinet-hv" onclick="DigitalTwin3D.jumpToZone('cabinet-hv')" class="px-2 py-0.5 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium cursor-pointer shadow-xs shrink-0">
+                ⚡ 强电柜
+              </button>
+              <button id="btn-zone-cabinet-lv" onclick="DigitalTwin3D.jumpToZone('cabinet-lv')" class="px-2 py-0.5 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium cursor-pointer shadow-xs shrink-0">
+                📡 弱电柜
+              </button>
+
+              <div class="h-3.5 w-px bg-emerald-300 shrink-0 mx-0.5"></div>
+
+              <!-- 🚀 3 秒自动轮巡科技感控制器 (单行集成) -->
+              <div class="flex items-center gap-1 bg-emerald-50 px-1.5 py-0.5 rounded-lg border border-emerald-300 shrink-0">
+                <button id="btn-tour-toggle" onclick="DigitalTwin3D.toggleAutoTour()" class="flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition shadow-xs cursor-pointer text-xs" title="点击暂停或恢复 3 秒自动巡检轮巡">
+                  <span id="tour-toggle-icon" class="animate-pulse">⚡</span>
+                  <span id="tour-toggle-text">3s 轮巡</span>
+                </button>
+                <div class="flex items-center gap-1 text-emerald-900 font-bold px-0.5" title="距离下一次自动切换实体剩余时间">
+                  <span id="tour-ping-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                  <span id="tour-countdown-text" class="font-mono text-emerald-800 font-black text-xs">3.0s</span>
+                </div>
+              </div>
+
+            </div>
+
           </div>
 
         </div>

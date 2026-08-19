@@ -20,10 +20,76 @@ const DigitalTwin3D = {
   // 需执行微行动画的对象 (水波纹旋转等)
   animatedObjects: [],
 
-  // 相机平滑运镜插值状态 (Lerp)
-  isLerpingCamera: false,
-  targetCameraPos: null,
-  targetLookAt: null,
+  // ---------------------------------------------------------------------------
+  // 🎥 电影级运镜与巡检飞行动力学系统 (Cinematic Camera Flight Engine)
+  // ---------------------------------------------------------------------------
+  flight: {
+    isActive: false,
+    startTime: 0,
+    duration: 1300,             // 飞行过渡耗时 1.3 秒，具备物理平滑阻尼感
+    startCamPos: new THREE.Vector3(),
+    targetCamPos: new THREE.Vector3(),
+    startLookAt: new THREE.Vector3(),
+    targetLookAt: new THREE.Vector3(),
+    arcAltitude: 16.0,          // 弧形巡航高度抬升 (模拟无人机自高空掠过俯冲)
+  },
+
+  // 专属电影级运镜机位预设 (定制黄金俯仰角、景深与透视)
+  cinematicPresets: {
+    all: {
+      camPos: new THREE.Vector3(-50, 95, 140),
+      lookAt: new THREE.Vector3(10, 0, 0),
+      arcHeight: 28.0,
+      entityId: 'tank-1',
+      entityType: 'fish-tank',
+      entityName: '🐟 鱼池 #01 (加州鲈鱼成鱼池)'
+    },
+    fish: {
+      camPos: new THREE.Vector3(-12, 38, 56),  // 40度大俯视，展现10座圆形加州鲈鱼池阵列与桥架
+      lookAt: new THREE.Vector3(15, 2, -2),
+      arcHeight: 20.0,
+      entityId: 'tank-1',
+      entityType: 'fish-tank',
+      entityName: '🐟 鱼池 #01 (加州鲈鱼成鱼池)'
+    },
+    vege: {
+      camPos: new THREE.Vector3(-68, 14, -32), // 低空广角纵深滑行，贴近48m奶油生菜水培跑道
+      lookAt: new THREE.Vector3(-38, 2, -16),
+      arcHeight: 16.0,
+      entityId: 'raceway-a',
+      entityType: 'raceway',
+      entityName: '🥬 菜池 #A 槽 (特级奶油生菜)'
+    },
+    nursery: {
+      camPos: new THREE.Vector3(-24, 20, 26),  // 35度侧俯视，聚焦12座粉红光照独立试验舱
+      lookAt: new THREE.Vector3(-45, 3, 0),
+      arcHeight: 16.0,
+      entityId: 'nursery-1',
+      entityType: 'nursery',
+      entityName: '🌱 种植试验舱 #01 (小叶茼蒿高钙配方试验)'
+    },
+    'cabinet-hv': {
+      camPos: new THREE.Vector3(26, 9.5, -6.5),  // 红色强电动力柜黄金特写，全景开阔零遮挡
+      lookAt: new THREE.Vector3(48, 2.5, -9.5),
+      arcHeight: 14.0,
+      entityId: 'cabinet-hv',
+      entityType: 'cabinet-hv',
+      entityName: '⚡ 强电动力配电柜 (380V主动力/威胜电表)'
+    },
+    'cabinet-lv': {
+      camPos: new THREE.Vector3(26, 9.5, -17.5), // 蓝色弱电控制柜对称切入，清晰展示PLC与通信模块
+      lookAt: new THREE.Vector3(48, 2.5, -14.5),
+      arcHeight: 14.0,
+      entityId: 'cabinet-lv',
+      entityType: 'cabinet-lv',
+      entityName: '📡 弱电自动化控制柜 (汇川PLC/安全栅/Modbus)'
+    }
+  },
+
+  // 动态全息声呐扫描光圈队列 (Sonar Scanning Rings)
+  sonarWaves: [],
+  idleDriftAngle: 0,           // 悬停无人机微呼吸角速度
+
   hoveredMesh: null,
 
   // ---------------------------------------------------------------------------
@@ -438,16 +504,28 @@ const DigitalTwin3D = {
     cableTray.position.set(0, 6.2, 0);
     group.add(cableTray);
 
-    // 5. 靠墙并排放置的【强电动力柜】与【弱电自动化柜】
-    // (1) ⚡ 强电动力配电柜 (380V 三相主动力 / 威胜0.5S智能电表 / 丁本CT互感器)
-    const cabinetHVGeo = new THREE.BoxGeometry(2.5, 4.5, 4.0);
-    const cabinetHVMat = new THREE.MeshStandardMaterial({
-      color: 0x334155, // 沉稳深色工业冷轧钢
-      metalness: 0.7,
+    // 5. 专属开阔配电控制岛：🔴 红色强电柜 + 🔵 蓝色弱电柜 (完全避开立柱横梁遮挡)
+    // (0) 工业级绝缘设备基座平台 (带防静电警示边线)
+    const plinthGeo = new THREE.BoxGeometry(3.6, 0.3, 10.5);
+    const plinthMat = new THREE.MeshStandardMaterial({
+      color: 0x1e293b,
+      metalness: 0.8,
       roughness: 0.3
     });
+    const plinth = new THREE.Mesh(plinthGeo, plinthMat);
+    plinth.position.set(48, 0.15, -12);
+    plinth.receiveShadow = true;
+    group.add(plinth);
+
+    // (1) 🔴 红色【强电动力配电柜】 (380V 三相主动力 / 威胜0.5S智能电表 / 丁本CT互感器)
+    const cabinetHVGeo = new THREE.BoxGeometry(2.6, 4.5, 3.8);
+    const cabinetHVMat = new THREE.MeshStandardMaterial({
+      color: 0xdc2626, // 鲜明醒目的工业高压红
+      metalness: 0.65,
+      roughness: 0.25
+    });
     const cabinetHV = new THREE.Mesh(cabinetHVGeo, cabinetHVMat);
-    cabinetHV.position.set(50, 2.25, -3.2);
+    cabinetHV.position.set(48, 2.55, -9.5);
     cabinetHV.castShadow = true;
     cabinetHV.receiveShadow = true;
     cabinetHV.userData = {
@@ -458,22 +536,29 @@ const DigitalTwin3D = {
     this.interactiveMeshes.push(cabinetHV);
     group.add(cabinetHV);
 
-    // 强电柜警示铭牌 (明黄高压电标识)
-    const plateHVGeo = new THREE.PlaneGeometry(0.1, 1.2, 2.0);
-    const plateHVMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b });
+    // 强电柜正面：明黄 380V 危险闪电警示牌
+    const plateHVGeo = new THREE.PlaneGeometry(0.1, 1.4, 1.8);
+    const plateHVMat = new THREE.MeshBasicMaterial({ color: 0xfbbf24 });
     const plateHV = new THREE.Mesh(plateHVGeo, plateHVMat);
-    plateHV.position.set(48.7, 2.8, -3.2);
+    plateHV.position.set(46.68, 3.2, -9.5);
     group.add(plateHV);
 
-    // (2) 📡 弱电自动化控制柜 (汇川 Easy320 PLC / 24V DC / 隔离安全栅 / 485 Modbus)
-    const cabinetLVGeo = new THREE.BoxGeometry(2.5, 4.5, 4.0);
+    // 强电柜正面：威胜数显仪表屏
+    const meterHVGeo = new THREE.PlaneGeometry(0.1, 0.8, 1.4);
+    const meterHVMat = new THREE.MeshBasicMaterial({ color: 0x0f172a });
+    const meterHV = new THREE.Mesh(meterHVGeo, meterHVMat);
+    meterHV.position.set(46.68, 2.0, -9.5);
+    group.add(meterHV);
+
+    // (2) 🔵 蓝色【弱电自动化控制柜】 (汇川 Easy320 PLC / 24V DC / 隔离安全栅 / 485 Modbus)
+    const cabinetLVGeo = new THREE.BoxGeometry(2.6, 4.5, 3.8);
     const cabinetLVMat = new THREE.MeshStandardMaterial({
-      color: 0x0f766e, // 现代翡翠工业绿色 PLC 柜体
-      metalness: 0.6,
-      roughness: 0.3
+      color: 0x2563eb, // 科技感纯正自动化深蓝
+      metalness: 0.65,
+      roughness: 0.25
     });
     const cabinetLV = new THREE.Mesh(cabinetLVGeo, cabinetLVMat);
-    cabinetLV.position.set(50, 2.25, 3.2);
+    cabinetLV.position.set(48, 2.55, -14.5);
     cabinetLV.castShadow = true;
     cabinetLV.receiveShadow = true;
     cabinetLV.userData = {
@@ -484,12 +569,26 @@ const DigitalTwin3D = {
     this.interactiveMeshes.push(cabinetLV);
     group.add(cabinetLV);
 
-    // 弱电柜运行指示屏 (薄荷绿发光微屏)
-    const plateLVGeo = new THREE.PlaneGeometry(0.1, 1.2, 2.0);
-    const plateLVMat = new THREE.MeshBasicMaterial({ color: 0x10b981 });
+    // 弱电柜正面：汇川 Easy320 PLC 触控操作屏 (高亮青蓝微屏)
+    const plateLVGeo = new THREE.PlaneGeometry(0.1, 1.4, 1.8);
+    const plateLVMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
     const plateLV = new THREE.Mesh(plateLVGeo, plateLVMat);
-    plateLV.position.set(48.7, 2.8, 3.2);
+    plateLV.position.set(46.68, 3.2, -14.5);
     group.add(plateLV);
+
+    // 弱电柜正面：24V DC 运行指示灯列 (薄荷绿发光条)
+    const ledLVGeo = new THREE.PlaneGeometry(0.1, 0.6, 1.4);
+    const ledLVMat = new THREE.MeshBasicMaterial({ color: 0x34d399 });
+    const ledLV = new THREE.Mesh(ledLVGeo, ledLVMat);
+    ledLV.position.set(46.68, 2.0, -14.5);
+    group.add(ledLV);
+
+    // 弱电柜顶部：高频无线通信天线
+    const antennaGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.8, 8);
+    const antennaMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.9 });
+    const antenna = new THREE.Mesh(antennaGeo, antennaMat);
+    antenna.position.set(48, 5.2, -14.5);
+    group.add(antenna);
 
     this.scene.add(group);
   },
@@ -637,20 +736,66 @@ const DigitalTwin3D = {
   },
 
   /**
-   * 平滑聚焦到某个 3D 实体 (Lerp Camera)
+   * 激发全息声呐扫描光圈 (Target Acquired 科技感声呐波)
+   * @param {THREE.Vector3} targetPos 目标中心坐标
+   */
+  triggerSonarScan(targetPos) {
+    const geo = new THREE.RingGeometry(0.3, 1.0, 32);
+    const mat = new THREE.MeshBasicMaterial({
+      color: 0x10b981,
+      transparent: true,
+      opacity: 0.9,
+      side: THREE.DoubleSide,
+      depthWrite: false
+    });
+    const ring = new THREE.Mesh(geo, mat);
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.set(targetPos.x, targetPos.y + 0.15, targetPos.z);
+    this.scene.add(ring);
+
+    this.sonarWaves.push({
+      mesh: ring,
+      scale: 1.0,
+      opacity: 0.9,
+      maxScale: 30.0
+    });
+  },
+
+  /**
+   * 启动电影级空间弧线运镜飞行
+   * @param {THREE.Vector3} targetCamPos 目标机位
+   * @param {THREE.Vector3} targetLookAt 目标焦点
+   * @param {number} arcHeight 弧线巡航高度抬升分量 (模拟高空掠过再俯冲)
+   */
+  startCinematicFlight(targetCamPos, targetLookAt, arcHeight = 16.0) {
+    this.flight.isActive = true;
+    this.flight.startTime = performance.now();
+    this.flight.duration = 1300; // 1.3 秒平滑巡航
+    this.flight.startCamPos.copy(this.camera.position);
+    this.flight.targetCamPos.copy(targetCamPos);
+    this.flight.startLookAt.copy(this.controls ? this.controls.target : new THREE.Vector3(0, 0, 0));
+    this.flight.targetLookAt.copy(targetLookAt);
+    this.flight.arcAltitude = arcHeight;
+
+    // 激发全息声呐锁定扫描波
+    this.triggerSonarScan(targetLookAt);
+  },
+
+  /**
+   * 平滑聚焦到某个 3D 实体
    */
   focusOnEntity(mesh) {
     const worldPos = new THREE.Vector3();
     mesh.getWorldPosition(worldPos);
 
-    this.targetLookAt = worldPos.clone();
-    this.targetCameraPos = new THREE.Vector3(
+    const targetLookAt = worldPos.clone();
+    const targetCamPos = new THREE.Vector3(
       worldPos.x + 16,
       worldPos.y + 18,
       worldPos.z + 24
     );
 
-    this.isLerpingCamera = true;
+    this.startCinematicFlight(targetCamPos, targetLookAt, 14.0);
 
     // 同步更新右侧数据面板
     if (typeof DataEngine !== 'undefined') {
@@ -659,7 +804,7 @@ const DigitalTwin3D = {
   },
 
   /**
-   * 空间区域快速跳跃导航与自动巡检聚焦
+   * 空间区域快速跳跃导航与电影级运镜聚焦
    * @param {string} zoneKey 区域标识 ('fish' | 'vege' | 'nursery' | 'cabinet-hv' | 'cabinet-lv' | 'all')
    * @param {boolean} isManualClick 是否为用户手动点击触发 (手动点击将进入临时接管模式)
    */
@@ -677,30 +822,13 @@ const DigitalTwin3D = {
     // 2. 更新 3D 浮层状态文字
     this.updateTourStatusText(zoneKey, isManualClick);
 
-    let targetMesh = null;
-    if (zoneKey === 'fish') {
-      targetMesh = this.interactiveMeshes.find(m => m.userData.id === 'tank-1');
-    } else if (zoneKey === 'vege') {
-      targetMesh = this.interactiveMeshes.find(m => m.userData.id === 'raceway-a');
-    } else if (zoneKey === 'nursery') {
-      targetMesh = this.interactiveMeshes.find(m => m.userData.id === 'nursery-1');
-    } else if (zoneKey === 'cabinet-hv' || zoneKey === 'cabinet') {
-      targetMesh = this.interactiveMeshes.find(m => m.userData.id === 'cabinet-hv');
-    } else if (zoneKey === 'cabinet-lv') {
-      targetMesh = this.interactiveMeshes.find(m => m.userData.id === 'cabinet-lv');
-    } else {
-      // 全局总览视口
-      this.targetLookAt = new THREE.Vector3(10, 0, 0);
-      this.targetCameraPos = new THREE.Vector3(-50, 95, 140);
-      this.isLerpingCamera = true;
-      if (typeof DataEngine !== 'undefined') {
-        DataEngine.selectEntity('tank-1', 'fish-tank', '🐟 鱼池 #01 (加州鲈鱼成鱼池)');
-      }
-      return;
-    }
+    // 3. 读取电影级专属机位预设并执行空间弧线运镜
+    const preset = this.cinematicPresets[zoneKey] || this.cinematicPresets.fish;
+    this.startCinematicFlight(preset.camPos, preset.lookAt, preset.arcHeight);
 
-    if (targetMesh) {
-      this.focusOnEntity(targetMesh);
+    // 4. 同步联动右侧数据中枢
+    if (typeof DataEngine !== 'undefined') {
+      DataEngine.selectEntity(preset.entityId, preset.entityType, preset.entityName);
     }
   },
 
@@ -791,12 +919,12 @@ const DigitalTwin3D = {
     if (this.isTourActive) {
       this.userManualOverride = false;
       this.tourRemainingMs = 3000;
-      if (toggleBtnEl) toggleBtnEl.className = "flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition shadow-sm cursor-pointer";
-      if (toggleTextEl) toggleTextEl.textContent = '3s 自动轮巡';
+      if (toggleBtnEl) toggleBtnEl.className = "flex items-center gap-1 px-2 py-0.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition shadow-xs cursor-pointer";
+      if (toggleTextEl) toggleTextEl.textContent = '3s 轮巡';
       if (toggleIconEl) toggleIconEl.textContent = '⚡';
       if (countdownEl) countdownEl.textContent = '3.0s';
-      if (pingDotEl) pingDotEl.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-ping';
-      if (statusDotEl) statusDotEl.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping';
+      if (pingDotEl) pingDotEl.className = 'w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping';
+      if (statusDotEl) statusDotEl.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-ping';
       
       const currentZone = this.tourSteps[this.tourIndex];
       this.updateTourStatusText(currentZone, false);
@@ -804,12 +932,12 @@ const DigitalTwin3D = {
     } else {
       if (this.manualOverrideTimer) clearTimeout(this.manualOverrideTimer);
       this.userManualOverride = false;
-      if (toggleBtnEl) toggleBtnEl.className = "flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold transition shadow-sm cursor-pointer";
+      if (toggleBtnEl) toggleBtnEl.className = "flex items-center gap-1 px-2 py-0.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold transition shadow-xs cursor-pointer";
       if (toggleTextEl) toggleTextEl.textContent = '已暂停';
       if (toggleIconEl) toggleIconEl.textContent = '⏸️';
       if (countdownEl) countdownEl.textContent = 'PAUSED';
-      if (pingDotEl) pingDotEl.className = 'w-2 h-2 rounded-full bg-slate-400';
-      if (statusDotEl) statusDotEl.className = 'w-2.5 h-2.5 rounded-full bg-slate-400';
+      if (pingDotEl) pingDotEl.className = 'w-1.5 h-1.5 rounded-full bg-slate-400';
+      if (statusDotEl) statusDotEl.className = 'w-2 h-2 rounded-full bg-slate-400';
       if (statusEl) {
         statusEl.textContent = '⏸️ 自动巡检已暂停 • 点击【已暂停】按钮可重新恢复 3s 轮巡';
       }
@@ -825,9 +953,9 @@ const DigitalTwin3D = {
       const btn = document.getElementById(`btn-zone-${k}`);
       if (btn) {
         if (k === activeKey) {
-          btn.className = "px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold transition shadow-sm cursor-pointer";
+          btn.className = "px-2 py-0.5 rounded-lg bg-emerald-600 text-white font-bold transition shadow-xs cursor-pointer shrink-0";
         } else {
-          btn.className = "px-2.5 py-1 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium cursor-pointer";
+          btn.className = "px-2 py-0.5 rounded-lg bg-white hover:bg-emerald-100 text-slate-800 border border-emerald-200 transition font-medium cursor-pointer shadow-xs shrink-0";
         }
       }
     });
@@ -851,9 +979,9 @@ const DigitalTwin3D = {
 
     const targetName = names[zoneKey] || zoneKey;
     if (isManual) {
-      statusEl.textContent = `🖱️ 手动聚焦: ${targetName} • 5秒后恢复自动轮巡`;
+      statusEl.textContent = `🖱️ 手动接管: ${targetName} • 5s后恢复轮巡`;
     } else {
-      statusEl.textContent = `🚀 自动巡检中 (3s周期) • 当前聚焦: ${targetName}`;
+      statusEl.textContent = `🚀 自动巡检中 (3s周期) • ${targetName}`;
     }
   },
 
@@ -903,7 +1031,7 @@ const DigitalTwin3D = {
   },
 
   /**
-   * 60FPS 动画循环
+   * 60FPS 动画循环 (全息声呐扩散 + 电影级弧线运镜 + 无人机呼吸漂移)
    */
   animate() {
     requestAnimationFrame(() => this.animate());
@@ -912,21 +1040,67 @@ const DigitalTwin3D = {
       obj.rotation.z += 0.003;
     });
 
-    // 无人机悬停起伏微动
+    // 1. 无人机悬停起伏微动
     if (this.droneMesh) {
       this.droneHoverTime += 0.03;
       this.droneMesh.position.y = 7.2 + Math.sin(this.droneHoverTime) * 0.18;
     }
 
-    if (this.isLerpingCamera && this.targetCameraPos && this.targetLookAt) {
-      this.camera.position.lerp(this.targetCameraPos, 0.06);
+    // 2. 全息声呐扫描光圈扩散与渐隐动画
+    for (let i = this.sonarWaves.length - 1; i >= 0; i--) {
+      const wave = this.sonarWaves[i];
+      wave.scale += 0.55;
+      wave.opacity -= 0.018;
+      wave.mesh.scale.set(wave.scale, wave.scale, wave.scale);
+      wave.mesh.material.opacity = Math.max(0, wave.opacity);
+
+      if (wave.opacity <= 0 || wave.scale >= wave.maxScale) {
+        this.scene.remove(wave.mesh);
+        wave.mesh.geometry.dispose();
+        wave.mesh.material.dispose();
+        this.sonarWaves.splice(i, 1);
+      }
+    }
+
+    // 3. 🎥 电影级空间弧线运镜飞行插值 (EaseInOutCubic + 抛物线高度提升)
+    if (this.flight.isActive) {
+      const elapsed = performance.now() - this.flight.startTime;
+      let progress = Math.min(1.0, elapsed / this.flight.duration);
+
+      // EaseInOutCubic 物理平滑加减速缓动曲线
+      const eased = progress < 0.5 
+        ? 4 * progress * progress * progress 
+        : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+      // 3.1 水平空间平滑插值
+      const currentPos = new THREE.Vector3().lerpVectors(this.flight.startCamPos, this.flight.targetCamPos, eased);
+
+      // 3.2 空间抛物线高度抬升 (模拟无人机自高空掠过、再俯冲切入目标的优美弧度)
+      const altitudeBoost = Math.sin(progress * Math.PI) * this.flight.arcAltitude;
+      currentPos.y += altitudeBoost;
+
+      this.camera.position.copy(currentPos);
+
+      // 3.3 焦点目标点插值
+      const currentLookAt = new THREE.Vector3().lerpVectors(this.flight.startLookAt, this.flight.targetLookAt, eased);
       if (this.controls) {
-        this.controls.target.lerp(this.targetLookAt, 0.06);
+        this.controls.target.copy(currentLookAt);
       }
 
-      if (this.camera.position.distanceTo(this.targetCameraPos) < 0.5) {
-        this.isLerpingCamera = false;
+      if (progress >= 1.0) {
+        this.flight.isActive = false;
+        this.camera.position.copy(this.flight.targetCamPos);
+        if (this.controls) {
+          this.controls.target.copy(this.flight.targetLookAt);
+        }
       }
+    } else if (this.controls && !this.userManualOverride) {
+      // 4. 悬停巡航状态下的无人机微呼吸漂移 (Idle Drone Drift，让水面光泽和金属光泽充满生机)
+      this.idleDriftAngle = (this.idleDriftAngle || 0) + 0.0012;
+      const driftX = Math.sin(this.idleDriftAngle) * 0.03;
+      const driftY = Math.cos(this.idleDriftAngle * 1.3) * 0.015;
+      this.camera.position.x += driftX;
+      this.camera.position.y += driftY;
     }
 
     if (this.controls) {
