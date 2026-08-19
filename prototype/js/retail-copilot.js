@@ -416,9 +416,251 @@ const RetailCopilotController = {
       `• 定植/采收周期: 2026-07-28 ~ 2026-08-18 (21天纯净深水浮板水培)\n` +
       `• 光照累积积分: DLI 16.8 mol/m²/d (特级促脆全光谱)\n` +
       `• 水质全息指标: DO 6.8 mg/L • pH 7.15 • 根区水温 20.8°C\n` +
-      `• 农残与重金属检测: 0 化学农药残留 (SGS 308项未检出) • 硝酸盐 850 mg/kg (优于欧标 <2000)\n` +
+      `• 农残与重金属检测: 0 化学农药残留 (SGS 308项未检出) • 硝酸盐 620.5 mg/kg (特级母婴级 <800)\n` +
+      `• 营养风味检测: 维 C 28.5 mg/100g (+110%) • 糖度 4.2°Brix\n` +
       `• 机械臂切根打码: 1080P 采收称重视频与冷链装箱 (2.8°C)\n` +
-      `• 权威防伪签章: [已加盖国家现代农业产业园数字 CA 电子公章]`);
+      `• 权威防伪签章: [已加盖国家现代农业产业园数字 CA 电子公章 SHA-256: 0x8f4a...9982]`);
+  },
+
+  // ===========================================================================
+  // 🔬 4. 品质主管与驻厂实验室中台控制器 (Quality Director & Lab Center)
+  // ===========================================================================
+
+  /**
+   * 渲染驻厂实验室核心仪器台账与校准状态
+   */
+  renderQualityInstruments(engine) {
+    const container = document.getElementById('quality-instruments-grid');
+    if (!container || !engine.qualityInstruments) return;
+
+    let html = '';
+    engine.qualityInstruments.forEach(inst => {
+      html += `
+        <div class="p-3.5 bg-white/95 rounded-2xl border border-slate-200 shadow-xs space-y-2 hover:border-emerald-300 transition">
+          <div class="flex items-center justify-between gap-2">
+            <span class="font-extrabold text-slate-900 text-xs truncate flex-1 min-w-0" title="${inst.name}">${inst.name}</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono font-bold border border-emerald-300 whitespace-nowrap shrink-0">${inst.status}</span>
+          </div>
+          <div class="text-[11px] text-slate-500 font-mono truncate">型号: <strong class="text-slate-700">${inst.model}</strong></div>
+          <div class="p-2 bg-emerald-50/70 rounded-xl text-[11px] font-sans text-emerald-950">
+            🎯 <strong>检测项目:</strong> ${inst.target}
+          </div>
+          <div class="flex justify-between items-center text-[10px] text-slate-500 font-mono pt-1 border-t border-slate-100">
+            <span class="truncate">精度: <strong class="text-emerald-700">${inst.accuracy}</strong></span>
+            <span class="whitespace-nowrap shrink-0 ml-2">校准: ${inst.lastCalibrated}</span>
+          </div>
+        </div>
+      `;
+    });
+
+    container.innerHTML = html;
+  },
+
+  /**
+   * 渲染每日出厂批次双维度抽检与放行工作台表格
+   */
+  renderQualityBatchesTable(engine) {
+    const tbody = document.getElementById('quality-batches-tbody');
+    if (!tbody || !engine.qualityBatches) return;
+
+    let html = '';
+    engine.qualityBatches.forEach(b => {
+      let actionBtnHtml = `
+        <div class="flex items-center gap-1.5 justify-end">
+          <button onclick="DataEngine.openLabReportModal('${b.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-900 font-bold text-xs cursor-pointer transition shadow-xs">
+            📄 报告详情
+          </button>
+      `;
+
+      if (b.canApprove) {
+        actionBtnHtml += `
+          <button onclick="DataEngine.approveQualityBatch('${b.id}')" class="px-2.5 py-1 rounded-lg bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs cursor-pointer transition shadow-xs animate-pulse">
+            ✍️ 签名放行
+          </button>
+        `;
+      }
+
+      actionBtnHtml += `</div>`;
+
+      html += `
+        <tr class="border-b border-slate-100 hover:bg-emerald-50/30 transition text-xs font-sans">
+          <td class="py-3 px-3">
+            <div class="font-extrabold text-slate-900">${b.id}</div>
+            <div class="text-[11px] text-slate-500">${b.productName}</div>
+            <div class="text-[10px] text-emerald-700 font-mono">${b.sourceRaceway}</div>
+          </td>
+          <td class="py-3 px-3 font-mono">
+            <div class="text-slate-700">采收: ${b.harvestTime}</div>
+            <div class="text-slate-500 text-[11px]">化验: ${b.inspectTime}</div>
+            <div class="text-[10px] text-slate-400">${b.inspector}</div>
+          </td>
+          <td class="py-3 px-3">
+            <div class="text-xs font-bold ${b.nitrate <= 800 ? 'text-emerald-800' : 'text-amber-800'} font-mono">
+              硝酸盐: ${b.nitrate} mg/kg <span class="text-[10px] text-slate-400">(限值 ${b.nitrateLimit})</span>
+            </div>
+            <div class="text-[11px] text-emerald-700 font-mono">农残: 0 检出 (62项) • 重金属: 极微</div>
+            <div class="text-[10px] text-slate-600 font-sans">${b.safetyVerdictText}</div>
+          </td>
+          <td class="py-3 px-3">
+            <div class="font-mono text-xs">
+              <span class="text-purple-800 font-black">维C: ${b.vitaminC} mg</span> • <span class="text-amber-700 font-black">糖度: ${b.sugarBrix}°Bx</span>
+            </div>
+            <div class="text-[11px] text-slate-500 font-mono">蛋白: ${b.crudeProtein}% • 微量铁: ${b.microFe}mg</div>
+            <div class="text-[10px] text-teal-800 font-sans">${b.nutritionVerdictText}</div>
+          </td>
+          <td class="py-3 px-3">
+            <span id="quality-batch-status-${b.id}" class="inline-block px-2.5 py-1 rounded-lg border text-[11px] font-mono ${b.statusBadge}">
+              ${b.statusText}
+            </span>
+            <div class="text-[10px] text-slate-400 font-mono mt-0.5 truncate max-w-[140px]" title="${b.ecoaId}">${b.ecoaId}</div>
+          </td>
+          <td class="py-3 px-3 text-right">
+            ${actionBtnHtml}
+          </td>
+        </tr>
+      `;
+    });
+
+    tbody.innerHTML = html;
+  },
+
+  /**
+   * 渲染 4°C 留样观察室数据
+   */
+  renderQualityRetentionRooms(engine) {
+    const room = engine.qualityRetentionRooms;
+    if (!room) return;
+
+    const tempEl = document.getElementById('quality-room-temp');
+    const rhEl = document.getElementById('quality-room-rh');
+    const countEl = document.getElementById('quality-room-count');
+    const weightLossEl = document.getElementById('quality-room-weightloss');
+    const vcRetentionEl = document.getElementById('quality-room-vcretention');
+    const alertEl = document.getElementById('quality-room-alert');
+
+    if (tempEl) tempEl.textContent = `${room.tempC}°C`;
+    if (rhEl) rhEl.textContent = `${room.rhPercent}%RH`;
+    if (countEl) countEl.textContent = `${room.totalSamplesCount} 批次`;
+    if (weightLossEl) weightLossEl.textContent = room.weightLoss5dAvg;
+    if (vcRetentionEl) vcRetentionEl.textContent = room.vcRetention5dAvg;
+    if (alertEl) alertEl.textContent = room.currentAlert;
+  },
+
+  /**
+   * 渲染质量 CAPA 纠偏工单流
+   */
+  renderQualityCAPATickets(engine) {
+    const container = document.getElementById('quality-capa-stream');
+    if (!container || !engine.qualityCAPATickets) return;
+
+    let html = '';
+    engine.qualityCAPATickets.forEach(t => {
+      let dispatchBtnHtml = '';
+      if (t.canDispatch) {
+        dispatchBtnHtml = `
+          <div class="pt-1.5 border-t border-slate-100 flex justify-end">
+            <button onclick="DataEngine.dispatchQualityCAPA('${t.id}')" class="px-3 py-1.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs cursor-pointer shadow-md shadow-purple-500/20 transition flex items-center gap-1.5">
+              🚀 一键下发 CAPA 纠偏指令
+            </button>
+          </div>
+        `;
+      }
+
+      html += `
+        <div class="p-3.5 bg-white/95 rounded-2xl border border-slate-200 shadow-xs space-y-2 hover:border-purple-300 transition">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="font-extrabold text-slate-900 text-xs">${t.id}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-purple-100 text-purple-800 border border-purple-300">${t.type}</span>
+            </div>
+            <span class="text-[10px] text-slate-500 font-mono">责任: ${t.department}</span>
+          </div>
+          <div class="p-2 bg-slate-50 rounded-xl text-slate-700 font-sans text-xs">
+            ⚠️ <strong>触发原因:</strong> ${t.triggerReason}
+          </div>
+          <div class="p-2.5 bg-purple-50/70 border border-purple-100 rounded-xl text-purple-950 font-sans text-xs">
+            💡 <strong>CAPA 纠正与预防方案:</strong> ${t.actionPlan}
+            <div id="quality-capa-status-${t.id}" class="text-[11px] text-purple-700 font-bold font-mono mt-1">${t.status}</div>
+          </div>
+          ${dispatchBtnHtml}
+        </div>
+      `;
+    });
+
+    container.innerHTML = html;
+  },
+
+  /**
+   * 品质主管一键数字签名放行
+   */
+  approveQualityBatch(engine, batchId) {
+    const target = engine.qualityBatches.find(b => b.id === batchId);
+    if (!target) return;
+
+    target.status = 'RELEASED';
+    target.statusBadge = 'bg-emerald-100 text-emerald-800 border-emerald-300 font-bold';
+    target.statusText = '✅ 电子签名放行 (已生成 e-COA)';
+    target.canApprove = false;
+    target.ecoaId = `eCOA-20260819-${batchId.replace('LOT-', '')}-RELEASED`;
+    target.sha256 = '0x38b29c910a88bf20084c81b29a8f4c1b99824c90b2';
+
+    this.renderQualityBatchesTable(engine);
+
+    alert(`✍️ 【批次 ${batchId} 质检放行成功！】\n\n` +
+      `• 放行产品: ${target.productName}\n` +
+      `• 签署质检官: 品质主管 · 王工 (数字私钥验签通过)\n` +
+      `• 生成 e-COA 编号: ${target.ecoaId}\n` +
+      `• 区块链 SHA-256 存证: ${target.sha256}\n` +
+      `• 联动效果: 该批次已自动同步允许 B2B 冷链专车装车出厂，并已向 C 端一物一码主链注入质检合格证明！`);
+  },
+
+  /**
+   * 一键下发质量 CAPA 纠偏指令
+   */
+  dispatchQualityCAPA(engine, capaId) {
+    const target = engine.qualityCAPATickets.find(t => t.id === capaId);
+    if (!target) return;
+
+    target.status = '✅ 指令已送达种植长工作台 (下茬光配方已动态修正)';
+    target.canDispatch = false;
+
+    this.renderQualityCAPATickets(engine);
+
+    alert(`🚀 【质量 CAPA 纠偏指令已正式下发！】\n\n` +
+      `• 工单编号: ${target.id}\n` +
+      `• 接收部门: ${target.department}\n` +
+      `• 纠偏动作: ${target.actionPlan}\n` +
+      `• 闭环机制: 种植长调度台将自动将目标跑道最后 48h 补光上调 15%，确保下茬糖度稳定恢复至 4.0°Brix 以上！`);
+  },
+
+  /**
+   * 调取并查看全项理化检验报告 (e-COA)
+   */
+  openLabReportModal(engine, batchId) {
+    const target = engine.qualityBatches.find(b => b.id === batchId);
+    if (!target) return;
+
+    alert(`🔬 【全项理化与微生物出厂检验报告 (e-COA 原始记录)】\n\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `【基本信息】\n` +
+      `• 批次编号: ${target.id}\n` +
+      `• 产品品类: ${target.productName}\n` +
+      `• 来源产区: ${target.sourceRaceway}\n` +
+      `• 检验时间: ${target.inspectTime} (质检官: ${target.inspector})\n\n` +
+      `【第一维度：安全红线指标】\n` +
+      `• 硝酸盐 (UV-Vis): ${target.nitrate} mg/kg (母婴级严选限值 < 800.0 mg/kg) 🟢 合格\n` +
+      `• 62项化学农残 (胆碱酯酶抑制法): 0 检出 (检出限 < 0.01 mg/kg) 🟢 合格\n` +
+      `• 4项重金属 (AAS 原子吸收): Pb<0.002, Cd<0.001 mg/kg 🟢 远优于国标\n` +
+      `• 致病菌 (沙门氏菌/单增李斯特菌): ${target.salmonella} 🟢 合格\n\n` +
+      `【第二维度：营养与风味指标】\n` +
+      `• 维生素 C (HPLC): ${target.vitaminC} mg/100g (较传统大棚 +110%) 💎 超额富集\n` +
+      `• 糖度 Brix (折光仪): ${target.sugarBrix} °Brix (清脆鲜甜无苦涩)\n` +
+      `• 粗蛋白质含量: ${target.crudeProtein}%\n` +
+      `• 微量元素 (铁 Fe): ${target.microFe} mg/100g\n\n` +
+      `【出厂放行与防伪认证】\n` +
+      `• 放行状态: ${target.statusText}\n` +
+      `• e-COA 编号: ${target.ecoaId}\n` +
+      `• 数字私钥签章: ${target.sha256}`);
   }
 };
 

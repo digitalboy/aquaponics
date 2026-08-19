@@ -21,7 +21,7 @@ const DataEngine = {
     // 1. 初始化生成 10 座鱼池、4 座水培跑道、浮板 24 孔位、试验舱与测温立柱
     MockDataFactory.populateFacilities(this);
 
-    // 2. 首次渲染养殖长矩阵、种植长矩阵、浮板孔位矩阵、动力时序甘特图、会员工单流与 B2B 履约调度大盘
+    // 2. 首次渲染养殖长矩阵、种植长矩阵、浮板孔位矩阵、动力时序甘特图、会员工单流、B2B履约调度与品质实验室大盘
     this.renderAquaTankMatrix();
     this.renderHydroRacewayMatrix();
     this.renderRaftSlotGrid();
@@ -29,6 +29,10 @@ const DataEngine = {
     this.renderMemberTicketStream();
     this.renderB2BFulfillmentTable();
     this.renderB2BTicketsStream();
+    this.renderQualityInstruments();
+    this.renderQualityBatchesTable();
+    this.renderQualityRetentionRooms();
+    this.renderQualityCAPATickets();
 
     // 3. 启动 800ms 连续物理微扰动时序仿真
     setInterval(() => this.tick(), 800);
@@ -148,7 +152,38 @@ const DataEngine = {
   },
 
   // ---------------------------------------------------------------------------
-  // 4. 3D 数字孪生全息 HUD 弹窗与巡检矩阵 (委托至 HUDRenderer)
+  // 4. 🔬 品质主管与驻厂实验室中台门面 (委托至 RetailCopilotController)
+  // ---------------------------------------------------------------------------
+  renderQualityInstruments() {
+    RetailCopilotController.renderQualityInstruments(this);
+  },
+
+  renderQualityBatchesTable() {
+    RetailCopilotController.renderQualityBatchesTable(this);
+  },
+
+  renderQualityRetentionRooms() {
+    RetailCopilotController.renderQualityRetentionRooms(this);
+  },
+
+  renderQualityCAPATickets() {
+    RetailCopilotController.renderQualityCAPATickets(this);
+  },
+
+  approveQualityBatch(batchId) {
+    RetailCopilotController.approveQualityBatch(this, batchId);
+  },
+
+  dispatchQualityCAPA(capaId) {
+    RetailCopilotController.dispatchQualityCAPA(this, capaId);
+  },
+
+  openLabReportModal(batchId) {
+    RetailCopilotController.openLabReportModal(this, batchId);
+  },
+
+  // ---------------------------------------------------------------------------
+  // 5. 3D 数字孪生全息 HUD 弹窗与巡检矩阵 (委托至 HUDRenderer)
   // ---------------------------------------------------------------------------
   setQuickTab(tabKey) {
     HUDRenderer.setQuickTab(this, tabKey);

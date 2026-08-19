@@ -21,6 +21,7 @@
     'view-energy',
     'view-supply-chain',
     'view-b2b-fulfillment',
+    'view-quality',
     'view-b2b',
     'view-b2c'
   ];

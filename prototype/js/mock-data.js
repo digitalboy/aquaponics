@@ -316,6 +316,225 @@ const MockDataFactory = {
           canAction: true,
           actionText: '📄 调取并预览 e-COA 质检单'
         }
+      ],
+
+      // 15. 🔬 品质实验室仪器台账与在线质控状态
+      qualityInstruments: [
+        {
+          id: 'INST-01',
+          name: '双光束紫外可见分光光度计',
+          model: '北京普析 T6-1650E (8联自动池)',
+          target: '硝酸盐 NO₃⁻ / 亚硝酸盐 NO₂⁻',
+          status: '🟢 在线已标定',
+          accuracy: 'R² = 0.9998 · 8联进样',
+          lastCalibrated: '今日 06:30',
+          nextCalibrated: '明日 06:30'
+        },
+        {
+          id: 'INST-02',
+          name: '多通道农药残留快速检测仪',
+          model: '北京智云达 ZYD-NP6 (CP210x直连)',
+          target: '有机磷 / 氨基甲酸酯 62项农残',
+          status: '🟢 在线已标定',
+          accuracy: '6通道 · 阻断率 100%',
+          lastCalibrated: '今日 07:00',
+          nextCalibrated: '明日 07:00'
+        },
+        {
+          id: 'INST-03',
+          name: '高精度数字折光糖度计',
+          model: 'ATAGO PAL-1 (BLE 蓝牙直连)',
+          target: '可溶性固形物 (糖度 °Brix)',
+          status: '🟢 在线已标定',
+          accuracy: '±0.1 °Brix',
+          lastCalibrated: '今日 08:00',
+          nextCalibrated: '今日 14:00'
+        },
+        {
+          id: 'INST-04',
+          name: '火焰石墨炉原子吸收光谱仪',
+          model: '北京普析 TAS-990 (一体机)',
+          target: '重金属 (Pb, Cd) · 铁/钙/锌',
+          status: '🟢 在线已标定',
+          accuracy: '石墨炉 LOD < 0.0001 mg/kg',
+          lastCalibrated: '2026-08-15',
+          nextCalibrated: '2026-08-22'
+        },
+        {
+          id: 'INST-05',
+          name: '食品物性物性分析仪 (质构仪)',
+          model: 'TA.XT PlusC',
+          target: '鲈鱼肌肉弹性 / 紧实度 / 胶着性',
+          status: '🟢 在线已标定',
+          accuracy: '0.001 N 力值归零',
+          lastCalibrated: '今日 07:30',
+          nextCalibrated: '明日 07:30'
+        },
+        {
+          id: 'INST-06',
+          name: '顶空固相微萃取气质联用仪',
+          model: 'HS-SPME-GCMS',
+          target: '土腥味化合物 (Geosmin / 2-MIB)',
+          status: '🟢 在线已标定',
+          accuracy: '定量限 1.0 ng/kg',
+          lastCalibrated: '2026-08-10',
+          nextCalibrated: '2026-09-10'
+        }
+      ],
+
+      // 16. 📋 每日出厂批次双维度理化抽检与放行工作台 (安全红线 + 营养风味)
+      qualityBatches: [
+        {
+          id: 'LOT-20260819-01',
+          productName: '特级水培奶油生菜 (250g净菜)',
+          category: '水培叶菜',
+          sourceRaceway: '#A 跑道 (A03-B03)',
+          harvestTime: '今日 04:30',
+          inspectTime: '今日 05:15',
+          inspector: '品质主管 · 王工 (工号 003)',
+          nitrate: 620.5,
+          nitrateLimit: 800.0,
+          pesticideDetected: 0,
+          heavyMetalsPb: 0.0012,
+          antibioticsDetected: 0,
+          salmonella: '未检出 (阴性)',
+          safetyVerdictText: '🟢 特级母婴级安全 (全部合规)',
+          vitaminC: 28.5,
+          sugarBrix: 4.2,
+          crudeProtein: 2.1,
+          microFe: 1.85,
+          nutritionVerdictText: '💎 超额营养 (维C +110% · 糖度 4.2°Brix)',
+          status: 'RELEASED',
+          statusBadge: 'bg-emerald-100 text-emerald-800 border-emerald-300 font-bold',
+          statusText: '✅ 电子签名放行 (已生成 e-COA)',
+          ecoaId: 'eCOA-20260819-A01-9982',
+          sha256: '0x8f4a7c1b8923e54d89a2bcfe109842bc194a20b29c',
+          canApprove: false,
+          hasCAPA: false
+        },
+        {
+          id: 'LOT-20260819-02',
+          productName: '活泉生态加州鲈鱼 (活体大宗/净菜)',
+          category: '循环水产',
+          sourceRaceway: '#01 鲈鱼成鱼池 (吊水池)',
+          harvestTime: '今日 05:00',
+          inspectTime: '今日 05:40',
+          inspector: '品质主管 · 王工 (工号 003)',
+          nitrate: 12.0,
+          nitrateLimit: 100.0,
+          pesticideDetected: 0,
+          heavyMetalsPb: 0.0008,
+          antibioticsDetected: 0,
+          geosmin: 6.2,
+          salmonella: '未检出 (阴性)',
+          safetyVerdictText: '🟢 纯净无抗 (孔雀石绿/氯霉素 0检出)',
+          vitaminC: 1.2,
+          sugarBrix: 0.8,
+          crudeProtein: 19.8,
+          microFe: 2.40,
+          dhaEpa: 1.42,
+          muscleFirmness: '紧实 Q 弹 (质构硬度 1,420g)',
+          nutritionVerdictText: '🐟 高蛋白优质脂质 (粗蛋白 19.8% · 无土腥)',
+          status: 'RELEASED',
+          statusBadge: 'bg-teal-100 text-teal-800 border-teal-300 font-bold',
+          statusText: '✅ 电子签名放行 (已生成 e-COA)',
+          ecoaId: 'eCOA-20260819-FISH01-3810',
+          sha256: '0x19a84bf20084c81b29a8f4c1b99824c90b21a884fe',
+          canApprove: false,
+          hasCAPA: false
+        },
+        {
+          id: 'LOT-20260819-03',
+          productName: '罗马脆生菜 (山姆会员专属大箱)',
+          category: '水培叶菜',
+          sourceRaceway: '#B 跑道 (B02)',
+          harvestTime: '今日 06:10',
+          inspectTime: '今日 06:45',
+          inspector: '品质主管 · 王工 (工号 003)',
+          nitrate: 740.0,
+          nitrateLimit: 800.0,
+          pesticideDetected: 0,
+          heavyMetalsPb: 0.0015,
+          antibioticsDetected: 0,
+          salmonella: '未检出 (阴性)',
+          safetyVerdictText: '🟢 安全合规 (硝酸盐 740 mg/kg)',
+          vitaminC: 22.8,
+          sugarBrix: 3.4,
+          crudeProtein: 1.8,
+          microFe: 1.50,
+          nutritionVerdictText: '🟡 糖度微偏低 (3.4°Brix，建议光合增补)',
+          status: 'PENDING_AUDIT',
+          statusBadge: 'bg-purple-100 text-purple-800 border-purple-300 animate-pulse font-bold',
+          statusText: '⚡ 待审核放行 / 建议 CAPA 调优',
+          ecoaId: 'eCOA-20260819-ROM02-PENDING',
+          sha256: '待签名确认',
+          canApprove: true,
+          hasCAPA: true,
+          capaSuggestion: '向种植长派发《采收前 48h 提高 15% PPFD 光照》农艺调优工单'
+        },
+        {
+          id: 'LOT-20260819-04',
+          productName: '特种香草新鲜罗勒 (Ole\' 精品专配)',
+          category: '高定香草',
+          sourceRaceway: '#C 跑道 (C01)',
+          harvestTime: '今日 07:00',
+          inspectTime: '今日 07:35',
+          inspector: '品质主管 · 王工 (工号 003)',
+          nitrate: 510.0,
+          nitrateLimit: 800.0,
+          pesticideDetected: 0,
+          heavyMetalsPb: 0.0009,
+          antibioticsDetected: 0,
+          salmonella: '未检出 (阴性)',
+          safetyVerdictText: '🟢 特级纯净 (免洗生食级)',
+          vitaminC: 34.2,
+          sugarBrix: 4.8,
+          crudeProtein: 3.2,
+          microFe: 2.80,
+          nutritionVerdictText: '🌿 芳香精油与多酚富集 (香气评级 AAA)',
+          status: 'RELEASED',
+          statusBadge: 'bg-emerald-100 text-emerald-800 border-emerald-300 font-bold',
+          statusText: '✅ 电子签名放行 (已生成 e-COA)',
+          ecoaId: 'eCOA-20260819-HERB01-4491',
+          sha256: '0x992abfc8210499e1208ab984210a99182bc8102a9c',
+          canApprove: false,
+          hasCAPA: false
+        }
+      ],
+
+      // 17. ❄️ 4°C 留样冷藏库与 5 天货架期营养衰减跟踪
+      qualityRetentionRooms: {
+        chamberId: 'ROOM-4C-SAMPLE-01',
+        tempC: 4.1,
+        rhPercent: 86,
+        totalSamplesCount: 48,
+        weightLoss5dAvg: '1.85% (优于行业 <5%)',
+        vcRetention5dAvg: '88.5% (微气调锁鲜有效)',
+        currentAlert: '🟢 恒温恒湿正常 (无结露/无冷害)'
+      },
+
+      // 18. 🛠️ 质量 CAPA (纠偏与预防措施) 跟踪工单
+      qualityCAPATickets: [
+        {
+          id: 'CAPA-2026-0819-01',
+          batchId: 'LOT-20260819-03',
+          type: '农艺光配方优化 (糖度提升)',
+          department: '水培种植部 (种植长)',
+          triggerReason: '#B02 跑道罗马生菜采收糖度 3.4°Brix (低于预期 3.8°Brix)',
+          actionPlan: '在下一茬采收前 48 小时，将顶棚 LED 补光强度由 220 提升至 280 µmol/m²/s，促使叶肉碳水化合物与糖分充分转化累积。',
+          status: '🟡 待品质主管一键下发',
+          canDispatch: true
+        },
+        {
+          id: 'CAPA-2026-0818-02',
+          batchId: 'LOT-20260818-AQUA02',
+          type: '活水吊水净化时长校准',
+          department: '水产养殖部 (养殖长)',
+          triggerReason: '部分成鱼出塘前土腥味检测为 8.5 ng/kg (接近 10 ng/kg 预警红线)',
+          actionPlan: '出塘前微孔曝气循环水吊水净化时间从 48 小时延长至 72 小时，确保 Geosmin 完全降解排出。',
+          status: '✅ 已闭环执行 (复检 0 ng/kg 完全无腥)',
+          canDispatch: false
+        }
       ]
     };
   },

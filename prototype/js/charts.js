@@ -12,6 +12,7 @@ const AppCharts = {
   pumpWavelet: null,
   radarBases: null,
   atpForecast: null,
+  qualityRadar: null,
 
   /**
    * 初始化所有核心图表
@@ -23,6 +24,7 @@ const AppCharts = {
     this.initPumpWavelet();
     this.initRadarBases();
     this.initATPForecast();
+    this.initQualityRadar();
   },
 
   /**
@@ -324,6 +326,53 @@ const AppCharts = {
   },
 
   /**
+   * 7. 6 维出厂品质与营养安全对比雷达图 (品质主管视角)
+   */
+  initQualityRadar() {
+    const ctx = document.getElementById('chart-quality-radar')?.getContext('2d');
+    if (!ctx) return;
+
+    this.qualityRadar = new Chart(ctx, {
+      type: 'radar',
+      data: {
+        labels: ['低硝酸盐控制(<800mg)', '62项化学农残0检出', '水产抗生素0检出', '维生素C超额(+110%)', '糖度鲜甜(≥4.0°Bx)', '活泉无土腥(<10ng)'],
+        datasets: [
+          {
+            label: '鱼菜共生驻厂实验室实测',
+            data: [98, 100, 100, 96, 94, 98],
+            borderColor: '#059669',
+            backgroundColor: 'rgba(16, 185, 129, 0.25)',
+            borderWidth: 2
+          },
+          {
+            label: '普通大棚/传统农业基准',
+            data: [45, 60, 50, 48, 55, 62],
+            borderColor: '#94a3b8',
+            backgroundColor: 'rgba(148, 163, 184, 0.15)',
+            borderDash: [3, 3],
+            borderWidth: 1.5
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { labels: { color: '#334155', font: { family: 'JetBrains Mono', size: 10, weight: 'bold' } } }
+        },
+        scales: {
+          r: {
+            angleLines: { color: 'rgba(16, 185, 129, 0.2)' },
+            grid: { color: 'rgba(16, 185, 129, 0.15)' },
+            pointLabels: { color: '#1e293b', font: { size: 10, weight: 'bold' } },
+            ticks: { backdropColor: 'transparent', color: '#475569', min: 0, max: 100 }
+          }
+        }
+      }
+    });
+  },
+
+  /**
    * 角色切换时自适应重置图表大小
    */
   resizeForRole(roleId) {
@@ -336,6 +385,9 @@ const AppCharts = {
     if (roleId === 'executive') {
       if (this.radarBases) this.radarBases.resize();
       if (this.atpForecast) this.atpForecast.resize();
+    }
+    if (roleId === 'quality' && this.qualityRadar) {
+      this.qualityRadar.resize();
     }
   }
 };
