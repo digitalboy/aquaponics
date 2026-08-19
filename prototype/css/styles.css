@@ -1,0 +1,149 @@
+/* ========================================================================= */
+/* 鱼菜共生数字工业化工厂 · Aquaponics Cloud OS */
+/* 高定生机白绿微渐变设计系统 (Pristine Eco-White & Soft Mint Gradient System) */
+/* ========================================================================= */
+
+/* 1. 几乎纯白、带轻盈生机微渐变的全局背景 */
+body {
+  background: 
+    radial-gradient(circle at 15% 0%, rgba(167, 243, 208, 0.45) 0%, transparent 45%),
+    radial-gradient(circle at 85% 10%, rgba(209, 250, 229, 0.5) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% -10%, #d1fae5 0%, #ecfdf5 30%, #f0fdf4 60%, #ffffff 100%) !important;
+  background-attachment: fixed !important;
+  color: #0f172a !important;
+  min-height: 100vh;
+}
+
+/* 2. 清新薄荷绿精致滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(240, 253, 244, 0.6);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(52, 211, 153, 0.6);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.9);
+}
+
+/* 3. Luminous Glassmorphism 纯净水晶白玉毛玻璃卡片 */
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.1), 0 4px 16px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.glass-card-hover {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-card-hover:hover {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(16, 185, 129, 0.45);
+  box-shadow: 0 16px 36px -10px rgba(16, 185, 129, 0.2), 0 0 20px rgba(52, 211, 153, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+}
+
+/* 4. 紧急警报动态呼吸光效 */
+@keyframes pulse-alarm {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.03);
+  }
+}
+.animate-alarm {
+  animation: pulse-alarm 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* 5. 水流与温室生态渐变 */
+.flow-bg {
+  background: linear-gradient(135deg, rgba(209, 250, 229, 0.8) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(167, 243, 208, 0.7) 100%);
+}
+
+/* 6. 隐藏原生滚动条 */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* 7. 3D 数字孪生视口与左右分栏 (高透白绿基底) */
+#three-canvas-container {
+  position: relative;
+  width: 100%;
+  height: 640px;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: linear-gradient(145deg, #f0fdf4 0%, #ecfdf5 45%, #f8fafc 100%);
+  box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.08);
+}
+
+#three-canvas-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.right-data-panel {
+  height: 640px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  box-shadow: 0 20px 45px -15px rgba(16, 185, 129, 0.12), 0 4px 20px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* 8. 抽屉式侧边菜单 (Drawer Sidebar 纯白玉质感) */
+.drawer-backdrop {
+  background: rgba(15, 23, 42, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: opacity 0.3s ease;
+}
+
+.drawer-panel {
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border-right: 1px solid rgba(16, 185, 129, 0.25);
+  box-shadow: 20px 0 50px -10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.drawer-closed {
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+
+.drawer-open {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.drawer-item {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(240, 253, 244, 0.7);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+.drawer-item:hover {
+  background: #ecfdf5;
+  border-color: #10b981;
+  box-shadow: 0 4px 16px -3px rgba(16, 185, 129, 0.2);
+  transform: translateX(4px);
+}
+.drawer-item.active {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  border-color: #059669;
+  box-shadow: 0 6px 20px -4px rgba(16, 185, 129, 0.35);
+}

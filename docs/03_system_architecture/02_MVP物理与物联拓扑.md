@@ -7,22 +7,23 @@
 ```mermaid
 flowchart TD
     %% 1. 物理层 (最前线)
-    subgraph Layer1["1. 现场物理感知与视频层 (Field Layer)"]
+    subgraph Layer1["1. 现场物理感知、无人机与视频层 (Field Layer)"]
         direction LR
-        SensorA["🐟 水质传感群 (RVSP 4×0.75)<br>(荧光法DO / 塞恩在线氨氮三合一 / 工业pH/EC)"]
+        SensorA["🐟 水产与水培水质传感群 (RVSP 4×0.75)<br>(10座鱼池DO/TAN/pH/水温 + 4座菜池根区DO/EC/水温)"]
         SensorB["🌱 室内3D测温柱群 (Cat5e STP)<br>(6根立柱 / 18点温湿度剖面 / PAR)"]
         SensorC["🌤️ 室外超声微气象站 (Cat5e STP)<br>(风速风向/温湿压/总辐射/雨雪触点)"]
         Cams["📹 10路 IP 摄像头 (Cat5e PoE)<br>(H.265 RTSP 视频流)"]
+        UAVDock["🛸 室内无人机自动机巢 (Drone Dock)<br>(4K多光谱航测机 + 4点轻量UWB微基站)"]
     end
 
     %% 2. 边缘控制与本地存储层 (硬件保命与黑匣子)
     subgraph Layer2["2. 现场控制与本地存储中枢 (Edge Control Hub)"]
         direction TB
-        Hub["🔀 4口 RS485 光电隔离集线器<br>(鱼池水质/水培/气象/电表 物理四分区隔离)"]
+        Hub["🔀 4口 RS485 光电隔离集线器<br>(鱼池水质/水培跑道/立体气象/电表 物理四分区隔离)"]
         PLC["🔌 汇川 Easy320 PLC (含GL10扩展)<br>(24V DC / 0.1s 硬件保命硬互锁)"]
         PowerMeter["⚡ 威胜 DTSD342-P5 智能电表<br>(配3只 200/5A DBKCT24 开口互感器 / TOU峰谷电量)"]
         NVR["📹 16路 NVR + 4TB 监控硬盘<br>(本地循环录制 15 天全量历史)"]
-        Logic["本地硬核保命闭环<br>(DO<4.0 或 UIA>0.05 强开气泵 & 熔断投喂 / 暴雨强关天窗)"]
+        Logic["本地硬核保命闭环<br>(鱼池/菜池 DO<4.0 强开微孔曝气/文丘里 | UIA>0.05 熔断投喂 | 暴雨强关天窗)"]
         
         Hub --> PLC
         PowerMeter -->|RS485 Modbus-RTU| Hub
@@ -34,14 +35,14 @@ flowchart TD
         direction TB
         Gateway["💻 智能边缘网关 (研华工控机)<br>(5s 宽表快照 / 128G 断网自愈缓存)"]
         CloudAPI["⚡ Cloudflare Workers API<br>(防时钟漂移校验 + 三级告警引擎)"]
-        DB["🗄️ Cloudflare D1 (5s 宽表 120+点位 SQL)<br>📦 Cloudflare R2 (告警视频切片 & 快照)"]
+        DB["🗄️ Cloudflare D1 (5s 宽表 128+点位 SQL)<br>📦 Cloudflare R2 (告警视频切片 & 快照)"]
         
         Gateway -->|"③ 5s 宽表 JSON (HTTPS 加密)"| CloudAPI
         CloudAPI --> DB
     end
 
     %% 数据流动与通讯协议原理
-    SensorA -->|"① RS-485 Modbus-RTU"| Hub
+    SensorA -->|"① RS-485 Modbus-RTU (0x01~0x0A / 0x1300~0x1303)"| Hub
     SensorB -->|"① RS-485 Modbus-RTU"| Hub
     SensorC -->|"① RS-485 Modbus-RTU"| Hub
     Cams -->|"① 网线 RTSP 视频流"| NVR
@@ -65,8 +66,8 @@ flowchart TD
 
 ### 原理一：物理信号的“数字量化与保命硬锁闭”（Layer 1 $\rightarrow$ Layer 2）
 
-* **过程：** 现场的传感器把水质或光照的物理变化，通过工业标准的 RS-485 (Modbus-RTU) 信号发给汇川 Easy320 PLC（进阶多轴控制扩建时可选用汇川 AM400 系列）。
-* **IT 负责人的安全防线：** 核心控制必须先过 PLC。这样即使后面的网关断网或服务器死机，PLC 依然能靠本地的梯形图硬核代码闭环保命（如发现严重缺氧，不经云端直接拉高液氧电磁阀继电器并切断投喂机电源）。
+* **过程：** 现场的传感器把水质（鱼池水质与菜池水槽根区溶氧/EC/水温）或光照的物理变化，通过工业标准的 RS-485 (Modbus-RTU) 信号发给汇川 Easy320 PLC。
+* **IT 负责人的安全防线：** 核心控制必须先过 PLC。这样即使后面的网关断网或服务器死机，PLC 依然能靠本地的梯形图硬核代码闭环保命（如发现鱼池或水培菜池严重缺氧 $\text{DO} < 4.0\,\text{mg/L}$，不经云端直接拉高对应微孔曝气电磁阀继电器并联动文丘里射流器）。
 
 ### 原理二：工业协议到 IT 协议的“翻译与脱水”（Layer 2 $\rightarrow$ Layer 3 网关）
 

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鱼菜共生数字工业化工厂 · Aquaponics Cloud OS</title>
+
+  <!-- 外部依赖 CDN: Tailwind CSS & Chart.js & Three.js & OrbitControls -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- 字体: 优先 PingFang SC、Microsoft YaHei 等中文优化字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- 模块化样式引用 (高定生机白绿微渐变) -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"PingFang SC"', '"Hiragino Sans GB"', '"Microsoft YaHei"', '"WenQuanYi Micro Hei"', 'Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Consolas', 'Menlo', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-emerald-200 selection:text-emerald-950 text-sm">
+
+  <!-- ========================================================================= -->
+  <!-- 1. 顶部全局导航栏 (纯净白玉、严格 ISO 8601 时钟、实时电流、上帝情景模拟器) -->
+  <!-- ========================================================================= -->
+  <header class="sticky top-0 z-40 border-b border-emerald-200/80 bg-white/90 backdrop-blur-xl px-5 py-3 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+    
+    <!-- Left: Drawer Menu Toggle & Brand Title -->
+    <div class="flex items-center gap-4">
+      
+      <!-- ☰ 抽屉式侧面菜单唤出按钮 -->
+      <button onclick="toggleDrawer()" class="px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-800 border border-emerald-300/80 transition flex items-center gap-2.5 shadow-sm group font-bold cursor-pointer" title="点击打开角色工作台 (或按键盘 M 键)">
+        <span class="text-lg leading-none group-hover:scale-110 transition text-emerald-600 group-hover:text-white">☰</span>
+        <span class="text-xs font-bold">工作台菜单</span>
+      </button>
+
+      <!-- 当前激活工作台状态芯片 -->
+      <div onclick="toggleDrawer()" class="hidden sm:flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl bg-emerald-50/80 border border-emerald-300 text-emerald-900 text-xs font-semibold cursor-pointer hover:bg-emerald-100 transition shadow-inner">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span id="header-active-role-text" class="font-extrabold text-slate-900">🏛️ 战略成果与投资作战室</span>
+        <span id="header-active-role-tag" class="px-2 py-0.5 rounded bg-emerald-200 text-emerald-900 text-xs font-mono font-bold border border-emerald-300">Gov / VC</span>
+      </div>
+
+      <div class="h-6 w-px bg-emerald-200 hidden md:block"></div>
+
+      <!-- Factory Brand -->
+      <div class="hidden md:flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 flex items-center justify-center shadow-md shadow-emerald-500/20">
+          <div class="w-full h-full bg-white rounded-[6px] flex items-center justify-center text-sm">
+            🌿
+          </div>
+        </div>
+        <div>
+          <h1 class="font-extrabold text-sm text-slate-900 tracking-tight flex items-center gap-2">
+            鱼菜共生数字工业化工厂
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-mono font-bold">Cloud OS v2.4</span>
+          </h1>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Center: Real-time Clock & Global Status (包含实时跳动电流) -->
+    <div class="hidden lg:flex items-center gap-4 bg-emerald-50/70 px-4 py-2 rounded-xl border border-emerald-200/90 font-mono text-xs shadow-inner backdrop-blur-md">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+        <span class="text-slate-500 font-medium">UTC:</span>
+        <span id="utc-clock" class="text-slate-900 font-bold">2026-08-18T16:00:00.000Z</span>
+      </div>
+      <div class="h-3.5 w-px bg-emerald-200"></div>
+      <div class="flex items-center gap-1.5 text-slate-700">
+        <span class="text-slate-500 font-medium">网关RTC:</span>
+        <span class="text-teal-700 font-bold">已同步</span>
+      </div>
+      <div class="h-3.5 w-px bg-emerald-200"></div>
+      <div class="flex items-center gap-1.5 text-slate-700">
+        <span class="text-slate-500 font-medium">工厂状态:</span>
+        <span class="text-emerald-700 font-extrabold">100% 连续运行</span>
+      </div>
+      <div class="h-3.5 w-px bg-emerald-200"></div>
+      <div class="flex items-center gap-1.5 text-slate-700">
+        <span class="text-slate-500 font-medium">实时电流:</span>
+        <span id="header-live-current" class="text-amber-700 font-black font-mono">28.2 A</span>
+      </div>
+    </div>
+
+    <!-- Right: Scenario Simulator Action Bar -->
+    <div class="flex items-center gap-2 bg-emerald-50/70 p-1.5 rounded-xl border border-emerald-200/90 backdrop-blur-md">
+      <span class="text-xs text-slate-700 px-2 font-bold flex items-center gap-1">
+        <span>🎮</span> <span class="hidden xl:inline">情景模拟:</span>
+      </span>
+      <button onclick="triggerScenario('anoxia')" class="px-3 py-1.5 text-xs rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 transition flex items-center gap-1 font-bold cursor-pointer shadow-sm">
+        <span>🚨</span> 模拟缺氧
+      </button>
+      <button onclick="triggerScenario('ammonia')" class="px-3 py-1.5 text-xs rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-300 transition flex items-center gap-1 font-bold cursor-pointer shadow-sm">
+        <span>⚠️</span> 模拟氨超标
+      </button>
+      <button onclick="triggerScenario('peak_tariff')" class="px-3 py-1.5 text-xs rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-300 transition flex items-center gap-1 font-bold cursor-pointer shadow-sm">
+        <span>⚡</span> 尖峰电价
+      </button>
+      <button onclick="triggerScenario('storm')" class="px-3 py-1.5 text-xs rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-700 border border-teal-300 transition flex items-center gap-1 font-bold cursor-pointer shadow-sm">
+        <span>🌧️</span> 暴雨天窗
+      </button>
+      <button onclick="resetScenario()" class="px-3 py-1.5 text-xs rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-800 transition font-bold cursor-pointer border border-emerald-300 shadow-sm">
+        🔄 恢复
+      </button>
+    </div>
+
+  </header>
+
+  <!-- Emergency Banner (应急响应横幅) -->
+  <div id="emergency-banner" class="hidden bg-rose-600 border-b border-rose-700 px-4 py-2.5 text-center text-xs font-bold text-white flex items-center justify-center gap-3 animate-pulse shadow-md">
+    <span class="text-base">🚨</span>
+    <span id="emergency-msg">【现场 PLC 0.1s 硬安全触发】溶解氧跌破 4.0 mg/L，已强制联锁开启备用高压增氧阀并切断自动投喂！</span>
+    <span class="bg-rose-800 px-2.5 py-0.5 rounded border border-rose-300 text-white font-mono text-xs">Hard Safety Interlock: ACTIVE</span>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 2. 抽屉式侧面菜单栏 (Drawer Sidebar Navigation 白玉温润风格) -->
+  <!-- ========================================================================= -->
+  <div id="role-drawer" class="hidden fixed inset-0 z-50 overflow-hidden">
+    <div onclick="toggleDrawer()" class="drawer-backdrop absolute inset-0"></div>
+
+    <div id="drawer-panel" class="drawer-panel drawer-closed fixed inset-y-0 left-0 max-w-full w-full sm:w-[420px] flex flex-col justify-between p-6 overflow-y-auto">
+      
+      <div class="space-y-5">
+        
+        <div class="flex items-center justify-between border-b border-emerald-100 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 shadow-md shadow-emerald-500/20 flex items-center justify-center text-xl text-white">
+              🌿
+            </div>
+            <div>
+              <h2 class="font-extrabold text-slate-900 text-base">角色工作台导航</h2>
+              <p class="text-xs text-slate-500 mt-0.5">切换不同职能专有操作视界 (按 M 键快速切换)</p>
+            </div>
+          </div>
+          <button onclick="toggleDrawer()" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition cursor-pointer text-base border border-slate-300">
+            ✕
+          </button>
+        </div>
+
+        <div class="space-y-2.5 font-sans">
+          
+          <div id="drawer-item-investor" onclick="switchRole('investor')" class="drawer-item active p-3.5 rounded-2xl border border-emerald-600 cursor-pointer space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <span>🏛️</span> 战略成果与投资作战室
+              </span>
+              <span class="px-2 py-0.5 rounded bg-emerald-200 text-emerald-900 text-xs font-mono font-bold">Gov / VC</span>
+            </div>
+            <p class="text-xs text-slate-600 pl-6 leading-relaxed">3D数字孪生温室、节水95.2%、高资本回报IRR、跨周期现金流对冲</p>
+          </div>
+
+          <div id="drawer-item-aquaculture" onclick="switchRole('aquaculture')" class="drawer-item p-3.5 rounded-2xl border border-emerald-200 cursor-pointer space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <span>🐟</span> 水产养殖指挥台
+              </span>
+              <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-mono font-bold">养殖长</span>
+            </div>
+            <p class="text-xs text-slate-600 pl-6 leading-relaxed">国数荧光DO、塞恩氨氮、YOLO11摄食聚拢识别、双目估重</p>
+          </div>
+
+          <div id="drawer-item-hydroponics" onclick="switchRole('hydroponics')" class="drawer-item p-3.5 rounded-2xl border border-emerald-200 cursor-pointer space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <span>🥬</span> 水培种植调度台
+              </span>
+              <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-mono font-bold">种植长</span>
+            </div>
+            <p class="text-xs text-slate-600 pl-6 leading-relaxed">8.1m立体微气候、VPD/DLI罗盘、4大跑道成熟度与AMR工单</p>
+          </div>
+
+          <div id="drawer-item-energy" onclick="switchRole('energy')" class="drawer-item p-3.5 rounded-2xl border border-emerald-200 cursor-pointer space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <span>⚡</span> 工程能耗与预测维护
+              </span>
+              <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-mono font-bold">工程主管</span>
+            </div>
+            <p class="text-xs text-slate-600 pl-6 leading-relaxed">威胜三相电表、TOU分时避峰套利、主水泵小波谐波分析</p>
+          </div>
+
+          <div id="drawer-item-executive" onclick="switchRole('executive')" class="drawer-item p-3.5 rounded-2xl border border-emerald-200 cursor-pointer space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <span>📊</span> 集团多基地运营中台
+              </span>
+              <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-mono font-bold">COO/CFO</span>
+            </div>
+            <p class="text-xs text-slate-600 pl-6 leading-relaxed">苏州/成都/北京基地雷达对标、30天ATP期货锁单大盘</p>
+          </div>
+
+          <div id="drawer-item-b2b-fulfillment" onclick="switchRole('b2b-fulfillment')" class="drawer-item p-3.5 rounded-2xl border border-emerald-200 cursor-pointer space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <span>🚚</span> B2B 大客户与冷链履约中台
+              </span>
+              <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 text-xs font-mono font-bold">B2B 业务经理</span>
+            </div>
+            <p class="text-xs text-slate-600 pl-6 leading-relaxed">OTIF 99.8%、商超截单倒计时、在途冷链温控雷达与15分钟客诉应急调拨</p>
+          </div>
+
+          <div id="drawer-item-b2b" onclick="switchRole('b2b')" class="drawer-item p-3.5 rounded-2xl border border-emerald-200 cursor-pointer space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <span>🛍️</span> B2C 自有品牌与零售运营台
+              </span>
+              <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-mono font-bold">零售业务经理</span>
+            </div>
+            <p class="text-xs text-slate-600 pl-6 leading-relaxed">C端溢价率312%、1,280位周期购会员、一物一码转化与AI客服</p>
+          </div>
+
+          <div id="drawer-item-b2c" onclick="switchRole('b2c')" class="drawer-item p-3.5 rounded-2xl border border-emerald-200 cursor-pointer space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <span>📱</span> C端手机扫码溯源
+              </span>
+              <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-mono font-bold">家庭消费者</span>
+            </div>
+            <p class="text-xs text-slate-600 pl-6 leading-relaxed">iPhone模拟视图、21天纯净生长足迹、减碳142.5g勋章</p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="border-t border-emerald-100 pt-4 text-xs text-slate-600 space-y-2 font-mono">
+        <div class="flex justify-between">
+          <span class="text-slate-500">PLC 工业总线:</span>
+          <span class="text-emerald-700 font-bold">Easy320 正常通信</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">操作提示:</span>
+          <span class="text-slate-700">按键盘 <strong class="text-emerald-700">M</strong> 键可随时唤出/收起</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 左边缘浮动抽屉快捷把手 (纯白生机绿) -->
+  <button onclick="toggleDrawer()" class="fixed left-0 top-1/2 -translate-y-1/2 z-30 bg-white/95 hover:bg-emerald-600 text-emerald-800 hover:text-white px-2 py-4 rounded-r-xl border border-l-0 border-emerald-300 shadow-xl transition flex flex-col items-center gap-1 cursor-pointer group" title="点击打开工作台菜单 (快捷键: M)">
+    <span class="text-sm group-hover:scale-125 transition">☰</span>
+    <span class="text-[11px] font-sans [writing-mode:vertical-lr] tracking-widest text-emerald-900 group-hover:text-white font-bold">工作台</span>
+  </button>
+
+  <!-- ========================================================================= -->
+  <!-- 3. 主内容区域 (8 个角色视图模块由 js/views/ 自动挂载) -->
+  <!-- ========================================================================= -->
+  <main id="main-view-container" class="flex-1 p-5 md:p-8 max-w-[1850px] w-full mx-auto space-y-8">
+    <!-- 8 个角色视图容器由 js/views/view-loader.js 动态挂载 -->
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 4. 模态框容器 (SOP 标定弹窗 & 电子质检证明书 & 单株全息数字档案) -->
+  <!-- ========================================================================= -->
+  <div id="modals-container">
+    <!-- 模态框由 js/views/view-modals.js 动态挂载 -->
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 5. 模块化 JavaScript 脚本引入 (按依赖顺序加载) -->
+  <!-- ========================================================================= -->
+  <!-- 视图模板模块 (View Templates) -->
+  <script src="js/views/view-dashboard.js"></script>
+  <script src="js/views/view-aquaculture.js"></script>
+  <script src="js/views/view-hydroponics.js"></script>
+  <script src="js/views/view-energy.js"></script>
+  <script src="js/views/view-supply-chain.js"></script>
+  <script src="js/views/view-b2b-fulfillment.js"></script>
+  <script src="js/views/view-retail.js"></script>
+  <script src="js/views/view-trace.js"></script>
+  <script src="js/views/view-modals.js"></script>
+  <script src="js/views/view-loader.js"></script>
+
+  <!-- 业务逻辑与控制器 (Controllers & State) -->
+  <script src="js/state.js"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/sensor-simulator.js"></script>
+  <script src="js/aqua-hydro-view.js"></script>
+  <script src="js/retail-copilot.js"></script>
+  <script src="js/hud-renderer.js"></script>
+  <script src="js/data-engine.js"></script>
+  <script src="js/digital-twin-3d.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/canvas-fish.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
