@@ -93,9 +93,9 @@ window.ViewTemplates['view-b2c'] = `
             <div class="p-3.5 bg-gradient-to-br from-purple-50 via-white to-purple-50 rounded-2xl border border-purple-200 space-y-2">
               <div class="flex items-center justify-between">
                 <span class="font-black text-slate-900 text-xs">👑 钻石认养会员 · 张女士</span>
-                <span class="text-[10px] px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 font-bold font-mono">年卡第 142 天</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 font-bold font-mono">年卡第 142 天</span>
               </div>
-              <div class="text-[11px] text-slate-600 font-mono">
+              <div class="text-xs text-slate-600 font-mono space-y-0.5">
                 <div>📦 <strong>本周五鲜配</strong>: 顺丰冷链运输中 (2.8°C 恒温)</div>
                 <div>🌱 <strong>专属认养槽</strong>: #RA-B03-R02C04 (生长第16天 / 210g)</div>
               </div>
@@ -108,13 +108,13 @@ window.ViewTemplates['view-b2c'] = `
                   <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                   🤖 AI 智能农庄管家 (在线秒回)
                 </span>
-                <span class="text-[10px] text-slate-400 font-mono">调取全量批次质检档案</span>
+                <span class="text-xs text-slate-400 font-mono">调取全量批次质检档案</span>
               </div>
 
               <!-- 快捷提报按钮 -->
               <div class="space-y-1.5">
-                <span class="text-[10px] text-slate-500 block">点击快捷提交诉求：</span>
-                <div class="flex flex-wrap gap-1.5 text-[11px]">
+                <span class="text-xs text-slate-500 block">点击快捷提交诉求：</span>
+                <div class="flex flex-wrap gap-1.5 text-xs">
                   <button onclick="DataEngine.quickSendFeedback('这周收到的生菜有两片外叶微黄，希望注意冷链保温')" class="px-2 py-1 bg-purple-50 hover:bg-purple-100 text-purple-800 rounded-lg border border-purple-200 cursor-pointer">
                     🥬 反馈生菜微黄
                   </button>
@@ -129,7 +129,7 @@ window.ViewTemplates['view-b2c'] = `
 
               <!-- 聊天气泡区域 -->
               <div id="miniapp-chat-bubbles" class="space-y-2.5 max-h-48 overflow-y-auto font-sans text-xs pr-1">
-                <div class="bg-slate-100 p-2.5 rounded-xl rounded-tl-none text-slate-800 text-[11px] leading-relaxed">
+                <div class="bg-slate-100 p-2.5 rounded-xl rounded-tl-none text-slate-800 text-xs leading-relaxed">
                   您好，张女士！我是您的专属 AI 农庄管家。您订购的产品状态正常，若对生长品质或周配选品有任何投诉与建议，随时告诉我，我将秒级为您解答与关怀处理！
                 </div>
               </div>
@@ -137,7 +137,7 @@ window.ViewTemplates['view-b2c'] = `
               <!-- 输入框 -->
               <div class="flex gap-1.5 pt-1">
                 <input type="text" id="miniapp-input-text" placeholder="输入投诉、建议或选品需求..." class="flex-1 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-purple-500">
-                <button onclick="DataEngine.handleCustomFeedbackInput()" class="px-3 py-1.5 bg-purple-700 hover:bg-purple-800 text-white font-bold rounded-xl text-xs cursor-pointer shadow-sm">
+                <button onclick="DataEngine.handleCustomFeedbackInput()" class="px-3 py-1.5 bg-purple-700 hover:bg-purple-800 text-white font-bold rounded-xl text-xs cursor-pointer shadow-sm whitespace-nowrap">
                   发送
                 </button>
               </div>

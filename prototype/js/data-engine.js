@@ -30,6 +30,7 @@ const DataEngine = {
     this.renderB2BFulfillmentTable();
     this.renderB2BTicketsStream();
     this.renderQualityInstruments();
+    this.renderInProcessQCStream();
     this.renderQualityBatchesTable();
     this.renderQualityRetentionRooms();
     this.renderQualityCAPATickets();
@@ -156,6 +157,14 @@ const DataEngine = {
   // ---------------------------------------------------------------------------
   renderQualityInstruments() {
     RetailCopilotController.renderQualityInstruments(this);
+  },
+
+  renderInProcessQCStream() {
+    RetailCopilotController.renderInProcessQCStream(this);
+  },
+
+  triggerPreemptiveIntervention(ipqcId) {
+    RetailCopilotController.triggerPreemptiveIntervention(this, ipqcId);
   },
 
   renderQualityBatchesTable() {

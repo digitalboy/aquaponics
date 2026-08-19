@@ -18,52 +18,52 @@ window.ViewTemplates['view-b2b'] = `
         <div class="glass-card rounded-2xl p-5 border-2 border-emerald-300 shadow-md bg-gradient-to-br from-emerald-50/90 to-white space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs text-slate-500 font-bold font-sans">💎 C端自有品牌溢价率</span>
-            <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-mono font-bold">+312% 溢价</span>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-mono font-bold">+312% 溢价</span>
           </div>
           <div class="flex items-baseline gap-2">
             <strong class="text-2xl font-black text-slate-900 font-mono">¥35.0</strong>
             <span class="text-xs text-slate-500 font-sans">/ kg 综合均价</span>
           </div>
-          <p class="text-[11px] text-emerald-700 font-mono">B2B大宗 ¥8.5 vs DTC ¥35.0 • 毛利 78.5%</p>
+          <p class="text-xs text-emerald-700 font-mono">B2B大宗 ¥8.5 vs DTC ¥35.0 • 毛利 78.5%</p>
         </div>
 
         <!-- 👑 周期购与会员认养大盘 -->
         <div class="glass-card rounded-2xl p-5 border-2 border-teal-300 shadow-md bg-gradient-to-br from-teal-50/90 to-white space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs text-slate-500 font-bold font-sans">👑 周期购会员认养大盘</span>
-            <span class="px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 text-[11px] font-mono font-bold">周留存 82.5%</span>
+            <span class="px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 text-xs font-mono font-bold">周留存 82.5%</span>
           </div>
           <div class="flex items-baseline gap-2">
             <strong class="text-2xl font-black text-slate-900 font-mono">1,280</strong>
             <span class="text-xs text-slate-500 font-sans">位活跃订阅家庭</span>
           </div>
-          <p class="text-[11px] text-teal-700 font-mono">周客单价 ¥128.0 • 周回款 ¥16.4 万</p>
+          <p class="text-xs text-teal-700 font-mono">周客单价 ¥128.0 • 周回款 ¥16.4 万</p>
         </div>
 
         <!-- 📱 一物一码扫码互动率 -->
         <div class="glass-card rounded-2xl p-5 border-2 border-purple-300 shadow-md bg-gradient-to-br from-purple-50/90 to-white space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs text-slate-500 font-bold font-sans">📱 一物一码扫码互动率</span>
-            <span class="px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 text-[11px] font-mono font-bold">NPS 86.5分</span>
+            <span class="px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 text-xs font-mono font-bold">NPS 86.5分</span>
           </div>
           <div class="flex items-baseline gap-2">
             <strong class="text-2xl font-black text-slate-900 font-mono">68.4%</strong>
             <span class="text-xs text-slate-500 font-sans">终端消费者扫码</span>
           </div>
-          <p class="text-[11px] text-purple-700 font-mono">平均停留 48秒 • 二次复购率 42.5%</p>
+          <p class="text-xs text-purple-700 font-mono">平均停留 48秒 • 二次复购率 42.5%</p>
         </div>
 
         <!-- 🤖 AI 会员客服自动处理率 -->
         <div class="glass-card rounded-2xl p-5 border-2 border-indigo-300 shadow-md bg-gradient-to-br from-indigo-50/90 to-white space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs text-slate-500 font-bold font-sans">🤖 AI 会员客服自动处理率</span>
-            <span class="px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-[11px] font-mono font-bold">响应 0.8s</span>
+            <span class="px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-xs font-mono font-bold">响应 0.8s</span>
           </div>
           <div class="flex items-baseline gap-2">
             <strong class="text-2xl font-black text-indigo-700 font-mono">98.2%</strong>
             <span class="text-xs text-slate-500 font-sans">闭环解决</span>
           </div>
-          <p class="text-[11px] text-slate-600 font-mono">调取批次档案 • 满意度 98.6%</p>
+          <p class="text-xs text-slate-600 font-mono">调取批次档案 • 满意度 98.6%</p>
         </div>
 
       </div>
@@ -98,7 +98,7 @@ window.ViewTemplates['view-b2b'] = `
               <div class="space-y-1">
                 <div class="flex items-center gap-2">
                   <span class="font-bold text-slate-900 text-sm">🥬 母婴级低硝酸盐生菜鲜萃礼盒 (250g净菜)</span>
-                  <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-600 text-white font-mono font-bold">热销 TOP 1</span>
+                  <span class="text-xs px-2 py-0.5 rounded bg-emerald-600 text-white font-mono font-bold">热销 TOP 1</span>
                 </div>
                 <p class="text-slate-500 text-xs">硝酸盐&lt;800mg/kg • 0化学农药 • 机械臂无菌切根称重打码</p>
               </div>
@@ -108,7 +108,7 @@ window.ViewTemplates['view-b2b'] = `
                   <span class="text-base font-black text-emerald-700 font-mono">¥38.0 / 盒</span>
                 </div>
                 <div class="pl-3 border-l border-emerald-200">
-                  <span class="text-[11px] text-slate-500 block">单品毛利率</span>
+                  <span class="text-xs text-slate-500 block">单品毛利率</span>
                   <span class="text-sm font-black text-slate-900 font-mono">79.2%</span>
                 </div>
               </div>
@@ -119,7 +119,7 @@ window.ViewTemplates['view-b2b'] = `
               <div class="space-y-1">
                 <div class="flex items-center gap-2">
                   <span class="font-bold text-slate-900 text-sm">🐟 活泉加州鲈鲜切冷链净菜包 (500g鱼柳/鱼片)</span>
-                  <span class="text-[10px] px-2 py-0.5 rounded bg-teal-700 text-white font-mono font-bold">高蛋白辅食</span>
+                  <span class="text-xs px-2 py-0.5 rounded bg-teal-700 text-white font-mono font-bold">高蛋白辅食</span>
                 </div>
                 <p class="text-slate-500 text-xs">封闭纯净循环水养殖 • 0抗生素0孔雀石绿 • 活鱼瞬冷锁鲜</p>
               </div>
@@ -129,7 +129,7 @@ window.ViewTemplates['view-b2b'] = `
                   <span class="text-base font-black text-teal-800 font-mono">¥68.0 / 份</span>
                 </div>
                 <div class="pl-3 border-l border-teal-200">
-                  <span class="text-[11px] text-slate-500 block">单品毛利率</span>
+                  <span class="text-xs text-slate-500 block">单品毛利率</span>
                   <span class="text-sm font-black text-slate-900 font-mono">68.5%</span>
                 </div>
               </div>
@@ -140,7 +140,7 @@ window.ViewTemplates['view-b2b'] = `
               <div class="space-y-1">
                 <div class="flex items-center gap-2">
                   <span class="font-bold text-slate-900 text-sm">👑 专属水培浮板认养年卡 (52周高定周配)</span>
-                  <span class="text-[10px] px-2 py-0.5 rounded bg-purple-700 text-white font-mono font-bold">高净值尊享</span>
+                  <span class="text-xs px-2 py-0.5 rounded bg-purple-700 text-white font-mono font-bold">高净值尊享</span>
                 </div>
                 <p class="text-slate-500 text-xs">认养专属浮板孔位 • 每周2盒定制冷链直配 • 24h RTSP专属慢直播机位</p>
               </div>
@@ -150,7 +150,7 @@ window.ViewTemplates['view-b2b'] = `
                   <span class="text-base font-black text-purple-700 font-mono">¥1,980 / 年</span>
                 </div>
                 <div class="pl-3 border-l border-purple-200">
-                  <span class="text-[11px] text-slate-500 block">会员续费率</span>
+                  <span class="text-xs text-slate-500 block">会员续费率</span>
                   <span class="text-sm font-black text-slate-900 font-mono">84.2%</span>
                 </div>
               </div>
@@ -182,19 +182,19 @@ window.ViewTemplates['view-b2b'] = `
             <span class="font-bold text-slate-900 text-xs block">📊 全生命周期扫码互动转化漏斗</span>
             <div class="grid grid-cols-4 gap-2 text-center font-mono text-xs">
               <div class="p-2 bg-white rounded-lg border border-purple-100">
-                <span class="text-slate-500 font-sans block text-[10px]">1. 微信扫码率</span>
+                <span class="text-slate-500 font-sans block text-xs">1. 微信扫码率</span>
                 <span class="text-base font-black text-slate-900">68.4%</span>
               </div>
               <div class="p-2 bg-white rounded-lg border border-purple-100">
-                <span class="text-slate-500 font-sans block text-[10px]">2. 延时视频停留</span>
+                <span class="text-slate-500 font-sans block text-xs">2. 延时视频停留</span>
                 <span class="text-base font-black text-emerald-700">48 秒</span>
               </div>
               <div class="p-2 bg-white rounded-lg border border-purple-100">
-                <span class="text-slate-500 font-sans block text-[10px]">3. 周期购转化率</span>
+                <span class="text-slate-500 font-sans block text-xs">3. 周期购转化率</span>
                 <span class="text-base font-black text-teal-800">42.5%</span>
               </div>
               <div class="p-2 bg-white rounded-lg border border-purple-100">
-                <span class="text-slate-500 font-sans block text-[10px]">4. 二次复购率</span>
+                <span class="text-slate-500 font-sans block text-xs">4. 二次复购率</span>
                 <span class="text-base font-black text-purple-700">82.5%</span>
               </div>
             </div>
@@ -203,7 +203,7 @@ window.ViewTemplates['view-b2b'] = `
           <!-- 会员画像与客群偏好分析 -->
           <div class="space-y-2 font-sans text-xs">
             <span class="font-bold text-slate-900 block">👥 1,280 位活跃周期购会员画像分布</span>
-            <div class="space-y-2 font-sans text-[11px]">
+            <div class="space-y-2 font-sans text-xs">
               <div class="p-2.5 bg-white rounded-lg border border-slate-200 flex items-center justify-between">
                 <div class="flex items-center gap-2">
                   <span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span>
@@ -285,14 +285,14 @@ window.ViewTemplates['view-b2b'] = `
               <div class="p-3.5 rounded-xl bg-purple-50/80 border border-purple-200 space-y-2">
                 <div class="flex items-center justify-between">
                   <span class="font-bold text-purple-900 text-xs">🌱 选品排产优化建议 (置信度 94%)</span>
-                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-200 text-purple-800 font-bold">高频诉求</span>
+                  <span class="text-xs px-1.5 py-0.5 rounded bg-purple-200 text-purple-800 font-bold">高频诉求</span>
                 </div>
                 <p class="text-slate-600 text-xs leading-relaxed">
                   近 7 天有 <strong class="text-purple-800 font-mono">24 位会员</strong> 在小程序建议增加“嫩叶羽衣甘蓝”与“芝麻菜”周配选项。
                 </p>
                 <div class="flex items-center justify-between pt-1 border-t border-purple-100">
-                  <span class="text-[11px] text-emerald-700 font-bold">建议: 将 #04 跑道 20% 面积切换</span>
-                  <button onclick="DataEngine.applyAICopilotSuggestion('crop')" class="px-2.5 py-1 rounded-lg bg-purple-700 hover:bg-purple-800 text-white font-bold text-[11px] cursor-pointer shadow-sm">
+                  <span class="text-xs text-emerald-700 font-bold">建议: 将 #04 跑道 20% 面积切换</span>
+                  <button onclick="DataEngine.applyAICopilotSuggestion('crop')" class="px-2.5 py-1 rounded-lg bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs cursor-pointer shadow-sm">
                     一键采纳排产
                   </button>
                 </div>
@@ -302,14 +302,14 @@ window.ViewTemplates['view-b2b'] = `
               <div class="p-3.5 rounded-xl bg-teal-50/80 border border-teal-200 space-y-2">
                 <div class="flex items-center justify-between">
                   <span class="font-bold text-teal-900 text-xs">❄️ 冷链温控策略优化 (置信度 91%)</span>
-                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-teal-200 text-teal-800 font-bold">风险预警</span>
+                  <span class="text-xs px-1.5 py-0.5 rounded bg-teal-200 text-teal-800 font-bold">风险预警</span>
                 </div>
                 <p class="text-slate-600 text-xs leading-relaxed">
                   检测到 2 起夏季午间末端配送微温差反馈。
                 </p>
                 <div class="flex items-center justify-between pt-1 border-t border-teal-100">
-                  <span class="text-[11px] text-teal-800 font-bold">建议: 增投 150g 相变蓄冷冰袋</span>
-                  <button onclick="DataEngine.applyAICopilotSuggestion('coldchain')" class="px-2.5 py-1 rounded-lg bg-teal-700 hover:bg-teal-800 text-white font-bold text-[11px] cursor-pointer shadow-sm">
+                  <span class="text-xs text-teal-800 font-bold">建议: 增投 150g 相变蓄冷冰袋</span>
+                  <button onclick="DataEngine.applyAICopilotSuggestion('coldchain')" class="px-2.5 py-1 rounded-lg bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs cursor-pointer shadow-sm">
                     下发冷链工单
                   </button>
                 </div>
@@ -319,14 +319,14 @@ window.ViewTemplates['view-b2b'] = `
               <div class="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200 space-y-2">
                 <div class="flex items-center justify-between">
                   <span class="font-bold text-amber-900 text-xs">👑 高净值年卡会员续费关怀 (置信度 96%)</span>
-                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-200 text-amber-800 font-bold">VIP 关怀</span>
+                  <span class="text-xs px-1.5 py-0.5 rounded bg-amber-200 text-amber-800 font-bold">VIP 关怀</span>
                 </div>
                 <p class="text-slate-600 text-xs leading-relaxed">
                   有 <strong class="text-amber-800 font-mono">15 位认养年卡会员</strong> 处于最后 30 天周期。
                 </p>
                 <div class="flex items-center justify-between pt-1 border-t border-amber-100">
-                  <span class="text-[11px] text-amber-800 font-bold">建议: 自动派发 VIP 续费礼遇券</span>
-                  <button onclick="DataEngine.applyAICopilotSuggestion('vip')" class="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-[11px] cursor-pointer shadow-sm">
+                  <span class="text-xs text-amber-800 font-bold">建议: 自动派发 VIP 续费礼遇券</span>
+                  <button onclick="DataEngine.applyAICopilotSuggestion('vip')" class="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs cursor-pointer shadow-sm">
                     一键批量发送
                   </button>
                 </div>

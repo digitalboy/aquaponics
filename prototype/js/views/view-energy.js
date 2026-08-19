@@ -155,14 +155,14 @@ window.ViewTemplates['view-energy'] = `
             <thead>
               <tr class="bg-emerald-50/80 text-slate-700 border-b border-emerald-200">
                 <th class="py-2.5 px-3 font-bold font-sans">动力设备名称</th>
-                <th class="py-2.5 px-2 text-center text-emerald-800">00-03<br><span class="text-[10px] font-normal text-emerald-600 font-sans">谷(¥0.35)</span></th>
-                <th class="py-2.5 px-2 text-center text-emerald-800">03-06<br><span class="text-[10px] font-normal text-emerald-600 font-sans">谷(¥0.35)</span></th>
-                <th class="py-2.5 px-2 text-center text-teal-800">06-09<br><span class="text-[10px] font-normal text-teal-600 font-sans">平(¥0.68)</span></th>
-                <th class="py-2.5 px-2 text-center text-amber-800">09-12<br><span class="text-[10px] font-normal text-amber-600 font-sans">峰(¥1.05)</span></th>
-                <th class="py-2.5 px-2 text-center text-teal-800">12-15<br><span class="text-[10px] font-normal text-teal-600 font-sans">平(¥0.68)</span></th>
-                <th class="py-2.5 px-2 text-center text-teal-800">15-18<br><span class="text-[10px] font-normal text-teal-600 font-sans">平(¥0.68)</span></th>
-                <th class="py-2.5 px-2 text-center text-rose-800 font-bold bg-rose-50/70">18-21<br><span class="text-[10px] font-normal text-rose-600 font-sans">尖峰(¥1.28)</span></th>
-                <th class="py-2.5 px-2 text-center text-teal-800">21-24<br><span class="text-[10px] font-normal text-teal-600 font-sans">平(¥0.68)</span></th>
+                <th class="py-2.5 px-2 text-center text-emerald-800">00-03<br><span class="text-xs font-normal text-emerald-600 font-sans">谷(¥0.35)</span></th>
+                <th class="py-2.5 px-2 text-center text-emerald-800">03-06<br><span class="text-xs font-normal text-emerald-600 font-sans">谷(¥0.35)</span></th>
+                <th class="py-2.5 px-2 text-center text-teal-800">06-09<br><span class="text-xs font-normal text-teal-600 font-sans">平(¥0.68)</span></th>
+                <th class="py-2.5 px-2 text-center text-amber-800">09-12<br><span class="text-xs font-normal text-amber-600 font-sans">峰(¥1.05)</span></th>
+                <th class="py-2.5 px-2 text-center text-teal-800">12-15<br><span class="text-xs font-normal text-teal-600 font-sans">平(¥0.68)</span></th>
+                <th class="py-2.5 px-2 text-center text-teal-800">15-18<br><span class="text-xs font-normal text-teal-600 font-sans">平(¥0.68)</span></th>
+                <th class="py-2.5 px-2 text-center text-rose-800 font-bold bg-rose-50/70">18-21<br><span class="text-xs font-normal text-rose-600 font-sans">尖峰(¥1.28)</span></th>
+                <th class="py-2.5 px-2 text-center text-teal-800">21-24<br><span class="text-xs font-normal text-teal-600 font-sans">平(¥0.68)</span></th>
                 <th class="py-2.5 px-3 text-right font-sans font-bold">当日台时</th>
                 <th class="py-2.5 px-3 font-sans font-bold">当前状态 / 轮换策略</th>
               </tr>

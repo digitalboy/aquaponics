@@ -335,37 +335,71 @@ const AppCharts = {
     this.qualityRadar = new Chart(ctx, {
       type: 'radar',
       data: {
-        labels: ['低硝酸盐控制(<800mg)', '62项化学农残0检出', '水产抗生素0检出', '维生素C超额(+110%)', '糖度鲜甜(≥4.0°Bx)', '活泉无土腥(<10ng)'],
+        labels: [
+          '低硝酸盐控制 (<800mg/kg)',
+          '62项化学农残 0检出',
+          '水产抗生素/孔雀石绿 0检出',
+          '维生素 C 超额富集 (+110%)',
+          '可溶性糖度鲜甜 (≥4.0°Bx)',
+          '活水无土腥味 (<10ng/kg)'
+        ],
         datasets: [
           {
             label: '鱼菜共生驻厂实验室实测',
             data: [98, 100, 100, 96, 94, 98],
             borderColor: '#059669',
-            backgroundColor: 'rgba(16, 185, 129, 0.25)',
-            borderWidth: 2
+            backgroundColor: 'rgba(16, 185, 129, 0.28)',
+            pointBackgroundColor: '#059669',
+            pointBorderColor: '#ffffff',
+            pointHoverBackgroundColor: '#ffffff',
+            pointHoverBorderColor: '#059669',
+            borderWidth: 2.5,
+            pointRadius: 4
           },
           {
             label: '普通大棚/传统农业基准',
             data: [45, 60, 50, 48, 55, 62],
             borderColor: '#94a3b8',
-            backgroundColor: 'rgba(148, 163, 184, 0.15)',
-            borderDash: [3, 3],
-            borderWidth: 1.5
+            backgroundColor: 'rgba(148, 163, 184, 0.14)',
+            borderDash: [4, 4],
+            borderWidth: 1.5,
+            pointRadius: 3
           }
         ]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        layout: {
+          padding: { top: 8, bottom: 8, left: 10, right: 10 }
+        },
         plugins: {
-          legend: { labels: { color: '#334155', font: { family: 'JetBrains Mono', size: 10, weight: 'bold' } } }
+          legend: {
+            position: 'top',
+            labels: {
+              color: '#334155',
+              font: { family: 'JetBrains Mono, PingFang SC, sans-serif', size: 11, weight: 'bold' },
+              padding: 12
+            }
+          }
         },
         scales: {
           r: {
-            angleLines: { color: 'rgba(16, 185, 129, 0.2)' },
-            grid: { color: 'rgba(16, 185, 129, 0.15)' },
-            pointLabels: { color: '#1e293b', font: { size: 10, weight: 'bold' } },
-            ticks: { backdropColor: 'transparent', color: '#475569', min: 0, max: 100 }
+            min: 0,
+            max: 100,
+            ticks: {
+              stepSize: 25,
+              backdropColor: 'transparent',
+              color: '#64748b',
+              font: { size: 9, weight: '600' }
+            },
+            angleLines: { color: 'rgba(16, 185, 129, 0.25)' },
+            grid: { color: 'rgba(16, 185, 129, 0.16)' },
+            pointLabels: {
+              color: '#0f172a',
+              font: { family: 'PingFang SC, sans-serif', size: 11, weight: 'bold' },
+              padding: 6
+            }
           }
         }
       }

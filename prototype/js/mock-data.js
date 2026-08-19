@@ -502,9 +502,10 @@ const MockDataFactory = {
         }
       ],
 
-      // 17. ❄️ 4°C 留样冷藏库与 5 天货架期营养衰减跟踪
+      // 17. ❄️ 4°C 留样冷藏柜与 5 天货架期营养衰减跟踪 (海尔生物医疗 HYC-310A)
       qualityRetentionRooms: {
         chamberId: 'ROOM-4C-SAMPLE-01',
+        model: '海尔 HYC-310A (310L 电加热防雾)',
         tempC: 4.1,
         rhPercent: 86,
         totalSamplesCount: 48,
@@ -513,7 +514,95 @@ const MockDataFactory = {
         currentAlert: '🟢 恒温恒湿正常 (无结露/无冷害)'
       },
 
-      // 18. 🛠️ 质量 CAPA (纠偏与预防措施) 跟踪工单
+      // 18. 🔄 生产过程动态质检与前置干预数据集 (IPQC In-Process Quality Control Gates)
+      inProcessQualityInspections: [
+        {
+          id: 'IPQC-20260819-01',
+          targetName: '🥬 #A 跑道 (特级奶油生菜)',
+          growthStage: '旺盛生长期 (定植第 14 天 · 距采收 6 天)',
+          sampleTime: '今日 08:30',
+          testMethod: '普析 T6-1650E 汁液硝酸盐速测 + TAS-990 矿质微量元素',
+          metrics: {
+            nitrateCurrent: 1180.0,
+            nitrateForecast: '1100 mg/kg (若不干预将超出母婴级 <800 标杆)',
+            spad: 44.5,
+            calciumAbsorption: '吸收速率偏缓 (预警心叶缺钙烧心风险)'
+          },
+          riskLevel: 'WARNING_NITRATE_SPIKE',
+          riskLevelBadge: 'bg-amber-100 text-amber-800 border-amber-300 font-bold',
+          riskLevelText: '🟡 旺长硝酸盐偏高预警',
+          preemptiveActionName: '提前 6 天启动: 硝酸盐代谢促降冲洗 + 降低进水硝态氮 30%',
+          actionType: 'nitrate_flush',
+          targetUnitId: 'raceway-a',
+          status: 'PENDING_ACTION',
+          isDispatched: false
+        },
+        {
+          id: 'IPQC-20260819-02',
+          targetName: '🥬 #B 跑道 (罗马脆生菜)',
+          growthStage: '采收冲刺期 (定植第 18 天 · 采收前 48 小时)',
+          sampleTime: '今日 09:15',
+          testMethod: 'ATAGO 数字折光糖度仪 Brix + 采收面 ATP 生物荧光拭子',
+          metrics: {
+            sugarBrixCurrent: 3.65,
+            targetBrix: '4.20°Brix (标杆甜脆级)',
+            atpCleanliness: '18 RLU (远优于 <30 洁净级)',
+            canopyUniformity: '98.5% (单株点云均匀度极佳)'
+          },
+          riskLevel: 'WARNING_SUGAR_LIFT_NEEDED',
+          riskLevelBadge: 'bg-purple-100 text-purple-800 border-purple-300 font-bold',
+          riskLevelText: '⚡ 采收前 48h 糖度微欠',
+          preemptiveActionName: '提前 48h 开启: 连续红蓝光增糖配方 (延长4h补光) + 10°C 昼夜大温差诱导',
+          actionType: 'sugar_boost',
+          targetUnitId: 'raceway-b',
+          status: 'PENDING_ACTION',
+          isDispatched: false
+        },
+        {
+          id: 'IPQC-20260819-03',
+          targetName: '🐟 #01 鱼池 (加州鲈成鱼)',
+          growthStage: '起捕前净化期 (计划 7 天后整车出塘 · 4.8万尾)',
+          sampleTime: '今日 07:45',
+          testMethod: '顶空固相微萃取气相色谱 + 感官双盲评价',
+          metrics: {
+            geosminCurrent: '8.5 ng/kg (接近 10 ng/kg 红线)',
+            fcr: '0.98 (转化优异)',
+            muscleFirmness: '紧实 Q 弹 (质构仪硬度 820g)',
+            waterAmmonia: '0.012 mg/L (水质清澈)'
+          },
+          riskLevel: 'WARNING_GEOSMIN_ODOR',
+          riskLevelBadge: 'bg-teal-100 text-teal-800 border-teal-300 font-bold',
+          riskLevelText: '🌊 微量土腥味前置预警',
+          preemptiveActionName: '提前 7 天转入: 微气泡富氧活水吊水净化槽 72h 停食排毒, 确保起捕 0 土腥',
+          actionType: 'fish_depuration',
+          targetUnitId: 'tank-1',
+          status: 'PENDING_ACTION',
+          isDispatched: false
+        },
+        {
+          id: 'IPQC-20260819-04',
+          targetName: '🥗 #D 跑道 (嫩叶芝麻菜)',
+          growthStage: '育苗移栽期 (定植第 3 天 · 缓苗生根阶段)',
+          sampleTime: '今日 10:00',
+          testMethod: '微距显微根系检测 + SPAD 4 点测定',
+          metrics: {
+            spadCurrent: 38.2,
+            stemDiameter: '2.4 mm (胚轴粗壮)',
+            rootHealth: '洁白无菌 (根活力 99.2%)',
+            mortalityRate: '0.0% (无死苗/无徒长)'
+          },
+          riskLevel: 'OPTIMAL_NORMAL',
+          riskLevelBadge: 'bg-emerald-100 text-emerald-800 border-emerald-300 font-bold',
+          riskLevelText: '🟢 苗期长势优异达标',
+          preemptiveActionName: '长势优异，维持当前弱光与弱流动配方，无需额外干预',
+          actionType: 'none',
+          targetUnitId: 'raceway-d',
+          status: 'NORMAL',
+          isDispatched: false
+        }
+      ],
+
+      // 19. 🛠️ 质量 CAPA (纠偏与预防措施) 跟踪工单
       qualityCAPATickets: [
         {
           id: 'CAPA-2026-0819-01',
@@ -526,13 +615,33 @@ const MockDataFactory = {
           canDispatch: true
         },
         {
-          id: 'CAPA-2026-0818-02',
+          id: 'CAPA-2026-0819-02',
+          batchId: 'LOT-20260819-AQUA01',
+          type: '微滤机反冲洗频次调增 (固液分离)',
+          department: '循环水产部 (养殖长)',
+          triggerReason: '#02 育成池水体悬浮颗粒物 (TSS) 达到 18.5 mg/L (接近 20 mg/L 预警值)',
+          actionPlan: '将 200 目微滤机压差反冲洗触发阈值由 150 mmH2O 下调至 100 mmH2O，增加反冲洗频率 25%，降低水体有机负荷。',
+          status: '🟡 待品质主管一键下发',
+          canDispatch: true
+        },
+        {
+          id: 'CAPA-2026-0818-03',
           batchId: 'LOT-20260818-AQUA02',
           type: '活水吊水净化时长校准',
           department: '水产养殖部 (养殖长)',
           triggerReason: '部分成鱼出塘前土腥味检测为 8.5 ng/kg (接近 10 ng/kg 预警红线)',
           actionPlan: '出塘前微孔曝气循环水吊水净化时间从 48 小时延长至 72 小时，确保 Geosmin 完全降解排出。',
           status: '✅ 已闭环执行 (复检 0 ng/kg 完全无腥)',
+          canDispatch: false
+        },
+        {
+          id: 'CAPA-2026-0817-04',
+          batchId: 'LOT-20260817-NUR01',
+          type: '育苗槽微气流除湿 (根腐真菌抑制)',
+          department: '智慧育苗研发部',
+          triggerReason: '#11 试验舱海绵基质表面相对湿度持续高于 92%RH，存在灰霉病潜伏风险',
+          actionPlan: '启动育苗架微风间歇式侧吹（风速 0.3 m/s），将基质表层湿度控制在 75~80%RH 最佳生理区间。',
+          status: '✅ 已闭环执行 (病害初筛零感染)',
           canDispatch: false
         }
       ]

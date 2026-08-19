@@ -39,19 +39,19 @@ window.ViewTemplates['view-supply-chain'] = `
 
           <div class="grid grid-cols-3 gap-3 font-mono text-xs">
             <div class="p-3 bg-white/80 rounded-xl border border-emerald-100">
-              <span class="text-slate-500 font-sans block text-[11px]">月度预计出货量</span>
+              <span class="text-slate-500 font-sans block text-xs">月度预计出货量</span>
               <span class="text-lg font-black text-slate-900">142.5 <span class="text-xs font-normal text-slate-400">吨</span></span>
-              <span class="text-[10px] text-emerald-700 font-sans block mt-0.5">商超已锁单 86.4%</span>
+              <span class="text-xs text-emerald-700 font-sans block mt-0.5">商超已锁单 86.4%</span>
             </div>
             <div class="p-3 bg-white/80 rounded-xl border border-emerald-100">
-              <span class="text-slate-500 font-sans block text-[11px]">月度销售预估</span>
+              <span class="text-slate-500 font-sans block text-xs">月度销售预估</span>
               <span class="text-lg font-black text-slate-900">¥108.8 <span class="text-xs font-normal text-slate-400">万</span></span>
-              <span class="text-[10px] text-teal-700 font-sans block mt-0.5">均价: ¥8.50/kg</span>
+              <span class="text-xs text-teal-700 font-sans block mt-0.5">均价: ¥8.50/kg</span>
             </div>
             <div class="p-3 bg-white/80 rounded-xl border border-emerald-100">
-              <span class="text-slate-500 font-sans block text-[11px]">单公斤生产成本 (COGS)</span>
+              <span class="text-slate-500 font-sans block text-xs">单公斤生产成本 (COGS)</span>
               <span class="text-lg font-black text-emerald-800">¥2.85 <span class="text-xs font-normal text-slate-400">/kg</span></span>
-              <span class="text-[10px] text-slate-500 font-sans block mt-0.5">含电费/种苗/折旧</span>
+              <span class="text-xs text-slate-500 font-sans block mt-0.5">含电费/种苗/折旧</span>
             </div>
           </div>
         </div>
@@ -81,19 +81,19 @@ window.ViewTemplates['view-supply-chain'] = `
 
           <div class="grid grid-cols-3 gap-3 font-mono text-xs">
             <div class="p-3 bg-white/80 rounded-xl border border-teal-100">
-              <span class="text-slate-500 font-sans block text-[11px]">存塘总生物量</span>
+              <span class="text-slate-500 font-sans block text-xs">存塘总生物量</span>
               <span class="text-lg font-black text-slate-900">38.5 <span class="text-xs font-normal text-slate-400">吨</span></span>
-              <span class="text-[10px] text-teal-700 font-sans block mt-0.5">在养加州鲈 4.8万尾</span>
+              <span class="text-xs text-teal-700 font-sans block mt-0.5">在养加州鲈 4.8万尾</span>
             </div>
             <div class="p-3 bg-white/80 rounded-xl border border-teal-100">
-              <span class="text-slate-500 font-sans block text-[11px]">存塘活体资产估值</span>
+              <span class="text-slate-500 font-sans block text-xs">存塘活体资产估值</span>
               <span class="text-lg font-black text-slate-900">¥98.2 <span class="text-xs font-normal text-slate-400">万</span></span>
-              <span class="text-[10px] text-emerald-700 font-sans block mt-0.5">均价: ¥28.00/kg</span>
+              <span class="text-xs text-emerald-700 font-sans block mt-0.5">均价: ¥28.00/kg</span>
             </div>
             <div class="p-3 bg-white/80 rounded-xl border border-teal-100">
-              <span class="text-slate-500 font-sans block text-[11px]">饲料转化率 (FCR) / 成本</span>
+              <span class="text-slate-500 font-sans block text-xs">饲料转化率 (FCR) / 成本</span>
               <span class="text-lg font-black text-teal-800">0.98 <span class="text-xs font-normal text-slate-400">(¥13.2/kg)</span></span>
-              <span class="text-[10px] text-slate-500 font-sans block mt-0.5">海大特种膨化沉料</span>
+              <span class="text-xs text-slate-500 font-sans block mt-0.5">海大特种膨化沉料</span>
             </div>
           </div>
         </div>
@@ -125,14 +125,14 @@ window.ViewTemplates['view-supply-chain'] = `
               <span class="font-black text-slate-900 flex items-center gap-2 text-sm">
                 <span>📋</span> 最近 7 天已完成采销实绩 (Recent 7d Actuals)
               </span>
-              <span class="text-[11px] font-mono text-emerald-800 font-bold bg-emerald-100 px-2 py-0.5 rounded">实绩已入账</span>
+              <span class="text-xs font-mono text-emerald-800 font-bold bg-emerald-100 px-2 py-0.5 rounded">实绩已入账</span>
             </div>
 
             <div class="space-y-2 font-mono">
               <div class="p-2.5 bg-white/90 rounded-lg border border-emerald-100 flex justify-between items-center">
                 <div>
                   <span class="font-bold text-slate-900 font-sans block">🥬 蔬菜销售发货:</span>
-                  <span class="text-slate-500 text-[11px] font-sans">盒马鲜生/山姆会员店日配</span>
+                  <span class="text-slate-500 text-xs font-sans">盒马鲜生/山姆会员店日配</span>
                 </div>
                 <div class="text-right">
                   <span class="text-slate-900 font-black text-sm">31.5 吨</span>
@@ -143,7 +143,7 @@ window.ViewTemplates['view-supply-chain'] = `
               <div class="p-2.5 bg-white/90 rounded-lg border border-emerald-100 flex justify-between items-center">
                 <div>
                   <span class="font-bold text-slate-900 font-sans block">🥬 蔬菜种苗微肥采购:</span>
-                  <span class="text-slate-500 text-[11px] font-sans">特级奶油生菜海绵种苗 5万株</span>
+                  <span class="text-slate-500 text-xs font-sans">特级奶油生菜海绵种苗 5万株</span>
                 </div>
                 <div class="text-right">
                   <span class="text-slate-900 font-black text-sm">50,000 株</span>
@@ -154,7 +154,7 @@ window.ViewTemplates['view-supply-chain'] = `
               <div class="p-2.5 bg-white/90 rounded-lg border border-teal-100 flex justify-between items-center">
                 <div>
                   <span class="font-bold text-slate-900 font-sans block">🐟 加州鲈成鱼分选出塘:</span>
-                  <span class="text-slate-500 text-[11px] font-sans">#01/#05成鱼池活水车大宗批发</span>
+                  <span class="text-slate-500 text-xs font-sans">#01/#05成鱼池活水车大宗批发</span>
                 </div>
                 <div class="text-right">
                   <span class="text-slate-900 font-black text-sm">8.2 吨</span>
@@ -165,7 +165,7 @@ window.ViewTemplates['view-supply-chain'] = `
               <div class="p-2.5 bg-white/90 rounded-lg border border-teal-100 flex justify-between items-center">
                 <div>
                   <span class="font-bold text-slate-900 font-sans block">🐟 水产特种膨化饲料采购:</span>
-                  <span class="text-slate-500 text-[11px] font-sans">海大特种沉性膨化料 (粗蛋白≥46%)</span>
+                  <span class="text-slate-500 text-xs font-sans">海大特种沉性膨化料 (粗蛋白≥46%)</span>
                 </div>
                 <div class="text-right">
                   <span class="text-slate-900 font-black text-sm">12.0 吨</span>
@@ -181,14 +181,14 @@ window.ViewTemplates['view-supply-chain'] = `
               <span class="font-black text-slate-900 flex items-center gap-2 text-sm">
                 <span>🔮</span> 未来 30 天预测销售与集采预算 (Future 30d Plan)
               </span>
-              <span class="text-[11px] font-mono text-teal-800 font-bold bg-teal-100 px-2 py-0.5 rounded">APS 自动推导</span>
+              <span class="text-xs font-mono text-teal-800 font-bold bg-teal-100 px-2 py-0.5 rounded">APS 自动推导</span>
             </div>
 
             <div class="space-y-2 font-mono">
               <div class="p-2.5 bg-white/90 rounded-lg border border-teal-100 flex justify-between items-center">
                 <div>
                   <span class="font-bold text-slate-900 font-sans block">🥬 30天蔬菜预测出货 (ATP):</span>
-                  <span class="text-slate-500 text-[11px] font-sans">期货商超已锁单 86.4% (123.1吨)</span>
+                  <span class="text-slate-500 text-xs font-sans">期货商超已锁单 86.4% (123.1吨)</span>
                 </div>
                 <div class="text-right">
                   <span class="text-slate-900 font-black text-sm">142.5 吨</span>
@@ -199,7 +199,7 @@ window.ViewTemplates['view-supply-chain'] = `
               <div class="p-2.5 bg-white/90 rounded-lg border border-teal-100 flex justify-between items-center">
                 <div>
                   <span class="font-bold text-slate-900 font-sans block">🥬 30天种苗与冷链包材采购:</span>
-                  <span class="text-slate-500 text-[11px] font-sans">15万株优质种苗 + 2万只降解箱</span>
+                  <span class="text-slate-500 text-xs font-sans">15万株优质种苗 + 2万只降解箱</span>
                 </div>
                 <div class="text-right">
                   <span class="text-slate-900 font-black text-sm">150,000 株</span>

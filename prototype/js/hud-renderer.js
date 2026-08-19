@@ -131,7 +131,7 @@ const HUDRenderer = {
         selectorBodyHtml += `
           <button onclick="DigitalTwin3D.selectById('nursery-${i}')" class="p-1.5 rounded-xl border text-center transition flex flex-col items-center justify-center cursor-pointer ${activeClass}" title="${n.trialName}">
             <span class="font-bold">#${i.toString().padStart(2, '0')}舱</span>
-            <span class="text-[11px] font-bold ${isSelected ? 'text-white' : 'text-teal-700'}">${n.healthIndex}%</span>
+            <span class="text-xs font-bold ${isSelected ? 'text-white' : 'text-teal-700'}">${n.healthIndex}%</span>
           </button>
         `;
       }

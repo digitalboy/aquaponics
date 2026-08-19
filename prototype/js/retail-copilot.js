@@ -50,11 +50,11 @@ const RetailCopilotController = {
       let cellsHtml = '';
       eq.periods.forEach(p => {
         if (p === 'RUN') {
-          cellsHtml += `<td class="py-2 px-1 text-center"><span class="inline-block w-6 h-5 rounded bg-emerald-500 text-white font-black text-[10px] leading-5 shadow-xs">开</span></td>`;
+          cellsHtml += `<td class="py-2 px-1 text-center"><span class="inline-block w-6 h-5 rounded bg-emerald-500 text-white font-black text-xs leading-5 shadow-xs">开</span></td>`;
         } else if (p === 'ECO') {
-          cellsHtml += `<td class="py-2 px-1 text-center bg-rose-50/50"><span class="inline-block w-6 h-5 rounded bg-amber-400 text-slate-900 font-bold text-[10px] leading-5 shadow-xs">降</span></td>`;
+          cellsHtml += `<td class="py-2 px-1 text-center bg-rose-50/50"><span class="inline-block w-6 h-5 rounded bg-amber-400 text-slate-900 font-bold text-xs leading-5 shadow-xs">降</span></td>`;
         } else {
-          cellsHtml += `<td class="py-2 px-1 text-center"><span class="inline-block w-6 h-5 rounded bg-slate-200 text-slate-400 font-normal text-[10px] leading-5">停</span></td>`;
+          cellsHtml += `<td class="py-2 px-1 text-center"><span class="inline-block w-6 h-5 rounded bg-slate-200 text-slate-400 font-normal text-xs leading-5">停</span></td>`;
         }
       });
 
@@ -65,7 +65,7 @@ const RetailCopilotController = {
           <td class="py-2.5 px-3 text-right font-black text-slate-900 font-mono text-xs">${eq.hours}</td>
           <td class="py-2.5 px-3 font-sans text-xs">
             <span class="font-bold text-slate-800">${eq.status}</span>
-            <span class="text-slate-400 text-[11px] block font-mono">${eq.rule}</span>
+            <span class="text-slate-500 text-xs block font-mono mt-0.5">${eq.rule}</span>
           </td>
         </tr>
       `;
@@ -87,10 +87,10 @@ const RetailCopilotController = {
         <div class="p-3 bg-white/95 rounded-xl border border-slate-200 shadow-sm space-y-1.5 transition hover:border-purple-300">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
-              <span class="font-bold text-slate-900">${t.member}</span>
-              <span class="text-[10px] px-1.5 py-0.5 rounded font-mono font-bold border ${t.typeBadge}">${t.type}</span>
+              <span class="font-bold text-slate-900 text-xs">${t.member}</span>
+              <span class="text-xs px-2 py-0.5 rounded font-mono font-bold border whitespace-nowrap ${t.typeBadge}">${t.type}</span>
             </div>
-            <span class="text-[10px] text-slate-400 font-mono">${t.time}</span>
+            <span class="text-xs text-slate-400 font-mono">${t.time}</span>
           </div>
           <div class="p-2 bg-slate-50 rounded-lg text-slate-700 font-sans text-xs">
             💬 <strong>会员原话:</strong> “${t.content}”
@@ -99,7 +99,7 @@ const RetailCopilotController = {
             <span class="text-sm">🤖</span>
             <div>
               <strong>AI 自动回复:</strong> ${t.aiReply}
-              <div class="text-[10px] text-emerald-700 font-bold font-mono mt-0.5">${t.status}</div>
+              <div class="text-xs text-emerald-700 font-bold font-mono mt-0.5">${t.status}</div>
             </div>
           </div>
         </div>
@@ -156,7 +156,7 @@ const RetailCopilotController = {
 
     // 1. 插入用户气泡
     const userBubble = document.createElement('div');
-    userBubble.className = 'bg-purple-600 text-white p-2.5 rounded-xl rounded-tr-none text-[11px] leading-relaxed ml-6';
+    userBubble.className = 'bg-purple-600 text-white p-2.5 rounded-xl rounded-tr-none text-xs leading-relaxed ml-6';
     userBubble.innerHTML = `<strong>张女士:</strong> ${content}`;
     bubblesEl.appendChild(userBubble);
     bubblesEl.scrollTop = bubblesEl.scrollHeight;
@@ -185,7 +185,7 @@ const RetailCopilotController = {
     // 3. 400ms 后插入 AI 气泡
     setTimeout(() => {
       const aiBubble = document.createElement('div');
-      aiBubble.className = 'bg-slate-100 p-2.5 rounded-xl rounded-tl-none text-slate-800 text-[11px] leading-relaxed mr-4 border border-slate-200';
+      aiBubble.className = 'bg-slate-100 p-2.5 rounded-xl rounded-tl-none text-slate-800 text-xs leading-relaxed mr-4 border border-slate-200';
       aiBubble.innerHTML = `<strong>🤖 AI 管家:</strong> ${aiReply}`;
       bubblesEl.appendChild(aiBubble);
       bubblesEl.scrollTop = bubblesEl.scrollHeight;
@@ -231,8 +231,8 @@ const RetailCopilotController = {
     let html = '';
     engine.b2bShipments.forEach(s => {
       let actionBtns = `
-        <div class="flex items-center gap-1.5 justify-end">
-          <button onclick="DataEngine.exportECOACertificate('${s.batchId}')" class="px-2.5 py-1 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-900 font-bold text-xs cursor-pointer transition shadow-xs">
+        <div class="flex items-center gap-2 justify-end whitespace-nowrap shrink-0">
+          <button onclick="DataEngine.exportECOACertificate('${s.batchId}')" class="px-3 py-1.5 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-950 font-bold text-xs cursor-pointer transition shadow-xs whitespace-nowrap shrink-0">
             📄 质检单
           </button>
       `;
@@ -240,13 +240,13 @@ const RetailCopilotController = {
       if (s.canMitigate) {
         if (s.riskLevel === 'red') {
           actionBtns += `
-            <button onclick="DataEngine.applyDelayMitigation('${s.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs cursor-pointer transition shadow-xs animate-pulse" title="一键下发常州前置仓紧急派车代发">
+            <button onclick="DataEngine.applyDelayMitigation('${s.id}')" class="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs cursor-pointer transition shadow-xs animate-pulse whitespace-nowrap shrink-0" title="一键下发常州前置仓紧急派车代发">
               ⚡ 消除延误
             </button>
           `;
         } else if (s.riskLevel === 'blue') {
           actionBtns += `
-            <button onclick="DataEngine.applyDelayMitigation('${s.id}')" class="px-2.5 py-1 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs cursor-pointer transition shadow-xs" title="通知商超买手提前入库">
+            <button onclick="DataEngine.applyDelayMitigation('${s.id}')" class="px-3 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs cursor-pointer transition shadow-xs whitespace-nowrap shrink-0" title="通知商超买手提前入库">
               📑 提前入库
             </button>
           `;
@@ -258,25 +258,25 @@ const RetailCopilotController = {
         <tr class="hover:bg-purple-50/40 transition border-b border-slate-100 font-sans text-xs">
           <td class="py-3 px-3">
             <div class="font-extrabold text-slate-900">${s.client}</div>
-            <div class="text-[11px] text-purple-700 font-mono font-bold mt-0.5">${s.cutoffTime}</div>
+            <div class="text-xs text-purple-700 font-mono font-bold mt-0.5">${s.cutoffTime}</div>
           </td>
           <td class="py-3 px-3">
             <span class="font-bold text-slate-800">${s.cargo}</span>
-            <span class="text-[10px] block font-mono text-slate-400 mt-0.5">${s.batchId}</span>
+            <span class="text-xs block font-mono text-slate-500 mt-0.5">${s.batchId}</span>
           </td>
           <td class="py-3 px-3 font-mono">
             <div class="text-slate-900 font-bold">${s.truckPlate}</div>
-            <div class="text-[11px] text-teal-700 font-bold">${s.temp}</div>
+            <div class="text-xs text-teal-700 font-bold mt-0.5">${s.temp}</div>
           </td>
           <td class="py-3 px-3 font-mono">
-            <div class="text-slate-500 text-[11px]">计划: <span class="line-through">${s.plannedEta}</span></div>
+            <div class="text-slate-500 text-xs">计划: <span class="line-through">${s.plannedEta}</span></div>
             <div class="text-slate-900 font-black text-sm">预测: <span class="${s.riskLevel === 'red' ? 'text-rose-600 font-black underline' : 'text-emerald-700 font-bold'}">${s.predictedEta}</span></div>
           </td>
           <td class="py-3 px-3">
-            <span class="px-2 py-0.5 rounded-lg border text-[11px] font-mono font-bold inline-block ${s.varianceBadge}">
+            <span class="px-2 py-0.5 rounded-lg border text-xs font-mono font-bold inline-block whitespace-nowrap ${s.varianceBadge}">
               ${s.varianceText}
             </span>
-            <div class="text-[10px] text-slate-500 font-sans mt-1 max-w-[200px] leading-tight">
+            <div class="text-xs text-slate-600 font-sans mt-1 max-w-[220px] leading-tight">
               🔍 归因: ${s.rootCause}
             </div>
           </td>
@@ -342,7 +342,7 @@ const RetailCopilotController = {
         if (t.id === 'TKT-B2B-02') {
           actionBtnHtml = `
             <div class="pt-1.5 border-t border-slate-100 flex justify-end">
-              <button onclick="DataEngine.dispatchEmergencyReplenishment('${t.id}')" class="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs cursor-pointer shadow-md shadow-purple-500/20 transition flex items-center gap-1.5">
+              <button onclick="DataEngine.dispatchEmergencyReplenishment('${t.id}')" class="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs cursor-pointer shadow-md shadow-purple-500/20 transition flex items-center gap-1.5 whitespace-nowrap">
                 ${t.actionText}
               </button>
             </div>
@@ -350,7 +350,7 @@ const RetailCopilotController = {
         } else if (t.id === 'TKT-B2B-03') {
           actionBtnHtml = `
             <div class="pt-1.5 border-t border-slate-100 flex justify-end">
-              <button onclick="DataEngine.exportECOACertificate('LOT-20260819-HERB01')" class="px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs cursor-pointer shadow-md shadow-teal-500/20 transition flex items-center gap-1.5">
+              <button onclick="DataEngine.exportECOACertificate('LOT-20260819-HERB01')" class="px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs cursor-pointer shadow-md shadow-teal-500/20 transition flex items-center gap-1.5 whitespace-nowrap">
                 ${t.actionText}
               </button>
             </div>
@@ -363,9 +363,9 @@ const RetailCopilotController = {
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
               <span class="font-extrabold text-slate-900 text-xs">${t.client}</span>
-              <span class="text-[10px] px-2 py-0.5 rounded font-mono font-bold border ${t.typeBadge}">${t.type}</span>
+              <span class="text-xs px-2 py-0.5 rounded font-mono font-bold border whitespace-nowrap ${t.typeBadge}">${t.type}</span>
             </div>
-            <span class="text-[10px] text-slate-400 font-mono">${t.time}</span>
+            <span class="text-xs text-slate-400 font-mono">${t.time}</span>
           </div>
 
           <div class="p-2 bg-slate-50 rounded-xl text-slate-700 font-sans text-xs">
@@ -376,7 +376,7 @@ const RetailCopilotController = {
             <span class="text-base">⚡</span>
             <div class="w-full">
               <strong>中台调度决策:</strong> ${t.solution}
-              <div id="b2b-status-${t.id}" class="text-[11px] text-teal-800 font-bold font-mono mt-1">${t.status}</div>
+              <div id="b2b-status-${t.id}" class="text-xs text-teal-800 font-bold font-mono mt-1">${t.status}</div>
             </div>
           </div>
 
@@ -395,7 +395,7 @@ const RetailCopilotController = {
     const el = document.getElementById(`b2b-status-${ticketId}`);
     if (el) {
       el.textContent = '✅ 已派发【顺丰冷链专车 苏E·9932L】由常州基地紧急调拨中 (预计 22分钟后抵达成仓)';
-      el.className = 'text-[11px] text-purple-700 font-black font-mono mt-1 animate-pulse';
+      el.className = 'text-xs text-purple-700 font-black font-mono mt-1 animate-pulse';
     }
 
     alert('🚀 【跨基地紧急冷链调拨已成功下发！】\n\n' +
@@ -436,16 +436,16 @@ const RetailCopilotController = {
     let html = '';
     engine.qualityInstruments.forEach(inst => {
       html += `
-        <div class="p-3.5 bg-white/95 rounded-2xl border border-slate-200 shadow-xs space-y-2 hover:border-emerald-300 transition">
+        <div class="p-3.5 bg-white/95 rounded-xl border border-emerald-100 shadow-2xs hover:border-emerald-300 transition space-y-2">
           <div class="flex items-center justify-between gap-2">
             <span class="font-extrabold text-slate-900 text-xs truncate flex-1 min-w-0" title="${inst.name}">${inst.name}</span>
-            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono font-bold border border-emerald-300 whitespace-nowrap shrink-0">${inst.status}</span>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono font-bold border border-emerald-300 whitespace-nowrap shrink-0">${inst.status}</span>
           </div>
-          <div class="text-[11px] text-slate-500 font-mono truncate">型号: <strong class="text-slate-700">${inst.model}</strong></div>
-          <div class="p-2 bg-emerald-50/70 rounded-xl text-[11px] font-sans text-emerald-950">
+          <div class="text-xs text-slate-600 font-mono truncate">型号: <strong class="text-slate-800">${inst.model}</strong></div>
+          <div class="p-2 bg-emerald-50/70 rounded-xl text-xs font-sans text-emerald-950">
             🎯 <strong>检测项目:</strong> ${inst.target}
           </div>
-          <div class="flex justify-between items-center text-[10px] text-slate-500 font-mono pt-1 border-t border-slate-100">
+          <div class="flex justify-between items-center text-xs text-slate-500 font-mono pt-1 border-t border-slate-100">
             <span class="truncate">精度: <strong class="text-emerald-700">${inst.accuracy}</strong></span>
             <span class="whitespace-nowrap shrink-0 ml-2">校准: ${inst.lastCalibrated}</span>
           </div>
@@ -466,15 +466,15 @@ const RetailCopilotController = {
     let html = '';
     engine.qualityBatches.forEach(b => {
       let actionBtnHtml = `
-        <div class="flex items-center gap-1.5 justify-end">
-          <button onclick="DataEngine.openLabReportModal('${b.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-900 font-bold text-xs cursor-pointer transition shadow-xs">
+        <div class="flex items-center gap-2 justify-end whitespace-nowrap shrink-0">
+          <button onclick="DataEngine.openLabReportModal('${b.id}')" class="px-3 py-1.5 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-950 font-bold text-xs cursor-pointer transition shadow-xs whitespace-nowrap shrink-0">
             📄 报告详情
           </button>
       `;
 
       if (b.canApprove) {
         actionBtnHtml += `
-          <button onclick="DataEngine.approveQualityBatch('${b.id}')" class="px-2.5 py-1 rounded-lg bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs cursor-pointer transition shadow-xs animate-pulse">
+          <button onclick="DataEngine.approveQualityBatch('${b.id}')" class="px-3 py-1.5 rounded-lg bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs cursor-pointer transition shadow-xs whitespace-nowrap shrink-0 animate-pulse">
             ✍️ 签名放行
           </button>
         `;
@@ -485,34 +485,34 @@ const RetailCopilotController = {
       html += `
         <tr class="border-b border-slate-100 hover:bg-emerald-50/30 transition text-xs font-sans">
           <td class="py-3 px-3">
-            <div class="font-extrabold text-slate-900">${b.id}</div>
-            <div class="text-[11px] text-slate-500">${b.productName}</div>
-            <div class="text-[10px] text-emerald-700 font-mono">${b.sourceRaceway}</div>
+            <div class="font-extrabold text-slate-900 text-xs">${b.id}</div>
+            <div class="text-xs text-slate-600 mt-0.5">${b.productName}</div>
+            <div class="text-xs text-emerald-700 font-mono font-medium mt-0.5">${b.sourceRaceway}</div>
           </td>
           <td class="py-3 px-3 font-mono">
-            <div class="text-slate-700">采收: ${b.harvestTime}</div>
-            <div class="text-slate-500 text-[11px]">化验: ${b.inspectTime}</div>
-            <div class="text-[10px] text-slate-400">${b.inspector}</div>
+            <div class="text-slate-800 text-xs font-semibold">采收: ${b.harvestTime}</div>
+            <div class="text-slate-600 text-xs mt-0.5">化验: ${b.inspectTime}</div>
+            <div class="text-xs text-slate-500 font-sans mt-0.5">${b.inspector}</div>
           </td>
           <td class="py-3 px-3">
             <div class="text-xs font-bold ${b.nitrate <= 800 ? 'text-emerald-800' : 'text-amber-800'} font-mono">
-              硝酸盐: ${b.nitrate} mg/kg <span class="text-[10px] text-slate-400">(限值 ${b.nitrateLimit})</span>
+              硝酸盐: ${b.nitrate} mg/kg <span class="text-xs text-slate-500 font-sans font-normal">(限值 ${b.nitrateLimit})</span>
             </div>
-            <div class="text-[11px] text-emerald-700 font-mono">农残: 0 检出 (62项) • 重金属: 极微</div>
-            <div class="text-[10px] text-slate-600 font-sans">${b.safetyVerdictText}</div>
+            <div class="text-xs text-emerald-800 font-mono mt-0.5 font-medium">农残: 0 检出 (62项) • 重金属: 极微</div>
+            <div class="text-xs text-slate-700 font-sans mt-0.5 font-medium">${b.safetyVerdictText}</div>
           </td>
           <td class="py-3 px-3">
             <div class="font-mono text-xs">
-              <span class="text-purple-800 font-black">维C: ${b.vitaminC} mg</span> • <span class="text-amber-700 font-black">糖度: ${b.sugarBrix}°Bx</span>
+              <span class="text-purple-800 font-bold">维C: ${b.vitaminC} mg</span> • <span class="text-amber-700 font-bold">糖度: ${b.sugarBrix}°Bx</span>
             </div>
-            <div class="text-[11px] text-slate-500 font-mono">蛋白: ${b.crudeProtein}% • 微量铁: ${b.microFe}mg</div>
-            <div class="text-[10px] text-teal-800 font-sans">${b.nutritionVerdictText}</div>
+            <div class="text-xs text-slate-600 font-mono mt-0.5">蛋白: ${b.crudeProtein}% • 微量铁: ${b.microFe}mg</div>
+            <div class="text-xs text-teal-800 font-sans mt-0.5 font-medium">${b.nutritionVerdictText}</div>
           </td>
           <td class="py-3 px-3">
-            <span id="quality-batch-status-${b.id}" class="inline-block px-2.5 py-1 rounded-lg border text-[11px] font-mono ${b.statusBadge}">
+            <span id="quality-batch-status-${b.id}" class="inline-block px-2.5 py-1 rounded-lg border text-xs font-mono whitespace-nowrap ${b.statusBadge}">
               ${b.statusText}
             </span>
-            <div class="text-[10px] text-slate-400 font-mono mt-0.5 truncate max-w-[140px]" title="${b.ecoaId}">${b.ecoaId}</div>
+            <div class="text-xs text-slate-500 font-mono mt-1 truncate max-w-[160px]" title="${b.ecoaId}">${b.ecoaId}</div>
           </td>
           <td class="py-3 px-3 text-right">
             ${actionBtnHtml}
@@ -547,6 +547,203 @@ const RetailCopilotController = {
   },
 
   /**
+   * 渲染 🔄 生产过程动态质检与前置干预卡片流 (IPQC In-Process QC Gates)
+   */
+  renderInProcessQCStream(engine) {
+    const container = document.getElementById('in-process-qc-stream');
+    if (!container || !engine.inProcessQualityInspections) return;
+
+    let html = '';
+    engine.inProcessQualityInspections.forEach(item => {
+      let actionBtnHtml = '';
+      if (!item.isDispatched && item.actionType !== 'none') {
+        actionBtnHtml = `
+          <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-xs text-slate-500 font-sans">💡 建议品质主管提前介入：</span>
+            <button onclick="DataEngine.triggerPreemptiveIntervention('${item.id}')" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-bold text-xs cursor-pointer shadow-md shadow-emerald-500/20 transition flex items-center gap-1.5 whitespace-nowrap">
+              ⚡ 一键下发前置农艺干预
+            </button>
+          </div>
+        `;
+      } else if (item.isDispatched) {
+        actionBtnHtml = `
+          <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span class="text-emerald-700 font-bold font-mono">🟢 前置干预程序运行中</span>
+            <span class="px-2.5 py-0.5 rounded-lg bg-emerald-100 text-emerald-800 font-mono font-bold">指令已送达对应生产台</span>
+          </div>
+        `;
+      }
+
+      // 提取动态指标展示
+      let metricsSummary = '';
+      if (item.id === 'IPQC-20260819-01') {
+        metricsSummary = `
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono text-xs">
+            <div class="p-2 bg-white rounded-lg border border-amber-200">
+              <span class="text-slate-500 font-sans block">汁液硝酸盐速测</span>
+              <strong class="text-amber-800 text-sm font-black">${item.metrics.nitrateCurrent} mg/kg</strong>
+              <span class="text-slate-400 text-xs block">预警线 1200</span>
+            </div>
+            <div class="p-2 bg-white rounded-lg border border-slate-200">
+              <span class="text-slate-500 font-sans block">叶绿素 SPAD</span>
+              <strong class="text-emerald-700 text-sm font-black">${item.metrics.spad}</strong>
+              <span class="text-emerald-600 text-xs block">冠层长势旺盛</span>
+            </div>
+            <div class="p-2 bg-white rounded-lg border border-amber-200 col-span-2 sm:col-span-1">
+              <span class="text-slate-500 font-sans block">TAS-990 钙/铁微量元素</span>
+              <strong class="text-slate-800 text-xs font-bold">${item.metrics.calciumAbsorption}</strong>
+            </div>
+          </div>
+        `;
+      } else if (item.id === 'IPQC-20260819-02') {
+        metricsSummary = `
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono text-xs">
+            <div class="p-2 bg-white rounded-lg border border-purple-200">
+              <span class="text-slate-500 font-sans block">折光糖度 Brix 预检</span>
+              <strong class="text-purple-800 text-sm font-black">${item.metrics.sugarBrixCurrent} °Bx</strong>
+              <span class="text-slate-400 text-xs block">目标: ${item.metrics.targetBrix}</span>
+            </div>
+            <div class="p-2 bg-white rounded-lg border border-slate-200">
+              <span class="text-slate-500 font-sans block">采收面 ATP 洁净度</span>
+              <strong class="text-emerald-700 text-sm font-black">${item.metrics.atpCleanliness}</strong>
+              <span class="text-emerald-600 text-xs block">十万级无菌环境</span>
+            </div>
+            <div class="p-2 bg-white rounded-lg border border-slate-200 col-span-2 sm:col-span-1">
+              <span class="text-slate-500 font-sans block">3D 点云冠幅均匀度</span>
+              <strong class="text-slate-800 text-xs font-bold">${item.metrics.canopyUniformity}</strong>
+            </div>
+          </div>
+        `;
+      } else if (item.id === 'IPQC-20260819-03') {
+        metricsSummary = `
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono text-xs">
+            <div class="p-2 bg-white rounded-lg border border-teal-200">
+              <span class="text-slate-500 font-sans block">Geosmin 几何土味素</span>
+              <strong class="text-teal-800 text-sm font-black">${item.metrics.geosminCurrent}</strong>
+              <span class="text-slate-400 text-xs block">红线限值: 10 ng/kg</span>
+            </div>
+            <div class="p-2 bg-white rounded-lg border border-slate-200">
+              <span class="text-slate-500 font-sans block">饲料转化率 (FCR)</span>
+              <strong class="text-emerald-700 text-sm font-black">${item.metrics.fcr}</strong>
+              <span class="text-emerald-600 text-xs block">饵料系数极佳</span>
+            </div>
+            <div class="p-2 bg-white rounded-lg border border-slate-200 col-span-2 sm:col-span-1">
+              <span class="text-slate-500 font-sans block">质构仪肌肉弹性评级</span>
+              <strong class="text-slate-800 text-xs font-bold">${item.metrics.muscleFirmness}</strong>
+            </div>
+          </div>
+        `;
+      } else if (item.id === 'IPQC-20260819-04') {
+        metricsSummary = `
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono text-xs">
+            <div class="p-2 bg-white rounded-lg border border-emerald-200">
+              <span class="text-slate-500 font-sans block">苗期 SPAD 初值</span>
+              <strong class="text-emerald-800 text-sm font-black">${item.metrics.spadCurrent}</strong>
+              <span class="text-emerald-600 text-xs block">基准合格线 ≥35</span>
+            </div>
+            <div class="p-2 bg-white rounded-lg border border-slate-200">
+              <span class="text-slate-500 font-sans block">胚轴粗壮度</span>
+              <strong class="text-slate-800 text-sm font-black">${item.metrics.stemDiameter}</strong>
+              <span class="text-emerald-600 text-xs block">粗壮抗病</span>
+            </div>
+            <div class="p-2 bg-white rounded-lg border border-slate-200 col-span-2 sm:col-span-1">
+              <span class="text-slate-500 font-sans block">显微镜根系与死苗率</span>
+              <strong class="text-emerald-700 text-xs font-bold">${item.metrics.rootHealth}</strong>
+            </div>
+          </div>
+        `;
+      }
+
+      html += `
+        <div class="p-4 bg-white/95 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:border-emerald-300 transition">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
+            <div class="flex items-center gap-2.5">
+              <span class="font-extrabold text-slate-900 text-sm">${item.targetName}</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full font-mono font-bold border whitespace-nowrap ${item.riskLevelBadge}">${item.riskLevelText}</span>
+            </div>
+            <div class="flex items-center gap-3 text-xs text-slate-500 font-mono">
+              <span class="bg-slate-100 px-2 py-0.5 rounded text-slate-700">${item.growthStage}</span>
+              <span>抽检: ${item.sampleTime}</span>
+            </div>
+          </div>
+
+          <div class="text-xs text-slate-600 font-sans">
+            🔬 <strong>检测仪器与方法:</strong> ${item.testMethod}
+          </div>
+
+          ${metricsSummary}
+
+          <div class="p-3 bg-emerald-50/70 border border-emerald-100 rounded-xl text-emerald-950 font-sans text-xs space-y-1">
+            <div><strong>🛡️ 质量前置预警方案:</strong> ${item.preemptiveActionName}</div>
+            <div id="ipqc-status-${item.id}" class="text-xs text-teal-800 font-bold font-mono">${item.status === 'PENDING_ACTION' ? '🟡 待品质主管前置干预确认' : item.status}</div>
+          </div>
+
+          ${actionBtnHtml}
+        </div>
+      `;
+    });
+
+    container.innerHTML = html;
+  },
+
+  /**
+   * 一键下发生产过程动态干预指令 (Preemptive Quality Intervention)
+   */
+  triggerPreemptiveIntervention(engine, ipqcId) {
+    const item = engine.inProcessQualityInspections.find(i => i.id === ipqcId);
+    if (!item) return;
+
+    item.isDispatched = true;
+
+    if (item.actionType === 'nitrate_flush') {
+      item.status = '✅ 已提前 6 天下发硝酸盐代谢促降指令 (进水硝态氮降低 30% · 采收前 48h 开启纯水微流代谢)';
+      item.riskLevelText = '🟢 促降程序执行中 (预测出厂 <650 mg/kg)';
+      item.riskLevelBadge = 'bg-emerald-100 text-emerald-800 border-emerald-300 font-bold';
+
+      this.renderInProcessQCStream(engine);
+
+      alert(`⚡ 【前置干预成功 · 提前 6 天启动硝酸盐代谢促降程序！】\n\n` +
+        `• 抽检单元: ${item.targetName} (${item.growthStage})\n` +
+        `• 过程抽检发现: 叶柄组织汁液硝酸盐 1180 mg/kg (预测若不干预将超出母婴级 <800 标杆)\n` +
+        `• 前置农艺干预调度:\n` +
+        `  1. 水培进水回路硝态氮补入比即刻下调 30%；\n` +
+        `  2. 采收前 48 小时自动切入微流纯水富氧代谢冲洗程序；\n` +
+        `  3. 激活叶肉光合硝酸还原酶活性，促进其充分转化为蛋白质；\n` +
+        `• 预测出厂品质: 硝酸盐稳定降至 620~680 mg/kg，100% 确保母婴级特级品质放行！`);
+    } else if (item.actionType === 'sugar_boost') {
+      item.status = '✅ 已提前 48 小时开启连续红蓝光增糖配方 (PPFD 280 · 夜间温差扩大至 10°C)';
+      item.riskLevelText = '🟢 增糖诱导中 (预测出厂 4.25°Bx)';
+      item.riskLevelBadge = 'bg-emerald-100 text-emerald-800 border-emerald-300 font-bold';
+
+      this.renderInProcessQCStream(engine);
+
+      alert(`⚡ 【前置干预成功 · 采收前 48h 光温增糖配方已生效！】\n\n` +
+        `• 抽检单元: ${item.targetName} (${item.growthStage})\n` +
+        `• 过程抽检发现: 现阶段糖度为 3.65°Brix (距标杆 4.2°Brix 微欠)\n` +
+        `• 前置农艺干预调度:\n` +
+        `  1. 智能顶棚植物补光灯开启采收前连续红蓝光增糖配方 (延长 4 小时光照，PPFD 提升至 280 µmol/m²/s)；\n` +
+        `  2. 联动温室环控将夜间目标温度下调 3.5°C，扩大昼夜温差至 10°C；\n` +
+        `  3. 迫使光合碳水化合物在最后 48 小时内充分转化为可溶性单糖；\n` +
+        `• 预测出厂品质: 采收时糖度将跃升至 4.25°Brix，清脆甘甜，达成免检特级标准！`);
+    } else if (item.actionType === 'fish_depuration') {
+      item.status = '✅ 已提前 7 天下发活水吊水工单 (已转入微气泡富氧吊水槽 72h 停食排毒)';
+      item.riskLevelText = '🟢 吊水净化中 (预测出塘 0 ng/kg)';
+      item.riskLevelBadge = 'bg-teal-100 text-teal-800 border-teal-300 font-bold';
+
+      this.renderInProcessQCStream(engine);
+
+      alert(`🌊 【前置干预成功 · 起捕前 7 天活水吊水净化调度已触发！】\n\n` +
+        `• 抽检单元: ${item.targetName} (${item.growthStage})\n` +
+        `• 过程抽检发现: 气相色谱测出微量 Geosmin (几何土味素) 8.5 ng/kg (接近 10 ng/kg 红线)\n` +
+        `• 前置水产干预调度:\n` +
+        `  1. 系统在起捕前 7 天自动生成调度指令，将成鱼转入【微气泡富氧活水吊水槽】；\n` +
+        `  2. 开启 72~120 小时停食吊水与大流量无饵纯水冲淋；\n` +
+        `  3. 启动微纳米气泡暴气，加速鱼体鳃部与脂肪组织排出土味素；\n` +
+        `• 预测出厂品质: 复检 Geosmin 降为 0 ng/kg 完全无腥，守牢免检出塘口碑！`);
+    }
+  },
+
+  /**
    * 渲染质量 CAPA 纠偏工单流
    */
   renderQualityCAPATickets(engine) {
@@ -559,7 +756,7 @@ const RetailCopilotController = {
       if (t.canDispatch) {
         dispatchBtnHtml = `
           <div class="pt-1.5 border-t border-slate-100 flex justify-end">
-            <button onclick="DataEngine.dispatchQualityCAPA('${t.id}')" class="px-3 py-1.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs cursor-pointer shadow-md shadow-purple-500/20 transition flex items-center gap-1.5">
+            <button onclick="DataEngine.dispatchQualityCAPA('${t.id}')" class="px-3 py-1.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs cursor-pointer shadow-md shadow-purple-500/20 transition flex items-center gap-1.5 whitespace-nowrap">
               🚀 一键下发 CAPA 纠偏指令
             </button>
           </div>
@@ -571,16 +768,16 @@ const RetailCopilotController = {
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
               <span class="font-extrabold text-slate-900 text-xs">${t.id}</span>
-              <span class="text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-purple-100 text-purple-800 border border-purple-300">${t.type}</span>
+              <span class="text-xs px-2 py-0.5 rounded font-mono font-bold bg-purple-100 text-purple-800 border border-purple-300 whitespace-nowrap">${t.type}</span>
             </div>
-            <span class="text-[10px] text-slate-500 font-mono">责任: ${t.department}</span>
+            <span class="text-xs text-slate-500 font-mono whitespace-nowrap">责任: ${t.department}</span>
           </div>
           <div class="p-2 bg-slate-50 rounded-xl text-slate-700 font-sans text-xs">
             ⚠️ <strong>触发原因:</strong> ${t.triggerReason}
           </div>
           <div class="p-2.5 bg-purple-50/70 border border-purple-100 rounded-xl text-purple-950 font-sans text-xs">
             💡 <strong>CAPA 纠正与预防方案:</strong> ${t.actionPlan}
-            <div id="quality-capa-status-${t.id}" class="text-[11px] text-purple-700 font-bold font-mono mt-1">${t.status}</div>
+            <div id="quality-capa-status-${t.id}" class="text-xs text-purple-700 font-bold font-mono mt-1">${t.status}</div>
           </div>
           ${dispatchBtnHtml}
         </div>
@@ -621,7 +818,13 @@ const RetailCopilotController = {
     const target = engine.qualityCAPATickets.find(t => t.id === capaId);
     if (!target) return;
 
-    target.status = '✅ 指令已送达种植长工作台 (下茬光配方已动态修正)';
+    if (capaId === 'CAPA-2026-0819-01') {
+      target.status = '✅ 指令已送达种植长工作台 (下茬光配方已动态修正)';
+    } else if (capaId === 'CAPA-2026-0819-02') {
+      target.status = '✅ 指令已送达养殖长工作台 (微滤机压差反冲洗频次已提高 25%)';
+    } else {
+      target.status = '✅ 指令已送达生产调度台 (闭环执行中)';
+    }
     target.canDispatch = false;
 
     this.renderQualityCAPATickets(engine);
@@ -629,8 +832,9 @@ const RetailCopilotController = {
     alert(`🚀 【质量 CAPA 纠偏指令已正式下发！】\n\n` +
       `• 工单编号: ${target.id}\n` +
       `• 接收部门: ${target.department}\n` +
+      `• 触发原因: ${target.triggerReason}\n` +
       `• 纠偏动作: ${target.actionPlan}\n` +
-      `• 闭环机制: 种植长调度台将自动将目标跑道最后 48h 补光上调 15%，确保下茬糖度稳定恢复至 4.0°Brix 以上！`);
+      `• 闭环机制: 生产调度台已自动接入并调整执行参数，持续消除质量偏离！`);
   },
 
   /**

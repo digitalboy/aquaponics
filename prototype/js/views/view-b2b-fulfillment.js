@@ -18,52 +18,52 @@ window.ViewTemplates['view-b2b-fulfillment'] = `
         <div class="glass-card rounded-2xl p-5 border-2 border-purple-300 shadow-md bg-gradient-to-br from-purple-50/90 to-white space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs text-slate-500 font-bold font-sans">🎯 准时足额交付率 (OTIF)</span>
-            <span class="px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 text-[11px] font-mono font-bold">行业第 1</span>
+            <span class="px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 text-xs font-mono font-bold">行业第 1</span>
           </div>
           <div class="flex items-baseline gap-2">
             <strong class="text-2xl font-black text-slate-900 font-mono">99.8%</strong>
             <span class="text-xs text-slate-500 font-sans">/ 100% 满分标杆</span>
           </div>
-          <p class="text-[11px] text-purple-700 font-mono">近30天交付 128 批次 • 0 延误拒收</p>
+          <p class="text-xs text-purple-700 font-mono">近30天交付 128 批次 • 0 延误拒收</p>
         </div>
 
         <!-- 🚚 在途冷链恒温车次 -->
         <div class="glass-card rounded-2xl p-5 border-2 border-emerald-300 shadow-md bg-gradient-to-br from-emerald-50/90 to-white space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs text-slate-500 font-bold font-sans">🚚 今日在途冷链履约中</span>
-            <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-mono font-bold">全程 2~4°C</span>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-mono font-bold">全程 2~4°C</span>
           </div>
           <div class="flex items-baseline gap-2">
             <strong class="text-2xl font-black text-slate-900 font-mono">18</strong>
             <span class="text-xs text-slate-500 font-sans">车次 (14.2 吨菜/鱼)</span>
           </div>
-          <p class="text-[11px] text-emerald-700 font-mono">北斗 GPS + 智能温湿度多点探针联动</p>
+          <p class="text-xs text-emerald-700 font-mono">北斗 GPS + 智能温湿度多点探针联动</p>
         </div>
 
         <!-- ⚡ B2B 商业客诉响应时效 -->
         <div class="glass-card rounded-2xl p-5 border-2 border-teal-300 shadow-md bg-gradient-to-br from-teal-50/90 to-white space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs text-slate-500 font-bold font-sans">⚡ 商业客诉响应与换补货</span>
-            <span class="px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 text-[11px] font-mono font-bold">&lt;15分钟闭环</span>
+            <span class="px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 text-xs font-mono font-bold">&lt;15分钟闭环</span>
           </div>
           <div class="flex items-baseline gap-2">
             <strong class="text-2xl font-black text-slate-900 font-mono">12.5</strong>
             <span class="text-xs text-slate-500 font-sans">分钟平均闭环</span>
           </div>
-          <p class="text-[11px] text-teal-700 font-mono">前置仓跨厂紧急调拨 • 0 滞销扣款</p>
+          <p class="text-xs text-teal-700 font-mono">前置仓跨厂紧急调拨 • 0 滞销扣款</p>
         </div>
 
         <!-- 👑 战略大客户年度长协 -->
         <div class="glass-card rounded-2xl p-5 border-2 border-amber-300 shadow-md bg-gradient-to-br from-amber-50/90 to-white space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs text-slate-500 font-bold font-sans">👑 战略大客户年度长协</span>
-            <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[11px] font-mono font-bold">100% 续约</span>
+            <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-xs font-mono font-bold">100% 续约</span>
           </div>
           <div class="flex items-baseline gap-2">
             <strong class="text-2xl font-black text-slate-900 font-mono">¥2,840</strong>
             <span class="text-xs text-slate-500 font-sans">万元在手年合约</span>
           </div>
-          <p class="text-[11px] text-amber-700 font-mono">盒马 / 山姆 / 海底捞 / Ole' 定向包销</p>
+          <p class="text-xs text-amber-700 font-mono">盒马 / 山姆 / 海底捞 / Ole' 定向包销</p>
         </div>
 
       </div>
@@ -139,7 +139,7 @@ window.ViewTemplates['view-b2b-fulfillment'] = `
               <span class="font-bold flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span> 🏭 无锡试验基地 (特种香草)</span>
               <span class="font-mono font-bold text-purple-800">日产能 1.2 吨 (定向包销高端餐饮)</span>
             </div>
-            <div class="p-2.5 bg-white/90 rounded-lg border border-emerald-100 text-[11px] text-slate-600 leading-relaxed font-mono">
+            <div class="p-2.5 bg-white/90 rounded-lg border border-emerald-100 text-xs text-slate-600 leading-relaxed font-mono">
               🛡️ <strong>防断供安全阀:</strong> 系统实时维持 15% 物理缓冲产能与区域前置冷链备件，出现单厂减产时可在 10 分钟内完成跨基地自动补调！
             </div>
           </div>

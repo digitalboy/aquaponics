@@ -136,16 +136,16 @@ window.ViewTemplates['view-investor'] = `
           </p>
         </div>
 
-        <div class="glass-card rounded-2xl p-5 glass-card-hover border-l-4 border-teal-500 flex flex-col justify-between min-h-[155px] space-y-3">
+        <div class="glass-card rounded-2xl p-5 glass-card-hover border-l-4 border-teal-500 flex flex-col justify-between min-h-[155px] space-y-3 bg-gradient-to-br from-teal-50/50 to-white">
           <div class="flex items-center justify-between text-slate-600 text-xs">
-            <span class="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">🛡️ 零化学农药/抗生素</span>
-            <span class="px-2.5 py-1 rounded-lg bg-teal-100 text-teal-800 font-mono text-xs font-bold border border-teal-300">100% 合格</span>
+            <span class="font-extrabold text-slate-900 text-sm flex items-center gap-1.5">🛡️ 权威质检/母婴级安全</span>
+            <span class="px-2.5 py-1 rounded-lg bg-teal-100 text-teal-800 font-mono text-xs font-bold border border-teal-300">100% e-COA</span>
           </div>
-          <div class="text-3xl font-black text-teal-700 font-mono tracking-tight">
-            0 <span class="text-xs font-sans text-slate-500 font-normal">检出</span>
+          <div class="text-2xl font-black text-teal-700 font-mono tracking-tight flex items-baseline gap-1.5">
+            0 农残 <span class="text-xs text-slate-400">·</span> 0 抗生素
           </div>
-          <p class="text-xs text-slate-600 leading-relaxed border-t border-emerald-100 pt-2.5">
-            共生闭环下用药即死鱼，生态倒逼实现纯净免洗高品质
+          <p class="text-xs text-slate-600 leading-relaxed border-t border-teal-100 pt-2 font-sans">
+            硝酸盐 <strong class="text-teal-800 font-mono">620.5 mg/kg</strong> (较欧标降82%) • 维C <strong class="text-purple-700 font-mono">+110%</strong>
           </p>
         </div>
 
@@ -190,6 +190,164 @@ window.ViewTemplates['view-investor'] = `
 
       </div>
 
+      <!-- ===================================================================== -->
+      <!-- 🔬 驻厂理化与微生物实验室 · 权威质检与食品安全信任背书大屏 (Lab Trust Capsule) -->
+      <!-- ===================================================================== -->
+      <div class="glass-card rounded-2xl p-6 border-2 border-emerald-300 shadow-lg space-y-5 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/50">
+        
+        <!-- 头部标题栏与互动快捷键 -->
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-100 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-700 text-white flex items-center justify-center text-xl shadow-md shadow-emerald-600/30">
+              🔬
+            </div>
+            <div>
+              <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                驻厂理化与微生物实验室 · 权威质检与食品安全信任背书
+                <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-mono font-bold">
+                  科研级仪器直连 • 100% 批批检验
+                </span>
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5">
+                北京普析双光束分光光度计 + 智云达 62 项农残快速检测仪 + TAS-990 原子吸收仪，每批次产品 100% 自动签发不可篡改 e-COA 电子合格证
+              </p>
+            </div>
+          </div>
+          
+          <!-- 快捷操作按钮 -->
+          <div class="flex items-center gap-2.5">
+            <button onclick="DataEngine.openLabReportModal('LOT-20260819-01')" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-700 hover:from-teal-700 hover:to-emerald-800 text-white font-bold text-xs cursor-pointer shadow-md shadow-teal-500/20 transition flex items-center gap-1.5 whitespace-nowrap">
+              📄 调取最新批次权威检验报告 (e-COA)
+            </button>
+            <button onclick="document.getElementById('drawer-item-quality')?.click()" class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-bold text-xs cursor-pointer shadow-xs transition flex items-center gap-1.5 whitespace-nowrap">
+              🔬 进入驻厂实验室工作台 →
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 大核心质检权威对比卡片网格 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          
+          <!-- 1. 母婴级低硝酸盐 -->
+          <div class="p-4 bg-white/95 rounded-2xl border border-teal-200 shadow-xs space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
+                <span>🥬</span> 硝酸盐 (紫外可见分光法)
+              </span>
+              <span class="text-xs px-2 py-0.5 rounded font-mono font-bold bg-teal-100 text-teal-800 border border-teal-300">
+                降 82% 欧标
+              </span>
+            </div>
+            <div class="flex items-baseline justify-between">
+              <div class="font-mono">
+                <span class="text-2xl font-black text-teal-700">620.5</span>
+                <span class="text-xs text-slate-500">mg/kg</span>
+              </div>
+              <div class="text-right text-xs font-mono text-slate-400">
+                <div>传统大棚: 3200</div>
+                <div>欧盟限值: 4000</div>
+              </div>
+            </div>
+            <div class="p-2 bg-teal-50/70 rounded-xl text-teal-950 text-xs leading-tight">
+              <strong>普析 T6-1650E:</strong> 8 联自动旋转池每日标样校正 ($R^2 = 0.9998$)，达母婴辅食级特选标准
+            </div>
+          </div>
+
+          <!-- 2. 62项农残与抗生素 0 检出 -->
+          <div class="p-4 bg-white/95 rounded-2xl border border-emerald-200 shadow-xs space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
+                <span>🧪</span> 62项农残与水产抗生素
+              </span>
+              <span class="text-xs px-2 py-0.5 rounded font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                0 容忍标准
+              </span>
+            </div>
+            <div class="flex items-baseline justify-between">
+              <div class="font-mono">
+                <span class="text-2xl font-black text-emerald-700">0 检出</span>
+                <span class="text-xs text-slate-500">LOD&lt;0.01</span>
+              </div>
+              <div class="text-right text-xs font-mono text-slate-400">
+                <div>孔雀石绿: 0</div>
+                <div>氯霉素/呋喃: 0</div>
+              </div>
+            </div>
+            <div class="p-2 bg-emerald-50/70 rounded-xl text-emerald-950 text-xs leading-tight">
+              <strong>智云达 ZYD-NP6:</strong> 胆碱酯酶抑制法批批检测；共生闭环下用药即死鱼，生态物理免洗
+            </div>
+          </div>
+
+          <!-- 3. 超额活性营养与风味 Brix -->
+          <div class="p-4 bg-white/95 rounded-2xl border border-purple-200 shadow-xs space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
+                <span>💎</span> 维生素 C 与糖度 Brix
+              </span>
+              <span class="text-xs px-2 py-0.5 rounded font-mono font-bold bg-purple-100 text-purple-800 border border-purple-300">
+                超额富集 +110%
+              </span>
+            </div>
+            <div class="flex items-baseline justify-between">
+              <div class="font-mono">
+                <span class="text-2xl font-black text-purple-700">28.5</span>
+                <span class="text-xs text-slate-500">mg • 4.2°Bx</span>
+              </div>
+              <div class="text-right text-xs font-mono text-slate-400">
+                <div>传统生菜: 13.5mg</div>
+                <div>传统糖度: 2.8°Bx</div>
+              </div>
+            </div>
+            <div class="p-2 bg-purple-50/70 rounded-xl text-purple-950 text-xs leading-tight">
+              <strong>HPLC & PAL-1:</strong> 采收前 48h 连续红蓝光谱增糖，多酚与活性维C富集，口感清脆甘甜
+            </div>
+          </div>
+
+          <!-- 4. 重金属极微与活鱼 0 土腥味 -->
+          <div class="p-4 bg-white/95 rounded-2xl border border-indigo-200 shadow-xs space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
+                <span>🐟</span> 重金属极微 / 0 土腥味
+              </span>
+              <span class="text-xs px-2 py-0.5 rounded font-mono font-bold bg-indigo-100 text-indigo-800 border border-indigo-300">
+                降 98% 国标
+              </span>
+            </div>
+            <div class="flex items-baseline justify-between">
+              <div class="font-mono">
+                <span class="text-2xl font-black text-indigo-700">&lt;0.001</span>
+                <span class="text-xs text-slate-500">mg/kg (Pb/Cd)</span>
+              </div>
+              <div class="text-right text-xs font-mono text-slate-400">
+                <div>国标上限: 0.10</div>
+                <div>土腥味: 0 ng/kg</div>
+              </div>
+            </div>
+            <div class="p-2 bg-indigo-50/70 rounded-xl text-indigo-950 text-xs leading-tight">
+              <strong>普析 TAS-990:</strong> 原子吸收石墨炉测定；成鱼经 72h 微纳米活水吊水排毒，肉质紧实 Q 弹
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 底部电子防伪验证条 -->
+        <div class="p-3 bg-slate-900 text-slate-200 rounded-xl flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-slate-400">最新 e-COA 证书存证:</span>
+            <strong class="text-emerald-300">eCOA-20260819-ROM01-8849</strong>
+          </div>
+          <div class="text-slate-400 truncate max-w-md hidden sm:block">
+            SHA-256: <span class="text-slate-300 select-all">0x7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069</span>
+          </div>
+          <div class="flex items-center gap-2 text-emerald-400 font-sans font-bold">
+            <span>🛡️ 数字私钥签名 (王工 · 003)</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-700 text-xs">大客户扫码直验</span>
+          </div>
+        </div>
+
+      </div>
+
       <!-- 对比表与时序数据终端 -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
@@ -220,10 +378,10 @@ window.ViewTemplates['view-investor'] = `
                   <td class="py-3.5 px-3.5 text-slate-800">节水抗旱，契约级环保</td>
                 </tr>
                 <tr class="hover:bg-emerald-50/50">
-                  <td class="py-3.5 px-3.5 font-bold text-slate-900">🥗 农药抗生素残留</td>
-                  <td class="py-3.5 px-3.5 text-slate-500">依赖化学喷洒，易超标</td>
-                  <td class="py-3.5 px-3.5 font-black text-emerald-700 bg-emerald-50 font-mono">0 检出 (物理隔绝)</td>
-                  <td class="py-3.5 px-3.5 text-slate-800">免洗即食，溢价空间大</td>
+                  <td class="py-3.5 px-3.5 font-bold text-slate-900">🥗 农药抗生素与母婴级硝酸盐</td>
+                  <td class="py-3.5 px-3.5 text-slate-500">易有化学农残; 硝酸盐 3200 mg/kg</td>
+                  <td class="py-3.5 px-3.5 font-black text-emerald-700 bg-emerald-50 font-mono">0 检出 • 硝酸盐 620.5 (降82%)</td>
+                  <td class="py-3.5 px-3.5 text-slate-800">免洗即食, 维C+110%, 溢价300%</td>
                 </tr>
                 <tr class="hover:bg-emerald-50/50">
                   <td class="py-3.5 px-3.5 font-bold text-slate-900">📊 单平米年产量 (坪效)</td>

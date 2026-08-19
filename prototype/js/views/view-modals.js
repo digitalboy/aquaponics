@@ -108,19 +108,19 @@ window.ViewTemplates['modals'] = `
         
         <div class="grid grid-cols-3 gap-3 font-mono text-center">
           <div class="p-3 bg-emerald-50 rounded-2xl border border-emerald-100">
-            <span class="text-[11px] text-slate-500 block font-sans">估算单株鲜重</span>
+            <span class="text-xs text-slate-500 block font-sans">估算单株鲜重</span>
             <span id="passport-weight" class="text-2xl font-black text-slate-900">215 <span class="text-xs font-normal text-slate-500">g</span></span>
-            <span id="passport-weight-target" class="text-[10px] text-emerald-700 block mt-0.5">目标: 250g (86%)</span>
+            <span id="passport-weight-target" class="text-xs text-emerald-700 block mt-0.5">目标: 250g (86%)</span>
           </div>
           <div class="p-3 bg-emerald-50 rounded-2xl border border-emerald-100">
-            <span class="text-[11px] text-slate-500 block font-sans">3D 点云冠幅</span>
+            <span class="text-xs text-slate-500 block font-sans">3D 点云冠幅</span>
             <span id="passport-canopy" class="text-2xl font-black text-teal-800">18.5 <span class="text-xs font-normal text-slate-500">cm</span></span>
-            <span class="text-[10px] text-teal-600 block mt-0.5">展开度饱满</span>
+            <span class="text-xs text-teal-600 block mt-0.5">展开度饱满</span>
           </div>
           <div class="p-3 bg-emerald-50 rounded-2xl border border-emerald-100">
-            <span class="text-[11px] text-slate-500 block font-sans">叶绿素 SPAD</span>
+            <span class="text-xs text-slate-500 block font-sans">叶绿素 SPAD</span>
             <span id="passport-spad" class="text-2xl font-black text-emerald-700">46.2</span>
-            <span class="text-[10px] text-emerald-600 block mt-0.5">翡翠绿 (无缺素)</span>
+            <span class="text-xs text-emerald-600 block mt-0.5">翡翠绿 (无缺素)</span>
           </div>
         </div>
 
@@ -146,10 +146,10 @@ window.ViewTemplates['modals'] = `
             </div>
             <div>
               <span class="font-bold text-slate-900 block">C 端一物一码溯源证书已绑定</span>
-              <span class="text-slate-500 text-[11px]">商超货架扫码直达此单株 21 天全延时摄影</span>
+              <span class="text-slate-500 text-xs">商超货架扫码直达此单株 21 天全延时摄影</span>
             </div>
           </div>
-          <button onclick="alert('已生成该单株专属溯源证书 URL: https://trace.aquaponics.io/plant/RA-B03-R02C04')" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold cursor-pointer transition text-xs shadow-sm">
+          <button onclick="alert('已生成该单株专属溯源证书 URL: https://trace.aquaponics.io/plant/RA-B03-R02C04')" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold cursor-pointer transition text-xs shadow-sm whitespace-nowrap">
             预览溯源证书
           </button>
         </div>

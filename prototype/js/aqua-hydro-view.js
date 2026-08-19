@@ -82,8 +82,8 @@ const AquaHydroViewController = {
             <span class="font-extrabold text-xs">#${i.toString().padStart(2, '0')}池</span>
             <span class="w-2.5 h-2.5 rounded-full ${doDot}"></span>
           </div>
-          <div class="text-[11px] truncate w-full font-sans text-left mt-1 font-medium ${isSelected ? 'text-emerald-100' : 'text-slate-700'}">${t.species}</div>
-          <div class="text-xs font-bold font-mono mt-1 w-full text-right ${isSelected ? 'text-white' : 'text-emerald-800'}">${t.do.toFixed(1)} <span class="text-[10px] font-normal opacity-80">mg</span></div>
+          <div class="text-xs truncate w-full font-sans text-left mt-1 font-medium ${isSelected ? 'text-emerald-100' : 'text-slate-700'}">${t.species}</div>
+          <div class="text-xs font-bold font-mono mt-1 w-full text-right ${isSelected ? 'text-white' : 'text-emerald-800'}">${t.do.toFixed(1)} <span class="text-xs font-normal opacity-80">mg</span></div>
         </button>
       `;
     }
@@ -181,7 +181,7 @@ const AquaHydroViewController = {
           </div>
 
           <div class="flex items-center justify-between text-xs font-mono w-full ${isSelected ? 'text-emerald-100' : 'text-slate-700'}">
-            <span class="font-bold flex items-center gap-1"><span class="text-[11px]">🫧</span> DO: <strong class="${isSelected ? 'text-white' : 'text-emerald-700'}">${r.rootDO.toFixed(2)}</strong></span>
+            <span class="font-bold flex items-center gap-1"><span class="text-xs">🫧</span> DO: <strong class="${isSelected ? 'text-white' : 'text-emerald-700'}">${r.rootDO.toFixed(2)}</strong></span>
             <span>VPD: <strong class="${isSelected ? 'text-white' : 'text-slate-900'}">${r.vpd}</strong></span>
             <span class="font-bold ${isSelected ? 'text-white' : 'text-teal-800'}">${r.growthPercent}% 熟</span>
           </div>
@@ -249,10 +249,10 @@ const AquaHydroViewController = {
 
           <div class="flex items-center justify-between text-base">
             <span class="text-xl">🥬</span>
-            <span class="font-black font-mono text-slate-900 text-sm">${s.weight}<span class="text-[10px] font-normal text-slate-500">g</span></span>
+            <span class="font-black font-mono text-slate-900 text-sm">${s.weight}<span class="text-xs font-normal text-slate-500">g</span></span>
           </div>
 
-          <div class="flex items-center justify-between text-[11px] font-sans border-t border-slate-200/60 pt-1">
+          <div class="flex items-center justify-between text-xs font-sans border-t border-slate-200/60 pt-1">
             <span class="text-slate-500 font-mono">${s.canopyCm}cm</span>
             <span class="font-bold font-mono ${s.status === 'warning' ? 'text-amber-700' : 'text-emerald-700'}">${tagText}</span>
           </div>

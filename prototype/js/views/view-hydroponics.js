@@ -159,7 +159,7 @@ window.ViewTemplates['view-hydroponics'] = `
             </div>
             <div class="flex items-baseline justify-between">
               <span class="text-xl font-black text-slate-900" id="drone-battery">98%</span>
-              <span class="text-[10px] text-teal-600 font-sans">无线接触快充</span>
+              <span class="text-xs text-teal-600 font-sans">无线接触快充</span>
             </div>
             <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
               <div class="bg-emerald-500 h-full rounded-full" style="width: 98%"></div>
@@ -174,7 +174,7 @@ window.ViewTemplates['view-hydroponics'] = `
             <div class="text-slate-900 font-bold font-sans text-xs mt-1 truncate">
               下次航测: <span class="text-emerald-700 font-mono font-bold" id="drone-next-flight">10:00 (4K NDVI)</span>
             </div>
-            <div class="text-[11px] text-slate-400 font-sans truncate">航线: #A~#D跑道 + 10鱼池宏观正射</div>
+            <div class="text-xs text-slate-500 font-sans truncate">航线: #A~#D跑道 + 10鱼池宏观正射</div>
           </div>
 
           <div class="p-3 bg-white/90 rounded-xl border border-teal-100 space-y-1">
@@ -185,7 +185,7 @@ window.ViewTemplates['view-hydroponics'] = `
             <div class="text-slate-900 font-bold font-sans text-xs mt-1">
               悬停精度: <span class="text-teal-700 font-mono font-bold">±1.8 cm</span>
             </div>
-            <div class="text-[11px] text-slate-400 font-sans">光流 SLAM + 避障雷达正常</div>
+            <div class="text-xs text-slate-500 font-sans">光流 SLAM + 避障雷达正常</div>
           </div>
 
           <div class="p-3 bg-white/90 rounded-xl border border-teal-100 space-y-1">
@@ -196,7 +196,7 @@ window.ViewTemplates['view-hydroponics'] = `
             <div class="text-slate-900 font-bold font-sans text-xs mt-1">
               全域覆盖率: <span class="text-emerald-700 font-mono font-bold">100% (无死角)</span>
             </div>
-            <div class="text-[11px] text-slate-400 font-sans">已生成 24 孔位单株点云档案</div>
+            <div class="text-xs text-slate-500 font-sans">已生成 24 孔位单株点云档案</div>
           </div>
 
         </div>
@@ -224,7 +224,7 @@ window.ViewTemplates['view-hydroponics'] = `
                 <span class="font-bold text-slate-900 flex items-center gap-1.5 font-sans">
                   <span>🌱</span> L1 作物冠层 (1.2m)
                 </span>
-                <span class="text-slate-500 text-[11px] font-sans">蔬菜根叶微环境区</span>
+                <span class="text-slate-500 text-xs font-sans">蔬菜根叶微环境区</span>
               </div>
               <div class="text-right">
                 <span class="text-lg font-black text-slate-900"><span id="hydro-canopy-temp">22.8</span>°C</span>
@@ -238,7 +238,7 @@ window.ViewTemplates['view-hydroponics'] = `
                 <span class="font-bold text-slate-800 flex items-center gap-1.5 font-sans">
                   <span>💨</span> L2 中层混风 (3.8m)
                 </span>
-                <span class="text-slate-500 text-[11px] font-sans">环流风机对流层 (0.6m/s)</span>
+                <span class="text-slate-500 text-xs font-sans">环流风机对流层 (0.6m/s)</span>
               </div>
               <div class="text-right">
                 <span class="text-lg font-black text-teal-800">25.1°C</span>
@@ -252,7 +252,7 @@ window.ViewTemplates['view-hydroponics'] = `
                 <span class="font-bold text-slate-800 flex items-center gap-1.5 font-sans">
                   <span>☀️</span> L3 顶脊热滞 (7.5m)
                 </span>
-                <span class="text-slate-500 text-[11px] font-sans">天窗自然排热 (开度 45%)</span>
+                <span class="text-slate-500 text-xs font-sans">天窗自然排热 (开度 45%)</span>
               </div>
               <div class="text-right">
                 <span class="text-lg font-black text-amber-700">29.4°C</span>
