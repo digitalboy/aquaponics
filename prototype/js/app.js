@@ -144,6 +144,12 @@ window.addEventListener('keydown', (e) => {
     closeDrawer();
     closeCalibrationModal();
     closeInspectionReport();
+    if (typeof RetailCopilotController !== 'undefined') {
+      RetailCopilotController.closeSocialModal();
+    }
+    if (typeof ScientistConsole !== 'undefined') {
+      ScientistConsole.closeReasoningModal();
+    }
   }
 });
 
@@ -168,7 +174,12 @@ window.addEventListener('DOMContentLoaded', () => {
   // 5. 首次渲染各表盘数据
   renderGauges();
 
-  // 6. 支持通过 URL 查询参数直接直达某角色视图 (例如: ?role=investor 或 ?role=b2c)
+  // 6. 初始化 B2C 会员 360° 档案
+  if (typeof RetailCopilotController !== 'undefined' && RetailCopilotController.renderCustomerProfile) {
+    RetailCopilotController.renderCustomerProfile('zhang');
+  }
+
+  // 7. 支持通过 URL 查询参数直接直达某角色视图 (例如: ?role=investor 或 ?role=b2c)
   const urlParams = new URLSearchParams(window.location.search);
   const roleParam = urlParams.get('role');
   if (roleParam) {

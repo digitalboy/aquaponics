@@ -865,6 +865,661 @@ const RetailCopilotController = {
       `• 放行状态: ${target.statusText}\n` +
       `• e-COA 编号: ${target.ecoaId}\n` +
       `• 数字私钥签章: ${target.sha256}`);
+  },
+
+  /**
+   * =========================================================================
+   * 社媒舆情大盘与 AI 品牌心智分析交互控制器 (Social Sentiment Controllers)
+   * =========================================================================
+   */
+  socialPostsData: {
+    'post-1': {
+      platform: 'xhs',
+      platformIcon: '📕',
+      author: '@萌宝辅食日记 (粉丝 12.5w)',
+      tag: '小红书母婴达人',
+      time: '2026-08-19 14:15 · 杭州',
+      sentimentBadge: '💖 极度好评 (99%)',
+      sentimentClass: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+      content: '“终于买到了做宝宝辅食的真·母婴级生菜！带去实验室测了硝酸盐只有 620mg，远低于欧盟 2500mg 标准，生吃脆甜无苦味，宝宝一口气吃了大半碗蔬菜泥！顺丰冷链包装太专业了！”',
+      stats: '<span>❤️ 2,840 赞</span><span>💬 382 评论</span><span>⭐ 1,420 收藏</span><span class="text-rose-600 font-bold">🛒 带货转化: 142 盒</span>',
+      keywords: ['🍃 清脆爽口 (84%)', '👶 宝宝爱吃 (76%)', '🧪 无硝酸盐苦涩 (68%)', '📦 顺丰冷链保鲜 (92%)'],
+      aiReply: '“感谢宝妈的专业认可！我们的奶油生菜在工厂采收前经过了 48 小时远红光转化与活化停氮，让内源硝酸盐彻底转化为甘氨酸，宝宝吃得健康，妈妈更安心！私信为您送上本批次北京普析 62 项盲检 e-COA 电子防伪报告与专属体验礼遇！”'
+    },
+    'post-2': {
+      platform: 'douyin',
+      platformIcon: '🎵',
+      author: '@大雄的品质厨房 (点赞 35w)',
+      tag: '抖音美食测评',
+      time: '2026-08-19 11:20 · 上海',
+      sentimentBadge: '💖 极度好评 (96%)',
+      sentimentClass: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+      content: '“【加州鲈盲测开箱】清蒸 8 分钟开盖真的一点土腥味都没有！肉质像蒜瓣一样紧致 Q 弹！最绝的是扫包装上的一物一码，能直接看到这条鱼在工厂恒温水槽里 21 天的生长延时视频，工业化养殖确实强！”',
+      stats: '<span>❤️ 1.8w 赞</span><span>💬 1,240 评论</span><span>▶️ 18.5w 播放</span><span class="text-slate-900 font-bold">🛒 带货转化: 86 份</span>',
+      keywords: ['🐟 0土腥味 (94%)', '🥩 蒜瓣肉Q弹 (88%)', '📱 扫码延时摄影 (91%)', '🧊 顺丰活水保鲜 (86%)'],
+      aiReply: '“感谢大厨的硬核测评！我们的加州鲈在起捕前均经过 72 小时微纳米纯氧活水吊水净化，将 Geosmin 土腥味分子彻底降解为 0！期待下期与您联合共创《母婴级清蒸鲈鱼》米其林食谱！”'
+    },
+    'post-3': {
+      platform: 'xhs',
+      platformIcon: '📕',
+      author: '@硬核成分党Dr.Li (粉丝 28w)',
+      tag: '食品科学博士',
+      time: '2026-08-18 19:40 · 北京',
+      sentimentBadge: '🔬 专业背书 (98%)',
+      sentimentClass: 'bg-indigo-100 text-indigo-800 border-indigo-300',
+      content: '“横评了市面上 6 款号称‘水培有机’的生菜。碧波鲜源的糖度达到了 4.3°Bx（普通水培只有 2.5），果胶硬度 820g，完全没有化肥水培菜那种水哒哒软塌塌的口感。他们的鱼菜共生微生态系统确实把硝态氮转化做得极其彻底。”',
+      stats: '<span>❤️ 4,520 赞</span><span>💬 520 评论</span><span>⭐ 3,890 收藏</span><span class="text-indigo-700 font-bold">🛒 带货转化: 210 年卡</span>',
+      keywords: ['🧬 果胶硬度820g (95%)', '🍭 糖度4.3°Bx (92%)', '🌿 微生物完全转化 (89%)'],
+      aiReply: '“感谢李博士严谨的理化数据横评！数字化农业工厂正是通过 FvCB 光合模型与 SPS 蔗糖合成动力学精准调光，才实现了脆甜高糖与母婴级超低硝酸盐。已为您开放工厂 3D 数字孪生与试验舱数据通道！”'
+    },
+    'post-4': {
+      platform: 'douyin',
+      platformIcon: '🎵',
+      author: '@减脂期的小甜 (真实买家)',
+      tag: '周订会员',
+      time: '2026-08-18 16:30 · 深圳',
+      sentimentBadge: '💡 新品需求线索',
+      sentimentClass: 'bg-amber-100 text-amber-800 border-amber-300',
+      content: '“生菜和鲈鱼都很棒，但现在减脂打工人真的很需要【羽衣甘蓝鲜榨汁组合包】和【免浆免洗黑鱼/鲈鱼片】！希望能尽快上线新 SKU，我一定每周订！”',
+      stats: '<span>❤️ 340 赞</span><span>💬 86 评论</span><span class="text-amber-700 font-bold">AI识别: 爆款高潜</span>',
+      keywords: ['🥤 羽衣甘蓝青汁 (96%)', '🥩 免浆免洗鱼柳 (88%)', '📅 周订续费意愿 (100%)'],
+      aiReply: '“您的建议已直达我们研发主管工作台！我们的 12 座科研种植试验舱已在测试【富硒高花青素羽衣甘蓝】与【瞬冷免浆鲈鱼片】，预计 14 天内完成中试并为您寄送首批尝鲜礼盒！”'
+    }
+  },
+
+  /**
+   * 刷新社媒舆情
+   */
+  refreshSocialSentiment() {
+    alert('🔄 【全网社媒爬虫引擎已完成增量同步】\n\n• 小红书: 新捕获 42 篇笔记 (正面率 98.2%)\n• 抖音: 新捕获 18 条带货短视频 (播放量 +140w)\n• 微信视频号: 互动点赞 +2,400\n• 综合 NPS 得分保持在 92.6 分，暂无负面危机预警！');
+  },
+
+  /**
+   * 筛选社媒平台
+   */
+  filterSocialPlatform(platform) {
+    const btns = {
+      all: document.getElementById('btn-social-all'),
+      xhs: document.getElementById('btn-social-xhs'),
+      douyin: document.getElementById('btn-social-douyin'),
+      wx: document.getElementById('btn-social-wx')
+    };
+
+    Object.keys(btns).forEach(k => {
+      if (btns[k]) {
+        if (k === platform) {
+          btns[k].className = 'px-2.5 py-1 rounded-lg bg-slate-900 text-white font-bold transition cursor-pointer';
+        } else {
+          btns[k].className = 'px-2.5 py-1 rounded-lg bg-white hover:bg-slate-50 text-slate-700 font-bold border border-slate-200 transition cursor-pointer';
+        }
+      }
+    });
+
+    const container = document.getElementById('social-feed-container');
+    if (!container) return;
+
+    // 简单筛选展示
+    const cards = container.children;
+    for (let i = 0; i < cards.length; i++) {
+      if (platform === 'all') {
+        cards[i].classList.remove('hidden');
+      } else if (platform === 'xhs') {
+        if (i === 0 || i === 2) cards[i].classList.remove('hidden');
+        else cards[i].classList.add('hidden');
+      } else if (platform === 'douyin') {
+        if (i === 1 || i === 3) cards[i].classList.remove('hidden');
+        else cards[i].classList.add('hidden');
+      } else if (platform === 'wx') {
+        cards[i].classList.remove('hidden');
+      }
+    }
+  },
+
+  /**
+   * 查看社媒帖子详情下钻
+   */
+  showSocialDetail(postId) {
+    const post = this.socialPostsData[postId] || this.socialPostsData['post-1'];
+    
+    const iconEl = document.getElementById('modal-social-icon');
+    if (iconEl) iconEl.textContent = post.platformIcon;
+
+    const authorEl = document.getElementById('modal-social-author');
+    if (authorEl) authorEl.textContent = post.author;
+
+    const tagEl = document.getElementById('modal-social-tag');
+    if (tagEl) tagEl.textContent = post.tag;
+
+    const timeEl = document.getElementById('modal-social-time');
+    if (timeEl) timeEl.textContent = post.time;
+
+    const contentEl = document.getElementById('modal-social-content');
+    if (contentEl) contentEl.textContent = post.content;
+
+    const statsEl = document.getElementById('modal-social-stats');
+    if (statsEl) statsEl.innerHTML = post.stats;
+
+    const badgeEl = document.getElementById('modal-social-sentiment-badge');
+    if (badgeEl) {
+      badgeEl.textContent = post.sentimentBadge;
+      badgeEl.className = `px-2.5 py-0.5 rounded-full font-bold text-xs border ${post.sentimentClass}`;
+    }
+
+    const aiReplyEl = document.getElementById('modal-social-ai-reply');
+    if (aiReplyEl) aiReplyEl.textContent = post.aiReply;
+
+    const modal = document.getElementById('modal-social-post-detail');
+    if (modal) modal.classList.remove('hidden');
+  },
+
+  /**
+   * 关闭社媒帖子详情弹窗
+   */
+  closeSocialModal() {
+    const modal = document.getElementById('modal-social-post-detail');
+    if (modal) modal.classList.add('hidden');
+  },
+
+  /**
+   * 发送官方回复与私信
+   */
+  sendOfficialReply() {
+    this.closeSocialModal();
+    alert('💌 【官方公关回复与私信已发送成功！】\n\n• 已通过小红书/抖音开放平台官方企业蓝V接口自动发表评论\n• 已附带北京普析 e-COA 电子质检单与 21 天生长延时溯源码\n• 已向博主私信派发【母婴辅食高端定制品鉴装】提货券！');
+  },
+
+  /**
+   * 爆款新品直连研发主管 12 座试验舱
+   */
+  dispatchNewProductToRnd() {
+    alert('🚀 【爆款新品研发工单已下发至研发主管中台！】\n\n' +
+      '• 抓取线索: 小红书/抖音近期“羽衣甘蓝青汁抗氧化”与“免浆低脂鲈鱼片”搜索量暴涨 340%\n' +
+      '• 派发目标: 研发主管工作台 · 12 座科研种植试验舱 (Nursery R&D)\n' +
+      '• 试验任务: 启动 DOE 正交试验 (UV-A 激发花青素配方 + 瞬冷免浆工艺)\n' +
+      '• 预期周期: 14 天内完成商业数字配方签发，无缝放大至 48 米跑道量产！');
+  },
+
+  /**
+   * 包装与规格优化建议
+   */
+  applyPackagingUpgrade() {
+    alert('📦 【包装升级工单已下发至后道包装线！】\n\n• 诉求来源: 28% 中产小家庭反馈 500g 生菜分量偏大\n• 优化方案: 推出 200g 奶油生菜 + 小叶茼蒿“免洗鲜萃双拼盒”\n• 联动动作: 已向机械臂包装分选机下发新打样尺寸指令，预计下周上市！');
+  },
+
+  /**
+   * 生成成分党科普公关文案
+   */
+  generatePrContent() {
+    alert('📄 【AI 成分党科普短视频与推文已生成！】\n\n' +
+      '• 主题: 《从鱼粪到母婴级蔬菜：揭秘鱼菜共生硝化菌生物转化奥秘》\n' +
+      '• 证据链: 附带本批次 e-COA 电子防伪质检单 (硝酸盐 620mg/kg, 62项农残0检出)\n' +
+      '• 分发渠道: 已一键推送至小红书官方号、抖音蓝V及 1,280 位会员私域群！');
+  },
+
+  /**
+   * =========================================================================
+   * 会员 360° 全息档案与客户全生命周期智能检索控制器 (Customer 360 & CRM)
+   * =========================================================================
+   */
+  customersData: {
+    'zhang': {
+      id: 'CUST-HZ-2025-08821',
+      name: '张女士 (钻石认养年卡会员)',
+      avatar: '👑',
+      phone: '138****8821',
+      city: '浙江省杭州市 · 余杭区绿城桃花源',
+      joinDays: 342,
+      tagClass: 'bg-purple-100 text-purple-900 border-purple-300',
+      tags: ['👑 钻石认养年卡', '👶 育儿辅食家庭', '高品质敏感型', 'LTV ¥12,800', '周均复购 1 次', 'NPS 推荐 10分'],
+      slotAsset: {
+        slotId: '#RA-B03-R02C04',
+        crop: '波士顿奶油生菜',
+        day: 18,
+        status: '生长健壮 (预计采收 Day 21)',
+        streamOnline: true
+      },
+      metrics: {
+        totalSpent: '¥ 5,940',
+        fulfilledWeeks: '48 / 52 周',
+        avgRating: '5.0 ★★★★★',
+        csatRate: '100%'
+      },
+      orders: [
+        {
+          orderId: 'ORD-20260818-8821',
+          date: '2026-08-18 10:30',
+          items: '每周鲜萃母婴生菜礼盒 (250g×2) + 活泉加州鲈净菜包 (500g×1)',
+          amount: '¥ 144.00',
+          status: '已送达 (顺丰冷链车载 3.2°C)',
+          ecoa: 'eCOA-20260818-VEG03 (实测硝酸盐 620mg/kg)'
+        },
+        {
+          orderId: 'ORD-20260811-7712',
+          date: '2026-08-11 09:15',
+          items: '每周鲜萃母婴生菜礼盒 (250g×2) + 活泉加州鲈净菜包 (500g×1)',
+          amount: '¥ 144.00',
+          status: '已送达 (顺丰冷链车载 2.8°C)',
+          ecoa: 'eCOA-20260811-VEG01 (实测硝酸盐 590mg/kg)'
+        },
+        {
+          orderId: 'ORD-20260804-6631',
+          date: '2026-08-04 10:00',
+          items: '专属水培浮板认养年卡 (52周全季定制周配首期)',
+          amount: '¥ 1,980.00',
+          status: '年卡履约中 (剩余 4 周到期)',
+          ecoa: '包含 52 期专属质检电子防伪单'
+        }
+      ],
+      communications: [
+        {
+          time: '2026-08-14 18:14',
+          channel: '📱 小程序在线客服',
+          topic: '咨询生菜外叶微黄与保存方式',
+          summary: '用户反馈收到生菜外缘有一片微黄。AI 客服在 0.8 秒内调取当日光照 DLI 与冷链温控数据，解释为远红光增糖生理自然褪色，并自动赠送 ¥20 礼遇券，用户非常满意给出 5 星好评。'
+        },
+        {
+          time: '2026-08-01 10:20',
+          channel: '📞 专属企微 1v1 管家',
+          topic: '建议增加羽衣甘蓝周配选项',
+          summary: '会员表示减脂期希望能搭配羽衣甘蓝榨汁。管家已登记并联动农艺排产中台。'
+        },
+        {
+          time: '2026-07-15 09:30',
+          channel: '📕 小红书互动',
+          topic: '达人发帖 @萌宝辅食日记 好评分享',
+          summary: '发帖“真·母婴级生菜辅食测评”获 2,840 赞，官方蓝V互动并赠送加州鲈冷鲜体验装。'
+        }
+      ],
+      aiRecommendations: [
+        {
+          badge: '👑 年卡续费攻坚 (倒计时 28 天)',
+          title: '该会员认养年卡即将到期，近期高频关注羽衣甘蓝新品',
+          actionText: '一键派发续费礼遇 (赠52周羽衣甘蓝定制)',
+          type: 'renewal'
+        },
+        {
+          badge: '🎁 专属 VIP 关怀',
+          title: '高净值忠实口碑用户，NPS 推荐 10 分',
+          actionText: '发起企微 VIP 专属问候',
+          type: 'vip'
+        }
+      ]
+    },
+
+    'lin': {
+      id: 'CUST-SH-2026-05562',
+      name: '林妈妈 (母婴辅食周期购会员)',
+      avatar: '👶',
+      phone: '139****5562',
+      city: '上海市 · 浦东新区碧云国际社区',
+      joinDays: 180,
+      tagClass: 'bg-pink-100 text-pink-900 border-pink-300',
+      tags: ['👶 母婴辅食核心客群', '极度关注低硝酸盐', '0化学农药敏感', 'LTV ¥6,200', '周订 2 盒生菜'],
+      slotAsset: {
+        slotId: '周配共享跑道 #RA-A02',
+        crop: '母婴级奶油生菜',
+        day: 14,
+        status: '光照转化中 (硝酸盐 < 600mg)',
+        streamOnline: true
+      },
+      metrics: {
+        totalSpent: '¥ 3,420',
+        fulfilledWeeks: '24 / 24 周',
+        avgRating: '4.9 ★★★★★',
+        csatRate: '100%'
+      },
+      orders: [
+        {
+          orderId: 'ORD-20260817-5562',
+          date: '2026-08-17 11:20',
+          items: '母婴级低硝酸盐生菜鲜萃礼盒 (250g×2)',
+          amount: '¥ 76.00',
+          status: '已送达 (冷链车载 3.0°C)',
+          ecoa: 'eCOA-20260817-VEG02 (农残0检出)'
+        },
+        {
+          orderId: 'ORD-20260810-4419',
+          date: '2026-08-10 10:45',
+          items: '母婴级低硝酸盐生菜鲜萃礼盒 (250g×2)',
+          amount: '¥ 76.00',
+          status: '已送达 (冷链车载 2.9°C)',
+          ecoa: 'eCOA-20260810-VEG04 (硝酸盐610mg/kg)'
+        }
+      ],
+      communications: [
+        {
+          time: '2026-08-12 14:30',
+          channel: '📱 小程序在线客服',
+          topic: '查验北京普析 62 项农残检测单',
+          summary: '会员索取最新批次农残检测报告，AI 客服秒级推送权威 e-COA 报告，会员确认无误并续订 12 周。'
+        }
+      ],
+      aiRecommendations: [
+        {
+          badge: '🍼 母婴营养升级',
+          title: '宝宝已满 9 个月，可推荐搭配高蛋白活泉加州鲈鱼柳辅食包',
+          actionText: '赠送鲈鱼柳辅食尝鲜装 (¥0元领)',
+          type: 'sample'
+        }
+      ]
+    },
+
+    'chen': {
+      id: 'CUST-SZ-2026-09918',
+      name: '陈先生 (健身减脂轻食周配会员)',
+      avatar: '🥗',
+      phone: '136****9918',
+      city: '广东省深圳市 · 南山区高新园',
+      joinDays: 95,
+      tagClass: 'bg-emerald-100 text-emerald-900 border-emerald-300',
+      tags: ['🥗 健身轻食白领', '高蛋白鲈鱼忠粉', '高频加购', 'LTV ¥4,100', '周订 2 份鱼柳'],
+      slotAsset: {
+        slotId: '活泉吊水池 #TANK-01',
+        crop: '高蛋白加州鲈 (吊水72h)',
+        day: 22,
+        status: '微纳米纯氧净化中 (0土腥味)',
+        streamOnline: true
+      },
+      metrics: {
+        totalSpent: '¥ 2,240',
+        fulfilledWeeks: '14 / 14 周',
+        avgRating: '5.0 ★★★★★',
+        csatRate: '100%'
+      },
+      orders: [
+        {
+          orderId: 'ORD-20260816-9918',
+          date: '2026-08-16 09:30',
+          items: '活泉加州鲈鲜切冷链净菜包 (500g×2) + 鲜萃生菜 (250g×1)',
+          amount: '¥ 174.00',
+          status: '已送达 (顺丰冷鲜直达)',
+          ecoa: 'eCOA-20260816-FISH01 (Geosmin 0检出)'
+        }
+      ],
+      communications: [
+        {
+          time: '2026-08-05 19:10',
+          channel: '🎵 抖音带货直播间互动',
+          topic: '好评反馈鱼肉无刺且无土腥味',
+          summary: '在抖音直播间评论“加州鲈清蒸微波即食太方便”，获主播置顶并加赠 1 盒鲜萃生菜。'
+        }
+      ],
+      aiRecommendations: [
+        {
+          badge: '🥩 新品优先内测',
+          title: '针对高频健身买家，推荐优先试吃研发主管即将上市的【瞬冷免浆鲈鱼片】',
+          actionText: '邀请加入新品体验官群',
+          type: 'newproduct'
+        }
+      ]
+    },
+
+    'wang': {
+      id: 'CUST-BJ-2025-03341',
+      name: '王教授 (健康养生银发年卡 · 临期关怀)',
+      avatar: '⚠️',
+      phone: '137****3341',
+      city: '北京市 · 海淀区万柳华府',
+      joinDays: 350,
+      tagClass: 'bg-amber-100 text-amber-900 border-amber-300',
+      tags: ['👑 高净值银发养生族', '年卡剩余15天', '专属浮板认养', 'LTV ¥7,900', '对送货准时度敏感'],
+      slotAsset: {
+        slotId: '#RA-A01-R01C02',
+        crop: '富硒羽衣甘蓝 + 生菜',
+        day: 20,
+        status: '生长成熟 (等待周配采收)',
+        streamOnline: true
+      },
+      metrics: {
+        totalSpent: '¥ 3,960',
+        fulfilledWeeks: '50 / 52 周',
+        avgRating: '4.8 ★★★★★',
+        csatRate: '100%'
+      },
+      orders: [
+        {
+          orderId: 'ORD-20260815-3341',
+          date: '2026-08-15 08:30',
+          items: '专属浮板定制周配礼盒 (生菜×2 + 羽衣甘蓝×1)',
+          amount: '¥ 0.00 (年卡扣减)',
+          status: '已送达 (顺丰小哥送货上门)',
+          ecoa: 'eCOA-20260815-VEG01'
+        }
+      ],
+      communications: [
+        {
+          time: '2026-08-10 11:00',
+          channel: '📱 小程序好评',
+          topic: '表扬顺丰冷链小哥礼貌送上门',
+          summary: '老人反馈每周六上午 9 点准时送达，蔬菜新鲜脆甜，家人非常放心。'
+        }
+      ],
+      aiRecommendations: [
+        {
+          badge: '⚠️ 核心年卡续费防流失',
+          title: '认养年卡还剩 15 天到期，系统判定续费意愿极高',
+          actionText: '一键派发银发 VIP 续费 88 折 + 赠高钙菜礼遇',
+          type: 'renewal_silver'
+        }
+      ]
+    }
+  },
+
+  /**
+   * 渲染会员 360° 全息档案
+   */
+  renderCustomerProfile(customerId) {
+    const cust = this.customersData[customerId] || this.customersData['zhang'];
+    const container = document.getElementById('customer-profile-card-container');
+    if (!container) return;
+
+    // 组装 HTML
+    container.innerHTML = `
+      <div class="space-y-5 animate-fadeIn font-sans text-xs">
+        
+        <!-- 1. 用户核心画像大卡 (Customer Persona Header) -->
+        <div class="p-5 rounded-2xl bg-white border-2 border-indigo-200 shadow-sm flex flex-wrap items-center justify-between gap-4">
+          
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-indigo-100 border border-indigo-300 flex items-center justify-center text-3xl shrink-0 shadow-inner">
+              ${cust.avatar}
+            </div>
+            <div class="space-y-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <strong class="text-base text-slate-900 font-bold font-sans">${cust.name}</strong>
+                <span class="px-2.5 py-0.5 rounded-full ${cust.tagClass} text-xs font-mono font-bold border">
+                  ${cust.id}
+                </span>
+                <span class="text-xs text-slate-500 font-mono">入会已 ${cust.joinDays} 天</span>
+              </div>
+              <div class="text-xs text-slate-600 font-medium flex items-center gap-3">
+                <span>📱 电话: <strong class="text-slate-900 font-mono">${cust.phone}</strong></span>
+                <span>📍 地址: ${cust.city}</span>
+              </div>
+              <!-- 画像标签 -->
+              <div class="flex flex-wrap items-center gap-1.5 pt-1">
+                ${cust.tags.map(t => `<span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-medium text-[11px] border border-slate-200">${t}</span>`).join('')}
+              </div>
+            </div>
+          </div>
+
+          <!-- 右侧关键资产与核心指标 -->
+          <div class="flex flex-wrap items-center gap-4 text-right">
+            <div class="p-3 rounded-xl bg-purple-50/80 border border-purple-200 text-left">
+              <span class="text-[11px] text-purple-700 font-bold block">🌱 认养专属孔位资产</span>
+              <strong class="text-xs text-slate-900 font-mono block">${cust.slotAsset.slotId}</strong>
+              <span class="text-[11px] text-slate-600 font-sans">${cust.slotAsset.crop} · ${cust.slotAsset.status}</span>
+            </div>
+            <div class="space-y-1">
+              <div><span class="text-slate-500">累计消费:</span> <strong class="text-purple-700 font-mono font-black text-sm">${cust.metrics.totalSpent}</strong></div>
+              <div><span class="text-slate-500">履约周期:</span> <strong class="text-slate-900 font-mono font-bold">${cust.metrics.fulfilledWeeks}</strong></div>
+              <div><span class="text-slate-500">历史满意度:</span> <strong class="text-emerald-700 font-mono font-bold">${cust.metrics.avgRating}</strong></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 2. 三栏并列：历史订单与冷链履约 (5列) + 交流与客诉历史 (4列) + AI 专属运营建议 (3列) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          
+          <!-- (1) 全生命周期历史订单与冷链轨迹 (5列) -->
+          <div class="lg:col-span-5 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+              <span class="font-extrabold text-xs text-slate-900 flex items-center gap-1.5">
+                <span>📦</span> 历史履约订单 (${cust.orders.length} 笔代表)
+              </span>
+              <span class="text-slate-400 font-mono text-[11px]">顺丰冷链车载直达</span>
+            </div>
+
+            <div class="space-y-2.5 max-h-[280px] overflow-y-auto pr-1 font-sans">
+              ${cust.orders.map(o => `
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100/80 transition space-y-1.5 text-xs">
+                  <div class="flex items-center justify-between">
+                    <span class="font-mono font-bold text-slate-900 text-xs">${o.orderId}</span>
+                    <span class="font-mono text-slate-500 text-[11px]">${o.date}</span>
+                  </div>
+                  <p class="text-slate-700 font-medium leading-relaxed">${o.items}</p>
+                  <div class="flex items-center justify-between pt-1 border-t border-slate-200/60 font-mono text-[11px]">
+                    <span class="text-purple-700 font-bold text-xs">${o.amount}</span>
+                    <span class="text-emerald-700 font-medium">${o.status}</span>
+                  </div>
+                  <div class="text-[11px] text-indigo-700 font-mono pt-0.5">
+                    📄 ${o.ecoa}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- (2) 多渠道交流与 AI 客服互动历史 (4列) -->
+          <div class="lg:col-span-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+              <span class="font-extrabold text-xs text-slate-900 flex items-center gap-1.5">
+                <span>💬</span> 沟通与服务工单记录 (${cust.communications.length} 条)
+              </span>
+              <span class="text-emerald-700 font-mono font-bold text-[11px]">满意度 100%</span>
+            </div>
+
+            <div class="space-y-2.5 max-h-[280px] overflow-y-auto pr-1 font-sans">
+              ${cust.communications.map(c => `
+                <div class="p-3 rounded-xl bg-indigo-50/50 border border-indigo-100 space-y-1 text-xs">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-indigo-900 text-xs">${c.channel}</span>
+                    <span class="font-mono text-slate-400 text-[11px]">${c.time}</span>
+                  </div>
+                  <strong class="text-slate-800 text-xs block">${c.topic}</strong>
+                  <p class="text-slate-600 leading-relaxed font-medium text-xs">${c.summary}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- (3) AI 客户经营洞察与专属行动引擎 (3列) -->
+          <div class="lg:col-span-3 p-4 rounded-2xl bg-gradient-to-br from-indigo-50/80 to-purple-50/80 border-2 border-indigo-300 shadow-sm space-y-3 flex flex-col justify-between">
+            
+            <div class="space-y-3">
+              <div class="flex items-center justify-between border-b border-indigo-200 pb-2">
+                <span class="font-extrabold text-xs text-indigo-950 flex items-center gap-1">
+                  <span>💡</span> AI 客户经营策略
+                </span>
+                <span class="px-1.5 py-0.5 rounded bg-indigo-200 text-indigo-900 font-mono font-bold text-[10px]">Copilot</span>
+              </div>
+
+              ${cust.aiRecommendations.map(r => `
+                <div class="p-3 rounded-xl bg-white border border-indigo-200 space-y-2 shadow-xs">
+                  <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 font-bold text-[11px] block">
+                    ${r.badge}
+                  </span>
+                  <p class="text-slate-700 text-xs leading-relaxed font-medium">
+                    ${r.title}
+                  </p>
+                  <button 
+                    onclick="RetailCopilotController.executeCustomerAction('${cust.name}', '${r.actionText}')" 
+                    class="w-full py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs transition cursor-pointer shadow-xs">
+                    ${r.actionText}
+                  </button>
+                </div>
+              `).join('')}
+            </div>
+
+            <div class="pt-2 border-t border-indigo-200 text-[11px] text-slate-500 font-mono text-center">
+              LTV 预测增益: <strong class="text-purple-700">+¥2,400</strong>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    `;
+  },
+
+  /**
+   * 搜索客户档案
+   */
+  searchCustomer() {
+    const input = document.getElementById('retail-user-search-input');
+    const query = input ? input.value.trim() : '';
+    if (!query) {
+      alert('请输入会员姓名、手机号或卡号进行搜索');
+      return;
+    }
+
+    // 匹配
+    let key = 'zhang';
+    if (query.includes('林') || query.includes('5562') || query.includes('母婴') || query.includes('上海')) {
+      key = 'lin';
+    } else if (query.includes('陈') || query.includes('9918') || query.includes('健身') || query.includes('深圳')) {
+      key = 'chen';
+    } else if (query.includes('王') || query.includes('3341') || query.includes('银发') || query.includes('北京')) {
+      key = 'wang';
+    }
+
+    this.quickSelectCustomer(key);
+  },
+
+  /**
+   * 快捷切换标杆会员
+   */
+  quickSelectCustomer(key) {
+    const btns = {
+      zhang: document.getElementById('btn-cust-zhang'),
+      lin: document.getElementById('btn-cust-lin'),
+      chen: document.getElementById('btn-cust-chen'),
+      wang: document.getElementById('btn-cust-wang')
+    };
+
+    Object.keys(btns).forEach(k => {
+      if (btns[k]) {
+        if (k === key) {
+          btns[k].className = 'px-3 py-1.5 rounded-xl bg-purple-600 text-white border border-purple-600 font-extrabold transition cursor-pointer shadow-xs';
+        } else {
+          btns[k].className = 'px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-bold transition cursor-pointer';
+        }
+      }
+    });
+
+    const input = document.getElementById('retail-user-search-input');
+    if (input) {
+      if (key === 'zhang') input.value = '张女士 (138****8821)';
+      else if (key === 'lin') input.value = '林妈妈 (139****5562)';
+      else if (key === 'chen') input.value = '陈先生 (136****9918)';
+      else if (key === 'wang') input.value = '王教授 (137****3341)';
+    }
+
+    this.renderCustomerProfile(key);
+  },
+
+  /**
+   * 执行针对具体客户的 AI 运营动作
+   */
+  executeCustomerAction(customerName, actionText) {
+    alert(`🎯 【会员专属运营动作执行成功！】\n\n` +
+      `• 目标会员: ${customerName}\n` +
+      `• 执行动作: ${actionText}\n` +
+      `• 联动触达: 已通过企微私域助手向该会员推送定制礼遇卡券与消息！\n` +
+      `• 运营归档: 动作日志已存证至 CRM 客户生命周期数据表。`);
   }
 };
+
 

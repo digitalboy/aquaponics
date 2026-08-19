@@ -528,4 +528,106 @@ window.ViewTemplates['modals'] = `
 
     </div>
   </div>
+
+  <!-- ========================================================================= -->
+  <!-- Modal 5: 📱 社媒帖子全景下钻与 AI 公关回复/KOL合作弹窗 (Social Post Detail Modal) -->
+  <!-- ========================================================================= -->
+  <div id="modal-social-post-detail" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-3xl w-full border-2 border-rose-300 shadow-2xl overflow-hidden my-auto flex flex-col max-h-[90vh]">
+      
+      <!-- 头部 -->
+      <div class="bg-gradient-to-r from-rose-950 via-slate-900 to-orange-950 p-5 text-white flex items-center justify-between shrink-0 border-b border-rose-800/60">
+        <div class="flex items-center gap-3">
+          <div id="modal-social-icon" class="w-11 h-11 rounded-2xl bg-rose-500/20 border border-rose-400/50 flex items-center justify-center text-2xl shadow-inner">
+            📕
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 id="modal-social-author" class="font-black text-base text-rose-300 tracking-tight">@萌宝辅食日记</h3>
+              <span id="modal-social-tag" class="px-2.5 py-0.5 rounded-full bg-rose-400/20 text-rose-300 text-xs font-mono font-bold border border-rose-400/40">
+                小红书母婴达人
+              </span>
+            </div>
+            <p id="modal-social-time" class="text-xs text-rose-400/90 mt-0.5 font-medium font-mono">
+              2026-08-19 14:15 · 杭州 · 粉丝 12.5w
+            </p>
+          </div>
+        </div>
+
+        <button onclick="RetailCopilotController.closeSocialModal()" class="w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer border border-slate-700 text-base">
+          ✕
+        </button>
+      </div>
+
+      <!-- 内容区 -->
+      <div class="p-6 overflow-y-auto space-y-5 text-slate-800 font-sans text-xs flex-1">
+        
+        <!-- 帖子原文字句与互动数据 -->
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-extrabold text-xs text-slate-900 flex items-center gap-1.5">
+              <span>📝</span> 原帖全文与社媒数据
+            </span>
+            <span id="modal-social-sentiment-badge" class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs border border-emerald-300">
+              💖 极度好评 (99%)
+            </span>
+          </div>
+          <p id="modal-social-content" class="text-slate-700 text-xs leading-relaxed font-medium select-text">
+            “终于买到了做宝宝辅食的真·母婴级生菜！带去实验室测了硝酸盐只有 620mg，远低于欧盟 2500mg 标准，生吃脆甜无苦味，宝宝一口气吃了大半碗蔬菜泥！顺丰冷链包装太专业了！”
+          </p>
+          <div id="modal-social-stats" class="flex flex-wrap items-center gap-4 pt-2 border-t border-slate-200 text-slate-500 font-mono text-xs">
+            <span>❤️ 2,840 赞</span>
+            <span>💬 382 评论</span>
+            <span>⭐ 1,420 收藏</span>
+            <span class="text-rose-600 font-bold">🛒 带货转化: 142 盒</span>
+          </div>
+        </div>
+
+        <!-- 评论区高频热词词云与心智洞察 -->
+        <div class="p-4 rounded-2xl bg-rose-50/60 border border-rose-200 space-y-2.5">
+          <span class="font-bold text-xs text-rose-950 flex items-center gap-1.5">
+            <span>☁️</span> 评论区高频热词与消费者心智洞察:
+          </span>
+          <div class="flex flex-wrap gap-2 text-xs">
+            <span class="px-2.5 py-1 rounded-lg bg-white border border-rose-200 text-rose-800 font-medium">🍃 清脆爽口 (84%)</span>
+            <span class="px-2.5 py-1 rounded-lg bg-white border border-rose-200 text-rose-800 font-medium">👶 宝宝爱吃 (76%)</span>
+            <span class="px-2.5 py-1 rounded-lg bg-white border border-rose-200 text-rose-800 font-medium">🧪 无硝酸盐苦涩 (68%)</span>
+            <span class="px-2.5 py-1 rounded-lg bg-white border border-rose-200 text-rose-800 font-medium">📦 顺丰冷链保鲜 (92%)</span>
+            <span class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-600 font-medium">💰 价格略贵 (24%)</span>
+          </div>
+        </div>
+
+        <!-- AI 官方互动/达人合作跟进建议 -->
+        <div class="p-4 rounded-2xl bg-white border-2 border-emerald-400 space-y-3 shadow-xs">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-xs text-emerald-950 flex items-center gap-1.5">
+              <span>🤖</span> AI 智能生成的品牌官方互动回复 (已关联 e-COA 报告):
+            </span>
+            <span class="text-xs text-slate-400 font-mono">置信度: 99.4%</span>
+          </div>
+          <div id="modal-social-ai-reply" class="p-3.5 rounded-xl bg-emerald-50/80 border border-emerald-200 text-slate-800 text-xs leading-relaxed font-sans select-text">
+            “感谢宝妈的专业认可！我们的奶油生菜在工厂采收前经过了 48 小时远红光转化与活化停氮，让内源硝酸盐彻底转化为甘氨酸，宝宝吃得健康，妈妈更安心！私信为您送上本批次北京普析 62 项盲检 e-COA 电子防伪报告与专属体验礼遇！”
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 底部操作栏 -->
+      <div class="p-4 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
+        <div class="flex items-center gap-2 text-xs text-slate-500 font-mono">
+          <span>工单状态: <strong class="text-emerald-700">AI 自动跟进中</strong></span>
+        </div>
+
+        <div class="flex items-center gap-2.5">
+          <button onclick="RetailCopilotController.closeSocialModal()" class="px-4 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs border border-slate-300 cursor-pointer transition">
+            关闭
+          </button>
+          <button onclick="RetailCopilotController.sendOfficialReply()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-orange-600 hover:from-rose-700 hover:to-orange-700 text-white font-extrabold text-xs cursor-pointer transition shadow-sm flex items-center gap-1.5">
+            <span>💬</span> 一键向博主发送官方回复与私信
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
 `;
