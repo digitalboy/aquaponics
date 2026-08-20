@@ -147,7 +147,7 @@ graph TD
 
 * **本模块专属规范：全球主要国家与地区农业食品安全标准比对**：👉 [01_全球主要国家与地区农业食品安全标准比对规范.md](./01_全球主要国家与地区农业食品安全标准比对规范.md)
 * **农艺机理与学术知识支持子系统**：👉 [08_agronomy_knowledge_rnd/README.md](../08_agronomy_knowledge_rnd/README.md)
-* **销售赋能与客户全生命周期溯源**：👉 [06_sales_and_traceability/README.md](../06_sales_and_traceability/README.md)
+* **品牌溯源与客户全生命周期溯源**：👉 [06_brand_traceability_crm/README.md](../06_brand_traceability_crm/README.md)
 * **水产养殖与保命硬件互锁**：👉 [01_aquaculture/README.md](../01_aquaculture/README.md)
 * **水培种植与立体微气候感知**：👉 [02_hydroponics/README.md](../02_hydroponics/README.md)
 * **全局时间与接口数据契约规范**：👉 [03_接口与数据契约规范.md](../../03_system_architecture/03_接口与数据契约规范.md)

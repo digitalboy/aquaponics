@@ -127,4 +127,4 @@ flowchart TD
 * **生物视觉模型与数据库**：👉 [04_YOLO11活体生物数据集构建规范.md](../../03_system_architecture/04_YOLO11活体生物数据集构建规范.md)
 * **品质控制与出厂土腥味抽测**：👉 [07_quality_assurance_lab/README.md](../07_quality_assurance_lab/README.md)
 * **全球主要国家与地区水产食品安全标准**：👉 [01_全球主要国家与地区农业食品安全标准比对规范.md](../07_quality_assurance_lab/01_全球主要国家与地区农业食品安全标准比对规范.md)
-* **鱼菜长慢周期资产错位对冲**：👉 [05_supply_chain_finance/README.md](../05_supply_chain_finance/README.md)
+* **鱼菜长慢周期资产错位对冲**：👉 [05_supply_chain_and_commerce/README.md](../05_supply_chain_and_commerce/README.md)

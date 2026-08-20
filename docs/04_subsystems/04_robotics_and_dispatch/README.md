@@ -6,7 +6,7 @@
 
 ## 1. 集中调度系统 (RCS) 的四维金字塔架构
 
-为防止各设备单体各自为战，系统采用统一的分层控制架构（工单生成源头来自供应链中台 APS，详见 👉 [05_supply_chain_finance/README.md](../05_supply_chain_finance/README.md)）：
+为防止各设备单体各自为战，系统采用统一的分层控制架构（工单生成源头来自供应链与商贸协同子系统 APS，详见 👉 [05_supply_chain_and_commerce/README.md](../05_supply_chain_and_commerce/README.md)）：
 
 ```mermaid
 flowchart TD
@@ -97,7 +97,7 @@ flowchart TD
 
 ## 🔗 相关设计与规范链接
 
-* **供应链排产中台与订单流转**：👉 [05_supply_chain_finance/README.md](../05_supply_chain_finance/README.md)
+* **供应链排产协同与订单流转**：👉 [05_supply_chain_and_commerce/README.md](../05_supply_chain_and_commerce/README.md)
 * **农艺机理与 12 座试验舱配方调度**：👉 [08_agronomy_knowledge_rnd/README.md](../08_agronomy_knowledge_rnd/README.md)
 * **水培作物成熟期预测模型**：👉 [02_hydroponics/README.md](../02_hydroponics/README.md)
 * **品质控制与机械臂无菌切根装盒标准**：👉 [07_quality_assurance_lab/README.md](../07_quality_assurance_lab/README.md)

@@ -62,8 +62,8 @@ docs/
     ├── 02_hydroponics/                                # 🌱 02. 水培种植子系统 (VPD反演/水力调节池/大空间温控)
     ├── 03_energy_optimization/                        # ⚡ 03. 能耗优化子系统 (分回路计量/TOU电价MPC套利)
     ├── 04_robotics_and_dispatch/                      # 🤖 04. 智能调度与机器人 (RCS/VDA 5050/具身收割)
-    ├── 05_supply_chain_finance/                       # 📊 05. 供应链与业务中台 (APS以销定产/资产错位对冲)
-    ├── 06_sales_and_traceability/                     # 💼 06. 销售赋能与客户溯源 (ATP/B端大屏/一物一码/社媒舆情)
+    ├── 05_supply_chain_and_commerce/                  # 📊 05. 供应链与商贸协同 (产供销一体化/四维选品/30天ATP/APS以销定产/COGS业财对冲)
+    ├── 06_brand_traceability_crm/                     # 💼 06. 品牌溯源、客户运营与舆情感知 (一物一码/B2B门户/DTC会员360°/社媒舆情AI中枢)
     ├── 07_quality_assurance_lab/                      # 🔬 07. 品质控制与实验室 (IQC/IPQC/OQC/全球食品安全规范/e-COA)
     └── 08_agronomy_knowledge_rnd/                     # 🧑‍🔬 08. 农艺机理与学术知识 (Crop Ontology/12座试验舱/蒸腾机理)
 ```

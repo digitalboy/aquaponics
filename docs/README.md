@@ -49,11 +49,11 @@ docs/
     ├── 04_robotics_and_dispatch/                      # 🤖 04. 智能调度与机器人
     │   └── README.md                                  # RCS 金字塔调度、VDA 5050 与力控具身收割
     │
-    ├── 05_supply_chain_finance/                       # 📊 05. 供应链与业务中台
-    │   └── README.md                                  # APS 以销定产、长慢周期资产错位对冲财务模型
+    ├── 05_supply_chain_and_commerce/                  # 📊 05. 供应链与商贸协同子系统
+    │   └── README.md                                  # 产供销一体化、四维选品、30天ATP、APS以销定产与COGS业财对冲
     │
-    ├── 06_sales_and_traceability/                     # 💼 06. 销售赋能与客户溯源子系统
-    │   └── README.md                                  # 30天可承诺量 ATP、B端商超大屏、C端一物一码溯源与社媒舆情大盘
+    ├── 06_brand_traceability_crm/                     # 💼 06. 品牌溯源、客户运营与舆情感知子系统
+    │   └── README.md                                  # 一物一码区块链防伪、B2B商超门户、B2C会员360°全息与全网社媒舆情AI大盘
     │
     ├── 07_quality_assurance_lab/                      # 🔬 07. 品质控制与实验室子系统
     │   ├── README.md                                  # IQC/IPQC/OQC三道防线、仪器台账与 e-COA 防伪存证
@@ -84,7 +84,7 @@ docs/
 ### 3. 宏观架构与数据底座 (Global Architecture & Data Base)
 * 查阅 [01_系统宏观架构设计.md](./03_system_architecture/01_系统宏观架构设计.md) 建立多基地连锁的云边端协同大局观。
 * 参考 [02_MVP物理与物联拓扑.md](./03_system_architecture/02_MVP物理与物联拓扑.md) 掌握底层汇川 PLC、边缘网关与 Cloudflare Serverless 连通逻辑。
-* **【核心数据红线】** [03_接口与数据契约规范.md](./03_system_architecture/03_接口与数据契约规范.md) 规定了所有 API 必须采用的 **严格 ISO 8601 UTC 毫秒时间格式 (`YYYY-MM-DDTHH:mm:ss.000Z`)**。
+* **【核心数据红线】** [03_接口与数据契约规范.md](./03_system_architecture/03_接口与数据契约规范.md) 规定了所有 API 必须采用的 **严格 ISO 8601 UTC 毫秒时间格式 (`YYYY-MM-DDTHH:mm:ss.000Z`)** 与数据湖冷热分层架构。
 * 查阅 [04_YOLO11活体生物数据集构建规范.md](./03_system_architecture/04_YOLO11活体生物数据集构建规范.md) 掌握生物表型、SQL Schema 与点云标注规范。
 
 ### 4. 八大自治子系统详细设计 (Subsystems Detailed Design)
@@ -94,8 +94,8 @@ docs/
   - 细节规范：[02_大空间温室立体微气候感知与温控策略规范.md](./04_subsystems/02_hydroponics/02_大空间温室立体微气候感知与温控策略规范.md)
 * **⚡ 03. 能耗优化子系统**：[04_subsystems/03_energy_optimization/README.md](./04_subsystems/03_energy_optimization/README.md)（分回路能耗计量、TOU 下的 MPC 热泵套利）
 * **🤖 04. 智能调度与机器人**：[04_subsystems/04_robotics_and_dispatch/README.md](./04_subsystems/04_robotics_and_dispatch/README.md)（RCS 金字塔调度、VDA 5050 与力控具身收割）
-* **📊 05. 供应链与业务中台**：[04_subsystems/05_supply_chain_finance/README.md](./04_subsystems/05_supply_chain_finance/README.md)（APS 以销定产、资产周转错位对冲、冷热数仓隔离）
-* **💼 06. 销售赋能与客户溯源**：[04_subsystems/06_sales_and_traceability/README.md](./04_subsystems/06_sales_and_traceability/README.md)（30天可承诺量 ATP、B端商超大屏、C端一物一码溯源与社媒舆情中台）
+* **📊 05. 供应链与商贸协同**：[04_subsystems/05_supply_chain_and_commerce/README.md](./04_subsystems/05_supply_chain_and_commerce/README.md)（产供销一体化、四维选品、30天ATP、APS以销定产、COGS业财对冲）
+* **💼 06. 品牌溯源、客户运营与舆情感知**：[04_subsystems/06_brand_traceability_crm/README.md](./04_subsystems/06_brand_traceability_crm/README.md)（一物一码区块链溯源、B2B商超门户、B2C会员360°全息与全网社媒舆情AI大盘）
 * **🔬 07. 品质控制与实验室**：[04_subsystems/07_quality_assurance_lab/README.md](./04_subsystems/07_quality_assurance_lab/README.md)（IQC/IPQC/OQC三道防线、普析仪器台账、4°C留样室与e-COA防伪存证）
   - 细节规范：[01_全球主要国家与地区农业食品安全标准比对规范.md](./04_subsystems/07_quality_assurance_lab/01_全球主要国家与地区农业食品安全标准比对规范.md)
 * **🧑‍🔬 08. 农艺机理与学术支持**：[04_subsystems/08_agronomy_knowledge_rnd/README.md](./04_subsystems/08_agronomy_knowledge_rnd/README.md)（Crop Ontology本体、FvCB光合与Stanghellini模型、12座试验舱配方R&D与GraphRAG）

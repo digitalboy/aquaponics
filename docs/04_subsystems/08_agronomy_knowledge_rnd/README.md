@@ -342,4 +342,6 @@ flowchart TD
 * **全球主要国家与地区农业食品安全标准比对规范**：👉 [01_全球主要国家与地区农业食品安全标准比对规范.md](../07_quality_assurance_lab/01_全球主要国家与地区农业食品安全标准比对规范.md)
 * **水培种植子系统与调理池加药**：👉 [02_hydroponics/README.md](../02_hydroponics/README.md)
 * **能耗优化子系统与 MPC 光效对冲**：👉 [03_energy_optimization/README.md](../03_energy_optimization/README.md)
+* **供应链与商贸协同 (以销定产与新品放大)**：👉 [05_supply_chain_and_commerce/README.md](../05_supply_chain_and_commerce/README.md)
+* **品牌溯源与全网社媒爆款线索输入**：👉 [06_brand_traceability_crm/README.md](../06_brand_traceability_crm/README.md)
 * **接口与数据契约规范 (严格 ISO 8601 UTC)**：👉 [03_接口与数据契约规范.md](../../03_system_architecture/03_接口与数据契约规范.md)

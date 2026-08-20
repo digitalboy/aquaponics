@@ -103,7 +103,7 @@ flowchart TD
 ### 4.1 基于光温累积（DLI）与 SUCROS 机理的成熟期预测
 * **算法模型**：结合 **SUCROS (植物生长机理模型)** 与 **LSTM 时序网络**。
 * **数据输入**：每日光合有效辐射累积量 (DLI)、气温积温（GDD）、以及栽培区高空相机每日识别并语义分割出的**叶面积指数 (LAI)**。
-* **商业表现**：系统在幼苗定植第 10 天，即可在云端以 $97\%$ 的精确度预测出该批次作物的成熟起捕日（当平均单株重达到 $250\,\text{g}$ 的物理规格），为 ERP/APS 供应链模块与机器人调度系统提供精准的履约依据（详见 👉 [05_supply_chain_finance/README.md](../05_supply_chain_finance/README.md) 与 [04_robotics_and_dispatch/README.md](../04_robotics_and_dispatch/README.md)）。
+* **商业表现**：系统在幼苗定植第 10 天，即可在云端以 $97\%$ 的精确度预测出该批次作物的成熟起捕日（当平均单株重达到 $250\,\text{g}$ 的物理规格），为 ERP/APS 供应链模块与机器人调度系统提供精准的履约依据（详见 👉 [05_supply_chain_and_commerce/README.md](../05_supply_chain_and_commerce/README.md) 与 [04_robotics_and_dispatch/README.md](../04_robotics_and_dispatch/README.md)）。
 
 ---
 
@@ -130,5 +130,5 @@ flowchart TD
 * **品质控制与实验室抽检 (硝酸盐/农残/糖度)**：👉 [07_quality_assurance_lab/README.md](../07_quality_assurance_lab/README.md)
 * **全球主要国家与地区农业食品安全标准比对规范**：👉 [01_全球主要国家与地区农业食品安全标准比对规范.md](../07_quality_assurance_lab/01_全球主要国家与地区农业食品安全标准比对规范.md)
 * **现场弱电布线与快拆施工**：👉 [05_现场弱电线缆选型与布线施工规范.md](../../02_requirements_and_plans/05_现场弱电线缆选型与布线施工规范.md)
-* **自动收割机器人调度与排产中台**：👉 [04_robotics_and_dispatch/README.md](../04_robotics_and_dispatch/README.md) & [05_supply_chain_finance/README.md](../05_supply_chain_finance/README.md)
-* **产销协同选品与可承诺量大盘**：👉 [06_sales_and_traceability/README.md](../06_sales_and_traceability/README.md)
+* **供应链与商贸协同子系统 (以销定产与选品)**：👉 [05_supply_chain_and_commerce/README.md](../05_supply_chain_and_commerce/README.md)
+* **品牌溯源与一物一码可信大盘**：👉 [06_brand_traceability_crm/README.md](../06_brand_traceability_crm/README.md)
