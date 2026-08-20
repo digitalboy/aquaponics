@@ -17,7 +17,7 @@ flowchart TD
     APS -->|自动排程/调整品种| RCS["基地机器人收割工单(RCS)"]
 ```
 
-* **秒级排产流程**：中台接收基于四维加权选品模型输出的季度定植清单（详见 👉 [06_销售赋能与客户溯源子系统.md](./06_销售赋能与客户溯源子系统.md)），实时对比作物成熟度预测数据（算法机理见 [02_水培种植子系统.md](./02_水培种植子系统.md)）与 OMS 订单。一旦触发缺口，自动微调温室 LED 光合辐射强度（PPFD）或温度以加速/减慢成熟速度；成熟后，直接下发收割指令给基地的 RCS 调度系统（详见 [04_智能调度与机器人.md](./04_智能调度与机器人.md)）。
+* **秒级排产流程**：中台接收基于四维加权选品模型输出的季度定植清单（详见 👉 [06_sales_and_traceability/README.md](../06_sales_and_traceability/README.md)），实时对比作物成熟度预测数据（算法机理见 [02_hydroponics/README.md](../02_hydroponics/README.md)）与 OMS 订单。一旦触发缺口，自动微调温室 LED 光合辐射强度（PPFD）或温度以加速/减慢成熟速度；成熟后，直接下发收割指令给基地的 RCS 调度系统（详见 [04_robotics_and_dispatch/README.md](../04_robotics_and_dispatch/README.md)）。
 
 ---
 
@@ -123,12 +123,12 @@ flowchart LR
 
 ## 🔗 相关设计与规范链接
 
-* **农艺机理与学术知识支持 (选品决策与数字配方)**：👉 [08_农艺机理与学术知识支持子系统.md](./08_农艺机理与学术知识支持子系统.md)
-* **品质控制与出厂 e-COA 放行**：👉 [07_品质控制与实验室子系统.md](./07_品质控制与实验室子系统.md)
-* **销售赋能与 30 天可承诺量大盘 (ATP)**：👉 [06_销售赋能与客户溯源子系统.md](./06_销售赋能与客户溯源子系统.md)
-* **全球主要国家与地区农业食品安全标准比对规范**：👉 [06_全球主要国家与地区农业食品安全标准比对规范.md](../05_specifications/06_全球主要国家与地区农业食品安全标准比对规范.md)
-* **水培作物生长预测机理**：👉 [02_水培种植子系统.md](./02_水培种植子系统.md)
-* **机器人自动收割调度 (RCS)**：👉 [04_智能调度与机器人.md](./04_智能调度与机器人.md)
-* **全局接口与 D1 数据库契约**：👉 [03_接口与数据契约规范.md](../03_system_architecture/03_接口与数据契约规范.md)
-* **一期投资预算与分期实施规划**：👉 [03_分期实施计划书.md](../02_requirements_and_plans/03_分期实施计划书.md)
-* **生物视觉模型与数据库架构**：👉 [01_YOLO11活体生物数据集构建规范.md](../05_specifications/01_YOLO11活体生物数据集构建规范.md)
+* **农艺机理与学术知识支持 (选品决策与数字配方)**：👉 [08_agronomy_knowledge_rnd/README.md](../08_agronomy_knowledge_rnd/README.md)
+* **品质控制与出厂 e-COA 放行**：👉 [07_quality_assurance_lab/README.md](../07_quality_assurance_lab/README.md)
+* **销售赋能与 30 天可承诺量大盘 (ATP)**：👉 [06_sales_and_traceability/README.md](../06_sales_and_traceability/README.md)
+* **全球主要国家与地区农业食品安全标准比对规范**：👉 [01_全球主要国家与地区农业食品安全标准比对规范.md](../07_quality_assurance_lab/01_全球主要国家与地区农业食品安全标准比对规范.md)
+* **水培作物生长预测机理**：👉 [02_hydroponics/README.md](../02_hydroponics/README.md)
+* **机器人自动收割调度 (RCS)**：👉 [04_robotics_and_dispatch/README.md](../04_robotics_and_dispatch/README.md)
+* **全局接口与 D1 数据库契约**：👉 [03_接口与数据契约规范.md](../../03_system_architecture/03_接口与数据契约规范.md)
+* **一期投资预算与分期实施规划**：👉 [03_分期实施计划书.md](../../02_requirements_and_plans/03_分期实施计划书.md)
+* **生物视觉模型与数据库架构**：👉 [04_YOLO11活体生物数据集构建规范.md](../../03_system_architecture/04_YOLO11活体生物数据集构建规范.md)
