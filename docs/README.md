@@ -32,7 +32,8 @@ docs/
 │   ├── 01_系统宏观架构设计.md                         # 连锁数字化工厂云边端协同架构
 │   ├── 02_MVP物理与物联拓扑.md                        # 一期极简物联闭环与汇川 PLC 自治拓扑
 │   ├── 03_接口与数据契约规范.md                       # 严格 ISO 8601 UTC 毫秒时间与 MQTT 契约
-│   └── 04_YOLO11活体生物数据集构建规范.md             # 📷 生物表型分类、D1/SQL Schema 与 YOLO11 标准
+│   ├── 04_YOLO11活体生物数据集构建规范.md             # 📷 生物表型分类、D1/SQL Schema 与 YOLO11 标准
+│   └── 05_设施与物联网资产编码规范.md                 # 🏷️ L1~L6 六级设施编码字典、浮板解耦模型与 SketchUp 契约
 │
 └── 04_subsystems/                                     # 📌 04. 八大自治子系统 (专属模块化目录体系)
     ├── 01_aquaculture/                                # 🐟 01. 水产养殖子系统
@@ -86,6 +87,7 @@ docs/
 * 参考 [02_MVP物理与物联拓扑.md](./03_system_architecture/02_MVP物理与物联拓扑.md) 掌握底层汇川 PLC、边缘网关与 Cloudflare Serverless 连通逻辑。
 * **【核心数据红线】** [03_接口与数据契约规范.md](./03_system_architecture/03_接口与数据契约规范.md) 规定了所有 API 必须采用的 **严格 ISO 8601 UTC 毫秒时间格式 (`YYYY-MM-DDTHH:mm:ss.000Z`)** 与数据湖冷热分层架构。
 * 查阅 [04_YOLO11活体生物数据集构建规范.md](./03_system_architecture/04_YOLO11活体生物数据集构建规范.md) 掌握生物表型、SQL Schema 与点云标注规范。
+* **【空间与资产底座】** 查阅 [05_设施与物联网资产编码规范.md](./03_system_architecture/05_设施与物联网资产编码规范.md) 掌握 L1~L6 六级设施编码字典、浮板跨池解耦模型与 SketchUp / Three.js 命名契约。
 
 ### 4. 八大自治子系统详细设计 (Subsystems Detailed Design)
 * **🐟 01. 水产养殖子系统**：[04_subsystems/01_aquaculture/README.md](./04_subsystems/01_aquaculture/README.md)（荧光 DO 监测、PLC 0.1s 硬件保命、AI 抢食投喂）
