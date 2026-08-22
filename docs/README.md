@@ -33,7 +33,9 @@ docs/
 │   ├── 02_MVP物理与物联拓扑.md                        # 一期极简物联闭环与汇川 PLC 自治拓扑
 │   ├── 03_接口与数据契约规范.md                       # 严格 ISO 8601 UTC 毫秒时间与 MQTT 契约
 │   ├── 04_YOLO11活体生物数据集构建规范.md             # 📷 生物表型分类、D1/SQL Schema 与 YOLO11 标准
-│   └── 05_设施与物联网资产编码规范.md                 # 🏷️ L1~L6 六级设施编码字典、浮板解耦模型与 SketchUp 契约
+│   ├── 05_设施与物联网资产编码规范.md                 # 🏷️ L1~L6 六级设施编码字典、浮板解耦模型与 SketchUp 契约
+│   ├── 06_农业数字孪生与多尺度仿真体系规范.md         # 🌐 Macro几何/Meso流体微气候/Micro活体 Bio-Twin 与 What-If 推演
+│   └── 07_AI分层自主决策与闭环控制规范.md             # 🤖 L0~L5 分级、多时间尺度控制闭环、P0~P3 仲裁与安全包络
 │
 └── 04_subsystems/                                     # 📌 04. 八大自治子系统 (专属模块化目录体系)
     ├── 01_aquaculture/                                # 🐟 01. 水产养殖子系统
@@ -88,6 +90,8 @@ docs/
 * **【核心数据红线】** [03_接口与数据契约规范.md](./03_system_architecture/03_接口与数据契约规范.md) 规定了所有 API 必须采用的 **严格 ISO 8601 UTC 毫秒时间格式 (`YYYY-MM-DDTHH:mm:ss.000Z`)** 与数据湖冷热分层架构。
 * 查阅 [04_YOLO11活体生物数据集构建规范.md](./03_system_architecture/04_YOLO11活体生物数据集构建规范.md) 掌握生物表型、SQL Schema 与点云标注规范。
 * **【空间与资产底座】** 查阅 [05_设施与物联网资产编码规范.md](./03_system_architecture/05_设施与物联网资产编码规范.md) 掌握 L1~L6 六级设施编码字典、浮板跨池解耦模型与 SketchUp / Three.js 命名契约。
+* **【数字孪生中台】** 查阅 [06_农业数字孪生与多尺度仿真体系规范.md](./03_system_architecture/06_农业数字孪生与多尺度仿真体系规范.md) 掌握 Macro 空间几何、Meso 流体微气候场与 Micro 动植物活体 Bio-Twin 仿真模型与 What-If 推演引擎。
+* **【AI 自主决策中枢】** 查阅 [07_AI分层自主决策与闭环控制规范.md](./03_system_architecture/07_AI分层自主决策与闭环控制规范.md) 掌握 L0~L5 农业自主决策分级标准、0.1s PLC 硬件保命至月度云端排产多时间尺度控制及安全包络仲裁机制。
 
 ### 4. 八大自治子系统详细设计 (Subsystems Detailed Design)
 * **🐟 01. 水产养殖子系统**：[04_subsystems/01_aquaculture/README.md](./04_subsystems/01_aquaculture/README.md)（荧光 DO 监测、PLC 0.1s 硬件保命、AI 抢食投喂）
