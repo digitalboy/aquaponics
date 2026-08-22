@@ -65,7 +65,7 @@ docs/
 └── 04_subsystems/                                     # 📌 04. 八大自治子系统 (专属模块化目录体系)
     ├── 01_aquaculture/                                # 🐟 01. 水产养殖子系统 (DO监测/PLC保命/投喂)
     ├── 02_hydroponics/                                # 🌱 02. 水培种植子系统 (VPD反演/水力调节池/大空间温控)
-    ├── 03_energy_optimization/                        # ⚡ 03. 能耗优化子系统 (分回路计量/TOU电价MPC套利)
+    ├── 03_energy_optimization/                        # ⚡ 03. 能耗优化子系统 (分回路计量/TOU电价MPC套利/17座鱼池水动力能耗模型)
     ├── 04_robotics_and_dispatch/                      # 🤖 04. 智能调度与机器人 (RCS/VDA 5050/具身收割)
     ├── 05_supply_chain_and_commerce/                  # 📊 05. 供应链与商贸协同 (产供销一体化/四维选品/30天ATP/APS以销定产/COGS业财对冲)
     ├── 06_brand_traceability_crm/                     # 💼 06. 品牌溯源、客户运营与舆情感知 (一物一码/B2B门户/DTC会员360°/社媒舆情AI中枢)

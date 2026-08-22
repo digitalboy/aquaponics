@@ -47,7 +47,8 @@ docs/
     │   └── 02_大空间温室立体微气候感知与温控策略规范.md # 🌡️ 8.1米大空间垂直分层测温阵列、室外超声波气象站与三级温控策略
     │
     ├── 03_energy_optimization/                        # ⚡ 03. 能耗优化子系统
-    │   └── README.md                                  # 分回路电表感知与 TOU 电价下的 MPC 避峰套利
+    │   ├── README.md                                  # 分回路电表感知与 TOU 电价下的 MPC 避峰套利
+    │   └── 01_养殖水动力与全厂运行能耗估算模型(非正式草案).md # 📊 17座鱼池水动力/气泵功率推导、全厂分场景用电与0.65元/度电费测算
     │
     ├── 04_robotics_and_dispatch/                      # 🤖 04. 智能调度与机器人
     │   └── README.md                                  # RCS 金字塔调度、VDA 5050 与力控具身收割
@@ -99,6 +100,7 @@ docs/
   - 细节规范：[01_调节池水力计算与加药自治规范.md](./04_subsystems/02_hydroponics/01_调节池水力计算与加药自治规范.md)
   - 细节规范：[02_大空间温室立体微气候感知与温控策略规范.md](./04_subsystems/02_hydroponics/02_大空间温室立体微气候感知与温控策略规范.md)
 * **⚡ 03. 能耗优化子系统**：[04_subsystems/03_energy_optimization/README.md](./04_subsystems/03_energy_optimization/README.md)（分回路能耗计量、TOU 下的 MPC 热泵套利）
+  - 细节规范：[01_养殖水动力与全厂运行能耗估算模型(非正式草案).md](./04_subsystems/03_energy_optimization/01_养殖水动力与全厂运行能耗估算模型(非正式草案).md)
 * **🤖 04. 智能调度与机器人**：[04_subsystems/04_robotics_and_dispatch/README.md](./04_subsystems/04_robotics_and_dispatch/README.md)（RCS 金字塔调度、VDA 5050 与力控具身收割）
 * **📊 05. 供应链与商贸协同**：[04_subsystems/05_supply_chain_and_commerce/README.md](./04_subsystems/05_supply_chain_and_commerce/README.md)（产供销一体化、四维选品、30天ATP、APS以销定产、COGS业财对冲）
 * **💼 06. 品牌溯源、客户运营与舆情感知**：[04_subsystems/06_brand_traceability_crm/README.md](./04_subsystems/06_brand_traceability_crm/README.md)（一物一码区块链溯源、B2B商超门户、B2C会员360°全息与全网社媒舆情AI大盘）
