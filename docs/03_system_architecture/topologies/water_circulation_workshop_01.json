@@ -1,0 +1,278 @@
+{
+  "schema_version": "2.0.0",
+  "system_id": "SYS-HYDRO-CIRC-01",
+  "facility_name": "数字化鱼菜共生水动力与全厂水循环系统 (01号综合车间)",
+  "workshop_code": "WS-01-AQUA-HYDRO",
+  "updated_at": "2026-08-23T12:30:00.000Z",
+  
+  "water_balance_summary": {
+    "total_system_volume_m3": 470.0,
+    "total_fish_tank_volume_m3": 391.4,
+    "total_hydroponic_runway_volume_m3": 42.0,
+    "treatment_and_buffer_volume_m3": 36.6,
+    "target_circulation_flow_rate_m3_per_h": 420.0,
+    "fish_tank_turnover_rate_per_hour": 1.07
+  },
+
+  "makeup_water_system": {
+    "active_source_type": "groundwater_well",
+    "sources_available": [
+      {
+        "source_id": "SRC-TAP-01",
+        "source_type": "municipal_tap_water",
+        "nominal_pipeline_dn": 50,
+        "supply_pressure_mpa": 0.35,
+        "baseline_temp_c": 19.5,
+        "residual_chlorine_mg_l": 0.65,
+        "iron_content_mg_l": 0.02,
+        "required_pre_treatment": "carbon_filter_dechlorination"
+      },
+      {
+        "source_id": "SRC-WELL-01",
+        "source_type": "groundwater_well",
+        "nominal_pipeline_dn": 65,
+        "supply_pressure_mpa": 0.28,
+        "baseline_temp_c": 16.2,
+        "residual_chlorine_mg_l": 0.0,
+        "dissolved_oxygen_mg_l": 0.8,
+        "iron_content_mg_l": 0.45,
+        "required_pre_treatment": "aeration_degassing_and_iron_manganese_filtration"
+      }
+    ],
+    "pre_treatment_units": {
+      "carbon_filter": {
+        "unit_id": "FILTER-CARBON-01",
+        "media": "椰壳高碘值活性炭 (有效吸附余氯与消毒副产物)",
+        "design_flow_capacity_m3_per_h": 5.0,
+        "target_chlorine_outlet_mg_l": 0.0
+      },
+      "aeration_and_degassing_tower": {
+        "unit_id": "TOWER-AERATION-01",
+        "type": "多级跌水穿孔曝气增氧塔",
+        "blower_assist_airflow_m3_per_h": 50.0,
+        "target_do_outlet_mg_l": 6.5,
+        "co2_stripping_efficiency_pct": 75.0
+      },
+      "manganese_sand_iron_filter": {
+        "unit_id": "FILTER-MANGANESE-01",
+        "media": "天然锰砂 + 石英砂双层滤料",
+        "target_iron_outlet_mg_l": 0.05
+      }
+    },
+    "makeup_buffer_tank": {
+      "vessel_id": "VESSEL-MAKEUP-BUFFER-01",
+      "geometry": { "shape": "rectangular", "length_m": 4.0, "width_m": 2.5, "water_depth_m": 1.5, "volume_m3": 15.0 },
+      "sensors": { "level_sensor_type": "ultrasonic_continuous", "temp_sensor": "PT1000", "do_sensor": "optical_fluorescence" }
+    },
+    "evaporation_makeup_rules": {
+      "estimated_daily_evaporation_m3": 9.4,
+      "dosing_mode": "continuous_micro_pulse",
+      "max_hourly_makeup_volume_m3": 0.5,
+      "temp_gradient_limit_c_per_hour": 1.0
+    }
+  },
+
+  "vessels_and_units": [
+    {
+      "node_id": "VESSEL-FISH-GROUP-8M",
+      "name": "4座 Φ8m 成鱼高密度养殖池组",
+      "unit_type": "fish_rearing_tank",
+      "count": 4,
+      "single_tank_geometry": { "shape": "circular", "diameter_m": 8.0, "water_depth_m": 1.1, "single_volume_m3": 55.29 },
+      "total_group_volume_m3": 221.16,
+      "inflow_design": { "nozzle_dn": 110, "type": "tangential_surface_swirl", "design_inflow_rate_per_tank_m3_per_h": 59.1 },
+      "bottom_drain": { "drain_dn": 160, "type": "center_vortex_drain", "sludge_settling_ratio_pct": 85.0 }
+    },
+    {
+      "node_id": "VESSEL-FISH-GROUP-5M",
+      "name": "5座 Φ5m 中成鱼养殖池组",
+      "unit_type": "fish_rearing_tank",
+      "count": 5,
+      "single_tank_geometry": { "shape": "circular", "diameter_m": 5.0, "water_depth_m": 1.1, "single_volume_m3": 21.60 },
+      "total_group_volume_m3": 108.0,
+      "inflow_design": { "nozzle_dn": 75, "type": "tangential_surface_swirl", "design_inflow_rate_per_tank_m3_per_h": 23.1 },
+      "bottom_drain": { "drain_dn": 110, "type": "center_vortex_drain" }
+    },
+    {
+      "node_id": "VESSEL-FISH-GROUP-3M",
+      "name": "8座 Φ3m 幼鱼标粗池组",
+      "unit_type": "fish_rearing_tank",
+      "count": 8,
+      "single_tank_geometry": { "shape": "circular", "diameter_m": 3.0, "water_depth_m": 1.1, "single_volume_m3": 7.78 },
+      "total_group_volume_m3": 62.24,
+      "inflow_design": { "nozzle_dn": 50, "type": "tangential_surface_swirl", "design_inflow_rate_per_tank_m3_per_h": 8.3 },
+      "bottom_drain": { "drain_dn": 75, "type": "center_vortex_drain" }
+    },
+    {
+      "node_id": "VESSEL-DRUM-FILTER",
+      "name": "全自动滚筒微滤机",
+      "unit_type": "mechanical_screen_filter",
+      "mesh_size_micron": 74,
+      "screen_mesh_mesh": 200,
+      "max_flow_capacity_m3_per_h": 420.0,
+      "backwash_system": { "high_pressure_pump_power_kw": 0.75, "trigger_mode": "differential_pressure_and_timer" }
+    },
+    {
+      "node_id": "VESSEL-MBBR-BIOFILTER",
+      "name": "移动床生物脱氨硝化滤池 (MBBR)",
+      "unit_type": "biological_filter_mbbr",
+      "effective_volume_m3": 45.0,
+      "media_spec": { "carrier_type": "K3", "filling_ratio_pct": 55, "specific_surface_area_m2_m3": 800 },
+      "aeration_fluidization_blower_power_kw": 3.7,
+      "target_tan_removal_capacity_kg_per_day": 3.85
+    },
+    {
+      "node_id": "VESSEL-CONDITIONING-TANK",
+      "name": "水质综合调理与中继缓冲池",
+      "unit_type": "water_conditioning_tank",
+      "effective_volume_m3": 25.0,
+      "pulse_dosing_ports": ["PORT-PH-UP", "PORT-PH-DOWN", "PORT-TRACE-ELEMENTS"],
+      "mixing_pump_power_kw": 0.25
+    },
+    {
+      "node_id": "VESSEL-HYDRO-RUNWAYS",
+      "name": "4条深水水培蔬菜跑道槽 (DWC)",
+      "unit_type": "hydroponic_dwc_runway",
+      "count": 4,
+      "single_runway_geometry": { "length_m": 35.0, "width_m": 1.0, "water_depth_m": 0.3, "single_volume_m3": 10.5 },
+      "total_volume_m3": 42.0,
+      "flow_velocity_m_per_s": 0.05,
+      "aeration_venturi_injectors_count": 8
+    },
+    {
+      "node_id": "VESSEL-SUMP-PIT",
+      "name": "循环泵吸水坑与主回流井",
+      "unit_type": "sump_pit",
+      "effective_volume_m3": 12.0,
+      "installed_pumps_count": 3
+    }
+  ],
+
+  "pumps_and_actuators": [
+    {
+      "pump_id": "PUMP-RAS-01",
+      "name": "1号主循环变频提升水泵",
+      "duty_type": "duty_active",
+      "rated_power_kw": 3.0,
+      "rated_flow_m3_per_h": 140.0,
+      "rated_head_m": 3.8,
+      "efficiency_pct": 78.5,
+      "is_vfd_speed_controlled": true
+    },
+    {
+      "pump_id": "PUMP-RAS-02",
+      "name": "2号主循环变频提升水泵",
+      "duty_type": "duty_active",
+      "rated_power_kw": 3.0,
+      "rated_flow_m3_per_h": 140.0,
+      "rated_head_m": 3.8,
+      "efficiency_pct": 78.5,
+      "is_vfd_speed_controlled": true
+    },
+    {
+      "pump_id": "PUMP-RAS-03",
+      "name": "3号备用循环提升水泵 (PLC自动轮换自投)",
+      "duty_type": "standby_auto_switch",
+      "rated_power_kw": 3.0,
+      "rated_flow_m3_per_h": 140.0,
+      "rated_head_m": 3.8,
+      "efficiency_pct": 78.5,
+      "is_vfd_speed_controlled": true
+    }
+  ],
+
+  "pipe_network": [
+    {
+      "pipe_id": "PIPE-DRAIN-GRAVITY-01",
+      "name": "鱼池重力回水主收集渠/管",
+      "from_node": "VESSEL-FISH-GROUP-8M",
+      "to_node": "VESSEL-DRUM-FILTER",
+      "material": "PVC-U",
+      "nominal_diameter_dn": 200,
+      "length_m": 42.0,
+      "flow_type": "gravity_free_surface",
+      "slope_pct": 0.8,
+      "design_flow_m3_per_h": 420.0
+    },
+    {
+      "pipe_id": "PIPE-FILTER-TO-MBBR",
+      "name": "微滤机自流进入生物滤池管道",
+      "from_node": "VESSEL-DRUM-FILTER",
+      "to_node": "VESSEL-MBBR-BIOFILTER",
+      "material": "PVC-U",
+      "nominal_diameter_dn": 200,
+      "length_m": 4.0,
+      "flow_type": "gravity_free_surface",
+      "design_flow_m3_per_h": 420.0
+    },
+    {
+      "pipe_id": "PIPE-MBBR-TO-BUFFER",
+      "name": "生物滤池溢流进入调理池管道",
+      "from_node": "VESSEL-MBBR-BIOFILTER",
+      "to_node": "VESSEL-CONDITIONING-TANK",
+      "material": "PVC-U",
+      "nominal_diameter_dn": 160,
+      "length_m": 3.5,
+      "flow_type": "gravity_overflow",
+      "design_flow_m3_per_h": 420.0
+    },
+    {
+      "pipe_id": "PIPE-BUFFER-TO-HYDRO",
+      "name": "调理池供水分配水培跑道管网",
+      "from_node": "VESSEL-CONDITIONING-TANK",
+      "to_node": "VESSEL-HYDRO-RUNWAYS",
+      "material": "PVC-U",
+      "nominal_diameter_dn": 160,
+      "length_m": 28.0,
+      "flow_type": "gravity_distribution",
+      "design_flow_m3_per_h": 420.0
+    },
+    {
+      "pipe_id": "PIPE-HYDRO-TO-SUMP",
+      "name": "水培跑道末端溢流集水回泵坑管",
+      "from_node": "VESSEL-HYDRO-RUNWAYS",
+      "to_node": "VESSEL-SUMP-PIT",
+      "material": "PVC-U",
+      "nominal_diameter_dn": 200,
+      "length_m": 35.0,
+      "flow_type": "gravity_free_surface",
+      "design_flow_m3_per_h": 420.0
+    },
+    {
+      "pipe_id": "PIPE-PRESSURE-DELIVERY-MAIN",
+      "name": "主循环泵压力输水总管 (引向17座鱼池)",
+      "from_node": "VESSEL-SUMP-PIT",
+      "to_node": "VESSEL-FISH-GROUP-8M",
+      "material": "PVC-U",
+      "nominal_diameter_dn": 200,
+      "length_m": 55.0,
+      "flow_type": "pressurized_closed_pipe",
+      "design_flow_m3_per_h": 420.0,
+      "velocity_m_per_s": 1.48,
+      "calculated_head_loss_m": 2.15
+    }
+  ],
+
+  "operating_hydraulic_modes": [
+    {
+      "mode_code": "NORMAL_COUPLED_CYCLE",
+      "mode_name": "标准鱼菜全闭环协同循环工况",
+      "description": "鱼池水全量流经微滤机、MBBR与水培跑道，植物完全消解硝酸盐后回流鱼池",
+      "valve_states": {
+        "VALVE-COUPLED-MAIN": "OPEN",
+        "VALVE-DECOUPLED-BYPASS": "CLOSED",
+        "VALVE-SLUDGE-DISCHARGE": "PULSE_AUTOMATIC"
+      }
+    },
+    {
+      "mode_code": "DECOUPLED_RAS_STANDALONE",
+      "mode_name": "水产养殖解耦独立内循环工况",
+      "description": "鱼池发生防病用药或水培采收时，切断水培连接，调理池水流直接回泵坑",
+      "valve_states": {
+        "VALVE-COUPLED-MAIN": "CLOSED",
+        "VALVE-DECOUPLED-BYPASS": "OPEN",
+        "VALVE-SLUDGE-DISCHARGE": "PULSE_AUTOMATIC"
+      }
+    }
+  ]
+}

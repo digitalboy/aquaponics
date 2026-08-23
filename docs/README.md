@@ -36,9 +36,11 @@ docs/
 │   ├── 04_YOLO11活体生物数据集构建规范.md             # 📷 生物表型分类、D1/SQL Schema 与 YOLO11 标准
 │   ├── 05_设施与物联网资产编码规范.md                 # 🏷️ L1~L6 六级设施编码字典、浮板解耦模型与 SketchUp 契约
 │   ├── 06_农业数字孪生与多尺度仿真体系规范.md         # 🌐 Macro几何/Meso流体微气候/Micro活体 Bio-Twin 与 What-If 推演
-│   └── 07_AI分层自主决策与闭环控制规范.md             # 🤖 L0~L5 分级、多时间尺度控制闭环、P0~P3 仲裁与安全包络
+│   ├── 07_AI分层自主决策与闭环控制规范.md             # 🤖 L0~L5 分级、多时间尺度控制闭环、P0~P3 仲裁与安全包络
+│   ├── 08_电气系统图与拓扑数据契约规范(Electrical_Topology_Schema).md # ⚡ 机器可读低压配电系统图、TypeScript+Zod Schema与数字孪生绑定
+│   └── 09_水动力拓扑与水循环数据契约规范(Hydraulic_Topology_Schema).md # 🌊 全厂水循环拓扑、多源补水预处理、Zod流量守恒与P&ID自动渲染
 │
-└── 04_subsystems/                                     # 📌 04. 八大自治子系统 (专属模块化目录体系)
+├── 04_subsystems/                                     # 📌 04. 八大自治子系统 (专属模块化目录体系)
     ├── 01_aquaculture/                                # 🐟 01. 水产养殖子系统
     │   └── README.md                                  # 荧光 DO 监测 (深圳国数质保3年)、24h在线氨氮反演、PLC 保命与 YOLO11 估重
     │
@@ -95,6 +97,8 @@ docs/
 * **【空间与资产底座】** 查阅 [05_设施与物联网资产编码规范.md](./03_system_architecture/05_设施与物联网资产编码规范.md) 掌握 L1~L6 六级设施编码字典、浮板跨池解耦模型与 SketchUp / Three.js 命名契约。
 * **【数字孪生中台】** 查阅 [06_农业数字孪生与多尺度仿真体系规范.md](./03_system_architecture/06_农业数字孪生与多尺度仿真体系规范.md) 掌握 Macro 空间几何、Meso 流体微气候场与 Micro 动植物活体 Bio-Twin 仿真模型与 What-If 推演引擎。
 * **【AI 自主决策中枢】** 查阅 [07_AI分层自主决策与闭环控制规范.md](./03_system_architecture/07_AI分层自主决策与闭环控制规范.md) 掌握 L0~L5 农业自主决策分级标准、0.1s PLC 硬件保命至月度云端排产多时间尺度控制及安全包络仲裁机制。
+* **【电气即代码 (EaC)】** 查阅 [08_电气系统图与拓扑数据契约规范(Electrical_Topology_Schema).md](./03_system_architecture/08_电气系统图与拓扑数据契约规范(Electrical_Topology_Schema).md) 掌握低压配电系统图的 TypeScript + Zod Schema 规则引擎、一期标准 JSON 拓扑与数字孪生动态着色机制。
+* **【水动力即代码 (HWaC)】** 查阅 [09_水动力拓扑与水循环数据契约规范(Hydraulic_Topology_Schema).md](./03_system_architecture/09_水动力拓扑与水循环数据契约规范(Hydraulic_Topology_Schema).md) 掌握多源补水脱毒预处理、17池RAS水循环模型、Zod流量守恒断言、车间独立实例库与 P&ID 自动渲染机制。
 
 ### 4. 八大自治子系统详细设计 (Subsystems Detailed Design)
 * **🐟 01. 水产养殖子系统**：[04_subsystems/01_aquaculture/README.md](./04_subsystems/01_aquaculture/README.md)（荧光 DO 监测、PLC 0.1s 硬件保命、AI 抢食投喂）

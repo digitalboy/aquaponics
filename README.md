@@ -61,7 +61,9 @@ docs/
 │   ├── 04_YOLO11活体生物数据集构建规范.md             # (生物表型、SQL Schema 与点云数据集标准)
 │   ├── 05_设施与物联网资产编码规范.md                 # (L1~L6设施编码字典、浮板解耦模型与SketchUp契约)
 │   ├── 06_农业数字孪生与多尺度仿真体系规范.md         # (Macro几何/Meso流体微气候/Micro活体 Bio-Twin 与 What-If 推演)
-│   └── 07_AI分层自主决策与闭环控制规范.md             # (L0~L5 分级、多时间尺度闭环、P0~P3 仲裁与安全包络)
+│   ├── 07_AI分层自主决策与闭环控制规范.md             # (L0~L5 分级、多时间尺度闭环、P0~P3 仲裁与安全包络)
+│   ├── 08_电气系统图与拓扑数据契约规范(Electrical_Topology_Schema).md # (机器可读低压配电系统图、TypeScript+Zod Schema与数字孪生绑定)
+│   └── 09_水动力拓扑与水循环数据契约规范(Hydraulic_Topology_Schema).md # (全厂水循环拓扑、多源补水预处理、Zod流量守恒与P&ID自动渲染)
 │
 └── 04_subsystems/                                     # 📌 04. 八大自治子系统 (专属模块化目录体系)
     ├── 01_aquaculture/                                # 🐟 01. 水产养殖子系统 (DO监测/PLC保命/投喂)
