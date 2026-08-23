@@ -11,6 +11,7 @@ const RoleMeta = {
   aquaculture: { name: '水产养殖指挥台', tag: '养殖长 / 现场作业', icon: '🐟' },
   hydroponics: { name: '水培种植调度台', tag: '种植长 / 农艺调度', icon: '🥬' },
   energy: { name: '工程能耗与预测维护', tag: '工程主管 / 设施维保', icon: '⚡' },
+  electrical: { name: '全厂电气一次系统图与拓扑', tag: '电气工程师 / 盘柜维保', icon: '📐' },
   executive: { name: '集团多基地运营中台', tag: 'COO / CFO / 供应链', icon: '📊' },
   'b2b-fulfillment': { name: 'B2B 大客户与冷链履约中台', tag: 'B2B 业务经理', icon: '🚚' },
   quality: { name: '品质检验与实验室中台', tag: '品质主管 / 驻厂检验', icon: '🔬' },

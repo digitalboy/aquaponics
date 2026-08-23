@@ -19,6 +19,7 @@
     'view-aquaculture',
     'view-hydroponics',
     'view-energy',
+    'view-electrical',
     'view-supply-chain',
     'view-b2b-fulfillment',
     'view-quality',

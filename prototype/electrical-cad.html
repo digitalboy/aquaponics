@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>电气工程图纸 CAD 渲染引擎 · Electrical Multi-Sheet CAD (GB/T 4728 & IEC 60617)</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- 字体: 优先采用工科与制图等宽字体 JetBrains Mono / Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+    .font-cad {
+      font-family: 'JetBrains Mono', Consolas, Menlo, monospace;
+    }
+    /* CAD 画布网格背景 (深色与浅色) */
+    .cad-grid-dark {
+      background-color: #0b1120;
+      background-image: radial-gradient(rgba(148, 163, 184, 0.15) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+    .cad-grid-light {
+      background-color: #ffffff;
+      background-image: radial-gradient(rgba(100, 116, 139, 0.25) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 flex flex-col h-screen overflow-hidden select-none">
+
+  <!-- ========================================================================= -->
+  <!-- 1. 顶部专业工程控制栏 (CAD Toolbar) -->
+  <!-- ========================================================================= -->
+  <header class="h-14 border-b border-slate-800 bg-slate-900 px-4 flex items-center justify-between gap-4 shrink-0 z-30 shadow-md">
+    
+    <!-- 左侧: 软件标题与图卷切换器 -->
+    <div class="flex items-center gap-4 flex-wrap">
+      <div class="flex items-center gap-2">
+        <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-black text-sm">📐</span>
+        <div>
+          <h1 class="font-extrabold text-sm text-slate-100 tracking-tight flex items-center gap-2">
+            电气工程图纸 CAD 渲染引擎
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-cad">GB/T 18135 • IEC 60617</span>
+          </h1>
+        </div>
+      </div>
+
+      <div class="h-5 w-px bg-slate-800 hidden md:block"></div>
+
+      <!-- 🏛️ 行业标准三大工程图卷切换选项卡 (物理分卷) -->
+      <div class="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 font-cad text-xs">
+        <button id="tab-sheet-1" onclick="switchSheet(1)" class="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-black transition flex items-center gap-1.5 shadow-sm">
+          <span>⚡</span> 图卷 1: ELEC-01 强电一次配电系统图
+        </button>
+        <button id="tab-sheet-2" onclick="switchSheet(2)" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition flex items-center gap-1.5 font-bold">
+          <span>🤖</span> 图卷 2: ELEC-02 PLC 自控与 I/O 原理图
+        </button>
+        <button id="tab-sheet-3" onclick="switchSheet(3)" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition flex items-center gap-1.5 font-bold">
+          <span>📶</span> 图卷 3: ELEC-03 RS-485 总线与网络拓扑图
+        </button>
+      </div>
+    </div>
+
+    <!-- 中间: 视图缩放与平移控制按键 -->
+    <div class="flex items-center gap-1.5 bg-slate-950 p-1 rounded-lg border border-slate-800 font-cad text-xs">
+      <button onclick="zoomCanvas(1.2)" class="px-2 py-1 rounded hover:bg-slate-800 text-slate-300 hover:text-white transition" title="放大 (滚轮向上)">🔍+</button>
+      <button onclick="zoomCanvas(0.833)" class="px-2 py-1 rounded hover:bg-slate-800 text-slate-300 hover:text-white transition" title="缩小 (滚轮向下)">🔍-</button>
+      <button onclick="resetZoom()" class="px-2 py-1 rounded hover:bg-slate-800 text-slate-300 hover:text-white transition" title="1:1 原图">1:1</button>
+      <button onclick="fitCanvas()" class="px-2.5 py-1 rounded bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 transition font-bold" title="居中自适应">⛶ 适屏</button>
+      <span id="zoom-level-text" class="px-1 text-slate-400 text-[11px]">100%</span>
+    </div>
+
+    <!-- 右侧: 视图主题切换、JSON 抽屉与导出按钮 -->
+    <div class="flex items-center gap-3">
+      
+      <!-- 主题切换: CAD 深色 / 白图 -->
+      <button onclick="toggleCadTheme()" id="btn-theme" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-cad transition border border-slate-700 flex items-center gap-1.5">
+        <span id="theme-icon">🌙</span> <span id="theme-text">CAD 暗黑</span>
+      </button>
+
+      <!-- 打开 JSON 编辑抽屉 -->
+      <button onclick="toggleJsonDrawer()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-cad transition border border-slate-700 flex items-center gap-1.5">
+        <span>📝</span> JSON 源
+      </button>
+
+      <!-- 导出 SVG / 打印 -->
+      <button onclick="exportSvgDrawing()" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black transition flex items-center gap-1.5 shadow-sm">
+        <span>💾</span> 导出当前图卷 (SVG)
+      </button>
+      <button onclick="window.print()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-cad transition border border-slate-700 hidden sm:flex items-center gap-1.5">
+        <span>🖨️</span> 打印
+      </button>
+    </div>
+
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 2. 主视口区域: 可平移/缩放的无损矢量 SVG 画布 -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 relative overflow-hidden cad-grid-dark cursor-grab active:cursor-grabbing" id="cad-viewport">
+    
+    <!-- 浮动制图标尺与图号提示 -->
+    <div class="absolute top-4 left-4 z-10 bg-slate-900/90 backdrop-blur-md px-3 py-2 rounded-xl border border-slate-800 font-cad text-[11px] text-slate-400 shadow-xl pointer-events-none">
+      <div class="flex items-center gap-2 font-bold text-slate-200">
+        <span id="current-sheet-badge" class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">图卷 1 / 共 3 卷</span>
+        <span id="current-sheet-title" class="text-white">全厂低压动力配电一次系统图</span>
+      </div>
+      <div class="mt-1">工程图号: <span id="current-sheet-code" class="text-amber-400 font-bold">ELEC-01-SLD</span> • 坐标: <span id="mouse-coords" class="text-slate-300">X: 0, Y: 0</span></div>
+    </div>
+
+    <!-- SVG 图纸容器 (通过 transform 实现无限平移与缩放) -->
+    <svg id="cad-svg" class="w-[2400px] h-[1600px] absolute transition-transform duration-75 origin-top-left" viewBox="0 0 2400 1600" xmlns="http://www.w3.org/2000/svg">
+      
+      <!-- 标准 A2/A1 工程图框 -->
+      <rect x="30" y="30" width="2340" height="1540" fill="none" stroke="#334155" stroke-width="3" />
+      <rect x="45" y="45" width="2310" height="1510" fill="none" stroke="#475569" stroke-width="1.5" />
+
+      <!-- ===================================================================== -->
+      <!-- 3. 图纸动态渲染主容器 (由 JS 根据当前图卷纯函数独立绘制，绝无原点杂线) -->
+      <!-- ===================================================================== -->
+      <g id="cad-drawing-layer">
+        <!-- 动态生成矢量元素 -->
+      </g>
+
+      <!-- ===================================================================== -->
+      <!-- 4. 标准工程图纸右下角标题栏 (Title Block - GB/T 10609.1) -->
+      <!-- ===================================================================== -->
+      <g transform="translate(1755, 1375)">
+        <rect x="0" y="0" width="600" height="180" fill="#0f172a" stroke="#64748b" stroke-width="2" />
+        <line x1="0" y1="45" x2="600" y2="45" stroke="#475569" stroke-width="1.5" />
+        <line x1="0" y1="90" x2="600" y2="90" stroke="#475569" stroke-width="1.5" />
+        <line x1="0" y1="135" x2="600" y2="135" stroke="#475569" stroke-width="1.5" />
+        <line x1="280" y1="0" x2="280" y2="180" stroke="#475569" stroke-width="1.5" />
+        <line x1="440" y1="45" x2="440" y2="180" stroke="#475569" stroke-width="1.5" />
+
+        <!-- 标题栏动态文字 -->
+        <text x="15" y="30" fill="#f8fafc" font-size="15" font-weight="extrabold">数字化鱼菜共生农业工厂 (01号车间)</text>
+        <text id="titleblock-sheet-name" x="295" y="30" fill="#f59e0b" font-size="13" font-weight="bold" font-family="monospace">低压动力配电一次系统图</text>
+        
+        <text x="15" y="70" fill="#94a3b8" font-size="11">工程编号: <tspan fill="#f8fafc" font-family="monospace">PROJ-AQUA-2026</tspan></text>
+        <text x="15" y="115" fill="#94a3b8" font-size="11">设计单位: <tspan fill="#f8fafc">数字化农业工程设计院</tspan></text>
+        <text id="titleblock-discipline" x="15" y="160" fill="#94a3b8" font-size="11">专业: <tspan fill="#38bdf8" font-family="monospace">强电动力工程 (Power)</tspan></text>
+
+        <text x="295" y="70" fill="#94a3b8" font-size="11">设计: <tspan fill="#f8fafc">Antigravity Engine</tspan></text>
+        <text id="titleblock-sheet-code" x="455" y="70" fill="#94a3b8" font-size="11">图号: <tspan fill="#f59e0b" font-family="monospace">ELEC-01-SLD</tspan></text>
+
+        <text x="295" y="115" fill="#94a3b8" font-size="11">审核: <tspan fill="#f8fafc">Chief Engineer</tspan></text>
+        <text x="455" y="115" fill="#94a3b8" font-size="11">版本: <tspan fill="#34d399" font-family="monospace">V2.0 (GB/T 4728)</tspan></text>
+
+        <text x="295" y="160" fill="#94a3b8" font-size="11">日期: <tspan fill="#f8fafc" font-family="monospace">2026-08-23</tspan></text>
+        <text x="455" y="160" fill="#94a3b8" font-size="11">比例: <tspan fill="#f8fafc" font-family="monospace">1 : 1 (CAD矢量)</tspan></text>
+      </g>
+
+    </svg>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 5. 侧边 JSON 拓扑数据编辑器抽屉 (可折叠) -->
+  <!-- ========================================================================= -->
+  <aside id="json-drawer" class="fixed inset-y-0 right-0 z-40 w-full max-w-xl bg-slate-900 border-l border-slate-800 shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out">
+    <div class="h-14 px-5 border-b border-slate-800 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-amber-400 font-bold">📝</span>
+        <h2 class="font-bold text-sm text-slate-100 font-cad">全要素电气拓扑 JSON 数据底座</h2>
+      </div>
+      <button onclick="toggleJsonDrawer()" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white text-xs font-cad">✕ 关闭</button>
+    </div>
+
+    <div class="p-4 flex-1 flex flex-col gap-3 overflow-hidden">
+      <div class="text-xs text-slate-400 font-cad">
+        严格遵循《08_全要素电气与智能化拓扑规范》Schema 结构，在此编辑后，点击下方按钮将自动联动更新 3 张工程图卷：
+      </div>
+      <textarea id="json-editor-textarea" class="flex-1 w-full bg-slate-950 border border-slate-800 rounded-xl p-3 font-cad text-xs text-emerald-400 focus:outline-none focus:border-amber-500 resize-none overflow-auto leading-relaxed"></textarea>
+    </div>
+
+    <div class="p-4 border-t border-slate-800 bg-slate-900/90 flex items-center justify-between gap-3">
+      <span id="json-status" class="text-xs font-cad text-emerald-400">✓ JSON 语法合规</span>
+      <button onclick="compileAndRenderFromTextarea()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs font-cad transition shadow-md">
+        ⚡ 立即编译重绘 3 卷图纸
+      </button>
+    </div>
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- 6. 交互控制与图纸渲染引擎脚本 (纯原生正交制图体系，杜绝杂线) -->
+  <!-- ========================================================================= -->
+  <script>
+    // 01号车间全要素数据
+    const PlantWideData = {
+      "schema_version": "2.0.0",
+      "system_id": "SYS-AQUA-PLANT-01",
+      "facility_name": "数字化鱼菜共生农业工厂（01号车间）",
+      "workshop_code": "WS-01-AQUA-HYDRO",
+      "voltage_system": "TN-S 380V/220V 50Hz",
+      "updated_at": "2026-08-23T11:30:00.000Z",
+      
+      "power_distribution": {
+        "transformer_capacity_kva": 100,
+        "main_incomer": {
+          "panel_id": "AP-MAIN",
+          "name": "一级动力配电总柜",
+          "main_breaker": { "model": "NXM-250S/3300", "poles": "3P", "rated_current_a": 160, "trip_curve": "D", "breaking_capacity_ka": 36 },
+          "metering": { "meter_model": "威胜 DTSD342-P5", "ct_ratio": "200/5A" },
+          "spd_surge_protection": { "nominal_discharge_current_ka": 40, "test_class": "T1" }
+        },
+        "sub_panels": [
+          {
+            "panel_id": "AP-AQUA",
+            "name": "二级养殖动力配电箱",
+            "incoming_switch": { "model": "NXB-63", "poles": "3P", "rated_current_a": 63, "trip_curve": "D", "breaking_capacity_ka": 6 },
+            "feeder_cable": { "spec": "YJV 4x16 + 1x10", "length_m": 45, "allowable_ampacity_a": 80 },
+            "circuits": [
+              { "circuit_id": "WL1", "name": "#1 变频主水循环泵", "breaker": { "model": "NXB-63", "poles": "3P", "rated_current_a": 16, "trip_curve": "D" }, "cable": { "spec": "YJV 4x2.5 + 1x2.5", "length_m": 12 }, "load": { "name": "1号水泵", "type": "pump_motor", "rated_power_kw": 3.0, "rated_current_a": 6.4, "is_vfd_driven": true } },
+              { "circuit_id": "WL2", "name": "#2 变频主水循环泵", "breaker": { "model": "NXB-63", "poles": "3P", "rated_current_a": 16, "trip_curve": "D" }, "cable": { "spec": "YJV 4x2.5 + 1x2.5", "length_m": 14 }, "load": { "name": "2号水泵", "type": "pump_motor", "rated_power_kw": 3.0, "rated_current_a": 6.4, "is_vfd_driven": true } },
+              { "circuit_id": "WL3", "name": "#3 备用主水循环泵", "breaker": { "model": "NXB-63", "poles": "3P", "rated_current_a": 16, "trip_curve": "D" }, "cable": { "spec": "YJV 4x2.5 + 1x2.5", "length_m": 16 }, "load": { "name": "3号备用水泵", "type": "pump_motor", "rated_power_kw": 3.0, "rated_current_a": 6.4, "is_vfd_driven": true } },
+              { "circuit_id": "WL4", "name": "#1 变频充氧罗茨风机", "breaker": { "model": "NXB-63", "poles": "3P", "rated_current_a": 20, "trip_curve": "D" }, "cable": { "spec": "YJV 4x4.0 + 1x4.0", "length_m": 10 }, "load": { "name": "1号罗茨风机", "type": "blower_motor", "rated_power_kw": 3.7, "rated_current_a": 7.8, "is_vfd_driven": true } },
+              { "circuit_id": "WL5", "name": "#2 备用充氧罗茨风机", "breaker": { "model": "NXB-63", "poles": "3P", "rated_current_a": 20, "trip_curve": "D" }, "cable": { "spec": "YJV 4x4.0 + 1x4.0", "length_m": 12 }, "load": { "name": "2号备用风机", "type": "blower_motor", "rated_power_kw": 3.7, "rated_current_a": 7.8, "is_vfd_driven": true } },
+              { "circuit_id": "WL6", "name": "滚筒微滤机旋转马达", "breaker": { "model": "NXB-63", "poles": "3P", "rated_current_a": 6, "trip_curve": "D" }, "cable": { "spec": "YJV 4x1.5 + 1x1.5", "length_m": 8 }, "load": { "name": "微滤机马达", "type": "screen_filter", "rated_power_kw": 0.75, "rated_current_a": 1.8, "is_vfd_driven": false } }
+            ]
+          },
+          {
+            "panel_id": "AP-HYDRO",
+            "name": "二级水培动力配电箱",
+            "incoming_switch": { "model": "NXB-63", "poles": "3P", "rated_current_a": 40, "trip_curve": "D", "breaking_capacity_ka": 6 },
+            "feeder_cable": { "spec": "YJV 4x10 + 1x6", "length_m": 65, "allowable_ampacity_a": 58 },
+            "circuits": [
+              { "circuit_id": "WL7", "name": "A跑道深水增氧泵", "breaker": { "model": "NXB-63", "poles": "3P", "rated_current_a": 10, "trip_curve": "D" }, "cable": { "spec": "YJV 4x2.5 + 1x2.5", "length_m": 15 }, "load": { "name": "A跑道增氧泵", "type": "pump_motor", "rated_power_kw": 1.5, "rated_current_a": 3.4, "is_vfd_driven": false } },
+              { "circuit_id": "WL8", "name": "B跑道深水增氧泵", "breaker": { "model": "NXB-63", "poles": "3P", "rated_current_a": 10, "trip_curve": "D" }, "cable": { "spec": "YJV 4x2.5 + 1x2.5", "length_m": 25 }, "load": { "name": "B跑道增氧泵", "type": "pump_motor", "rated_power_kw": 1.5, "rated_current_a": 3.4, "is_vfd_driven": false } },
+              { "circuit_id": "WL9", "name": "调理池加药搅拌泵", "breaker": { "model": "NXB-63", "poles": "3P", "rated_current_a": 6, "trip_curve": "D" }, "cable": { "spec": "YJV 4x1.5 + 1x1.5", "length_m": 8 }, "load": { "name": "调理池加药泵", "type": "dosing_pump", "rated_power_kw": 0.25, "rated_current_a": 0.8, "is_vfd_driven": false } }
+            ]
+          },
+          {
+            "panel_id": "AP-CTRL",
+            "name": "弱电控制与UPS配电箱",
+            "incoming_switch": { "model": "NXB-63", "poles": "2P", "rated_current_a": 20, "trip_curve": "C", "breaking_capacity_ka": 6 },
+            "feeder_cable": { "spec": "YJV 3x4 + 1x2.5", "length_m": 30, "allowable_ampacity_a": 36 },
+            "circuits": [
+              { "circuit_id": "WL10", "name": "1kVA 在线式工控UPS", "breaker": { "model": "NXB-63", "poles": "2P", "rated_current_a": 16, "trip_curve": "C" }, "cable": { "spec": "RVV 3x2.5", "length_m": 5 }, "load": { "name": "工控UPS(续航5.1h)", "type": "ups_it_load", "rated_power_kw": 1.0, "rated_current_a": 4.5, "is_vfd_driven": false } }
+            ]
+          }
+        ]
+      },
+
+      "plc_controller": {
+        "controller_model": "Easy320-1614TN (汇川)",
+        "ip_address": "192.168.1.10",
+        "digital_inputs": [
+          { "point_id": "X01", "signal_name": "RAIN-ALARM", "description": "室外气象站雨雪常闭硬触点 (0.1s关天窗)", "wire_id": "OUT-DI-RAIN" },
+          { "point_id": "X04", "signal_name": "FISH-LV01", "description": "1号鱼池防溢/防干烧浮球液位开关", "wire_id": "LV-FISH-01" },
+          { "point_id": "X05", "signal_name": "VFD-FAULT", "description": "1号水泵变频器故障继电器 TA/TC 常闭反馈", "wire_id": "ALM-PUMP-01" }
+        ],
+        "digital_outputs": [
+          { "point_id": "Y01", "signal_name": "PUMP-RUN01", "description": "1号循环水泵启停中间继电器 KA1 (驱动DI1)", "wire_id": "PUMP-RUN-01" },
+          { "point_id": "Y02", "signal_name": "VALVE-BLOW", "description": "24V 荧光 DO 探头气动吹扫电磁阀 YV1", "wire_id": "AIR-VALVE-01" }
+        ]
+      },
+
+      "rs485_fieldbus": {
+        "bus_id": "BUS-RS485-MAIN",
+        "params": "9600-8-N-1 (手拉手菊花链)",
+        "slaves": [
+          { "addr": "0x01", "name": "威胜 DTSD342-P5 智能电表", "poll_ms": 1000 },
+          { "addr": "0x02", "name": "塞恩在线氨氮/pH/水温三合一", "poll_ms": 2000 },
+          { "addr": "0x03", "name": "深圳国数荧光法 DO 探头", "poll_ms": 500 },
+          { "addr": "0x04", "name": "联测调理池双盐桥 pH/EC 变送器", "poll_ms": 1000 },
+          { "addr": "0x08", "name": "竞道六要素超声波一体化微气象站", "poll_ms": 5000 },
+          { "addr": "0x11~0x16", "name": "6根立柱 3D 测温测湿百叶箱", "poll_ms": 5000 }
+        ]
+      },
+
+      "edge_and_network": {
+        "ipc": "研华 UNO-2271G-V2 (192.168.1.50)",
+        "switch": "16口工业 PoE 交换机 (TL-SL1218P)",
+        "nvr": "海康 16路 NVR (192.168.1.100)",
+        "cams": "10路工业 PoE 高清枪机 (192.168.1.101~110)"
+      }
+    };
+
+    let currentSheetIndex = 1;
+    let zoomScale = 0.95;
+    let panX = 40;
+    let panY = 20;
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let isDarkTheme = true;
+
+    const viewport = document.getElementById('cad-viewport');
+    const svgElem = document.getElementById('cad-svg');
+    const drawingLayer = document.getElementById('cad-drawing-layer');
+    const zoomText = document.getElementById('zoom-level-text');
+    const mouseCoords = document.getElementById('mouse-coords');
+    const jsonEditor = document.getElementById('json-editor-textarea');
+
+    // =========================================================================
+    // 纯独立 SVG 符号生成器 (完全自闭合，绝不依赖 <use>，杜绝任何坐标穿透杂线)
+    // =========================================================================
+    function drawSymbolMCCB(x, y, color) {
+      return `
+        <g transform="translate(${x}, ${y})">
+          <rect x="-12" y="-18" width="24" height="36" fill="${isDarkTheme ? '#0f172a' : '#ffffff'}" stroke="${color}" stroke-width="2" />
+          <line x1="-12" y1="-18" x2="12" y2="18" stroke="${color}" stroke-width="2" />
+          <line x1="-12" y1="18" x2="12" y2="-18" stroke="${color}" stroke-width="2" />
+          <line x1="0" y1="-26" x2="0" y2="-18" stroke="${color}" stroke-width="2" />
+          <line x1="0" y1="18" x2="0" y2="26" stroke="${color}" stroke-width="2" />
+        </g>
+      `;
+    }
+
+    function drawSymbolMCB(x, y, color) {
+      return `
+        <g transform="translate(${x}, ${y})">
+          <line x1="0" y1="-22" x2="0" y2="-10" stroke="${color}" stroke-width="2" />
+          <line x1="0" y1="-10" x2="-8" y2="8" stroke="${color}" stroke-width="2" />
+          <line x1="0" y1="10" x2="0" y2="22" stroke="${color}" stroke-width="2" />
+          <rect x="-14" y="-6" width="6" height="12" fill="none" stroke="${color}" stroke-width="1.5" />
+        </g>
+      `;
+    }
+
+    function drawSymbolCT(x, y, color) {
+      return `
+        <g transform="translate(${x}, ${y})">
+          <circle cx="0" cy="0" r="10" fill="none" stroke="${color}" stroke-width="2" />
+          <circle cx="0" cy="0" r="4" fill="${color}" />
+          <line x1="10" y1="0" x2="22" y2="0" stroke="${color}" stroke-width="1.5" stroke-dasharray="2,2" />
+        </g>
+      `;
+    }
+
+    function drawSymbolSPD(x, y, color) {
+      return `
+        <g transform="translate(${x}, ${y})">
+          <rect x="-12" y="-12" width="24" height="24" fill="${isDarkTheme ? '#0f172a' : '#ffffff'}" stroke="${color}" stroke-width="1.8" />
+          <path d="M-8,6 L0,-6 L8,-6 L0,6 Z" fill="${color}" />
+          <line x1="0" y1="-18" x2="0" y2="-12" stroke="${color}" stroke-width="2" />
+          <line x1="0" y1="12" x2="0" y2="20" stroke="${color}" stroke-width="2" />
+          <line x1="-10" y1="20" x2="10" y2="20" stroke="${color}" stroke-width="2" />
+          <line x1="-6" y1="24" x2="6" y2="24" stroke="${color}" stroke-width="2" />
+          <line x1="-2" y1="28" x2="2" y2="28" stroke="${color}" stroke-width="2" />
+        </g>
+      `;
+    }
+
+    function drawSymbolVFD(x, y, color) {
+      return `
+        <g transform="translate(${x}, ${y})">
+          <rect x="-24" y="-20" width="48" height="40" fill="${isDarkTheme ? '#0f172a' : '#ffffff'}" stroke="${color}" stroke-width="2" rx="3" />
+          <line x1="-24" y1="-20" x2="24" y2="20" stroke="${color}" stroke-width="1" />
+          <text x="-16" y="-4" fill="${color}" font-size="10" font-family="monospace">~</text>
+          <text x="6" y="14" fill="${color}" font-size="10" font-family="monospace">=</text>
+          <text x="-8" y="5" fill="${color}" font-size="8" font-family="monospace">VFD</text>
+        </g>
+      `;
+    }
+
+    function drawSymbolMotor(x, y, color) {
+      return `
+        <g transform="translate(${x}, ${y})">
+          <circle cx="0" cy="0" r="18" fill="${isDarkTheme ? '#0f172a' : '#ffffff'}" stroke="${color}" stroke-width="2" />
+          <text x="-7" y="5" fill="${color}" font-size="13" font-weight="bold" font-family="sans-serif">M</text>
+          <text x="3" y="10" fill="${color}" font-size="9" font-family="monospace">3~</text>
+          <line x1="0" y1="-26" x2="0" y2="-18" stroke="${color}" stroke-width="2" />
+        </g>
+      `;
+    }
+
+    /**
+     * 切换工程图卷 (1: 强电一次图, 2: PLC原理图, 3: 485与网络图)
+     */
+    function switchSheet(sheetIdx) {
+      currentSheetIndex = sheetIdx;
+
+      for (let i = 1; i <= 3; i++) {
+        const btn = document.getElementById(`tab-sheet-${i}`);
+        if (i === sheetIdx) {
+          btn.className = 'px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-black transition flex items-center gap-1.5 shadow-sm';
+        } else {
+          btn.className = 'px-3 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition flex items-center gap-1.5 font-bold';
+        }
+      }
+
+      const sheetTitles = {
+        1: { title: '全厂低压动力配电一次系统图', code: 'ELEC-01-SLD', disc: '强电动力工程 (Power Distribution)' },
+        2: { title: 'PLC 自动化控制与 I/O 接线原理图', code: 'ELEC-02-PLC', disc: '自动化与仪器仪表 (Instrumentation)' },
+        3: { title: 'RS-485 现场总线与工控网络拓扑图', code: 'ELEC-03-NET', disc: '弱电通信与物联网 (IIoT Network)' }
+      };
+
+      const meta = sheetTitles[sheetIdx];
+      document.getElementById('current-sheet-badge').textContent = `图卷 ${sheetIdx} / 共 3 卷`;
+      document.getElementById('current-sheet-title').textContent = meta.title;
+      document.getElementById('current-sheet-code').textContent = meta.code;
+
+      document.getElementById('titleblock-sheet-name').textContent = meta.title;
+      document.getElementById('titleblock-sheet-code').innerHTML = `图号: <tspan fill="#f59e0b" font-family="monospace">${meta.code}</tspan>`;
+      document.getElementById('titleblock-discipline').innerHTML = `专业: <tspan fill="#38bdf8" font-family="monospace">${meta.disc}</tspan>`;
+
+      renderCurrentSheet();
+    }
+
+    function renderCurrentSheet() {
+      if (currentSheetIndex === 1) renderSheet1_PowerSLD(PlantWideData);
+      else if (currentSheetIndex === 2) renderSheet2_PlcSchematic(PlantWideData);
+      else if (currentSheetIndex === 3) renderSheet3_NetworkFieldbus(PlantWideData);
+    }
+
+    // =========================================================================
+    // 🎨 图卷 1: ELEC-01 全厂低压动力配电一次系统图 (纯正交直角制图，绝无杂线)
+    // =========================================================================
+    function renderSheet1_PowerSLD(data) {
+      if (!drawingLayer) return;
+      drawingLayer.innerHTML = '';
+
+      const colorWire = isDarkTheme ? '#38bdf8' : '#0369a1';
+      const colorBus = isDarkTheme ? '#f59e0b' : '#d97706';
+      const colorText = isDarkTheme ? '#f8fafc' : '#0f172a';
+      const colorMuted = isDarkTheme ? '#94a3b8' : '#64748b';
+      const colorBoxBg = isDarkTheme ? '#0f172a' : '#f8fafc';
+      const colorBorder = isDarkTheme ? '#475569' : '#94a3b8';
+
+      let html = '';
+
+      // 1. 10kV 进线与变压器 (完全正交垂直排布)
+      const startX = 140;
+      const startY = 110;
+      html += `
+        <text x="${startX}" y="${startY - 35}" fill="${colorText}" font-size="13" font-weight="bold" font-family="monospace">10kV 市电进线 (双电源ATS自投)</text>
+        <line x1="${startX + 70}" y1="${startY - 20}" x2="${startX + 70}" y2="${startY}" stroke="${colorWire}" stroke-width="2.5" />
+        <circle cx="${startX + 70}" cy="${startY + 20}" r="20" fill="none" stroke="${colorWire}" stroke-width="2.5" />
+        <circle cx="${startX + 70}" cy="${startY + 45}" r="20" fill="none" stroke="${colorWire}" stroke-width="2.5" />
+        <text x="${startX + 105}" y="${startY + 38}" fill="${colorText}" font-size="12" font-family="monospace">100kVA (10/0.4kV)</text>
+        <line x1="${startX + 70}" y1="${startY + 65}" x2="${startX + 70}" y2="${startY + 95}" stroke="${colorWire}" stroke-width="2.5" />
+      `;
+
+      // 2. AP-MAIN 一级总柜
+      const mainY = startY + 95;
+      const incomer = data.power_distribution.main_incomer;
+      html += `
+        <rect x="${startX - 20}" y="${mainY}" width="380" height="240" fill="${colorBoxBg}" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6,4" rx="8" />
+        <text x="${startX - 5}" y="${mainY + 24}" fill="#f59e0b" font-size="13" font-weight="extrabold" font-family="monospace">AP-MAIN 一级低压动力总柜</text>
+        
+        ${drawSymbolMCCB(startX + 70, mainY + 65, colorText)}
+        <text x="${startX + 95}" y="${mainY + 65}" fill="${colorText}" font-size="11" font-weight="bold" font-family="monospace">QF0: ${incomer.main_breaker.model} 160A/3P (D型)</text>
+        <text x="${startX + 95}" y="${mainY + 80}" fill="${colorMuted}" font-size="10" font-family="monospace">Icu=36kA • Ii=1600A • 双拼电缆</text>
+        
+        ${drawSymbolCT(startX + 70, mainY + 125, colorWire)}
+        <text x="${startX + 95}" y="${mainY + 130}" fill="${colorText}" font-size="11" font-family="monospace">TA1~3: 200/5A (0.5级开合式)</text>
+        
+        <rect x="${startX + 230}" y="${mainY + 150}" width="115" height="35" fill="#0284c7" fill-opacity="0.2" stroke="#0284c7" stroke-width="1.5" rx="4" />
+        <text x="${startX + 240}" y="${mainY + 172}" fill="${colorText}" font-size="10" font-weight="bold" font-family="monospace">威胜智能电能表</text>
+        
+        <line x1="${startX + 70}" y1="${mainY + 170}" x2="${startX + 20}" y2="${mainY + 170}" stroke="${colorWire}" stroke-width="2" />
+        ${drawSymbolSPD(startX + 20, mainY + 185, '#34d399')}
+        <text x="${startX - 8}" y="${mainY + 225}" fill="${colorMuted}" font-size="9" font-family="monospace">SPD 40kA T1</text>
+        
+        <!-- 正交垂直引下线至主母线 -->
+        <line x1="${startX + 70}" y1="${mainY + 140}" x2="${startX + 70}" y2="${mainY + 280}" stroke="${colorWire}" stroke-width="3" />
+      `;
+
+      // 3. 380V/220V 主母排 (TMY 水平总线)
+      const busY = mainY + 280;
+      html += `
+        <line x1="80" y1="${busY}" x2="2280" y2="${busY}" stroke="${colorBus}" stroke-width="6" stroke-linecap="round" />
+        <text x="90" y="${busY - 12}" fill="${colorBus}" font-size="14" font-weight="extrabold" font-family="monospace">380V/220V 一级配电主母线 TMY-3x(40x4)+1x(25x3)</text>
+      `;
+
+      // 4. 二级动力分箱矩阵 (100% 正交垂直向下分支)
+      let currentX = 120;
+      data.power_distribution.sub_panels.forEach((panel) => {
+        const circuitCount = panel.circuits.length;
+        const panelWidth = Math.max(circuitCount * 125 + 60, 360);
+        const panelY = busY + 60;
+        const feedX = currentX + 60;
+
+        // 母线垂直引下线至分箱开关
+        html += `
+          <line x1="${feedX}" y1="${busY}" x2="${feedX}" y2="${panelY + 60}" stroke="${colorWire}" stroke-width="2.5" />
+          <circle cx="${feedX}" cy="${busY}" r="4" fill="${colorBus}" />
+          
+          <rect x="${currentX}" y="${panelY}" width="${panelWidth}" height="820" fill="${colorBoxBg}" stroke="${colorBorder}" stroke-width="2" rx="10" />
+          <rect x="${currentX}" y="${panelY}" width="${panelWidth}" height="45" fill="${isDarkTheme ? '#1e293b' : '#e2e8f0'}" rx="10" />
+          <text x="${currentX + 16}" y="${panelY + 28}" fill="${colorText}" font-size="13" font-weight="extrabold" font-family="monospace">${panel.panel_id} ${panel.name}</text>
+          <text x="${currentX + panelWidth - 140}" y="${panelY + 28}" fill="${colorMuted}" font-size="11" font-family="monospace">${panel.feeder_cable.spec}</text>
+          
+          ${drawSymbolMCB(feedX, panelY + 85, colorText)}
+          <text x="${feedX + 18}" y="${panelY + 85}" fill="${colorText}" font-size="10" font-weight="bold" font-family="monospace">${panel.incoming_switch.model} ${panel.incoming_switch.rated_current_a}A/3P (${panel.incoming_switch.trip_curve}型)</text>
+          <line x1="${feedX}" y1="${panelY + 110}" x2="${feedX}" y2="${panelY + 145}" stroke="${colorWire}" stroke-width="2.5" />
+        `;
+
+        // 二级箱体内部水平小母排
+        const subBusY = panelY + 145;
+        const subBusStartX = currentX + 30;
+        const subBusEndX = currentX + panelWidth - 30;
+        html += `
+          <line x1="${subBusStartX}" y1="${subBusY}" x2="${subBusEndX}" y2="${subBusY}" stroke="${colorBus}" stroke-width="4" stroke-linecap="round" />
+          <text x="${subBusStartX}" y="${subBusY - 8}" fill="${colorBus}" font-size="10" font-family="monospace">分箱母排 380V/220V</text>
+        `;
+
+        // 各分支回路垂直向下正交排布
+        panel.circuits.forEach((c, cIdx) => {
+          const cX = currentX + 60 + cIdx * 125;
+          html += `
+            <circle cx="${cX}" cy="${subBusY}" r="3" fill="${colorBus}" />
+            <line x1="${cX}" y1="${subBusY}" x2="${cX}" y2="${subBusY + 35}" stroke="${colorWire}" stroke-width="2" />
+            
+            ${drawSymbolMCB(cX, subBusY + 55, colorText)}
+            <text x="${cX + 12}" y="${subBusY + 52}" fill="${colorText}" font-size="9" font-weight="bold" font-family="monospace">${c.breaker.model}</text>
+            <text x="${cX + 12}" y="${subBusY + 64}" fill="${colorMuted}" font-size="9" font-family="monospace">${c.breaker.rated_current_a}A (${c.breaker.trip_curve}型)</text>
+            
+            <line x1="${cX}" y1="${subBusY + 75}" x2="${cX}" y2="${subBusY + 120}" stroke="${colorWire}" stroke-width="2" />
+            
+            <!-- 电缆引线标注 -->
+            <g transform="translate(${cX}, ${subBusY + 150})">
+              <line x1="0" y1="-30" x2="0" y2="20" stroke="${colorWire}" stroke-width="1.5" />
+              <line x1="0" y1="0" x2="35" y2="-15" stroke="${colorMuted}" stroke-width="1" />
+              <line x1="35" y1="-15" x2="95" y2="-15" stroke="${colorMuted}" stroke-width="1" />
+              <text x="8" y="-18" fill="${colorMuted}" font-size="8.5" font-family="monospace">${c.cable.spec}</text>
+              <text x="8" y="-6" fill="${colorMuted}" font-size="8.5" font-family="monospace">L=${c.cable.length_m}m</text>
+            </g>
+          `;
+
+          let motorY = subBusY + 380;
+          if (c.load.is_vfd_driven) {
+            html += `
+              <line x1="${cX}" y1="${subBusY + 170}" x2="${cX}" y2="${subBusY + 240}" stroke="${colorWire}" stroke-width="2" />
+              ${drawSymbolVFD(cX, subBusY + 260, colorWire)}
+              <text x="${cX - 20}" y="${subBusY + 295}" fill="${colorText}" font-size="8.5" font-family="monospace">变频器</text>
+              <line x1="${cX}" y1="${subBusY + 280}" x2="${cX}" y2="${motorY - 26}" stroke="${colorWire}" stroke-width="2" />
+            `;
+          } else {
+            html += `<line x1="${cX}" y1="${subBusY + 170}" x2="${cX}" y2="${motorY - 26}" stroke="${colorWire}" stroke-width="2" />`;
+          }
+
+          html += `
+            ${drawSymbolMotor(cX, motorY, '#34d399')}
+            <text x="${cX - 45}" y="${motorY + 35}" fill="${colorText}" font-size="9.5" font-weight="bold" font-family="monospace">${c.circuit_id}: ${c.name}</text>
+            <text x="${cX - 45}" y="${motorY + 50}" fill="${colorMuted}" font-size="9" font-family="monospace">Pe=${c.load.rated_power_kw}kW Ie=${c.load.rated_current_a}A</text>
+          `;
+        });
+
+        currentX += panelWidth + 50;
+      });
+
+      drawingLayer.innerHTML = html;
+    }
+
+    // =========================================================================
+    // 🎨 图卷 2: ELEC-02 PLC 自动化控制与 I/O 外部接线原理图 (弱电自控)
+    // =========================================================================
+    function renderSheet2_PlcSchematic(data) {
+      if (!drawingLayer) return;
+      drawingLayer.innerHTML = '';
+
+      const colorWire = isDarkTheme ? '#38bdf8' : '#0369a1';
+      const colorText = isDarkTheme ? '#f8fafc' : '#0f172a';
+      const colorMuted = isDarkTheme ? '#94a3b8' : '#64748b';
+      const colorBoxBg = isDarkTheme ? '#0f172a' : '#f8fafc';
+      const colorBorder = isDarkTheme ? '#475569' : '#94a3b8';
+
+      let html = '';
+
+      html += `
+        <text x="80" y="90" fill="#f59e0b" font-size="16" font-weight="extrabold" font-family="monospace">ELEC-02 PLC 自动化控制与 I/O 外部端子接线原理图</text>
+        <text x="80" y="115" fill="${colorMuted}" font-size="12" font-family="monospace">控制电压: DC 24V (明纬 NDR-120-24 稳压电源) • 隔离原则: 强电交流与弱电直流 100% 物理光耦隔离</text>
+      `;
+
+      html += `
+        <rect x="80" y="150" width="220" height="120" fill="${colorBoxBg}" stroke="#a855f7" stroke-width="2" rx="8" />
+        <text x="95" y="180" fill="#a855f7" font-size="13" font-weight="extrabold" font-family="monospace">明纬 NDR-120-24</text>
+        <text x="95" y="200" fill="${colorText}" font-size="11" font-family="monospace">输入: AC 220V (50Hz)</text>
+        <text x="95" y="220" fill="#34d399" font-size="11" font-weight="bold" font-family="monospace">输出: DC 24V / 5A (120W)</text>
+        <text x="95" y="245" fill="${colorMuted}" font-size="10" font-family="monospace">保险丝: 2A 熔断端子排</text>
+
+        <line x1="300" y1="190" x2="2250" y2="190" stroke="#ef4444" stroke-width="3" stroke-linecap="round" />
+        <text x="310" y="182" fill="#ef4444" font-size="11" font-weight="bold" font-family="monospace">+24V DC 弱电供电正极</text>
+
+        <line x1="300" y1="230" x2="2250" y2="230" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" />
+        <text x="310" y="248" fill="#3b82f6" font-size="11" font-weight="bold" font-family="monospace">0V / COM 弱电供电负极 (公共端)</text>
+      `;
+
+      const plcX = 700;
+      const plcY = 320;
+      const plcW = 1000;
+      const plcH = 800;
+
+      html += `
+        <rect x="${plcX}" y="${plcY}" width="${plcW}" height="${plcH}" fill="${colorBoxBg}" stroke="#38bdf8" stroke-width="3" rx="12" />
+        <rect x="${plcX}" y="${plcY}" width="${plcW}" height="55" fill="${isDarkTheme ? '#1e293b' : '#e2e8f0'}" rx="12" />
+        <text x="${plcX + 25}" y="${plcY + 35}" fill="${colorText}" font-size="16" font-weight="extrabold" font-family="monospace">PLC 主控制器: 汇川 Easy320-1614TN (Modbus-TCP IP: 192.168.1.10)</text>
+      `;
+
+      const diList = data.plc_controller.digital_inputs;
+      html += `
+        <rect x="${plcX + 20}" y="${plcY + 75}" width="420" height="700" fill="none" stroke="${colorBorder}" stroke-width="1.5" stroke-dasharray="4,4" rx="8" />
+        <text x="${plcX + 40}" y="${plcY + 105}" fill="#38bdf8" font-size="13" font-weight="bold" font-family="monospace">DI 数字量输入通道 (光耦隔离 NPN/PNP)</text>
+      `;
+
+      diList.forEach((di, idx) => {
+        const itemY = plcY + 150 + idx * 160;
+        html += `
+          <rect x="${plcX + 40}" y="${itemY}" width="90" height="35" fill="#0284c7" fill-opacity="0.3" stroke="#0284c7" stroke-width="1.5" rx="4" />
+          <text x="${plcX + 55}" y="${itemY + 22}" fill="#f8fafc" font-size="13" font-weight="black" font-family="monospace">${di.point_id}</text>
+          <text x="${plcX + 140}" y="${itemY + 22}" fill="${colorText}" font-size="11" font-weight="bold" font-family="monospace">${di.signal_name}</text>
+          
+          <line x1="${plcX + 40}" y1="${itemY + 17}" x2="${plcX - 180}" y2="${itemY + 17}" stroke="${colorWire}" stroke-width="2" />
+          <line x1="${plcX - 240}" y1="${itemY + 17}" x2="${plcX - 450}" y2="${itemY + 17}" stroke="${colorWire}" stroke-width="2" />
+          
+          <rect x="${plcX - 580}" y="${itemY - 15}" width="220" height="65" fill="${colorBoxBg}" stroke="#f59e0b" stroke-width="1.5" rx="6" />
+          <text x="${plcX - 565}" y="${itemY + 10}" fill="${colorText}" font-size="11" font-weight="bold">${di.description}</text>
+          <text x="${plcX - 565}" y="${itemY + 30}" fill="${colorMuted}" font-size="9.5" font-family="monospace">线号: ${di.wire_id} (常闭触点)</text>
+        `;
+      });
+
+      const doList = data.plc_controller.digital_outputs;
+      html += `
+        <rect x="${plcX + 560}" y="${plcY + 75}" width="420" height="700" fill="none" stroke="${colorBorder}" stroke-width="1.5" stroke-dasharray="4,4" rx="8" />
+        <text x="${plcX + 580}" y="${plcY + 105}" fill="#34d399" font-size="13" font-weight="bold" font-family="monospace">DO 数字量输出通道 (晶体管/继电器驱动)</text>
+      `;
+
+      doList.forEach((doItem, idx) => {
+        const itemY = plcY + 150 + idx * 180;
+        html += `
+          <rect x="${plcX + 580}" y="${itemY}" width="90" height="35" fill="#059669" fill-opacity="0.3" stroke="#059669" stroke-width="1.5" rx="4" />
+          <text x="${plcX + 595}" y="${itemY + 22}" fill="#f8fafc" font-size="13" font-weight="black" font-family="monospace">${doItem.point_id}</text>
+          <text x="${plcX + 680}" y="${itemY + 22}" fill="${colorText}" font-size="11" font-weight="bold" font-family="monospace">${doItem.signal_name}</text>
+          
+          <line x1="${plcX + 900}" y1="${itemY + 17}" x2="${plcX + 1080}" y2="${itemY + 17}" stroke="${colorWire}" stroke-width="2" />
+          <text x="${plcX + 1105}" y="${itemY + 22}" fill="#a855f7" font-size="12" font-weight="bold" font-family="monospace">KA${idx+1}</text>
+          
+          <rect x="${plcX + 1180}" y="${itemY - 20}" width="260" height="75" fill="${colorBoxBg}" stroke="#a855f7" stroke-width="1.5" rx="6" />
+          <text x="${plcX + 1195}" y="${itemY + 8}" fill="${colorText}" font-size="11" font-weight="bold">${doItem.description}</text>
+          <text x="${plcX + 1195}" y="${itemY + 28}" fill="#34d399" font-size="10" font-family="monospace">隔离控制: 无源干触点闭合</text>
+          <text x="${plcX + 1195}" y="${itemY + 44}" fill="${colorMuted}" font-size="9" font-family="monospace">线号: ${doItem.wire_id}</text>
+        `;
+      });
+
+      drawingLayer.innerHTML = html;
+    }
+
+    // =========================================================================
+    // 🎨 图卷 3: ELEC-03 RS-485 现场总线与工控网络拓扑图 (通信与网络)
+    // =========================================================================
+    function renderSheet3_NetworkFieldbus(data) {
+      if (!drawingLayer) return;
+      drawingLayer.innerHTML = '';
+
+      const colorWire = isDarkTheme ? '#38bdf8' : '#0369a1';
+      const colorText = isDarkTheme ? '#f8fafc' : '#0f172a';
+      const colorMuted = isDarkTheme ? '#94a3b8' : '#64748b';
+      const colorBoxBg = isDarkTheme ? '#0f172a' : '#f8fafc';
+      const colorBorder = isDarkTheme ? '#475569' : '#94a3b8';
+
+      let html = '';
+
+      html += `
+        <text x="80" y="90" fill="#f59e0b" font-size="16" font-weight="extrabold" font-family="monospace">ELEC-03 RS-485 现场总线与工控物联网络拓扑图</text>
+        <text x="80" y="115" fill="${colorMuted}" font-size="12" font-family="monospace">通信参数: 9600-8-N-1 • 拓扑结构: 手拉手菊花链 (Daisy-Chain) • 终端电阻: 最末端并接 120Ω (1/4W)</text>
+      `;
+
+      html += `
+        <rect x="80" y="150" width="2240" height="520" fill="${colorBoxBg}" stroke="#38bdf8" stroke-width="2" rx="12" />
+        <rect x="80" y="150" width="2240" height="45" fill="${isDarkTheme ? '#1e293b' : '#e2e8f0'}" rx="12" />
+        <text x="105" y="178" fill="#38bdf8" font-size="14" font-weight="extrabold" font-family="monospace">📡 现场 RS-485 仪表总线通道 (COM1 · 屏蔽双绞线 RVSP 4x0.75 / M12 航插)</text>
+      `;
+
+      html += `
+        <rect x="120" y="240" width="180" height="110" fill="#0284c7" fill-opacity="0.3" stroke="#0284c7" stroke-width="2" rx="8" />
+        <text x="145" y="275" fill="#f8fafc" font-size="14" font-weight="extrabold" font-family="monospace">PLC COM 主站</text>
+        <text x="145" y="300" fill="${colorText}" font-size="11" font-family="monospace">Easy320 (0x00)</text>
+        <text x="145" y="325" fill="#38bdf8" font-size="10" font-family="monospace">RS485-A / RS485-B</text>
+      `;
+
+      const slaves = data.rs485_fieldbus.slaves;
+      let busX = 300;
+
+      slaves.forEach((slave, sIdx) => {
+        const sX = 370 + sIdx * 300;
+        html += `
+          <line x1="${busX}" y1="295" x2="${sX}" y2="295" stroke="#38bdf8" stroke-width="3" />
+          <circle cx="${sX}" cy="295" r="5" fill="#f59e0b" />
+          
+          <rect x="${sX}" y="240" width="240" height="140" fill="${isDarkTheme ? '#1e293b' : '#f1f5f9'}" stroke="${colorBorder}" stroke-width="1.5" rx="8" />
+          <text x="${sX + 15}" y="270" fill="#f59e0b" font-size="14" font-weight="extrabold" font-family="monospace">${slave.addr}</text>
+          <text x="${sX + 15}" y="295" fill="${colorText}" font-size="11" font-weight="bold">${slave.name}</text>
+          <text x="${sX + 15}" y="325" fill="${colorMuted}" font-size="10" font-family="monospace">轮询周期: ${slave.poll_ms}ms</text>
+          <text x="${sX + 15}" y="345" fill="#34d399" font-size="9.5" font-family="monospace">M12 4针: 棕+24V/蓝0V/白A/黑B</text>
+        `;
+        busX = sX + 240;
+      });
+
+      html += `
+        <line x1="${busX}" y1="295" x2="${busX + 80}" y2="295" stroke="#38bdf8" stroke-width="3" />
+        <rect x="${busX + 80}" y="275" width="80" height="40" fill="#ef4444" fill-opacity="0.2" stroke="#ef4444" stroke-width="2" rx="4" />
+        <text x="${busX + 90}" y="298" fill="#ef4444" font-size="11" font-weight="bold" font-family="monospace">120 Ω</text>
+        <text x="${busX + 85}" y="330" fill="${colorMuted}" font-size="9.5" font-family="monospace">末端吸收电阻</text>
+      `;
+
+      html += `
+        <rect x="80" y="710" width="2240" height="600" fill="${colorBoxBg}" stroke="#a855f7" stroke-width="2" rx="12" />
+        <rect x="80" y="710" width="2240" height="45" fill="${isDarkTheme ? '#1e293b' : '#e2e8f0'}" rx="12" />
+        <text x="105" y="738" fill="#a855f7" font-size="14" font-weight="extrabold" font-family="monospace">💻 工业以太网与 PoE 高清视频网络拓扑 (Cat5e STP 屏蔽超五类网线)</text>
+        
+        <rect x="120" y="800" width="260" height="150" fill="#6b21a8" fill-opacity="0.3" stroke="#a855f7" stroke-width="2" rx="8" />
+        <text x="140" y="835" fill="#f8fafc" font-size="14" font-weight="extrabold" font-family="monospace">工业 PoE 交换机</text>
+        <text x="140" y="860" fill="${colorText}" font-size="11" font-family="monospace">TP-Link TL-SL1218P</text>
+        <text x="140" y="885" fill="#34d399" font-size="10" font-family="monospace">16口百兆PoE + 2千兆上联</text>
+        <text x="140" y="910" fill="${colorMuted}" font-size="10" font-family="monospace">总供电预算: 150W</text>
+        
+        <line x1="380" y1="840" x2="520" y2="840" stroke="#a855f7" stroke-width="2.5" />
+        <rect x="520" y="790" width="260" height="100" fill="${colorBoxBg}" stroke="#38bdf8" stroke-width="2" rx="8" />
+        <text x="540" y="820" fill="#38bdf8" font-size="12" font-weight="bold" font-family="monospace">研华工控机 (Edge IPC)</text>
+        <text x="540" y="845" fill="${colorText}" font-size="11" font-mono font-bold">IP: 192.168.1.50</text>
+        <text x="540" y="868" fill="${colorMuted}" font-size="9.5">5s宽表聚合 • YOLO11摄食推理</text>
+        
+        <line x1="380" y1="910" x2="520" y2="910" stroke="#a855f7" stroke-width="2.5" />
+        <rect x="520" y="910" width="260" height="90" fill="${colorBoxBg}" stroke="#f59e0b" stroke-width="2" rx="8" />
+        <text x="540" y="938" fill="#f59e0b" font-size="12" font-weight="bold" font-family="monospace">海康威视 16路 NVR</text>
+        <text x="540" y="960" fill="${colorText}" font-size="11" font-mono font-bold">IP: 192.168.1.100</text>
+        <text x="540" y="980" fill="${colorMuted}" font-size="9.5">4TB 监控级酷鹰硬盘 (存15天)</text>
+        
+        <line x1="380" y1="875" x2="900" y2="875" stroke="#a855f7" stroke-width="2.5" />
+        <text x="920" y="810" fill="${colorText}" font-size="13" font-weight="bold" font-family="monospace">10路 PoE 工业高清网络摄像枪机 (1080P / H.265)</text>
+      `;
+
+      for (let i = 1; i <= 10; i++) {
+        const camX = 900 + ((i - 1) % 5) * 260;
+        const camY = i <= 5 ? 840 : 980;
+        const ip = `192.168.1.${100 + i}`;
+
+        html += `
+          <rect x="${camX}" y="${camY}" width="240" height="95" fill="${isDarkTheme ? '#1e293b' : '#f1f5f9'}" stroke="${colorBorder}" stroke-width="1.5" rx="6" />
+          <text x="${camX + 15}" y="${camY + 28}" fill="#34d399" font-size="11" font-weight="bold" font-family="monospace">CAM-0${i}: 枪机 #${i}</text>
+          <text x="${camX + 15}" y="${camY + 50}" fill="${colorText}" font-size="10.5" font-family="monospace">${ip}</text>
+          <text x="${camX + 15}" y="${camY + 72}" fill="${colorMuted}" font-size="9">${i <= 4 ? '成鱼池摄食监测' : (i <= 8 ? '水培冠层俯拍' : '全厂主通道安防')}</text>
+        `;
+      }
+
+      drawingLayer.innerHTML = html;
+    }
+
+    /**
+     * 视口变换与交互控制
+     */
+    function updateTransform() {
+      if (!svgElem) return;
+      svgElem.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomScale})`;
+      if (zoomText) zoomText.textContent = `${Math.round(zoomScale * 100)}%`;
+    }
+
+    function zoomCanvas(factor) {
+      zoomScale = Math.min(Math.max(zoomScale * factor, 0.2), 3.0);
+      updateTransform();
+    }
+
+    function resetZoom() {
+      zoomScale = 1.0;
+      panX = 40;
+      panY = 20;
+      updateTransform();
+    }
+
+    function fitCanvas() {
+      const containerWidth = viewport.clientWidth;
+      zoomScale = Math.min(containerWidth / 2450, 1.2);
+      panX = 20;
+      panY = 10;
+      updateTransform();
+    }
+
+    viewport.addEventListener('mousedown', (e) => {
+      if (e.button === 0 || e.button === 1) {
+        isDragging = true;
+        startX = e.clientX - panX;
+        startY = e.clientY - panY;
+      }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isDragging) {
+        panX = e.clientX - startX;
+        panY = e.clientY - startY;
+        updateTransform();
+      }
+      if (mouseCoords) {
+        const rect = viewport.getBoundingClientRect();
+        const curX = Math.round((e.clientX - rect.left - panX) / zoomScale);
+        const curY = Math.round((e.clientY - rect.top - panY) / zoomScale);
+        mouseCoords.textContent = `X: ${curX}, Y: ${curY}`;
+      }
+    });
+
+    window.addEventListener('mouseup', () => { isDragging = false; });
+
+    viewport.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const factor = e.deltaY < 0 ? 1.1 : 0.9;
+      zoomCanvas(factor);
+    }, { passive: false });
+
+    function toggleCadTheme() {
+      isDarkTheme = !isDarkTheme;
+      const themeText = document.getElementById('theme-text');
+      const themeIcon = document.getElementById('theme-icon');
+
+      if (isDarkTheme) {
+        viewport.className = 'flex-1 relative overflow-hidden cad-grid-dark cursor-grab active:cursor-grabbing';
+        if (themeText) themeText.textContent = 'CAD 暗黑';
+        if (themeIcon) themeIcon.textContent = '🌙';
+      } else {
+        viewport.className = 'flex-1 relative overflow-hidden cad-grid-light cursor-grab active:cursor-grabbing';
+        if (themeText) themeText.textContent = '设计院白图';
+        if (themeIcon) themeIcon.textContent = '☀️';
+      }
+      renderCurrentSheet();
+    }
+
+    function toggleJsonDrawer() {
+      const drawer = document.getElementById('json-drawer');
+      if (!drawer) return;
+      if (drawer.classList.contains('translate-x-full')) {
+        drawer.classList.remove('translate-x-full');
+        if (jsonEditor) jsonEditor.value = JSON.stringify(PlantWideData, null, 2);
+      } else {
+        drawer.classList.add('translate-x-full');
+      }
+    }
+
+    function compileAndRenderFromTextarea() {
+      const status = document.getElementById('json-status');
+      try {
+        const parsed = JSON.parse(jsonEditor.value);
+        Object.assign(PlantWideData, parsed);
+        renderCurrentSheet();
+        if (status) {
+          status.className = 'text-xs font-cad text-emerald-400';
+          status.textContent = '✓ 编译成功，已重新排版渲染 3 卷图纸！';
+        }
+        setTimeout(() => toggleJsonDrawer(), 600);
+      } catch (err) {
+        if (status) {
+          status.className = 'text-xs font-cad text-red-400';
+          status.textContent = '❌ JSON 解析错误: ' + err.message;
+        }
+      }
+    }
+
+    function exportSvgDrawing() {
+      const svgData = new XMLSerializer().serializeToString(svgElem);
+      const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ELEC-0${currentSheetIndex}-Drawing-Sheet.svg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      switchSheet(1);
+      fitCanvas();
+    });
+  </script>
+</body>
+</html>

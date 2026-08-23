@@ -69,7 +69,7 @@ window.ViewTemplates['view-energy'] = `
 
       </div>
 
-      <!-- 📡 边缘网关近 1 小时 IIoT 宽表通信流速与丢包率条 -->
+      <!-- 📡 边缘网关近 1 小时 IIoT 宽表通信流速与丢包率条 + 电气系统图快捷入口 -->
       <div class="p-3.5 bg-slate-900 text-white rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs font-mono shadow-md">
         <div class="flex items-center gap-2">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -77,9 +77,10 @@ window.ViewTemplates['view-energy'] = `
           <strong class="text-emerald-400">720 帧 5s 宽表 (92,160 测点时序数据)</strong>
         </div>
         <div class="flex items-center gap-4 flex-wrap text-slate-300">
-          <span>压缩流量: <strong class="text-teal-300">1.85 MB</strong> (上行占用 &lt; 0.1%)</span>
-          <span>485 链路 CRC 丢包率: <strong class="text-emerald-400 font-bold">0.00% (极优)</strong></span>
-          <span>网关本地缓存: <strong class="text-slate-200">128G SSD 就绪</strong></span>
+          <span>485 丢包率: <strong class="text-emerald-400 font-bold">0.00%</strong></span>
+          <button onclick="switchRole('electrical')" class="px-3 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold flex items-center gap-1.5 transition shadow-sm cursor-pointer">
+            <span>📐</span> 查阅全厂电气一次系统图 (SLD) ➔
+          </button>
         </div>
       </div>
 
