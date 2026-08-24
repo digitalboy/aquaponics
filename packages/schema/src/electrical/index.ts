@@ -203,12 +203,12 @@ export const PlcExpansionModuleSchema = z.object({
 export const PlcIoMappingSchema = z.object({
   controller_id: z.string().optional().default('PLC-MAIN-01'),   // 控制器唯一ID (支持多PLC集群)
   controller_role: z.string().optional().default('主控中央PLC'), // 角色 (鱼池主控 / 温室环境 / 水肥加药)
-  controller_brand: z.string().optional(),
-  controller_model: z.string().optional().default('Easy320-1614TN'),
+  controller_brand: z.string().optional().default('汇川 (Inovance)'),
+  controller_model: z.string().optional().default('Easy320-0808TN'),
   ip_address: Ipv4AddressSchema.optional().default('192.168.1.10'),
   port: z.number().optional().default(502),
   protocol: z.literal('Modbus-TCP').optional().default('Modbus-TCP'),
-  // CPU 本体自带 I/O
+  // CPU 本体自带 I/O (8DI / 8DO 漏型晶体管)
   digital_inputs: z.array(DigitalInputPointSchema).optional().default([]),
   digital_outputs: z.array(DigitalOutputPointSchema).optional().default([]),
   // ⭐️ 级联扩展模块与远程子站列表

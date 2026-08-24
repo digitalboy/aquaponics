@@ -221,7 +221,7 @@ export class BOMExporter {
         quantity: 1,
         unit: '台',
         location: 'PLC-CABINET',
-        remarks: '16DI / 14DO 晶体管型',
+        remarks: '8DI / 8DO 晶体管漏型 (NPN) • 订货编码 01440325',
       });
 
       // 欧姆龙微型中继组

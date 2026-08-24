@@ -271,7 +271,7 @@
 
   "plc_controller": {
     "controller_brand": "汇川 (Inovance)",
-    "controller_model": "Easy320-1614TN",
+    "controller_model": "Easy320-0808TN",
     "ip_address": "192.168.1.10",
     "port": 502,
     "protocol": "Modbus-TCP",
