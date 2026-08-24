@@ -49,6 +49,8 @@ export function generateCategorizedWiringSchedule(topology: PlantWideTopology): 
       const isVfd = ckt.load.is_vfd_driven;
       const cktId = ckt.circuit_id;
       const loadName = ckt.load.name;
+      const isMotor = ['pump_motor', 'blower_motor', 'screen_filter', 'actuator_motor', 'dosing_pump'].includes(ckt.load.type);
+      const isDolMotor = !isVfd && isMotor;
 
       if (is3Phase) {
         // 三相 380V 动力回路 (L1, L2, L3, PE)
@@ -65,8 +67,8 @@ export function generateCategorizedWiringSchedule(topology: PlantWideTopology): 
           spec: `${ckt.cable.spec.split('+')[0] || 'BVR 2.5mm²'}`,
           fromComponent: `微断 ${ckt.breaker.model}`,
           fromTerminal: '2 (L1下出线)',
-          toComponent: isVfd ? '变频器 VFD' : `强电端子排 XT1-${panel.panel_id}`,
-          toTerminal: isVfd ? 'R / L1' : '1 (L1端子)',
+          toComponent: isVfd ? '变频器 VFD' : isDolMotor ? '接触器 KM (NXC-09)' : `强电端子排 XT1-${panel.panel_id}`,
+          toTerminal: isVfd ? 'R / L1' : isDolMotor ? '1/L1 (经FR至XT1)' : '1 (L1端子)',
           stripLengthMm: 10,
           torqueNm: 1.8,
           toolType: 'PZ2 十字绝缘螺丝刀',
@@ -86,8 +88,8 @@ export function generateCategorizedWiringSchedule(topology: PlantWideTopology): 
           spec: `${ckt.cable.spec.split('+')[0] || 'BVR 2.5mm²'}`,
           fromComponent: `微断 ${ckt.breaker.model}`,
           fromTerminal: '4 (L2下出线)',
-          toComponent: isVfd ? '变频器 VFD' : `强电端子排 XT1-${panel.panel_id}`,
-          toTerminal: isVfd ? 'S / L2' : '2 (L2端子)',
+          toComponent: isVfd ? '变频器 VFD' : isDolMotor ? '接触器 KM (NXC-09)' : `强电端子排 XT1-${panel.panel_id}`,
+          toTerminal: isVfd ? 'S / L2' : isDolMotor ? '3/L2 (经FR至XT1)' : '2 (L2端子)',
           stripLengthMm: 10,
           torqueNm: 1.8,
           toolType: 'PZ2 十字绝缘螺丝刀',
@@ -107,8 +109,8 @@ export function generateCategorizedWiringSchedule(topology: PlantWideTopology): 
           spec: `${ckt.cable.spec.split('+')[0] || 'BVR 2.5mm²'}`,
           fromComponent: `微断 ${ckt.breaker.model}`,
           fromTerminal: '6 (L3下出线)',
-          toComponent: isVfd ? '变频器 VFD' : `强电端子排 XT1-${panel.panel_id}`,
-          toTerminal: isVfd ? 'T / L3' : '3 (L3端子)',
+          toComponent: isVfd ? '变频器 VFD' : isDolMotor ? '接触器 KM (NXC-09)' : `强电端子排 XT1-${panel.panel_id}`,
+          toTerminal: isVfd ? 'T / L3' : isDolMotor ? '5/L3 (经FR至XT1)' : '3 (L3端子)',
           stripLengthMm: 10,
           torqueNm: 1.8,
           toolType: 'PZ2 十字绝缘螺丝刀',

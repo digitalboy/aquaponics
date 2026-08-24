@@ -202,7 +202,7 @@ export const ToolSidebar: React.FC<ToolSidebarProps> = ({
           {/* 面板内容容器 */}
           <div
             className={`flex-1 ${
-              activeTab === 'json' || activeTab === 'wiring'
+              activeTab === 'json' || activeTab === 'wiring' || activeTab === 'bom'
                 ? 'overflow-hidden flex flex-col p-3 min-h-0'
                 : 'overflow-y-auto p-4 space-y-4'
             } text-xs`}

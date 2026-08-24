@@ -34,8 +34,7 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
   const panelLayouts = subPanels.map((panel) => {
     const circuitCount = panel.circuits.length;
     const width = Math.max(PANEL_PAD_X * 2 + circuitCount * CKT_COL_WIDTH, 380);
-    const hasVfd = panel.circuits.some((c) => c.load.is_vfd_driven);
-    const height = hasVfd ? 720 : 660;
+    const height = 720; // 统一为 720px 高度，保证各箱体排版平齐
 
     const x = currentX;
     currentX += width + PANEL_GAP;
@@ -333,6 +332,8 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
               {panel.circuits.map((ckt: ElectricalCircuit, cIdx: number) => {
                 const cktX = PANEL_PAD_X + cIdx * CKT_COL_WIDTH + 10;
                 const hasVfd = ckt.load.is_vfd_driven;
+                const isMotor = ['pump_motor', 'blower_motor', 'screen_filter', 'actuator_motor', 'dosing_pump'].includes(ckt.load.type);
+                const isDolMotor = !hasVfd && isMotor;
                 const loadFullName = ckt.load.name;
                 const loadDisplayName = truncateText(loadFullName, 7);
                 const is3Phase = ckt.load.rated_voltage_v === 380 || !ckt.load.rated_voltage_v;
@@ -389,7 +390,103 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
                       <title>{`微型断路器: ${ckt.breaker.model} (${ckt.breaker.rated_current_a}A ${ckt.breaker.trip_curve}型)`}</title>
                     </g>
 
-                    {/* 2. 馈电电缆 (Cable) 专用 Hover 区域 (带 4/3 线斜杠符号) */}
+                    {/* 2. 工频直接起动电机回路的 交流接触器 (KM) + 热继电器 (FR) 模块 */}
+                    {isDolMotor && (
+                      <g transform="translate(12, 60)">
+                        {/* 进线连接线 */}
+                        <line x1="30" y1="-16" x2="30" y2="0" stroke="#818cf8" strokeWidth="2" />
+
+                        {/* 交流接触器 KM 卡片 */}
+                        <g
+                          className="cursor-pointer"
+                          onMouseEnter={(e) => {
+                            onHover?.({
+                              x: e.clientX,
+                              y: e.clientY,
+                              title: `交流接触器 (Contactor): 正泰 NXC-09`,
+                              badge: 'AC-3 9A (3P 380V)',
+                              badgeVariant: 'warning',
+                              details: [
+                                { label: '受控设备', value: `${loadFullName} (${ckt.circuit_id})` },
+                                { label: '主触头极数', value: '3P 380V (额定工作电流 9A)' },
+                                { label: '线圈控制电压', value: '24VDC / 220VAC (由 PLC 中继驱动)' },
+                                { label: '辅助触点', value: '1NO (常开状态反馈)' },
+                                { label: '机械/电寿命', value: '1000 万次 / 100 万次' },
+                              ],
+                            });
+                          }}
+                          onMouseMove={(e) => {
+                            onHover?.({
+                              x: e.clientX,
+                              y: e.clientY,
+                              title: `交流接触器 (Contactor): 正泰 NXC-09`,
+                              badge: 'AC-3 9A (3P 380V)',
+                              badgeVariant: 'warning',
+                              details: [
+                                { label: '受控设备', value: `${loadFullName} (${ckt.circuit_id})` },
+                                { label: '主触头极数', value: '3P 380V (额定工作电流 9A)' },
+                                { label: '线圈控制电压', value: '24VDC / 220VAC (由 PLC 中继驱动)' },
+                                { label: '辅助触点', value: '1NO (常开状态反馈)' },
+                                { label: '机械/电寿命', value: '1000 万次 / 100 万次' },
+                              ],
+                            });
+                          }}
+                          onMouseLeave={() => onHover?.(null)}
+                        >
+                          <rect width="60" height="32" rx="6" fill="#1e1b4b" stroke="#818cf8" strokeWidth="1.5" className="hover:stroke-indigo-300 hover:fill-indigo-950 transition" />
+                          <text x="30" y="21" fill="#c7d2fe" fontSize="11" fontWeight="black" textAnchor="middle" className="font-cad">
+                            KM (9A)
+                          </text>
+                        </g>
+
+                        {/* 接触器到热继电器中间连线 */}
+                        <line x1="30" y1="32" x2="30" y2="44" stroke="#818cf8" strokeWidth="2" />
+
+                        {/* 热过载继电器 FR 卡片 */}
+                        <g
+                          transform="translate(0, 44)"
+                          className="cursor-pointer"
+                          onMouseEnter={(e) => {
+                            onHover?.({
+                              x: e.clientX,
+                              y: e.clientY,
+                              title: `热过载保护继电器: 正泰 NXR-12`,
+                              badge: '双金属片热保护',
+                              badgeVariant: 'warning',
+                              details: [
+                                { label: '受控设备', value: loadFullName },
+                                { label: '整定电流范围', value: `${(ckt.load.rated_current_a * 1.05).toFixed(1)} A (按额定电流 1.05 倍整定)` },
+                                { label: '脱扣级别', value: 'Class 10A (反时限过载热脱扣)' },
+                                { label: '断相保护', value: '内置差动断相保护机构' },
+                              ],
+                            });
+                          }}
+                          onMouseMove={(e) => {
+                            onHover?.({
+                              x: e.clientX,
+                              y: e.clientY,
+                              title: `热过载保护继电器: 正泰 NXR-12`,
+                              badge: '双金属片热保护',
+                              badgeVariant: 'warning',
+                              details: [
+                                { label: '受控设备', value: loadFullName },
+                                { label: '整定电流范围', value: `${(ckt.load.rated_current_a * 1.05).toFixed(1)} A (按额定电流 1.05 倍整定)` },
+                                { label: '脱扣级别', value: 'Class 10A (反时限过载热脱扣)' },
+                                { label: '断相保护', value: '内置差动断相保护机构' },
+                              ],
+                            });
+                          }}
+                          onMouseLeave={() => onHover?.(null)}
+                        >
+                          <rect width="60" height="24" rx="4" fill="#31101e" stroke="#f43f5e" strokeWidth="1.5" className="hover:stroke-rose-300 hover:fill-rose-950 transition" />
+                          <text x="30" y="16" fill="#fecdd3" fontSize="10" fontWeight="bold" textAnchor="middle" className="font-cad">
+                            FR 热保
+                          </text>
+                        </g>
+                      </g>
+                    )}
+
+                    {/* 3. 馈电电缆 (Cable) 专用 Hover 区域 (带 4/3 线斜杠符号) */}
                     <g
                       className="cursor-pointer"
                       onMouseEnter={(e) => {
@@ -426,26 +523,47 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
                       }}
                       onMouseLeave={() => onHover?.(null)}
                     >
-                      <line x1="42" y1="44" x2="42" y2={hasVfd ? 130 : 140} stroke="#64748b" strokeWidth="2.5" className="hover:stroke-sky-400 transition" />
+                      {/* 如果是变频器或接触器直起回路，走线起始与结束高度调整 */}
+                      <line
+                        x1="42"
+                        y1={hasVfd ? 44 : isDolMotor ? 128 : 44}
+                        x2="42"
+                        y2={hasVfd ? 130 : isDolMotor ? 200 : 140}
+                        stroke="#64748b"
+                        strokeWidth="2.5"
+                        className="hover:stroke-sky-400 transition"
+                      />
                       
                       {/* 斜杠线数标示 (4线/3线) */}
-                      <g transform="translate(36, 68)">
+                      <g transform={`translate(36, ${hasVfd ? 68 : isDolMotor ? 150 : 68})`}>
                         <line x1="0" y1="8" x2="12" y2="0" stroke="#64748b" strokeWidth="1.5" />
                         <text x="13" y="6" fill="#94a3b8" fontSize="9" fontWeight="bold" className="font-cad">
                           {is3Phase ? '4' : '3'}
                         </text>
                       </g>
 
-                      <text x="50" y="85" fill="#94a3b8" fontSize="11" className="font-cad hover:fill-sky-300 font-bold">
+                      <text
+                        x="50"
+                        y={hasVfd ? 85 : isDolMotor ? 165 : 85}
+                        fill="#94a3b8"
+                        fontSize="11"
+                        className="font-cad hover:fill-sky-300 font-bold"
+                      >
                         {ckt.cable.spec}
                       </text>
-                      <text x="50" y="103" fill="#64748b" fontSize="10.5" className="font-cad">
+                      <text
+                        x="50"
+                        y={hasVfd ? 103 : isDolMotor ? 183 : 103}
+                        fill="#64748b"
+                        fontSize="10.5"
+                        className="font-cad"
+                      >
                         L={ckt.cable.length_m}m
                       </text>
                       <title>{`电缆型号: ${ckt.cable.spec} (长度 ${ckt.cable.length_m}m)`}</title>
                     </g>
 
-                    {/* 3. 变频驱动器 (VFD) 专用 Hover 区域 */}
+                    {/* 4. 变频驱动器 (VFD) 专用 Hover 区域 */}
                     {hasVfd && (
                       <g
                         transform="translate(12, 130)"
@@ -491,9 +609,9 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
                       </g>
                     )}
 
-                    {/* 4. 受电设备/水泵/电机 (Motor Load) 专用 Hover 区域 */}
+                    {/* 5. 受电设备/水泵/电机 (Motor Load) 专用 Hover 区域 (统一在 Y = 200 高度对齐) */}
                     <g
-                      transform={`translate(12, ${hasVfd ? 200 : 140})`}
+                      transform={`translate(12, ${hasVfd || isDolMotor ? 200 : 140})`}
                       className="cursor-pointer"
                       onMouseEnter={(e) => {
                         onHover?.({
@@ -507,7 +625,7 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
                             { label: '回路编号', value: ckt.circuit_id },
                             { label: '额定有功功率', value: `${ckt.load.rated_power_kw} kW` },
                             { label: '计算负荷电流', value: `${ckt.load.rated_current_a} A` },
-                            { label: '驱动控制方式', value: hasVfd ? '变频驱动 (VFD)' : '直接工频起动 (DOL)' },
+                            { label: '驱动控制方式', value: hasVfd ? '变频驱动 (VFD 调速)' : '交流接触器工频直起 (DOL + FR热保)' },
                             { label: '所属动力配电箱', value: `${panel.name} (${panel.panel_id})` },
                           ],
                         });
@@ -524,7 +642,7 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
                             { label: '回路编号', value: ckt.circuit_id },
                             { label: '额定有功功率', value: `${ckt.load.rated_power_kw} kW` },
                             { label: '计算负荷电流', value: `${ckt.load.rated_current_a} A` },
-                            { label: '驱动控制方式', value: hasVfd ? '变频驱动 (VFD)' : '直接工频起动 (DOL)' },
+                            { label: '驱动控制方式', value: hasVfd ? '变频驱动 (VFD 调速)' : '交流接触器工频直起 (DOL + FR热保)' },
                             { label: '所属动力配电箱', value: `${panel.name} (${panel.panel_id})` },
                           ],
                         });
