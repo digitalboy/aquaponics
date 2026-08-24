@@ -1,0 +1,36 @@
+{
+  "name": "@aquaponics/schema",
+  "version": "1.0.0",
+  "description": "数字化农业工厂统一全要素数据契约与 Zod 规则引擎 (SSOT)",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./electrical": {
+      "types": "./src/electrical/index.ts",
+      "import": "./src/electrical/index.ts"
+    },
+    "./hydraulic": {
+      "types": "./src/hydraulic/index.ts",
+      "import": "./src/hydraulic/index.ts"
+    },
+    "./common": {
+      "types": "./src/common/index.ts",
+      "import": "./src/common/index.ts"
+    }
+  },
+  "scripts": {
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@aquaponics/tsconfig": "workspace:*",
+    "typescript": "^5.4.5"
+  }
+}

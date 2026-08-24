@@ -1,0 +1,355 @@
+{
+  "schema_version": "2.0.0",
+  "system_id": "SYS-AQUA-PLANT-01",
+  "facility_name": "数字化鱼菜共生农业工厂（01号车间 一期全要素闭环项目）",
+  "workshop_code": "WS-01-AQUA-HYDRO",
+  "voltage_system": "TN-S 380V/220V 50Hz",
+  "updated_at": "2026-08-23T11:30:00.000Z",
+
+  "power_distribution": {
+    "transformer_capacity_kva": 100,
+    "main_incomer": {
+      "panel_id": "AP-MAIN",
+      "name": "一级动力配电总柜",
+      "physical_location": "配电中控室 (进线口立柱旁)",
+      "main_breaker": {
+        "brand": "正泰 (CHNT)",
+        "model": "NXM-250S/3300",
+        "poles": "3P",
+        "rated_current_a": 160,
+        "trip_curve": "D",
+        "breaking_capacity_ka": 36,
+        "magnetic_trip_instant_a": 1600,
+        "status": "CLOSED"
+      },
+      "metering": {
+        "meter_model": "威胜 DTSD342-P5 (三相导轨式)",
+        "ct_ratio": "200/5",
+        "ct_brand_and_model": "丁本 DBKCT24 (开口式孔径24mm)"
+      },
+      "spd_surge_protection": {
+        "nominal_discharge_current_ka": 40,
+        "test_class": "T1"
+      }
+    },
+    "sub_panels": [
+      {
+        "panel_id": "AP-AQUA",
+        "name": "二级养殖动力配电箱",
+        "ip_rating": "IP65",
+        "physical_location": "循环水泵房与生化池旁",
+        "incoming_switch": {
+          "brand": "正泰 (CHNT)",
+          "model": "NXB-63",
+          "poles": "3P",
+          "rated_current_a": 63,
+          "trip_curve": "D",
+          "breaking_capacity_ka": 6,
+          "status": "CLOSED"
+        },
+        "feeder_cable": {
+          "cable_type": "YJV",
+          "spec": "4x16 + 1x10",
+          "conductors": {
+            "live_conductors_count": 3,
+            "live_cross_section_mm2": 16,
+            "has_neutral": true,
+            "neutral_cross_section_mm2": 16,
+            "pe_cross_section_mm2": 10
+          },
+          "installation_method": "CT",
+          "length_m": 45,
+          "allowable_ampacity_a": 80,
+          "calculated_voltage_drop_pct": 0.95
+        },
+        "circuits": [
+          {
+            "circuit_id": "WL-AQUA-01",
+            "name": "#1 变频主水循环泵",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 16, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "YJV", "spec": "4x2.5 + 1x2.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 12, "allowable_ampacity_a": 24, "calculated_voltage_drop_pct": 0.35 },
+            "load": {
+              "device_id": "PUMP-RAS-01",
+              "name": "1号养殖主循环泵",
+              "type": "pump_motor",
+              "rated_power_kw": 3.0,
+              "rated_voltage_v": 380,
+              "rated_current_a": 6.4,
+              "is_vfd_driven": true,
+              "duty_cycle_hours_per_day": 24,
+              "vfd_config": {
+                "vfd_brand": "汇川 (Inovance)",
+                "vfd_model": "MD290-037G",
+                "rated_power_kw": 3.7,
+                "control_terminals": { "start_stop_di": "DI1 (无源干触点)", "fault_relay": "TA/TC (常闭故障报警)", "analog_freq_input": "AI1 (0~10V)" }
+              }
+            },
+            "telemetry": { "timestamp": "2026-08-23T11:30:00.000Z", "current_a": 6.38, "power_kw": 2.85, "status": "RUNNING" }
+          },
+          {
+            "circuit_id": "WL-AQUA-02",
+            "name": "#2 变频主水循环泵",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 16, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "YJV", "spec": "4x2.5 + 1x2.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 14, "allowable_ampacity_a": 24, "calculated_voltage_drop_pct": 0.41 },
+            "load": {
+              "device_id": "PUMP-RAS-02",
+              "name": "2号养殖主循环泵",
+              "type": "pump_motor",
+              "rated_power_kw": 3.0,
+              "rated_voltage_v": 380,
+              "rated_current_a": 6.4,
+              "is_vfd_driven": true,
+              "duty_cycle_hours_per_day": 24
+            }
+          },
+          {
+            "circuit_id": "WL-AQUA-03",
+            "name": "#3 备用主水循环泵",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 16, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "YJV", "spec": "4x2.5 + 1x2.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 16, "allowable_ampacity_a": 24, "calculated_voltage_drop_pct": 0.46 },
+            "load": {
+              "device_id": "PUMP-RAS-03",
+              "name": "3号养殖备用循环泵 (PLC自投)",
+              "type": "pump_motor",
+              "rated_power_kw": 3.0,
+              "rated_voltage_v": 380,
+              "rated_current_a": 6.4,
+              "is_vfd_driven": true,
+              "duty_cycle_hours_per_day": 0
+            }
+          },
+          {
+            "circuit_id": "WL-AQUA-04",
+            "name": "#1 变频高压充氧罗茨风机",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 20, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "YJV", "spec": "4x4.0 + 1x4.0", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 4.0, "has_neutral": true, "neutral_cross_section_mm2": 4.0, "pe_cross_section_mm2": 4.0 }, "installation_method": "CT", "length_m": 10, "allowable_ampacity_a": 32, "calculated_voltage_drop_pct": 0.28 },
+            "load": {
+              "device_id": "BLOWER-RAS-01",
+              "name": "1号主供气罗茨风机",
+              "type": "blower_motor",
+              "rated_power_kw": 3.7,
+              "rated_voltage_v": 380,
+              "rated_current_a": 7.8,
+              "is_vfd_driven": true,
+              "duty_cycle_hours_per_day": 24
+            },
+            "telemetry": { "timestamp": "2026-08-23T11:30:00.000Z", "current_a": 7.52, "power_kw": 3.42, "status": "RUNNING" }
+          },
+          {
+            "circuit_id": "WL-AQUA-05",
+            "name": "#2 备用充氧罗茨风机",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 20, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "YJV", "spec": "4x4.0 + 1x4.0", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 4.0, "has_neutral": true, "neutral_cross_section_mm2": 4.0, "pe_cross_section_mm2": 4.0 }, "installation_method": "CT", "length_m": 12, "allowable_ampacity_a": 32, "calculated_voltage_drop_pct": 0.33 },
+            "load": {
+              "device_id": "BLOWER-RAS-02",
+              "name": "2号备用罗茨风机",
+              "type": "blower_motor",
+              "rated_power_kw": 3.7,
+              "rated_voltage_v": 380,
+              "rated_current_a": 7.8,
+              "is_vfd_driven": true,
+              "duty_cycle_hours_per_day": 0
+            }
+          },
+          {
+            "circuit_id": "WL-AQUA-06",
+            "name": "滚筒微滤机旋转马达",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 6, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "YJV", "spec": "4x1.5 + 1x1.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 1.5, "has_neutral": true, "neutral_cross_section_mm2": 1.5, "pe_cross_section_mm2": 1.5 }, "installation_method": "CT", "length_m": 8, "allowable_ampacity_a": 18, "calculated_voltage_drop_pct": 0.15 },
+            "load": {
+              "device_id": "FILTER-DRUM-01",
+              "name": "微滤机滚筒马达",
+              "type": "screen_filter",
+              "rated_power_kw": 0.75,
+              "rated_voltage_v": 380,
+              "rated_current_a": 1.8,
+              "is_vfd_driven": false,
+              "duty_cycle_hours_per_day": 6
+            }
+          }
+        ]
+      },
+      {
+        "panel_id": "AP-HYDRO",
+        "name": "二级水培动力配电箱",
+        "ip_rating": "IP65",
+        "physical_location": "4条水培跑道前端/调理池旁",
+        "incoming_switch": {
+          "brand": "正泰 (CHNT)",
+          "model": "NXB-63",
+          "poles": "3P",
+          "rated_current_a": 40,
+          "trip_curve": "D",
+          "breaking_capacity_ka": 6,
+          "status": "CLOSED"
+        },
+        "feeder_cable": {
+          "cable_type": "YJV",
+          "spec": "4x10 + 1x6",
+          "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 10, "has_neutral": true, "neutral_cross_section_mm2": 10, "pe_cross_section_mm2": 6 },
+          "installation_method": "CT",
+          "length_m": 65,
+          "allowable_ampacity_a": 58,
+          "calculated_voltage_drop_pct": 1.18
+        },
+        "circuits": [
+          {
+            "circuit_id": "WL-HYDRO-01",
+            "name": "A跑道深水增氧射流泵",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 10, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "YJV", "spec": "4x2.5 + 1x2.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 15, "allowable_ampacity_a": 24, "calculated_voltage_drop_pct": 0.42 },
+            "load": { "device_id": "PUMP-HYDRO-01", "name": "A跑道增氧水泵", "type": "pump_motor", "rated_power_kw": 1.5, "rated_voltage_v": 380, "rated_current_a": 3.4, "is_vfd_driven": false, "duty_cycle_hours_per_day": 21 }
+          },
+          {
+            "circuit_id": "WL-HYDRO-02",
+            "name": "B跑道深水增氧射流泵",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 10, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "YJV", "spec": "4x2.5 + 1x2.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 25, "allowable_ampacity_a": 24, "calculated_voltage_drop_pct": 0.70 },
+            "load": { "device_id": "PUMP-HYDRO-02", "name": "B跑道增氧水泵", "type": "pump_motor", "rated_power_kw": 1.5, "rated_voltage_v": 380, "rated_current_a": 3.4, "is_vfd_driven": false, "duty_cycle_hours_per_day": 21 }
+          },
+          {
+            "circuit_id": "WL-HYDRO-05",
+            "name": "调理池脉冲加药/搅拌泵",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 6, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "YJV", "spec": "4x1.5 + 1x1.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 1.5, "has_neutral": true, "neutral_cross_section_mm2": 1.5, "pe_cross_section_mm2": 1.5 }, "installation_method": "CT", "length_m": 8, "allowable_ampacity_a": 18, "calculated_voltage_drop_pct": 0.12 },
+            "load": { "device_id": "PUMP-MIX-01", "name": "调理池加药搅拌泵", "type": "dosing_pump", "rated_power_kw": 0.25, "rated_voltage_v": 380, "rated_current_a": 0.8, "is_vfd_driven": false, "duty_cycle_hours_per_day": 4 }
+          }
+        ]
+      },
+      {
+        "panel_id": "AP-CTRL",
+        "name": "弱电控制中枢与办公配电",
+        "ip_rating": "IP65",
+        "physical_location": "中控室操作工位",
+        "incoming_switch": {
+          "brand": "正泰 (CHNT)",
+          "model": "NXB-63",
+          "poles": "2P",
+          "rated_current_a": 20,
+          "trip_curve": "C",
+          "breaking_capacity_ka": 6,
+          "status": "CLOSED"
+        },
+        "feeder_cable": {
+          "cable_type": "YJV",
+          "spec": "3x4 + 1x2.5",
+          "conductors": { "live_conductors_count": 1, "live_cross_section_mm2": 4.0, "has_neutral": true, "neutral_cross_section_mm2": 4.0, "pe_cross_section_mm2": 2.5 },
+          "installation_method": "CT",
+          "length_m": 30,
+          "allowable_ampacity_a": 36,
+          "calculated_voltage_drop_pct": 0.42
+        },
+        "circuits": [
+          {
+            "circuit_id": "WL-CTRL-01",
+            "name": "1kVA 在线式工控 UPS 供电",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "2P", "rated_current_a": 16, "trip_curve": "C", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "RVV", "spec": "3x2.5", "conductors": { "live_conductors_count": 1, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 5, "allowable_ampacity_a": 20, "calculated_voltage_drop_pct": 0.12 },
+            "load": { "device_id": "UPS-HUB-01", "name": "工控中台 UPS", "type": "ups_it_load", "rated_power_kw": 1.0, "rated_voltage_v": 220, "rated_current_a": 4.5, "is_vfd_driven": false, "duty_cycle_hours_per_day": 24 }
+          }
+        ]
+      }
+    ]
+  },
+
+  "dc_and_ups_system": {
+    "ups_unit": {
+      "brand": "山特 / 华为",
+      "model": "C1K 在线双变换式工控 UPS",
+      "capacity_kva": 1.0,
+      "battery_spec": "24V 20Ah 密闭铅酸/铁锂电池组",
+      "backup_hours_at_full_load": 5.1
+    },
+    "dc_power_supply": {
+      "brand": "明纬 (MeanWell)",
+      "model": "NDR-120-24",
+      "output_voltage_v": 24,
+      "output_current_a": 5,
+      "max_measured_line_drop_v": 0.59
+    }
+  },
+
+  "plc_controller": {
+    "controller_brand": "汇川 (Inovance)",
+    "controller_model": "Easy320-1614TN",
+    "ip_address": "192.168.1.10",
+    "port": 502,
+    "protocol": "Modbus-TCP",
+    "digital_inputs": [
+      { "point_id": "X01", "signal_name": "RAIN-DI-ALARM", "description": "室外气象站雨雪常闭硬触点 (0.1s关天窗)", "contact_type": "NC", "wire_id": "OUT-DI-RAIN" },
+      { "point_id": "X04", "signal_name": "FISH-DI-LV01", "description": "1号鱼池防溢/防干烧浮球开关", "contact_type": "NC", "wire_id": "LV-FISH-01" },
+      { "point_id": "X05", "signal_name": "VFD-PUMP-FAULT", "description": "1号水泵变频器故障继电器反馈", "contact_type": "NC", "wire_id": "ALM-PUMP-01" }
+    ],
+    "digital_outputs": [
+      { "point_id": "Y01", "signal_name": "PUMP-DO-RUN01", "description": "1号循环水泵启停控制继电器", "wire_id": "PUMP-RUN-01" },
+      { "point_id": "Y02", "signal_name": "VALVE-DO-BLOW", "description": "24V 荧光 DO 探头气动吹扫电磁阀", "wire_id": "AIR-VALVE-01" }
+    ]
+  },
+
+  "rs485_fieldbus": {
+    "bus_id": "BUS-RS485-MAIN",
+    "topology_type": "Daisy-Chain-Hand-In-Hand",
+    "has_120_ohm_terminator_at_end": true,
+    "slaves": [
+      { "slave_address_hex": "0x01", "device_name": "威胜 DTSD342-P5 三相智能电表", "manufacturer_and_model": "威胜信息", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 1000 },
+      { "slave_address_hex": "0x02", "device_name": "在线氨氮/pH/水温三合一传感器", "manufacturer_and_model": "山东塞恩 SN-3003", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 2000 },
+      { "slave_address_hex": "0x03", "device_name": "工业荧光法 DO 探头 (全不锈钢质保3年)", "manufacturer_and_model": "深圳国数 BSK-DO-100", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 500 },
+      { "slave_address_hex": "0x04", "device_name": "调理池双盐桥 pH / 四电极 EC 变送器", "manufacturer_and_model": "联测 SUP-PH5018 / EC2.0", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 1000 },
+      { "slave_address_hex": "0x08", "device_name": "室外六要素超声波一体化微气象站", "manufacturer_and_model": "竞道 FT-WQX6", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 5000 },
+      { "slave_address_hex": "0x11", "device_name": "1号立柱立体 3D 测温测湿百叶箱", "manufacturer_and_model": "仁科 SHT35", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 5000 }
+    ]
+  },
+
+  "edge_and_network": {
+    "edge_ipc": {
+      "brand_and_model": "研华 UNO-2271G-V2 (Intel N6210 / 8GB / 128GB SSD)",
+      "ip_address": "192.168.1.50",
+      "os": "Ubuntu 22.04 LTS (无风扇嵌入式工控机)",
+      "services_running": ["modbus_bridge_5s", "yolo11_feeding_inference", "cloudflare_d1_sync"]
+    },
+    "poe_switch": {
+      "model": "TP-Link TL-SL1218P (16PoE + 2千兆上联)",
+      "total_power_budget_w": 150
+    },
+    "nvr_recorder": {
+      "model": "海康威视 DS-7816N-Q2 (16路高清 NVR)",
+      "ip_address": "192.168.1.100",
+      "storage_capacity_tb": 4
+    },
+    "ip_cameras": [
+      { "camera_id": "CAM-FISH-01", "ip_address": "192.168.1.101", "location_and_target": "1号成鱼池水面高清枪机 (YOLO11 摄食监测)", "poe_powered": true },
+      { "camera_id": "CAM-HYDRO-01", "ip_address": "192.168.1.105", "location_and_target": "A跑道水培生菜冠层俯拍枪机", "poe_powered": true }
+    ]
+  },
+
+  "cabling_system": {
+    "cat5e_stp_pinout": {
+      "pair1_blue_white_blue": "RS485-A (Data+) / RS485-B (Data-)",
+      "pair2_3_orange_green_parallel": "DC +24V Power Positive (4 cores parallel, 0.8mm²)",
+      "pair4_brown_white_brown": "DC 0V / GND Power Negative (2 cores parallel, 0.4mm²)",
+      "shield_pe": "Control Cabinet PE Single-End Earthing Only"
+    },
+    "rvsp_m12_pinout": {
+      "pin1_brown": "DC +24V",
+      "pin2_white": "RS485-A (Data+)",
+      "pin3_blue": "DC 0V / GND",
+      "pin4_black": "RS485-B (Data-)"
+    },
+    "containment_trays": {
+      "tray_material": "热浸锌槽式 + 镀锌网格 (厚度 ≥65μm)",
+      "upper_power_tray_spec": "200x100x2.0mm 封闭槽式 (敷设 380V/220V)",
+      "lower_data_tray_spec": "200x50mm 镀锌网格式 (敷设 485/网线/24V)",
+      "vertical_clearance_mm": 350
+    }
+  },
+
+  "earthing_system": {
+    "measured_earthing_resistance_ohm": 0.82,
+    "meb_box_location": "配电主控制室主进线柜旁",
+    "spd_levels": {
+      "level1_main_panel": "40kA T1",
+      "level2_sub_panels": "20kA T2",
+      "level3_control_cabinet": "10kA 精细保护"
+    }
+  }
+}

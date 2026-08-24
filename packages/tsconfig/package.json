@@ -1,0 +1,13 @@
+{
+  "name": "@aquaponics/tsconfig",
+  "version": "1.0.0",
+  "private": true,
+  "description": "数字化农业工厂 Monorepo 统一 TypeScript 编译基准配置",
+  "files": [
+    "base.json"
+  ],
+  "exports": {
+    "./base.json": "./base.json",
+    "./*": "./*"
+  }
+}

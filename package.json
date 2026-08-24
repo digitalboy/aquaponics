@@ -1,0 +1,20 @@
+{
+  "name": "@aquaponics/monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "数字化农业工厂大型全栈工程 Monorepo (8大子系统与工业CAD生态)",
+  "type": "module",
+  "scripts": {
+    "dev:elecpal": "pnpm --filter @aquaponics/elecpal dev",
+    "build": "turbo run build",
+    "build:elecpal": "pnpm --filter @aquaponics/elecpal build",
+    "check": "turbo run check",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.4",
+    "typescript": "^5.4.5"
+  },
+  "packageManager": "pnpm@9.1.0"
+}

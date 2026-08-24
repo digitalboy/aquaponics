@@ -1,0 +1,8 @@
+name = "aquaponics-elecpal"
+compatibility_date = "2024-08-01"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "aquaponics-db"
+database_id = "d30b8610-9837-46a4-9f46-ba8a942d2ef2"

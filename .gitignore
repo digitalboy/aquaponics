@@ -1,22 +1,62 @@
-# Agents and skills
-.agents/
-.agent/
-.agernt/
-skills-lock.json
+# =============================================================================
+# 数字化农业工厂 Monorepo · Git 忽略配置规范 (.gitignore)
+# 涵盖: pnpm / Turborepo / Vite / Cloudflare Pages & Workers / Firebase / IDE
+# =============================================================================
 
-# Environment and secrets
+# 1. 依赖包管理 (Dependencies)
+node_modules/
+.pnpm-store/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-debug.log*
+
+# 2. 构建产物与缓存 (Build Outputs & Cache)
+dist/
+build/
+out/
+.output/
+.turbo/
+.cache/
+.next/
+*.tsbuildinfo
+.eslintcache
+
+# 3. 环境变量与安全凭证 (Env & Secrets)
 .env
 .env.*
 !.env.example
 
-# Node / Dependencies
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# 4. Cloudflare (Pages / Workers / Wrangler)
+.wrangler/
+.mf/
 
-# IDE and OS
+# 5. Firebase & 云端调试日志 (Firebase Emulators & Logs)
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
+
+# 6. 测试与覆盖率产物 (Testing & Coverage)
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+
+# 7. IDE 与操作系统生成文件 (IDE & OS)
 .DS_Store
 Thumbs.db
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 .idea/
+*.swp
+*.swo
+*~
+
+# 8. Agent 与技能配置 (Customizations)
+.agents/
+.agent/
+.agernt/
+skills-lock.json

@@ -1,0 +1,31 @@
+{
+  "extends": "../../packages/tsconfig/base.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "strict": true,
+    "jsx": "react-jsx",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["web/*"],
+      "@aquaponics/schema": ["../../packages/schema/src/index.ts"],
+      "@aquaponics/schema/*": ["../../packages/schema/src/*"],
+      "@core/*": ["src/core/*"],
+      "@renderers/*": ["src/renderers/*"],
+      "@services/*": ["src/services/*"],
+      "@config/*": ["src/config/*"],
+      "@ai/*": ["src/ai/*"]
+    }
+  },
+  "include": ["src/**/*", "web/**/*"]
+}
