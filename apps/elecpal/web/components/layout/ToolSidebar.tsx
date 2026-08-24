@@ -5,6 +5,7 @@ import {
   FileSpreadsheet,
   Folder,
   FileCode,
+  ListOrdered,
 } from 'lucide-react';
 import { ERCValidationResult } from '@core/erc-validator';
 import { LoadCalculationSummary } from '@core/calculator';
@@ -13,13 +14,15 @@ import { TopologyVersionSnapshot } from '@services/project-service';
 import { ERCPanel } from '../panels/ERCPanel';
 import { LoadCalcPanel } from '../panels/LoadCalcPanel';
 import { BOMPanel } from '../panels/BOMPanel';
+import { WiringPanel } from '../panels/WiringPanel';
 import { ProjectsPanel } from '../panels/ProjectsPanel';
 import { JsonEditorPanel } from '../panels/JsonEditorPanel';
 
-export type SidebarTab = 'erc' | 'calc' | 'bom' | 'projects' | 'json' | null;
+export type SidebarTab = 'erc' | 'calc' | 'bom' | 'wiring' | 'projects' | 'json' | null;
 
 interface ToolSidebarProps {
   activeTab: SidebarTab;
+  activeSheet: number;
   onTabChange: (tab: SidebarTab) => void;
   ercResult: ERCValidationResult | null;
   calcReport: LoadCalculationSummary | null;
@@ -34,6 +37,7 @@ interface ToolSidebarProps {
 
 export const ToolSidebar: React.FC<ToolSidebarProps> = ({
   activeTab,
+  activeSheet,
   onTabChange,
   ercResult,
   calcReport,
@@ -96,6 +100,19 @@ export const ToolSidebar: React.FC<ToolSidebarProps> = ({
             <FileSpreadsheet className="size-5" />
           </button>
 
+          {/* 📋 点对点接线表 (施工防呆) */}
+          <button
+            onClick={() => onTabChange(activeTab === 'wiring' ? null : 'wiring')}
+            className={`size-9 rounded-xl flex items-center justify-center transition ${
+              activeTab === 'wiring'
+                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40 shadow-sm'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+            }`}
+            title="施工级点对点接线表 (From-To List) & 线号管打字机数据"
+          >
+            <ListOrdered className="size-5" />
+          </button>
+
           {/* 📁 多工程与快照 */}
           <button
             onClick={() => onTabChange(activeTab === 'projects' ? null : 'projects')}
@@ -153,6 +170,12 @@ export const ToolSidebar: React.FC<ToolSidebarProps> = ({
                   <span>全厂设备采购 BOM 清单</span>
                 </>
               )}
+              {activeTab === 'wiring' && (
+                <>
+                  <ListOrdered className="size-4 text-amber-400" />
+                  <span>施工级接线表 (From-To List)</span>
+                </>
+              )}
               {activeTab === 'projects' && (
                 <>
                   <Folder className="size-4 text-amber-400" />
@@ -176,15 +199,18 @@ export const ToolSidebar: React.FC<ToolSidebarProps> = ({
             </button>
           </div>
 
-          {/* 面板内容容器 (JSON 模式下自适应撑满，消灭双滚动条) */}
+          {/* 面板内容容器 */}
           <div
             className={`flex-1 ${
-              activeTab === 'json' ? 'overflow-hidden flex flex-col p-3 min-h-0' : 'overflow-y-auto p-4 space-y-4'
+              activeTab === 'json' || activeTab === 'wiring'
+                ? 'overflow-hidden flex flex-col p-3 min-h-0'
+                : 'overflow-y-auto p-4 space-y-4'
             } text-xs`}
           >
             {activeTab === 'erc' && <ERCPanel ercResult={ercResult} />}
             {activeTab === 'calc' && <LoadCalcPanel calcReport={calcReport} />}
             {activeTab === 'bom' && <BOMPanel topology={topology} onExportBOM={onExportBOM} />}
+            {activeTab === 'wiring' && <WiringPanel topology={topology} activeSheet={activeSheet} />}
             {activeTab === 'projects' && (
               <ProjectsPanel snapshots={snapshots} onCommitSnapshot={onCommitSnapshot} />
             )}

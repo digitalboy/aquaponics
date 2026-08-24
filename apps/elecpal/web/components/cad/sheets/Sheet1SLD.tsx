@@ -11,11 +11,17 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
   const subPanels = topology.power_distribution.sub_panels || [];
 
   const MAIN_BOX_X = 60;
-  const MAIN_BOX_Y = 70;
+  const MAIN_BOX_Y = 60;
   const MAIN_BOX_W = 280;
-  const MAIN_BOX_H = 150;
+  const MAIN_BOX_H = 160;
 
-  const BUS_Y = 145;
+  // 五线铜排母线 Y 坐标定义 (TN-S 380V/220V 50Hz)
+  const BUS_L1_Y = 115;
+  const BUS_L2_Y = 128;
+  const BUS_L3_Y = 141;
+  const BUS_N_Y = 154;
+  const BUS_PE_Y = 167;
+
   const BUS_START_X = MAIN_BOX_X + MAIN_BOX_W;
 
   const SUBPANEL_START_X = 400;
@@ -49,7 +55,7 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
     <g>
       {/* 1. 10kV 进线与 10/0.4kV 变压器 */}
       <g
-        transform={`translate(${MAIN_BOX_X - 10}, ${MAIN_BOX_Y - 45})`}
+        transform={`translate(${MAIN_BOX_X - 10}, ${MAIN_BOX_Y - 40})`}
         className="cursor-pointer"
         onMouseEnter={(e) => {
           onHover?.({
@@ -83,13 +89,13 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
         }}
         onMouseLeave={() => onHover?.(null)}
       >
-        <text x="0" y="20" fill="#94a3b8" fontSize="11" fontWeight="bold" className="font-cad">
-          10kV 高压进线 ➔
+        <text x="0" y="20" fill="#94a3b8" fontSize="12" fontWeight="bold" className="font-cad">
+          10kV 高压电网进线 ➔
         </text>
-        <circle cx="125" cy="16" r="14" fill="none" stroke="#f59e0b" strokeWidth="2" />
-        <circle cx="140" cy="16" r="14" fill="none" stroke="#38bdf8" strokeWidth="2" />
-        <text x="165" y="20" fill="#38bdf8" fontSize="11" fontWeight="bold" className="font-cad">
-          10/0.4kV ({topology.power_distribution.transformer_capacity_kva} kVA)
+        <circle cx="145" cy="16" r="14" fill="none" stroke="#f59e0b" strokeWidth="2.5" />
+        <circle cx="160" cy="16" r="14" fill="none" stroke="#38bdf8" strokeWidth="2.5" />
+        <text x="185" y="20" fill="#38bdf8" fontSize="12" fontWeight="bold" className="font-cad">
+          10/0.4kV Dyn11 ({topology.power_distribution.transformer_capacity_kva} kVA)
         </text>
       </g>
 
@@ -107,7 +113,7 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
             details: [
               { label: '主断路器', value: topology.power_distribution.main_incomer.main_breaker.model },
               { label: '主额定电流', value: `${topology.power_distribution.main_incomer.main_breaker.rated_current_a} A` },
-              { label: '进线电压', value: '380V/220V 50Hz (TN-S)' },
+              { label: '进线电压', value: '380V/220V 50Hz (TN-S 三相五线制)' },
               { label: '一级浪涌 (SPD)', value: `${topology.power_distribution.main_incomer.spd_surge_protection.nominal_discharge_current_ka}kA (T1级)` },
             ],
           });
@@ -122,7 +128,7 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
             details: [
               { label: '主断路器', value: topology.power_distribution.main_incomer.main_breaker.model },
               { label: '主额定电流', value: `${topology.power_distribution.main_incomer.main_breaker.rated_current_a} A` },
-              { label: '进线电压', value: '380V/220V 50Hz (TN-S)' },
+              { label: '进线电压', value: '380V/220V 50Hz (TN-S 三相五线制)' },
               { label: '一级浪涌 (SPD)', value: `${topology.power_distribution.main_incomer.spd_surge_protection.nominal_discharge_current_ka}kA (T1级)` },
             ],
           });
@@ -141,7 +147,7 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
         <rect width={MAIN_BOX_W} height="36" rx="12" fill="#1e293b" />
         <text
           x={MAIN_BOX_W / 2}
-          y="23"
+          y="24"
           fill="#f8fafc"
           fontSize="13"
           fontWeight="bold"
@@ -151,24 +157,64 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
           一级动力总配电柜 (AP-MAIN)
         </text>
 
-        <text x="22" y="62" fill="#f59e0b" fontSize="11.5" fontWeight="bold" className="font-cad">
+        <text x="22" y="64" fill="#f59e0b" fontSize="12" fontWeight="bold" className="font-cad">
           主断路器: <tspan fill="#ffffff">{topology.power_distribution.main_incomer.main_breaker.model}</tspan>
         </text>
-        <text x="22" y="92" fill="#94a3b8" fontSize="11" className="font-cad">
-          主额定电流: <tspan fill="#f59e0b" fontWeight="bold">{topology.power_distribution.main_incomer.main_breaker.rated_current_a} A</tspan>
+        <text x="22" y="94" fill="#94a3b8" fontSize="12" className="font-cad">
+          主额定电流: <tspan fill="#f59e0b" fontWeight="bold">{topology.power_distribution.main_incomer.main_breaker.rated_current_a} A (4P/3P+N)</tspan>
         </text>
-        <text x="22" y="122" fill="#38bdf8" fontSize="11" className="font-cad">
+        <text x="22" y="124" fill="#38bdf8" fontSize="12" className="font-cad">
           浪涌保护器: <tspan fill="#ffffff" fontWeight="bold">{topology.power_distribution.main_incomer.spd_surge_protection.nominal_discharge_current_ka}kA (T1级)</tspan>
         </text>
+        <text x="22" y="148" fill="#84cc16" fontSize="11" className="font-cad font-bold">
+          配电制式: TN-S 380V/220V 三相五线
+        </text>
 
-        <circle cx={MAIN_BOX_W} cy={BUS_Y - MAIN_BOX_Y} r="5" fill="#f59e0b" />
+        {/* 出线端子引出点 */}
+        <circle cx={MAIN_BOX_W} cy={BUS_L1_Y - MAIN_BOX_Y} r="4" fill="#eab308" />
+        <circle cx={MAIN_BOX_W} cy={BUS_L2_Y - MAIN_BOX_Y} r="4" fill="#22c55e" />
+        <circle cx={MAIN_BOX_W} cy={BUS_L3_Y - MAIN_BOX_Y} r="4" fill="#ef4444" />
+        <circle cx={MAIN_BOX_W} cy={BUS_N_Y - MAIN_BOX_Y} r="4" fill="#38bdf8" />
+        <circle cx={MAIN_BOX_W} cy={BUS_PE_Y - MAIN_BOX_Y} r="4" fill="#84cc16" />
       </g>
 
-      {/* 3. 380V 主母线 */}
-      <line x1={BUS_START_X} y1={BUS_Y} x2={busEndX} y2={BUS_Y} stroke="#f59e0b" strokeWidth="4" />
-      <text x={BUS_START_X + 30} y={BUS_Y - 14} fill="#f59e0b" fontSize="12" fontWeight="bold" className="font-cad">
-        380V/220V 50Hz TN-S 集中配电母线排 (主干容量 {topology.power_distribution.main_incomer.main_breaker.rated_current_a}A)
-      </text>
+      {/* 3. 380V/220V TN-S 标准五线铜排集中配电母线 (GB/T 18135 合规标准) */}
+      <g>
+        {/* L1 A相 (黄) */}
+        <line x1={BUS_START_X} y1={BUS_L1_Y} x2={busEndX} y2={BUS_L1_Y} stroke="#eab308" strokeWidth="3" />
+        <text x={BUS_START_X + 15} y={BUS_L1_Y - 4} fill="#eab308" fontSize="10.5" fontWeight="black" className="font-cad">
+          L1 (A相 380V)
+        </text>
+
+        {/* L2 B相 (绿) */}
+        <line x1={BUS_START_X} y1={BUS_L2_Y} x2={busEndX} y2={BUS_L2_Y} stroke="#22c55e" strokeWidth="3" />
+        <text x={BUS_START_X + 15} y={BUS_L2_Y - 4} fill="#22c55e" fontSize="10.5" fontWeight="black" className="font-cad">
+          L2 (B相 380V)
+        </text>
+
+        {/* L3 C相 (红) */}
+        <line x1={BUS_START_X} y1={BUS_L3_Y} x2={busEndX} y2={BUS_L3_Y} stroke="#ef4444" strokeWidth="3" />
+        <text x={BUS_START_X + 15} y={BUS_L3_Y - 4} fill="#ef4444" fontSize="10.5" fontWeight="black" className="font-cad">
+          L3 (C相 380V)
+        </text>
+
+        {/* N 中性线 (浅蓝 虚线) */}
+        <line x1={BUS_START_X} y1={BUS_N_Y} x2={busEndX} y2={BUS_N_Y} stroke="#38bdf8" strokeWidth="2.5" strokeDasharray="6 3" />
+        <text x={BUS_START_X + 15} y={BUS_N_Y - 4} fill="#38bdf8" fontSize="10.5" fontWeight="bold" className="font-cad">
+          N (中性线 220V)
+        </text>
+
+        {/* PE 保护接地线 (黄绿 点划线) */}
+        <line x1={BUS_START_X} y1={BUS_PE_Y} x2={busEndX} y2={BUS_PE_Y} stroke="#84cc16" strokeWidth="2.5" strokeDasharray="8 2 2 2" />
+        <text x={BUS_START_X + 15} y={BUS_PE_Y - 4} fill="#84cc16" fontSize="10.5" fontWeight="bold" className="font-cad">
+          PE (保护接地母排)
+        </text>
+
+        {/* 母线整体参数说明 */}
+        <text x={BUS_START_X + 180} y={BUS_L1_Y - 12} fill="#f59e0b" fontSize="12" fontWeight="bold" className="font-cad">
+          380V/220V 50Hz TN-S 集中配电铜排母线 (主干额定容量 {topology.power_distribution.main_incomer.main_breaker.rated_current_a}A)
+        </text>
+      </g>
 
       {/* 4. 各二级动力配电箱组 */}
       {panelLayouts.map(({ panel, x, width, height }) => {
@@ -177,27 +223,48 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
 
         return (
           <g key={panel.panel_id}>
-            {/* 母线 T 接实心连接圆点 */}
-            <circle cx={feederGlobalX} cy={BUS_Y} r="4.5" fill="#f59e0b" />
+            {/* 五线 T 接实心连接圆点群 */}
+            <circle cx={feederGlobalX} cy={BUS_L1_Y} r="3.5" fill="#eab308" />
+            <circle cx={feederGlobalX} cy={BUS_L2_Y} r="3.5" fill="#22c55e" />
+            <circle cx={feederGlobalX} cy={BUS_L3_Y} r="3.5" fill="#ef4444" />
+            <circle cx={feederGlobalX} cy={BUS_N_Y} r="3.5" fill="#38bdf8" />
+            <circle cx={feederGlobalX} cy={BUS_PE_Y} r="3.5" fill="#84cc16" />
             
-            {/* 垂直引下馈电铜排 */}
+            {/* 垂直引下五芯馈电电缆 (带 45° 斜杠 5 线标示) */}
             <line
               x1={feederGlobalX}
-              y1={BUS_Y}
+              y1={BUS_PE_Y}
               x2={feederGlobalX}
               y2={SUBPANEL_TOP_Y}
               stroke="#f59e0b"
               strokeWidth="2.5"
-              strokeDasharray="4 2"
             />
+
+            {/* GB/T 18135 标准 5 导线斜杠规程符号 */}
+            <g transform={`translate(${feederGlobalX - 8}, ${(BUS_PE_Y + SUBPANEL_TOP_Y) / 2 - 15})`}>
+              <line x1="0" y1="12" x2="16" y2="0" stroke="#f59e0b" strokeWidth="2" />
+              <text x="18" y="8" fill="#f59e0b" fontSize="10.5" fontWeight="black" className="font-cad">
+                5
+              </text>
+            </g>
+
             <text
-              x={feederGlobalX + 8}
-              y={(BUS_Y + SUBPANEL_TOP_Y) / 2}
+              x={feederGlobalX + 12}
+              y={(BUS_PE_Y + SUBPANEL_TOP_Y) / 2 + 8}
               fill="#94a3b8"
-              fontSize="9.5"
+              fontSize="11"
               className="font-cad font-bold"
             >
               WDZ-YJY 5x16mm²
+            </text>
+            <text
+              x={feederGlobalX + 12}
+              y={(BUS_PE_Y + SUBPANEL_TOP_Y) / 2 + 24}
+              fill="#64748b"
+              fontSize="10"
+              className="font-cad"
+            >
+              (3L + N + PE)
             </text>
 
             {/* 二级配电箱体 */}
@@ -213,7 +280,7 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
               />
               <rect width={width} height="42" rx="12" fill="#1e293b" />
               
-              <circle cx={feederLocalX} cy="0" r="4" fill="#3b82f6" />
+              <circle cx={feederLocalX} cy="0" r="4.5" fill="#3b82f6" />
 
               <text x="20" y="26" fill="#38bdf8" fontSize="13" fontWeight="bold" className="font-cad">
                 {panel.name} ({panel.panel_id}) - {panel.ip_rating}
@@ -224,7 +291,7 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
                 x={width - 20}
                 y="26"
                 fill="#94a3b8"
-                fontSize="11"
+                fontSize="12"
                 textAnchor="end"
                 className="font-cad cursor-pointer hover:fill-amber-300"
                 onMouseEnter={(e) => {
@@ -262,14 +329,13 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
                 进线总开: <tspan fill="#f59e0b" fontWeight="bold">{panel.incoming_switch.model}</tspan> ({panel.incoming_switch.rated_current_a}A)
               </text>
 
-              {/* ===================================================================== */}
-              {/* 各回路精准解耦 Hover 事件系统 */}
-              {/* ===================================================================== */}
+              {/* 回路垂直正交排版 */}
               {panel.circuits.map((ckt: ElectricalCircuit, cIdx: number) => {
                 const cktX = PANEL_PAD_X + cIdx * CKT_COL_WIDTH + 10;
                 const hasVfd = ckt.load.is_vfd_driven;
                 const loadFullName = ckt.load.name;
                 const loadDisplayName = truncateText(loadFullName, 7);
+                const is3Phase = ckt.load.rated_voltage_v === 380 || !ckt.load.rated_voltage_v;
 
                 return (
                   <g key={ckt.circuit_id} transform={`translate(${cktX}, 65)`}>
@@ -288,6 +354,7 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
                             { label: '断路器型号', value: ckt.breaker.model },
                             { label: '额定工作电流 (In)', value: `${ckt.breaker.rated_current_a} A` },
                             { label: '瞬时脱扣曲线', value: `${ckt.breaker.trip_curve}型 (电机专用 10~14In 启动防误跳)` },
+                            { label: '极数规格', value: is3Phase ? '3P (3相380V动力保护)' : '1P+N / 2P (单相220V)' },
                             { label: '额定短路分断能力', value: '6.0 kA (IEC 60898-1)' },
                             { label: '受控回路与设备', value: `${loadFullName} (${ckt.circuit_id})` },
                           ],
@@ -304,6 +371,7 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
                             { label: '断路器型号', value: ckt.breaker.model },
                             { label: '额定工作电流 (In)', value: `${ckt.breaker.rated_current_a} A` },
                             { label: '瞬时脱扣曲线', value: `${ckt.breaker.trip_curve}型 (电机专用 10~14In 启动防误跳)` },
+                            { label: '极数规格', value: is3Phase ? '3P (3相380V动力保护)' : '1P+N / 2P (单相220V)' },
                             { label: '额定短路分断能力', value: '6.0 kA (IEC 60898-1)' },
                             { label: '受控回路与设备', value: `${loadFullName} (${ckt.circuit_id})` },
                           ],
@@ -316,12 +384,12 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
                         {ckt.breaker.model.split('/')[0]}
                       </text>
                       <text x="42" y="34" fill="#f59e0b" fontSize="11" textAnchor="middle" className="font-cad font-bold">
-                        {ckt.breaker.rated_current_a}A / {ckt.breaker.trip_curve}型
+                        {is3Phase ? '3P' : '1P+N'} {ckt.breaker.rated_current_a}A / {ckt.breaker.trip_curve}型
                       </text>
                       <title>{`微型断路器: ${ckt.breaker.model} (${ckt.breaker.rated_current_a}A ${ckt.breaker.trip_curve}型)`}</title>
                     </g>
 
-                    {/* 2. 馈电电缆 (Cable) 专用 Hover 区域 */}
+                    {/* 2. 馈电电缆 (Cable) 专用 Hover 区域 (带 4/3 线斜杠符号) */}
                     <g
                       className="cursor-pointer"
                       onMouseEnter={(e) => {
@@ -333,6 +401,7 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
                           badgeVariant: 'default',
                           details: [
                             { label: '电缆规格', value: ckt.cable.spec },
+                            { label: '导线芯数', value: is3Phase ? '4芯 (3火L1/L2/L3 + 1地PE)' : '3芯 (1火L + 1零N + 1地PE)' },
                             { label: '敷设长度', value: `${ckt.cable.length_m} 米` },
                             { label: '允许载流量', value: '26 A (远大于负载电流)' },
                             { label: '终端电压降校核', value: '0.42% (完全符合 <5% 国标)' },
@@ -348,6 +417,7 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
                           badgeVariant: 'default',
                           details: [
                             { label: '电缆规格', value: ckt.cable.spec },
+                            { label: '导线芯数', value: is3Phase ? '4芯 (3火L1/L2/L3 + 1地PE)' : '3芯 (1火L + 1零N + 1地PE)' },
                             { label: '敷设长度', value: `${ckt.cable.length_m} 米` },
                             { label: '允许载流量', value: '26 A (远大于负载电流)' },
                             { label: '终端电压降校核', value: '0.42% (完全符合 <5% 国标)' },
@@ -357,6 +427,15 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
                       onMouseLeave={() => onHover?.(null)}
                     >
                       <line x1="42" y1="44" x2="42" y2={hasVfd ? 130 : 140} stroke="#64748b" strokeWidth="2.5" className="hover:stroke-sky-400 transition" />
+                      
+                      {/* 斜杠线数标示 (4线/3线) */}
+                      <g transform="translate(36, 68)">
+                        <line x1="0" y1="8" x2="12" y2="0" stroke="#64748b" strokeWidth="1.5" />
+                        <text x="13" y="6" fill="#94a3b8" fontSize="9" fontWeight="bold" className="font-cad">
+                          {is3Phase ? '4' : '3'}
+                        </text>
+                      </g>
+
                       <text x="50" y="85" fill="#94a3b8" fontSize="11" className="font-cad hover:fill-sky-300 font-bold">
                         {ckt.cable.spec}
                       </text>

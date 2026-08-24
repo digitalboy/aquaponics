@@ -104,7 +104,9 @@ flowchart TD
 | **强电动力** | 分支回路 | `circuits` | `Array<Circuit>` | 独立 D 型微断、电力电缆截面、动力设备额定功率与电流 |
 | **变频驱动** | 变频控制器 | `vfd_drive` | `VfdDriveSpec` | 驱动器额定容量、DI 启停控制端子、故障报警无源干触点 |
 | **弱电直流** | 集中电源/UPS | `dc_and_ups_system`| `DcAndUpsSystem` | 在线式工控 UPS、直流开关电源、直流供电回路压降校验 |
-| **PLC 控制** | PLC 主控与I/O| `plc_controller` | `PlcController` | 控制器 IP、通信端口、DI 浮球/急停点位、DO 继电器点位 |
+| **PLC 控制** | PLC 主控与I/O| `plc_controller` / `plc_controllers` | `PlcController` / `Array<PlcController>` | 控制器唯一ID、角色(RAS/温室/水肥)、IP、DI 浮球/急停点位、DO 继电器点位 |
+| **PLC 扩展** | 扩展卡槽与子站 | `expansion_modules` | `Array<PlcExpansionModule>` | 槽位号 (Slot 1~16)、订货型号 (如 GL10-1600END)、本地卡槽/远程以太网子站 |
+| **PLC 联动** | 跨机通信与互锁 | `inter_plc_links` | `Array<InterPlcLink>` | 跨 PLC 间 Modbus-TCP / Profinet 联动条件、目标响应动作、安全互锁等级 |
 | **现场总线** | RS-485 字典 | `rs485_fieldbus` | `Rs485Fieldbus` | 串口参数 (9600-8-N-1)、从站地址表、终端匹配电阻配置 |
 | **边缘网络** | 工控机与监控 | `edge_and_network` | `EdgeAndNetwork` | 边缘工控机、PoE 工业交换机、网络摄像机固定 IP 映射 |
 | **线材桥架** | 线缆与走线架 | `cabling_system` | `CablingSystem` | 8芯网线并联线序、4芯屏蔽线接线定义、双层桥架垂直间距 |
@@ -259,28 +261,72 @@ export const DcAndUpsSystemSchema = z.object({
 });
 
 // ============================================================================
-// 5. PLC 控制器与 I/O 映射 Schema
+// 5. PLC 控制器、扩展模块与跨机联动 (DCS 分布式控制架构)
 // ============================================================================
 
+export const DigitalInputPointSchema = z.object({
+  point_id: z.string(),      // 如 "X00", "X01"
+  signal_name: z.string(),   // 逻辑点位名
+  description: z.string(),   // 功能描述
+  contact_type: z.enum(["NO", "NC"]),
+  wire_id: z.string(),
+});
+
+export const DigitalOutputPointSchema = z.object({
+  point_id: z.string(),      // 如 "Y01", "Y02"
+  signal_name: z.string(),
+  description: z.string(),
+  wire_id: z.string(),
+});
+
+/** PLC 扩展模块类型枚举 */
+export const PlcModuleTypeEnum = z.enum([
+  "LOCAL_DI",         // 本地数字量输入扩展 (如 16DI)
+  "LOCAL_DO",         // 本地数字量输出扩展 (如 16DO / 继电器)
+  "LOCAL_AI",         // 本地模拟量电压电流输入
+  "LOCAL_AO",         // 本地模拟量输出 (0-10V / 4-20mA)
+  "LOCAL_TEMP",       // 本地 PT100 / 热电偶高精度温度模块
+  "REMOTE_IO_STATION" // 远程分布式以太网/485子站 (Remote I/O)
+]);
+
+/** 单个 PLC 扩展模块 Schema */
+export const PlcExpansionModuleSchema = z.object({
+  module_id: z.string(),                                  // 扩展模块ID (如 "EXP-SLOT-01" / "RIO-FISH-02")
+  slot_number: z.number().int().min(1).optional(),        // 导轨槽位号 (1 ~ 16)
+  module_model: z.string(),                               // 采购订货型号 (如 "GL10-1600END")
+  module_type: PlcModuleTypeEnum.default("LOCAL_DI"),
+  is_remote: z.boolean().default(false),                  // 是否为远程分布式子站
+  location: z.string().optional(),                        // 物理安装位置
+  digital_inputs: z.array(DigitalInputPointSchema).default([]),
+  digital_outputs: z.array(DigitalOutputPointSchema).default([]),
+});
+
+/** PLC 控制器与 I/O 映射 Schema (支持单机与多机集群) */
 export const PlcIoMappingSchema = z.object({
+  controller_id: z.string().default("PLC-MAIN-01"),       // 控制器唯一标识
+  controller_role: z.string().default("主控中央PLC"),     // 角色 (鱼池主控 / 温室环境 / 水肥加药)
   controller_brand: z.string().optional(),
   controller_model: z.string(),
   ip_address: Ipv4AddressSchema,
   port: z.number().default(502),
   protocol: z.literal("Modbus-TCP"),
-  digital_inputs: z.array(z.object({
-    point_id: z.string(),      // 如 "X01"
-    signal_name: z.string(),   // 逻辑点位名
-    description: z.string(),   // 功能描述
-    contact_type: z.enum(["NO", "NC"]),
-    wire_id: z.string(),
-  })),
-  digital_outputs: z.array(z.object({
-    point_id: z.string(),      // 如 "Y01"
-    signal_name: z.string(),
-    description: z.string(),
-    wire_id: z.string(),
-  })),
+  // CPU 本体自带 I/O
+  digital_inputs: z.array(DigitalInputPointSchema),
+  digital_outputs: z.array(DigitalOutputPointSchema),
+  // ⭐️ 级联扩展模块与远程子站列表
+  expansion_modules: z.array(PlcExpansionModuleSchema).default([]),
+});
+
+/** 跨 PLC 间工业以太网/硬线联动链路 Schema */
+export const InterPlcLinkSchema = z.object({
+  link_id: z.string(),                                    // 联动链路ID (如 "LINK-RAS-CLIMATE-01")
+  from_plc_id: z.string(),                                // 发起方 PLC ID
+  to_plc_id: z.string(),                                  // 接收方 PLC ID
+  protocol: z.enum(["Modbus-TCP", "Profinet", "S7", "EtherNet/IP", "Hardwired_DryContact"]).default("Modbus-TCP"),
+  sync_cycle_ms: z.number().positive().default(100),      // 同步周期 (ms)
+  trigger_condition: z.string(),                          // 触发联动条件 (如 "鱼池超高水位 / DO急剧下降")
+  target_action: z.string(),                              // 联动响应动作 (如 "调理池紧急停机补水 / 开启制氧机加压")
+  safety_interlock_level: z.enum(["L1_CRITICAL", "L2_PROCESS", "L3_INFO"]).default("L1_CRITICAL"),
 });
 
 // ============================================================================
@@ -414,7 +460,9 @@ export const PlantWideTopologySchema = z.object({
   }),
   
   dc_and_ups_system: DcAndUpsSystemSchema,
-  plc_controller: PlcIoMappingSchema,
+  plc_controller: PlcIoMappingSchema.optional(),                        // 单机主控中央 PLC (兼容既有)
+  plc_controllers: z.array(PlcIoMappingSchema).default([]),             // ⭐️ 多 PLC 集群架构
+  inter_plc_links: z.array(InterPlcLinkSchema).default([]),             // ⭐️ 跨 PLC 工业以太网通信与联动链路
   rs485_fieldbus: Rs485FieldbusSchema,
   edge_and_network: EdgeAndNetworkSchema,
   cabling_system: CablingSystemSchema,
@@ -422,6 +470,9 @@ export const PlantWideTopologySchema = z.object({
 });
 
 export type PlantWideTopology = z.infer<typeof PlantWideTopologySchema>;
+export type PlcController = z.infer<typeof PlcIoMappingSchema>;
+export type PlcExpansionModule = z.infer<typeof PlcExpansionModuleSchema>;
+export type InterPlcLink = z.infer<typeof InterPlcLinkSchema>;
 ```
 
 ---

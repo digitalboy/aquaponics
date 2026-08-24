@@ -159,7 +159,7 @@ export const DcAndUpsSystemSchema = z.object({
 });
 
 // ============================================================================
-// 5. PLC 控制器与 I/O 映射 Schema
+// 5. PLC 控制器、扩展模块与跨机联动 (DCS 分布式控制架构)
 // ============================================================================
 
 export const DigitalInputPointSchema = z.object({
@@ -177,14 +177,54 @@ export const DigitalOutputPointSchema = z.object({
   wire_id: z.string(),
 });
 
+/** PLC 扩展模块类型枚举 */
+export const PlcModuleTypeEnum = z.enum([
+  'LOCAL_DI',         // 本地数字量输入扩展 (如 16DI)
+  'LOCAL_DO',         // 本地数字量输出扩展 (如 16DO / 继电器)
+  'LOCAL_AI',         // 本地模拟量电压电流输入
+  'LOCAL_AO',         // 本地模拟量输出 (0-10V / 4-20mA)
+  'LOCAL_TEMP',       // 本地 PT100 / 热电偶高精度温度模块
+  'REMOTE_IO_STATION' // 远程分布式以太网/485子站 (Remote I/O)
+]);
+
+/** 单个 PLC 扩展模块 Schema */
+export const PlcExpansionModuleSchema = z.object({
+  module_id: z.string(),                                  // 扩展模块ID (如 "EXP-SLOT-01" / "RIO-FISH-02")
+  slot_number: z.number().int().min(1).optional(),        // 导轨槽位号 (1 ~ 16)
+  module_model: z.string(),                               // 采购订货型号 (如 "GL10-1600END" / "GL10-0016ETN")
+  module_type: PlcModuleTypeEnum.optional().default('LOCAL_DI'),
+  is_remote: z.boolean().optional().default(false),       // 是否为远程分布式子站
+  location: z.string().optional(),                        // 物理安装位置 (如 "主控柜 Slot 1" 或 "2号鱼池现场子箱")
+  digital_inputs: z.array(DigitalInputPointSchema).optional().default([]),
+  digital_outputs: z.array(DigitalOutputPointSchema).optional().default([]),
+});
+
+/** PLC 控制器与 I/O 映射 Schema (支持单机与多机集群) */
 export const PlcIoMappingSchema = z.object({
+  controller_id: z.string().optional().default('PLC-MAIN-01'),   // 控制器唯一ID (支持多PLC集群)
+  controller_role: z.string().optional().default('主控中央PLC'), // 角色 (鱼池主控 / 温室环境 / 水肥加药)
   controller_brand: z.string().optional(),
-  controller_model: z.string().optional().default('CPU 1214C DC/DC/DC'),
+  controller_model: z.string().optional().default('Easy320-1614TN'),
   ip_address: Ipv4AddressSchema.optional().default('192.168.1.10'),
   port: z.number().optional().default(502),
   protocol: z.literal('Modbus-TCP').optional().default('Modbus-TCP'),
+  // CPU 本体自带 I/O
   digital_inputs: z.array(DigitalInputPointSchema).optional().default([]),
   digital_outputs: z.array(DigitalOutputPointSchema).optional().default([]),
+  // ⭐️ 级联扩展模块与远程子站列表
+  expansion_modules: z.array(PlcExpansionModuleSchema).optional().default([]),
+});
+
+/** 跨 PLC 间工业以太网/硬线联动链路 Schema */
+export const InterPlcLinkSchema = z.object({
+  link_id: z.string(),                                            // 联动链路ID (如 "LINK-RAS-CLIMATE-01")
+  from_plc_id: z.string(),                                        // 发起方 PLC ID
+  to_plc_id: z.string(),                                          // 接收方 PLC ID
+  protocol: z.enum(['Modbus-TCP', 'Profinet', 'S7', 'EtherNet/IP', 'Hardwired_DryContact']).optional().default('Modbus-TCP'),
+  sync_cycle_ms: z.number().positive().optional().default(100),   // 同步周期 (ms)
+  trigger_condition: z.string(),                                  // 触发联动条件 (如 "鱼池超高水位 / DO急剧下降")
+  target_action: z.string(),                                      // 联动响应动作 (如 "调理池紧急停机补水 / 开启制氧机加压")
+  safety_interlock_level: z.enum(['L1_CRITICAL', 'L2_PROCESS', 'L3_INFO']).optional().default('L1_CRITICAL'),
 });
 
 // ============================================================================
@@ -293,10 +333,12 @@ export const PlantWideTopologySchema = z.object({
   voltage_system: VoltageSystemEnum.optional().default('TN-S 380V/220V 50Hz'),
   updated_at: IsoUtcDateTimeSchema,
   
-  // 八大实体子系统
+  // 八大实体子系统 (含多PLC集群与跨机通信联动)
   power_distribution: PowerDistributionSchema,
   dc_and_ups_system: DcAndUpsSystemSchema.optional(),
-  plc_controller: PlcIoMappingSchema.optional(),
+  plc_controller: PlcIoMappingSchema.optional(),                        // 单机中央主控 PLC (兼容既有)
+  plc_controllers: z.array(PlcIoMappingSchema).optional().default([]),   // ⭐️ 多 PLC 集群架构
+  inter_plc_links: z.array(InterPlcLinkSchema).optional().default([]),   // ⭐️ 跨 PLC 工业以太网通信与联动链路
   rs485_fieldbus: Rs485FieldbusSchema.optional(),
   edge_and_network: EdgeAndNetworkSchema.optional(),
   cabling_system: CablingSystemSchema.optional(),
@@ -310,3 +352,6 @@ export type ElectricalCircuit = z.infer<typeof CircuitSchema>;
 export type SubPanel = z.infer<typeof SubPanelSchema>;
 export type CircuitBreaker = z.infer<typeof CircuitBreakerSchema>;
 export type Cable = z.infer<typeof CableSchema>;
+export type PlcController = z.infer<typeof PlcIoMappingSchema>;
+export type PlcExpansionModule = z.infer<typeof PlcExpansionModuleSchema>;
+export type InterPlcLink = z.infer<typeof InterPlcLinkSchema>;

@@ -276,13 +276,20 @@
     "port": 502,
     "protocol": "Modbus-TCP",
     "digital_inputs": [
+      { "point_id": "X00", "signal_name": "EMG-STOP-01", "description": "电控柜面板急停物理硬按钮", "contact_type": "NC", "wire_id": "EMG-STOP-01" },
       { "point_id": "X01", "signal_name": "RAIN-DI-ALARM", "description": "室外气象站雨雪常闭硬触点 (0.1s关天窗)", "contact_type": "NC", "wire_id": "OUT-DI-RAIN" },
-      { "point_id": "X04", "signal_name": "FISH-DI-LV01", "description": "1号鱼池防溢/防干烧浮球开关", "contact_type": "NC", "wire_id": "LV-FISH-01" },
-      { "point_id": "X05", "signal_name": "VFD-PUMP-FAULT", "description": "1号水泵变频器故障继电器反馈", "contact_type": "NC", "wire_id": "ALM-PUMP-01" }
+      { "point_id": "X02", "signal_name": "FISH-DI-LV01", "description": "1号鱼池防溢/防干烧双浮球开关", "contact_type": "NC", "wire_id": "LV-FISH-01" },
+      { "point_id": "X03", "signal_name": "FISH-DI-LV02", "description": "2号鱼池防溢/防干烧双浮球开关", "contact_type": "NC", "wire_id": "LV-FISH-02" },
+      { "point_id": "X04", "signal_name": "HYDRO-DI-LV01", "description": "菜池 DWC 水培槽低液位防干涸开关", "contact_type": "NC", "wire_id": "LV-HYDRO-01" },
+      { "point_id": "X05", "signal_name": "VFD-PUMP1-FAULT", "description": "1号水泵变频器故障继电器反馈", "contact_type": "NC", "wire_id": "ALM-PUMP-01" },
+      { "point_id": "X06", "signal_name": "VFD-PUMP2-FAULT", "description": "2号备用泵变频器故障继电器反馈", "contact_type": "NC", "wire_id": "ALM-PUMP-02" }
     ],
     "digital_outputs": [
-      { "point_id": "Y01", "signal_name": "PUMP-DO-RUN01", "description": "1号循环水泵启停控制继电器", "wire_id": "PUMP-RUN-01" },
-      { "point_id": "Y02", "signal_name": "VALVE-DO-BLOW", "description": "24V 荧光 DO 探头气动吹扫电磁阀", "wire_id": "AIR-VALVE-01" }
+      { "point_id": "Y01", "signal_name": "PUMP1-DO-RUN", "description": "1号主循环水泵启停控制继电器 (KA1)", "wire_id": "PUMP-RUN-01" },
+      { "point_id": "Y02", "signal_name": "PUMP2-DO-RUN", "description": "2号备用循环水泵启停控制继电器 (KA2)", "wire_id": "PUMP-RUN-02" },
+      { "point_id": "Y03", "signal_name": "AIR-COMP-DO-RUN", "description": "24V 吹扫微型无油空压机电源继电器 (KA3)", "wire_id": "AIR-COMP-01" },
+      { "point_id": "Y04", "signal_name": "VALVE-DO-BLOW", "description": "24V 荧光 DO 探头气动吹扫电磁阀 (EV1)", "wire_id": "AIR-VALVE-01" },
+      { "point_id": "Y05", "signal_name": "VALVE-DO-WATER-IN", "description": "调理池清水补水电磁阀控制继电器 (KA4)", "wire_id": "WATER-IN-01" }
     ]
   },
 
@@ -295,8 +302,13 @@
       { "slave_address_hex": "0x02", "device_name": "在线氨氮/pH/水温三合一传感器", "manufacturer_and_model": "山东塞恩 SN-3003", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 2000 },
       { "slave_address_hex": "0x03", "device_name": "工业荧光法 DO 探头 (全不锈钢质保3年)", "manufacturer_and_model": "深圳国数 BSK-DO-100", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 500 },
       { "slave_address_hex": "0x04", "device_name": "调理池双盐桥 pH / 四电极 EC 变送器", "manufacturer_and_model": "联测 SUP-PH5018 / EC2.0", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 1000 },
+      { "slave_address_hex": "0x05", "device_name": "调理池 PT1000 高精度水温变送器", "manufacturer_and_model": "盛泰 PT1000 (316L)", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 1000 },
+      { "slave_address_hex": "0x06", "device_name": "菜池 DWC 根区水温铠装防水探头", "manufacturer_and_model": "盛泰 PT1000-5M", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 1000 },
+      { "slave_address_hex": "0x07", "device_name": "菜池 PAR 光合有效辐射计", "manufacturer_and_model": "锦州阳光 PAR-01", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 2000 },
       { "slave_address_hex": "0x08", "device_name": "室外六要素超声波一体化微气象站", "manufacturer_and_model": "竞道 FT-WQX6", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 5000 },
-      { "slave_address_hex": "0x11", "device_name": "1号立柱立体 3D 测温测湿百叶箱", "manufacturer_and_model": "仁科 SHT35", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 5000 }
+      { "slave_address_hex": "0x11", "device_name": "1号立柱立体 3D 测温测湿百叶箱", "manufacturer_and_model": "仁科 SHT35", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 5000 },
+      { "slave_address_hex": "0x12", "device_name": "2号立柱立体 3D 测温测湿百叶箱", "manufacturer_and_model": "仁科 SHT35", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 5000 },
+      { "slave_address_hex": "0x13", "device_name": "3号立柱立体 3D 测温测湿百叶箱", "manufacturer_and_model": "仁科 SHT35", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 5000 }
     ]
   },
 

@@ -191,6 +191,7 @@ export function App() {
       <div className="flex-1 flex overflow-hidden relative">
         <ToolSidebar
           activeTab={activeSidebar}
+          activeSheet={activeSheet}
           onTabChange={setActiveSidebar}
           ercResult={ercResult}
           calcReport={calcReport}
