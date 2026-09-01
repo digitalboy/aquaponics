@@ -1,10 +1,10 @@
 {
   "schema_version": "2.0.0",
   "system_id": "SYS-AQUA-PLANT-01",
-  "facility_name": "数字化鱼菜共生农业工厂（01号车间 一期全要素闭环项目）",
-  "workshop_code": "WS-01-AQUA-HYDRO",
+  "facility_name": "数字化鱼菜共生农业工厂（深圳光明双棚大闭环一期全要素工程）",
+  "workshop_code": "WS-01-AQUA-HYDRO-B2-B3",
   "voltage_system": "TN-S 380V/220V 50Hz",
-  "updated_at": "2026-08-23T11:30:00.000Z",
+  "updated_at": "2026-08-28T02:30:00.000Z",
 
   "power_distribution": {
     "transformer_capacity_kva": 100,
@@ -34,153 +34,190 @@
     },
     "sub_panels": [
       {
-        "panel_id": "AP-AQUA",
-        "name": "二级养殖动力配电箱",
+        "panel_id": "AP-WELL",
+        "name": "深井取水泵配电箱",
         "ip_rating": "IP65",
-        "physical_location": "循环水泵房与生化池旁",
+        "physical_location": "水源深井与蓄水池就地动力箱",
         "incoming_switch": {
           "brand": "正泰 (CHNT)",
-          "model": "NXB-63",
+          "model": "NXBLE-63 (带漏电保护)",
+          "poles": "3P",
+          "rated_current_a": 20,
+          "trip_curve": "D",
+          "breaking_capacity_ka": 6,
+          "has_rcd": true,
+          "rcd_rated_residual_current_ma": 100,
+          "rcd_trip_time_s": 0.3,
+          "rcd_action_type": "TRIP",
+          "status": "CLOSED"
+        },
+        "feeder_cable": {
+          "cable_type": "YJV",
+          "spec": "4x4.0 + 1x4.0",
+          "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 4.0, "has_neutral": true, "neutral_cross_section_mm2": 4.0, "pe_cross_section_mm2": 4.0 },
+          "installation_method": "CT",
+          "length_m": 60,
+          "allowable_ampacity_a": 32,
+          "calculated_voltage_drop_pct": 1.15
+        },
+        "circuits": [
+          {
+            "circuit_id": "WL-WELL-01",
+            "name": "P-01 深井取水补水泵",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 20, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "YJV", "spec": "4x4.0 + 1x4.0", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 4.0, "has_neutral": true, "neutral_cross_section_mm2": 4.0, "pe_cross_section_mm2": 4.0 }, "installation_method": "CT", "length_m": 60, "allowable_ampacity_a": 32, "calculated_voltage_drop_pct": 1.15 },
+            "load": { "device_id": "P-01", "name": "深井取水泵 (软起动驱动)", "type": "pump_motor", "rated_power_kw": 4.0, "rated_voltage_v": 380, "rated_current_a": 8.4, "is_vfd_driven": false, "duty_cycle_hours_per_day": 4 }
+          }
+        ]
+      },
+      {
+        "panel_id": "AP-TOWER",
+        "name": "生物塔提升泵配电箱",
+        "ip_rating": "IP65",
+        "physical_location": "B2 生物过滤塔就地动力箱",
+        "incoming_switch": {
+          "brand": "正泰 (CHNT)",
+          "model": "NXBLE-63 (带漏电保护)",
+          "poles": "3P",
+          "rated_current_a": 25,
+          "trip_curve": "D",
+          "breaking_capacity_ka": 6,
+          "has_rcd": true,
+          "rcd_rated_residual_current_ma": 100,
+          "rcd_trip_time_s": 0.3,
+          "rcd_action_type": "TRIP",
+          "status": "CLOSED"
+        },
+        "feeder_cable": {
+          "cable_type": "YJV",
+          "spec": "4x4.0 + 1x4.0",
+          "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 4.0, "has_neutral": true, "neutral_cross_section_mm2": 4.0, "pe_cross_section_mm2": 4.0 },
+          "installation_method": "CT",
+          "length_m": 20,
+          "allowable_ampacity_a": 32,
+          "calculated_voltage_drop_pct": 0.42
+        },
+        "circuits": [
+          {
+            "circuit_id": "WL-TOWER-01",
+            "name": "P-02 生物塔提升主泵",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 16, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "YJV", "spec": "4x2.5 + 1x2.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 15, "allowable_ampacity_a": 24, "calculated_voltage_drop_pct": 0.38 },
+            "load": { "device_id": "P-02A", "name": "生物塔提升主泵 (工频连续运行)", "type": "pump_motor", "rated_power_kw": 3.0, "rated_voltage_v": 380, "rated_current_a": 6.4, "is_vfd_driven": false, "duty_cycle_hours_per_day": 24 }
+          },
+          {
+            "circuit_id": "WL-TOWER-02",
+            "name": "P-02 生物塔提升备用泵",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 16, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "YJV", "spec": "4x2.5 + 1x2.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 16, "allowable_ampacity_a": 24, "calculated_voltage_drop_pct": 0.40 },
+            "load": { "device_id": "P-02B", "name": "生物塔提升备用泵 (PLC自投)", "type": "pump_motor", "rated_power_kw": 3.0, "rated_voltage_v": 380, "rated_current_a": 6.4, "is_vfd_driven": false, "duty_cycle_hours_per_day": 0 }
+          }
+        ]
+      },
+      {
+        "panel_id": "AP-LIFT",
+        "name": "跨棚主提升泵配电箱",
+        "ip_rating": "IP65",
+        "physical_location": "B2 跨棚主提升泵房就地动力箱",
+        "incoming_switch": {
+          "brand": "正泰 (CHNT)",
+          "model": "NXBLE-63 (带漏电保护)",
           "poles": "3P",
           "rated_current_a": 63,
           "trip_curve": "D",
           "breaking_capacity_ka": 6,
+          "has_rcd": true,
+          "rcd_rated_residual_current_ma": 100,
+          "rcd_trip_time_s": 0.3,
+          "rcd_action_type": "TRIP",
           "status": "CLOSED"
         },
         "feeder_cable": {
           "cable_type": "YJV",
           "spec": "4x16 + 1x10",
-          "conductors": {
-            "live_conductors_count": 3,
-            "live_cross_section_mm2": 16,
-            "has_neutral": true,
-            "neutral_cross_section_mm2": 16,
-            "pe_cross_section_mm2": 10
-          },
+          "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 16, "has_neutral": true, "neutral_cross_section_mm2": 16, "pe_cross_section_mm2": 10 },
           "installation_method": "CT",
-          "length_m": 45,
+          "length_m": 30,
           "allowable_ampacity_a": 80,
-          "calculated_voltage_drop_pct": 0.95
+          "calculated_voltage_drop_pct": 0.58
         },
         "circuits": [
           {
-            "circuit_id": "WL-AQUA-01",
-            "name": "#1 变频主水循环泵",
-            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 16, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
-            "cable": { "cable_type": "YJV", "spec": "4x2.5 + 1x2.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 12, "allowable_ampacity_a": 24, "calculated_voltage_drop_pct": 0.35 },
-            "load": {
-              "device_id": "PUMP-RAS-01",
-              "name": "1号养殖主循环泵",
-              "type": "pump_motor",
-              "rated_power_kw": 3.0,
-              "rated_voltage_v": 380,
-              "rated_current_a": 6.4,
-              "is_vfd_driven": true,
-              "duty_cycle_hours_per_day": 24,
-              "vfd_config": {
-                "vfd_brand": "汇川 (Inovance)",
-                "vfd_model": "MD290-037G",
-                "rated_power_kw": 3.7,
-                "control_terminals": { "start_stop_di": "DI1 (无源干触点)", "fault_relay": "TA/TC (常闭故障报警)", "analog_freq_input": "AI1 (0~10V)" }
-              }
-            },
-            "telemetry": { "timestamp": "2026-08-23T11:30:00.000Z", "current_a": 6.38, "power_kw": 2.85, "status": "RUNNING" }
+            "circuit_id": "WL-LIFT-01",
+            "name": "P-03 B2➔B3 跨棚主提升泵",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 40, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "YJV", "spec": "4x10 + 1x6", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 10, "has_neutral": true, "neutral_cross_section_mm2": 10, "pe_cross_section_mm2": 6 }, "installation_method": "CT", "length_m": 25, "allowable_ampacity_a": 58, "calculated_voltage_drop_pct": 0.52 },
+            "load": { "device_id": "P-03A", "name": "跨棚主提升泵 (软起动器工频驱动)", "type": "pump_motor", "rated_power_kw": 11.0, "rated_voltage_v": 380, "rated_current_a": 21.8, "is_vfd_driven": false, "duty_cycle_hours_per_day": 24 }
           },
           {
-            "circuit_id": "WL-AQUA-02",
-            "name": "#2 变频主水循环泵",
-            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 16, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
-            "cable": { "cable_type": "YJV", "spec": "4x2.5 + 1x2.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 14, "allowable_ampacity_a": 24, "calculated_voltage_drop_pct": 0.41 },
-            "load": {
-              "device_id": "PUMP-RAS-02",
-              "name": "2号养殖主循环泵",
-              "type": "pump_motor",
-              "rated_power_kw": 3.0,
-              "rated_voltage_v": 380,
-              "rated_current_a": 6.4,
-              "is_vfd_driven": true,
-              "duty_cycle_hours_per_day": 24
-            }
-          },
+            "circuit_id": "WL-LIFT-02",
+            "name": "P-03 B2➔B3 跨棚备用提升泵",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 40, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "YJV", "spec": "4x10 + 1x6", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 10, "has_neutral": true, "neutral_cross_section_mm2": 10, "pe_cross_section_mm2": 6 }, "installation_method": "CT", "length_m": 27, "allowable_ampacity_a": 58, "calculated_voltage_drop_pct": 0.55 },
+            "load": { "device_id": "P-03B", "name": "跨棚备用提升泵 (软起动器)", "type": "pump_motor", "rated_power_kw": 11.0, "rated_voltage_v": 380, "rated_current_a": 21.8, "is_vfd_driven": false, "duty_cycle_hours_per_day": 0 }
+          }
+        ]
+      },
+      {
+        "panel_id": "AP-BLOWER",
+        "name": "鱼池充氧罗茨风机配电箱",
+        "ip_rating": "IP65",
+        "physical_location": "B2 鱼池风机房就地动力箱",
+        "incoming_switch": {
+          "brand": "正泰 (CHNT)",
+          "model": "NXBLE-63 (带漏电保护)",
+          "poles": "3P",
+          "rated_current_a": 32,
+          "trip_curve": "D",
+          "breaking_capacity_ka": 6,
+          "has_rcd": true,
+          "rcd_rated_residual_current_ma": 100,
+          "rcd_trip_time_s": 0.3,
+          "rcd_action_type": "TRIP",
+          "status": "CLOSED"
+        },
+        "feeder_cable": {
+          "cable_type": "YJV",
+          "spec": "4x6.0 + 1x6.0",
+          "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 6.0, "has_neutral": true, "neutral_cross_section_mm2": 6.0, "pe_cross_section_mm2": 6.0 },
+          "installation_method": "CT",
+          "length_m": 25,
+          "allowable_ampacity_a": 44,
+          "calculated_voltage_drop_pct": 0.45
+        },
+        "circuits": [
           {
-            "circuit_id": "WL-AQUA-03",
-            "name": "#3 备用主水循环泵",
-            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 16, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
-            "cable": { "cable_type": "YJV", "spec": "4x2.5 + 1x2.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 16, "allowable_ampacity_a": 24, "calculated_voltage_drop_pct": 0.46 },
-            "load": {
-              "device_id": "PUMP-RAS-03",
-              "name": "3号养殖备用循环泵 (PLC自投)",
-              "type": "pump_motor",
-              "rated_power_kw": 3.0,
-              "rated_voltage_v": 380,
-              "rated_current_a": 6.4,
-              "is_vfd_driven": true,
-              "duty_cycle_hours_per_day": 0
-            }
-          },
-          {
-            "circuit_id": "WL-AQUA-04",
-            "name": "#1 变频高压充氧罗茨风机",
+            "circuit_id": "WL-BLOW-01",
+            "name": "#1 鱼池充氧罗茨风机",
             "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 20, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
-            "cable": { "cable_type": "YJV", "spec": "4x4.0 + 1x4.0", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 4.0, "has_neutral": true, "neutral_cross_section_mm2": 4.0, "pe_cross_section_mm2": 4.0 }, "installation_method": "CT", "length_m": 10, "allowable_ampacity_a": 32, "calculated_voltage_drop_pct": 0.28 },
-            "load": {
-              "device_id": "BLOWER-RAS-01",
-              "name": "1号主供气罗茨风机",
-              "type": "blower_motor",
-              "rated_power_kw": 3.7,
-              "rated_voltage_v": 380,
-              "rated_current_a": 7.8,
-              "is_vfd_driven": true,
-              "duty_cycle_hours_per_day": 24
-            },
-            "telemetry": { "timestamp": "2026-08-23T11:30:00.000Z", "current_a": 7.52, "power_kw": 3.42, "status": "RUNNING" }
+            "cable": { "cable_type": "YJV", "spec": "4x4.0 + 1x4.0", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 4.0, "has_neutral": true, "neutral_cross_section_mm2": 4.0, "pe_cross_section_mm2": 4.0 }, "installation_method": "CT", "length_m": 10, "allowable_ampacity_a": 32, "calculated_voltage_drop_pct": 0.25 },
+            "load": { "device_id": "BLOWER-RAS-01", "name": "1号主供气罗茨风机", "type": "blower_motor", "rated_power_kw": 3.7, "rated_voltage_v": 380, "rated_current_a": 7.8, "is_vfd_driven": false, "duty_cycle_hours_per_day": 24 }
           },
           {
-            "circuit_id": "WL-AQUA-05",
+            "circuit_id": "WL-BLOW-02",
             "name": "#2 备用充氧罗茨风机",
             "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 20, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
-            "cable": { "cable_type": "YJV", "spec": "4x4.0 + 1x4.0", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 4.0, "has_neutral": true, "neutral_cross_section_mm2": 4.0, "pe_cross_section_mm2": 4.0 }, "installation_method": "CT", "length_m": 12, "allowable_ampacity_a": 32, "calculated_voltage_drop_pct": 0.33 },
-            "load": {
-              "device_id": "BLOWER-RAS-02",
-              "name": "2号备用罗茨风机",
-              "type": "blower_motor",
-              "rated_power_kw": 3.7,
-              "rated_voltage_v": 380,
-              "rated_current_a": 7.8,
-              "is_vfd_driven": true,
-              "duty_cycle_hours_per_day": 0
-            }
-          },
-          {
-            "circuit_id": "WL-AQUA-06",
-            "name": "滚筒微滤机旋转马达",
-            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 6, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
-            "cable": { "cable_type": "YJV", "spec": "4x1.5 + 1x1.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 1.5, "has_neutral": true, "neutral_cross_section_mm2": 1.5, "pe_cross_section_mm2": 1.5 }, "installation_method": "CT", "length_m": 8, "allowable_ampacity_a": 18, "calculated_voltage_drop_pct": 0.15 },
-            "load": {
-              "device_id": "FILTER-DRUM-01",
-              "name": "微滤机滚筒马达",
-              "type": "screen_filter",
-              "rated_power_kw": 0.75,
-              "rated_voltage_v": 380,
-              "rated_current_a": 1.8,
-              "is_vfd_driven": false,
-              "duty_cycle_hours_per_day": 6
-            }
+            "cable": { "cable_type": "YJV", "spec": "4x4.0 + 1x4.0", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 4.0, "has_neutral": true, "neutral_cross_section_mm2": 4.0, "pe_cross_section_mm2": 4.0 }, "installation_method": "CT", "length_m": 12, "allowable_ampacity_a": 32, "calculated_voltage_drop_pct": 0.30 },
+            "load": { "device_id": "BLOWER-RAS-02", "name": "2号备用罗茨风机", "type": "blower_motor", "rated_power_kw": 3.7, "rated_voltage_v": 380, "rated_current_a": 7.8, "is_vfd_driven": false, "duty_cycle_hours_per_day": 0 }
           }
         ]
       },
       {
         "panel_id": "AP-HYDRO",
-        "name": "二级水培动力配电箱",
+        "name": "二级水培与回流动力配电箱",
         "ip_rating": "IP65",
-        "physical_location": "4条水培跑道前端/调理池旁",
+        "physical_location": "B3 种植大棚与 B2 回流调节池旁",
         "incoming_switch": {
           "brand": "正泰 (CHNT)",
-          "model": "NXB-63",
+          "model": "NXBLE-63 (带漏电保护)",
           "poles": "3P",
           "rated_current_a": 40,
           "trip_curve": "D",
           "breaking_capacity_ka": 6,
+          "has_rcd": true,
+          "rcd_rated_residual_current_ma": 100,
+          "rcd_trip_time_s": 0.3,
+          "rcd_action_type": "TRIP",
           "status": "CLOSED"
         },
         "feeder_cable": {
@@ -190,29 +227,80 @@
           "installation_method": "CT",
           "length_m": 65,
           "allowable_ampacity_a": 58,
-          "calculated_voltage_drop_pct": 1.18
+          "calculated_voltage_drop_pct": 0.98
         },
         "circuits": [
           {
             "circuit_id": "WL-HYDRO-01",
-            "name": "A跑道深水增氧射流泵",
+            "name": "P-04 B3多层高架增压主泵",
             "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 10, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
-            "cable": { "cable_type": "YJV", "spec": "4x2.5 + 1x2.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 15, "allowable_ampacity_a": 24, "calculated_voltage_drop_pct": 0.42 },
-            "load": { "device_id": "PUMP-HYDRO-01", "name": "A跑道增氧水泵", "type": "pump_motor", "rated_power_kw": 1.5, "rated_voltage_v": 380, "rated_current_a": 3.4, "is_vfd_driven": false, "duty_cycle_hours_per_day": 21 }
+            "cable": { "cable_type": "YJV", "spec": "4x2.5 + 1x2.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 25, "allowable_ampacity_a": 24, "calculated_voltage_drop_pct": 0.45 },
+            "load": { "device_id": "P-04A", "name": "B3高架增压主泵 (PLC温控按需启停)", "type": "pump_motor", "rated_power_kw": 1.5, "rated_voltage_v": 380, "rated_current_a": 3.4, "is_vfd_driven": false, "duty_cycle_hours_per_day": 12 }
           },
           {
             "circuit_id": "WL-HYDRO-02",
-            "name": "B跑道深水增氧射流泵",
+            "name": "P-04 B3多层高架增压备用泵",
             "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 10, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
-            "cable": { "cable_type": "YJV", "spec": "4x2.5 + 1x2.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 25, "allowable_ampacity_a": 24, "calculated_voltage_drop_pct": 0.70 },
-            "load": { "device_id": "PUMP-HYDRO-02", "name": "B跑道增氧水泵", "type": "pump_motor", "rated_power_kw": 1.5, "rated_voltage_v": 380, "rated_current_a": 3.4, "is_vfd_driven": false, "duty_cycle_hours_per_day": 21 }
+            "cable": { "cable_type": "YJV", "spec": "4x2.5 + 1x2.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 26, "allowable_ampacity_a": 24, "calculated_voltage_drop_pct": 0.47 },
+            "load": { "device_id": "P-04B", "name": "B3高架增压备用泵", "type": "pump_motor", "rated_power_kw": 1.5, "rated_voltage_v": 380, "rated_current_a": 3.4, "is_vfd_driven": false, "duty_cycle_hours_per_day": 0 }
           },
           {
-            "circuit_id": "WL-HYDRO-05",
-            "name": "调理池脉冲加药/搅拌泵",
+            "circuit_id": "WL-HYDRO-03",
+            "name": "P-06 B3➔B2 回流辅助旁路泵",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 16, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "YJV", "spec": "4x2.5 + 1x2.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 15, "allowable_ampacity_a": 24, "calculated_voltage_drop_pct": 0.32 },
+            "load": { "device_id": "P-06", "name": "回流辅助旁路泵 (平时断电/重力自流)", "type": "pump_motor", "rated_power_kw": 2.2, "rated_voltage_v": 380, "rated_current_a": 4.8, "is_vfd_driven": false, "duty_cycle_hours_per_day": 1 }
+          }
+        ]
+      },
+      {
+        "panel_id": "AP-HVAC",
+        "name": "二级环控与棚顶喷淋配电箱",
+        "ip_rating": "IP65",
+        "physical_location": "B2/B3 大棚中部环控动力区",
+        "incoming_switch": {
+          "brand": "正泰 (CHNT)",
+          "model": "NXBLE-63 (带漏电保护)",
+          "poles": "3P",
+          "rated_current_a": 40,
+          "trip_curve": "D",
+          "breaking_capacity_ka": 6,
+          "has_rcd": true,
+          "rcd_rated_residual_current_ma": 100,
+          "rcd_trip_time_s": 0.3,
+          "rcd_action_type": "TRIP",
+          "status": "CLOSED"
+        },
+        "feeder_cable": {
+          "cable_type": "YJV",
+          "spec": "4x10 + 1x6",
+          "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 10, "has_neutral": true, "neutral_cross_section_mm2": 10, "pe_cross_section_mm2": 6 },
+          "installation_method": "CT",
+          "length_m": 50,
+          "allowable_ampacity_a": 58,
+          "calculated_voltage_drop_pct": 0.76
+        },
+        "circuits": [
+          {
+            "circuit_id": "WL-HVAC-01",
+            "name": "P-05 4500㎡棚顶降温喷淋泵",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 25, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "YJV", "spec": "4x4.0 + 1x4.0", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 4.0, "has_neutral": true, "neutral_cross_section_mm2": 4.0, "pe_cross_section_mm2": 4.0 }, "installation_method": "CT", "length_m": 35, "allowable_ampacity_a": 32, "calculated_voltage_drop_pct": 0.98 },
+            "load": { "device_id": "P-05", "name": "棚顶降温喷淋泵 (2分区按棚轮喷)", "type": "pump_motor", "rated_power_kw": 5.5, "rated_voltage_v": 380, "rated_current_a": 11.2, "is_vfd_driven": false, "duty_cycle_hours_per_day": 4 }
+          },
+          {
+            "circuit_id": "WL-HVAC-02",
+            "name": "温室高空环流风机组",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 10, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "YJV", "spec": "4x2.5 + 1x2.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 45, "allowable_ampacity_a": 24, "calculated_voltage_drop_pct": 0.65 },
+            "load": { "device_id": "HVAC-FANS", "name": "6台高空环流风机", "type": "hvac_fan", "rated_power_kw": 1.5, "rated_voltage_v": 380, "rated_current_a": 3.6, "is_vfd_driven": false, "duty_cycle_hours_per_day": 10 }
+          },
+          {
+            "circuit_id": "WL-HVAC-03",
+            "name": "电动顶窗/天窗开窗电机",
             "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "3P", "rated_current_a": 6, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
-            "cable": { "cable_type": "YJV", "spec": "4x1.5 + 1x1.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 1.5, "has_neutral": true, "neutral_cross_section_mm2": 1.5, "pe_cross_section_mm2": 1.5 }, "installation_method": "CT", "length_m": 8, "allowable_ampacity_a": 18, "calculated_voltage_drop_pct": 0.12 },
-            "load": { "device_id": "PUMP-MIX-01", "name": "调理池加药搅拌泵", "type": "dosing_pump", "rated_power_kw": 0.25, "rated_voltage_v": 380, "rated_current_a": 0.8, "is_vfd_driven": false, "duty_cycle_hours_per_day": 4 }
+            "cable": { "cable_type": "YJV", "spec": "4x1.5 + 1x1.5", "conductors": { "live_conductors_count": 3, "live_cross_section_mm2": 1.5, "has_neutral": true, "neutral_cross_section_mm2": 1.5, "pe_cross_section_mm2": 1.5 }, "installation_method": "CT", "length_m": 50, "allowable_ampacity_a": 18, "calculated_voltage_drop_pct": 0.42 },
+            "load": { "device_id": "VENT-MOTOR", "name": "天窗开窗电机组 (暴雨0.1s联锁)", "type": "actuator_motor", "rated_power_kw": 0.4, "rated_voltage_v": 380, "rated_current_a": 1.2, "is_vfd_driven": false, "duty_cycle_hours_per_day": 1 }
           }
         ]
       },
@@ -245,7 +333,33 @@
             "name": "1kVA 在线式工控 UPS 供电",
             "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "2P", "rated_current_a": 16, "trip_curve": "C", "breaking_capacity_ka": 6, "status": "CLOSED" },
             "cable": { "cable_type": "RVV", "spec": "3x2.5", "conductors": { "live_conductors_count": 1, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 5, "allowable_ampacity_a": 20, "calculated_voltage_drop_pct": 0.12 },
-            "load": { "device_id": "UPS-HUB-01", "name": "工控中台 UPS", "type": "ups_it_load", "rated_power_kw": 1.0, "rated_voltage_v": 220, "rated_current_a": 4.5, "is_vfd_driven": false, "duty_cycle_hours_per_day": 24 }
+            "load": { "device_id": "UPS-HUB-01", "name": "工控中台 UPS (汇川PLC/研华工控机/NVR)", "type": "ups_it_load", "rated_power_kw": 1.0, "rated_voltage_v": 220, "rated_current_a": 4.5, "is_vfd_driven": false, "duty_cycle_hours_per_day": 24 }
+          },
+          {
+            "circuit_id": "WL-CTRL-02",
+            "name": "全厂 10 组 24V 自动化阀门供电",
+            "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "2P", "rated_current_a": 10, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
+            "cable": { "cable_type": "RVV", "spec": "3x2.5", "conductors": { "live_conductors_count": 1, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 12, "allowable_ampacity_a": 20, "calculated_voltage_drop_pct": 0.22 },
+            "load": { "device_id": "VALVES-24V", "name": "10组电动蝶阀/球阀/电磁阀 (V-01~V-10)", "type": "actuator_motor", "rated_power_kw": 0.35, "rated_voltage_v": 220, "rated_current_a": 1.6, "is_vfd_driven": false, "duty_cycle_hours_per_day": 4 }
+          },
+          {
+            "circuit_id": "WL-CTRL-03",
+            "name": "现场移动检修防水插座箱 (高压水枪/手持工具)",
+            "breaker": {
+              "brand": "正泰 (CHNT)",
+              "model": "NXBLE-63",
+              "poles": "2P",
+              "rated_current_a": 16,
+              "trip_curve": "C",
+              "breaking_capacity_ka": 6,
+              "has_rcd": true,
+              "rcd_rated_residual_current_ma": 30,
+              "rcd_trip_time_s": 0.1,
+              "rcd_action_type": "TRIP",
+              "status": "CLOSED"
+            },
+            "cable": { "cable_type": "RVV", "spec": "3x2.5", "conductors": { "live_conductors_count": 1, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 15, "allowable_ampacity_a": 20, "calculated_voltage_drop_pct": 0.35 },
+            "load": { "device_id": "SOCKET-MAINT-01", "name": "现场 220V 检修防水插座 (高压清洗机/手电钻 30mA保命)", "type": "general_load", "rated_power_kw": 2.2, "rated_voltage_v": 220, "rated_current_a": 10.0, "is_vfd_driven": false, "duty_cycle_hours_per_day": 1 }
           }
         ]
       }
@@ -277,19 +391,23 @@
     "protocol": "Modbus-TCP",
     "digital_inputs": [
       { "point_id": "X00", "signal_name": "EMG-STOP-01", "description": "电控柜面板急停物理硬按钮", "contact_type": "NC", "wire_id": "EMG-STOP-01" },
-      { "point_id": "X01", "signal_name": "RAIN-DI-ALARM", "description": "室外气象站雨雪常闭硬触点 (0.1s关天窗)", "contact_type": "NC", "wire_id": "OUT-DI-RAIN" },
+      { "point_id": "X01", "signal_name": "RAIN-DI-ALARM", "description": "室外气象站雨雪常闭硬触点 (0.1s强制关天窗)", "contact_type": "NC", "wire_id": "OUT-DI-RAIN" },
       { "point_id": "X02", "signal_name": "FISH-DI-LV01", "description": "1号鱼池防溢/防干烧双浮球开关", "contact_type": "NC", "wire_id": "LV-FISH-01" },
       { "point_id": "X03", "signal_name": "FISH-DI-LV02", "description": "2号鱼池防溢/防干烧双浮球开关", "contact_type": "NC", "wire_id": "LV-FISH-02" },
       { "point_id": "X04", "signal_name": "HYDRO-DI-LV01", "description": "菜池 DWC 水培槽低液位防干涸开关", "contact_type": "NC", "wire_id": "LV-HYDRO-01" },
-      { "point_id": "X05", "signal_name": "VFD-PUMP1-FAULT", "description": "1号主水泵变频器故障继电器反馈", "contact_type": "NC", "wire_id": "ALM-PUMP-01" },
-      { "point_id": "X06", "signal_name": "VFD-PUMP2-FAULT", "description": "2号备用泵变频器故障继电器反馈", "contact_type": "NC", "wire_id": "ALM-PUMP-02" }
+      { "point_id": "X05", "signal_name": "PUMP1-ALM-DI", "description": "P-01 深井泵热过载保护触点", "contact_type": "NC", "wire_id": "ALM-PUMP-01" },
+      { "point_id": "X06", "signal_name": "PUMP2-ALM-DI", "description": "P-02 生物塔提升泵热过载保护触点", "contact_type": "NC", "wire_id": "ALM-PUMP-02" },
+      { "point_id": "X07", "signal_name": "PUMP3-ALM-DI", "description": "P-03 跨棚主提升泵热过载保护触点", "contact_type": "NC", "wire_id": "ALM-PUMP-03" }
     ],
     "digital_outputs": [
-      { "point_id": "Y01", "signal_name": "PUMP1-DO-RUN", "description": "1号主循环水泵启停控制继电器 (KA1)", "wire_id": "PUMP-RUN-01" },
-      { "point_id": "Y02", "signal_name": "PUMP2-DO-RUN", "description": "2号备用循环水泵启停控制继电器 (KA2)", "wire_id": "PUMP-RUN-02" },
-      { "point_id": "Y03", "signal_name": "AIR-COMP-DO-RUN", "description": "24V 吹扫微型无油空压机电源继电器 (KA3)", "wire_id": "AIR-COMP-01" },
-      { "point_id": "Y04", "signal_name": "VALVE-DO-BLOW", "description": "24V 荧光 DO 探头气动吹扫电磁阀 (EV1)", "wire_id": "AIR-VALVE-01" },
-      { "point_id": "Y05", "signal_name": "VALVE-DO-WATER-IN", "description": "调理池清水补水电磁阀控制继电器 (KA4)", "wire_id": "WATER-IN-01" }
+      { "point_id": "Y01", "signal_name": "P-02-DO-RUN", "description": "P-02 生物塔提升泵交流接触器控制 (KA1)", "wire_id": "PUMP-RUN-02" },
+      { "point_id": "Y02", "signal_name": "P-03-DO-RUN", "description": "P-03 跨棚主提升泵软起动器触发继电器 (KA2)", "wire_id": "PUMP-RUN-03" },
+      { "point_id": "Y03", "signal_name": "P-04-DO-RUN", "description": "P-04 B3高架增压泵温控按需启停继电器 (KA3)", "wire_id": "PUMP-RUN-04" },
+      { "point_id": "Y04", "signal_name": "P-05-DO-RUN", "description": "P-05 棚顶降温喷淋泵启停继电器 (KA4)", "wire_id": "PUMP-RUN-05" },
+      { "point_id": "Y05", "signal_name": "V-04-B2-SPRAY", "description": "V-04 B2棚顶喷淋电动蝶阀 24V (KA5)", "wire_id": "VALVE-SPRAY-B2" },
+      { "point_id": "Y06", "signal_name": "V-05-B3-SPRAY", "description": "V-05 B3棚顶喷淋电动蝶阀 24V (KA6)", "wire_id": "VALVE-SPRAY-B3" },
+      { "point_id": "Y07", "signal_name": "AIR-VALVE-DO", "description": "DO 探头 24V 气动吹扫电磁阀 (EV1)", "wire_id": "AIR-VALVE-01" },
+      { "point_id": "Y08", "signal_name": "O2-EMG-VALVE-DO", "description": "液氧急救保命电磁阀 (EV2)", "wire_id": "O2-EMG-VALVE" }
     ]
   },
 
@@ -299,8 +417,8 @@
     "has_120_ohm_terminator_at_end": true,
     "slaves": [
       { "slave_address_hex": "0x01", "device_name": "威胜 DTSD342-P5 三相智能电表", "manufacturer_and_model": "威胜信息", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 1000 },
-      { "slave_address_hex": "0x02", "device_name": "在线氨氮/pH/水温三合一传感器", "manufacturer_and_model": "山东塞恩 SN-3003", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 2000 },
-      { "slave_address_hex": "0x03", "device_name": "工业荧光法 DO 探头 (全不锈钢质保3年)", "manufacturer_and_model": "深圳国数 BSK-DO-100", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 500 },
+      { "slave_address_hex": "0x02", "device_name": "在线氨氮/pH/水温三合一传感器 (M12即插即测)", "manufacturer_and_model": "山东塞恩 SN-3003", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 2000 },
+      { "slave_address_hex": "0x03", "device_name": "工业荧光法 DO 探头 (全不锈钢质保3年/M12插头)", "manufacturer_and_model": "深圳国数 BSK-DO-100", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 500 },
       { "slave_address_hex": "0x04", "device_name": "调理池双盐桥 pH / 四电极 EC 变送器", "manufacturer_and_model": "联测 SUP-PH5018 / EC2.0", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 1000 },
       { "slave_address_hex": "0x05", "device_name": "调理池 PT1000 高精度水温变送器", "manufacturer_and_model": "盛泰 PT1000 (316L)", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 1000 },
       { "slave_address_hex": "0x06", "device_name": "菜池 DWC 根区水温铠装防水探头", "manufacturer_and_model": "盛泰 PT1000-5M", "baud_rate": 9600, "data_bits": 8, "stop_bits": 1, "parity": "None", "polling_interval_ms": 1000 },
@@ -342,10 +460,11 @@
       "shield_pe": "Control Cabinet PE Single-End Earthing Only"
     },
     "rvsp_m12_pinout": {
-      "pin1_brown": "DC +24V",
-      "pin2_white": "RS485-A (Data+)",
-      "pin3_blue": "DC 0V / GND",
-      "pin4_black": "RS485-B (Data-)"
+      "pin1_brown": "DC +24V (Pin 1)",
+      "pin2_white": "RS485-A Data+ (Pin 2)",
+      "pin3_blue": "DC 0V / GND (Pin 3)",
+      "pin4_black": "RS485-B Data- (Pin 4)",
+      "system_standard": "M12 A-Code 4-Pin / Tank-as-Port 即插即测架构"
     },
     "containment_trays": {
       "tray_material": "热浸锌槽式 + 镀锌网格 (厚度 ≥65μm)",

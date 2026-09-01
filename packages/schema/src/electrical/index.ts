@@ -46,6 +46,10 @@ export const CircuitBreakerSchema = z.object({
   trip_curve: TripCurveEnum,
   breaking_capacity_ka: z.number().positive('短路分断能力必须大于 0kA').optional(),
   magnetic_trip_instant_a: z.number().positive().optional(),
+  has_rcd: z.boolean().optional().default(false),
+  rcd_rated_residual_current_ma: z.number().positive().optional(), // 30mA (人身保命) / 100mA (动力防误跳)
+  rcd_trip_time_s: z.number().nonnegative().optional(), // 0.1s (瞬动) / 0.3s (延时)
+  rcd_action_type: z.enum(['TRIP', 'ALARM_ONLY']).optional().default('TRIP'), // TRIP (跳闸) / ALARM_ONLY (生命设备只报警不切断)
   status: z.enum(['OPEN', 'CLOSED', 'TRIPPED']).optional().default('CLOSED'),
 });
 

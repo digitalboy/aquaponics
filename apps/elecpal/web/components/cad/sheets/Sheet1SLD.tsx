@@ -24,16 +24,17 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
 
   const BUS_START_X = MAIN_BOX_X + MAIN_BOX_W;
 
-  const SUBPANEL_START_X = 400;
+  const SUBPANEL_START_X = 420;
   const SUBPANEL_TOP_Y = 250;
-  const CKT_COL_WIDTH = 140;
-  const PANEL_PAD_X = 40;
-  const PANEL_GAP = 80;
+  const CKT_COL_WIDTH = 135;
+  const PANEL_PAD_X = 35;
+  const PANEL_GAP = 55;
 
   let currentX = SUBPANEL_START_X;
   const panelLayouts = subPanels.map((panel) => {
     const circuitCount = panel.circuits.length;
-    const width = Math.max(PANEL_PAD_X * 2 + circuitCount * CKT_COL_WIDTH, 380);
+    // 箱体宽度自适应：1回路460px、2回路480px、3回路520px，保证标题与进线开关永不重叠
+    const width = Math.max(PANEL_PAD_X * 2 + circuitCount * CKT_COL_WIDTH, circuitCount === 1 ? 460 : (circuitCount === 2 ? 480 : 520));
     const height = 720; // 统一为 720px 高度，保证各箱体排版平齐
 
     const x = currentX;
@@ -48,7 +49,7 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
     };
   });
 
-  const busEndX = Math.max(currentX + 60, 2400);
+  const busEndX = Math.max(currentX + 80, 4400);
 
   return (
     <g>
@@ -216,7 +217,7 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
       </g>
 
       {/* 4. 各二级动力配电箱组 */}
-      {panelLayouts.map(({ panel, x, width, height }) => {
+      {panelLayouts.map(({ panel, x, width, height, circuitCount }) => {
         const feederLocalX = 50;
         const feederGlobalX = x + feederLocalX;
 
@@ -254,7 +255,7 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
               fontSize="11"
               className="font-cad font-bold"
             >
-              WDZ-YJY 5x16mm²
+              {panel.feeder_cable?.cable_type || 'WDZ-YJY'} {panel.feeder_cable?.spec || '5x10mm²'}
             </text>
             <text
               x={feederGlobalX + 12}
@@ -263,7 +264,7 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
               fontSize="10"
               className="font-cad"
             >
-              (3L + N + PE)
+              L={panel.feeder_cable?.length_m || 30}m ({panel.feeder_cable?.conductors?.live_conductors_count || 3}L + N + PE)
             </text>
 
             {/* 二级配电箱体 */}
@@ -330,7 +331,8 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
 
               {/* 回路垂直正交排版 */}
               {panel.circuits.map((ckt: ElectricalCircuit, cIdx: number) => {
-                const cktX = PANEL_PAD_X + cIdx * CKT_COL_WIDTH + 10;
+                const colSpacing = circuitCount > 1 ? (width - PANEL_PAD_X * 2 - 85) / (circuitCount - 1) : 0;
+                const cktX = circuitCount === 1 ? (width - 85) / 2 : PANEL_PAD_X + cIdx * colSpacing;
                 const hasVfd = ckt.load.is_vfd_driven;
                 const isMotor = ['pump_motor', 'blower_motor', 'screen_filter', 'actuator_motor', 'dosing_pump'].includes(ckt.load.type);
                 const isDolMotor = !hasVfd && isMotor;
@@ -390,101 +392,118 @@ export const Sheet1SLD: React.FC<Sheet1SLDProps> = ({ topology, onHover }) => {
                       <title>{`微型断路器: ${ckt.breaker.model} (${ckt.breaker.rated_current_a}A ${ckt.breaker.trip_curve}型)`}</title>
                     </g>
 
-                    {/* 2. 工频直接起动电机回路的 交流接触器 (KM) + 热继电器 (FR) 模块 */}
-                    {isDolMotor && (
-                      <g transform="translate(12, 60)">
-                        {/* 进线连接线 */}
-                        <line x1="30" y1="-16" x2="30" y2="0" stroke="#818cf8" strokeWidth="2" />
+                    {/* 2. 工频直接起动电机回路的 交流接触器 (KM) / 软起动器 (SS) + 热继电器 (FR) 模块 */}
+                    {isDolMotor && (() => {
+                      const isSoft = ckt.load.name.includes('软起动') || ckt.name.includes('软起动') || (ckt.load.rated_power_kw >= 7.5 && isDolMotor);
+                      const curA = ckt.load.rated_current_a || 6.4;
+                      let label = 'KM (9A)';
+                      let cTitle = '交流接触器: 正泰 NXC-09';
+                      let cBadge = 'AC-3 9A (3P 380V)';
 
-                        {/* 交流接触器 KM 卡片 */}
-                        <g
-                          className="cursor-pointer"
-                          onMouseEnter={(e) => {
-                            onHover?.({
-                              x: e.clientX,
-                              y: e.clientY,
-                              title: `交流接触器 (Contactor): 正泰 NXC-09`,
-                              badge: 'AC-3 9A (3P 380V)',
-                              badgeVariant: 'warning',
-                              details: [
-                                { label: '受控设备', value: `${loadFullName} (${ckt.circuit_id})` },
-                                { label: '主触头极数', value: '3P 380V (额定工作电流 9A)' },
-                                { label: '线圈控制电压', value: '24VDC / 220VAC (由 PLC 中继驱动)' },
-                                { label: '辅助触点', value: '1NO (常开状态反馈)' },
-                                { label: '机械/电寿命', value: '1000 万次 / 100 万次' },
-                              ],
-                            });
-                          }}
-                          onMouseMove={(e) => {
-                            onHover?.({
-                              x: e.clientX,
-                              y: e.clientY,
-                              title: `交流接触器 (Contactor): 正泰 NXC-09`,
-                              badge: 'AC-3 9A (3P 380V)',
-                              badgeVariant: 'warning',
-                              details: [
-                                { label: '受控设备', value: `${loadFullName} (${ckt.circuit_id})` },
-                                { label: '主触头极数', value: '3P 380V (额定工作电流 9A)' },
-                                { label: '线圈控制电压', value: '24VDC / 220VAC (由 PLC 中继驱动)' },
-                                { label: '辅助触点', value: '1NO (常开状态反馈)' },
-                                { label: '机械/电寿命', value: '1000 万次 / 100 万次' },
-                              ],
-                            });
-                          }}
-                          onMouseLeave={() => onHover?.(null)}
-                        >
-                          <rect width="60" height="32" rx="6" fill="#1e1b4b" stroke="#818cf8" strokeWidth="1.5" className="hover:stroke-indigo-300 hover:fill-indigo-950 transition" />
-                          <text x="30" y="21" fill="#c7d2fe" fontSize="11" fontWeight="black" textAnchor="middle" className="font-cad">
-                            KM (9A)
-                          </text>
+                      if (isSoft) {
+                        label = `SS (${ckt.load.rated_power_kw}kW)`;
+                        cTitle = `软起动器: 正泰 NJR2-T (${ckt.load.rated_power_kw}kW)`;
+                        cBadge = `软起动平滑降压 (${ckt.load.rated_power_kw}kW)`;
+                      } else if (curA > 40) { label = 'KM (65A)'; cTitle = '交流接触器: 正泰 NXC-65'; cBadge = 'AC-3 65A (3P)'; }
+                      else if (curA > 32) { label = 'KM (40A)'; cTitle = '交流接触器: 正泰 NXC-40'; cBadge = 'AC-3 40A (3P)'; }
+                      else if (curA > 25) { label = 'KM (32A)'; cTitle = '交流接触器: 正泰 NXC-32'; cBadge = 'AC-3 32A (3P)'; }
+                      else if (curA > 18) { label = 'KM (25A)'; cTitle = '交流接触器: 正泰 NXC-25'; cBadge = 'AC-3 25A (3P)'; }
+                      else if (curA > 12) { label = 'KM (18A)'; cTitle = '交流接触器: 正泰 NXC-18'; cBadge = 'AC-3 18A (3P)'; }
+                      else if (curA > 9) { label = 'KM (12A)'; cTitle = '交流接触器: 正泰 NXC-12'; cBadge = 'AC-3 12A (3P)'; }
+
+                      return (
+                        <g transform="translate(12, 60)">
+                          {/* 进线连接线 */}
+                          <line x1="30" y1="-16" x2="30" y2="0" stroke="#818cf8" strokeWidth="2" />
+
+                          {/* 交流接触器 / 软起动器 卡片 */}
+                          <g
+                            className="cursor-pointer"
+                            onMouseEnter={(e) => {
+                              onHover?.({
+                                x: e.clientX,
+                                y: e.clientY,
+                                title: cTitle,
+                                badge: cBadge,
+                                badgeVariant: isSoft ? 'success' : 'warning',
+                                details: [
+                                  { label: '受控设备', value: `${loadFullName} (${ckt.circuit_id})` },
+                                  { label: '主回路参数', value: isSoft ? `软起动平滑限流 (${ckt.load.rated_power_kw}kW / ${curA}A)` : `3P 380V (额定工作电流 ${label})` },
+                                  { label: '控制方式', value: isSoft ? '无源干触点触发 / 旁路接触器' : '24VDC / 220VAC (PLC驱动)' },
+                                  { label: '辅助触点', value: '1NO (常开状态反馈)' },
+                                ],
+                              });
+                            }}
+                            onMouseMove={(e) => {
+                              onHover?.({
+                                x: e.clientX,
+                                y: e.clientY,
+                                title: cTitle,
+                                badge: cBadge,
+                                badgeVariant: isSoft ? 'success' : 'warning',
+                                details: [
+                                  { label: '受控设备', value: `${loadFullName} (${ckt.circuit_id})` },
+                                  { label: '主回路参数', value: isSoft ? `软起动平滑限流 (${ckt.load.rated_power_kw}kW / ${curA}A)` : `3P 380V (额定工作电流 ${label})` },
+                                  { label: '控制方式', value: isSoft ? '无源干触点触发 / 旁路接触器' : '24VDC / 220VAC (PLC驱动)' },
+                                  { label: '辅助触点', value: '1NO (常开状态反馈)' },
+                                ],
+                              });
+                            }}
+                            onMouseLeave={() => onHover?.(null)}
+                          >
+                            <rect width="60" height="32" rx="6" fill={isSoft ? '#064e3b' : '#1e1b4b'} stroke={isSoft ? '#10b981' : '#818cf8'} strokeWidth="1.5" className="hover:stroke-indigo-300 hover:fill-indigo-950 transition" />
+                            <text x="30" y="21" fill={isSoft ? '#6ee7b7' : '#c7d2fe'} fontSize={isSoft ? '10' : '11'} fontWeight="black" textAnchor="middle" className="font-cad">
+                              {label}
+                            </text>
+                          </g>
+
+                          {/* 接触器到热继电器中间连线 */}
+                          <line x1="30" y1="32" x2="30" y2="44" stroke="#818cf8" strokeWidth="2" />
+
+                          {/* 热过载继电器 FR 卡片 */}
+                          <g
+                            transform="translate(0, 44)"
+                            className="cursor-pointer"
+                            onMouseEnter={(e) => {
+                              onHover?.({
+                                x: e.clientX,
+                                y: e.clientY,
+                                title: `热过载保护继电器: 正泰 NXR-12`,
+                                badge: '双金属片热保护',
+                                badgeVariant: 'warning',
+                                details: [
+                                  { label: '受控设备', value: loadFullName },
+                                  { label: '整定电流范围', value: `${(ckt.load.rated_current_a * 1.05).toFixed(1)} A (按额定电流 1.05 倍整定)` },
+                                  { label: '脱扣级别', value: 'Class 10A (反时限过载热脱扣)' },
+                                  { label: '断相保护', value: '内置差动断相保护机构' },
+                                ],
+                              });
+                            }}
+                            onMouseMove={(e) => {
+                              onHover?.({
+                                x: e.clientX,
+                                y: e.clientY,
+                                title: `热过载保护继电器: 正泰 NXR-12`,
+                                badge: '双金属片热保护',
+                                badgeVariant: 'warning',
+                                details: [
+                                  { label: '受控设备', value: loadFullName },
+                                  { label: '整定电流范围', value: `${(ckt.load.rated_current_a * 1.05).toFixed(1)} A (按额定电流 1.05 倍整定)` },
+                                  { label: '脱扣级别', value: 'Class 10A (反时限过载热脱扣)' },
+                                  { label: '断相保护', value: '内置差动断相保护机构' },
+                                ],
+                              });
+                            }}
+                            onMouseLeave={() => onHover?.(null)}
+                          >
+                            <rect width="60" height="24" rx="4" fill="#31101e" stroke="#f43f5e" strokeWidth="1.5" className="hover:stroke-rose-300 hover:fill-rose-950 transition" />
+                            <text x="30" y="16" fill="#fecdd3" fontSize="10" fontWeight="bold" textAnchor="middle" className="font-cad">
+                              FR 热保
+                            </text>
+                          </g>
                         </g>
-
-                        {/* 接触器到热继电器中间连线 */}
-                        <line x1="30" y1="32" x2="30" y2="44" stroke="#818cf8" strokeWidth="2" />
-
-                        {/* 热过载继电器 FR 卡片 */}
-                        <g
-                          transform="translate(0, 44)"
-                          className="cursor-pointer"
-                          onMouseEnter={(e) => {
-                            onHover?.({
-                              x: e.clientX,
-                              y: e.clientY,
-                              title: `热过载保护继电器: 正泰 NXR-12`,
-                              badge: '双金属片热保护',
-                              badgeVariant: 'warning',
-                              details: [
-                                { label: '受控设备', value: loadFullName },
-                                { label: '整定电流范围', value: `${(ckt.load.rated_current_a * 1.05).toFixed(1)} A (按额定电流 1.05 倍整定)` },
-                                { label: '脱扣级别', value: 'Class 10A (反时限过载热脱扣)' },
-                                { label: '断相保护', value: '内置差动断相保护机构' },
-                              ],
-                            });
-                          }}
-                          onMouseMove={(e) => {
-                            onHover?.({
-                              x: e.clientX,
-                              y: e.clientY,
-                              title: `热过载保护继电器: 正泰 NXR-12`,
-                              badge: '双金属片热保护',
-                              badgeVariant: 'warning',
-                              details: [
-                                { label: '受控设备', value: loadFullName },
-                                { label: '整定电流范围', value: `${(ckt.load.rated_current_a * 1.05).toFixed(1)} A (按额定电流 1.05 倍整定)` },
-                                { label: '脱扣级别', value: 'Class 10A (反时限过载热脱扣)' },
-                                { label: '断相保护', value: '内置差动断相保护机构' },
-                              ],
-                            });
-                          }}
-                          onMouseLeave={() => onHover?.(null)}
-                        >
-                          <rect width="60" height="24" rx="4" fill="#31101e" stroke="#f43f5e" strokeWidth="1.5" className="hover:stroke-rose-300 hover:fill-rose-950 transition" />
-                          <text x="30" y="16" fill="#fecdd3" fontSize="10" fontWeight="bold" textAnchor="middle" className="font-cad">
-                            FR 热保
-                          </text>
-                        </g>
-                      </g>
-                    )}
+                      );
+                    })()}
 
                     {/* 3. 馈电电缆 (Cable) 专用 Hover 区域 (带 4/3 线斜杠符号) */}
                     <g

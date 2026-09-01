@@ -53,6 +53,10 @@ export function generateCategorizedWiringSchedule(topology: PlantWideTopology): 
       const isDolMotor = !isVfd && isMotor;
 
       if (is3Phase) {
+        const isSoft = ckt.load.name.includes('软起动') || ckt.name.includes('软起动') || (ckt.load.rated_power_kw >= 7.5 && isDolMotor);
+        const curA = ckt.load.rated_current_a || 6.4;
+        const starterName = isSoft ? `软起动器 SS (${ckt.load.rated_power_kw}kW)` : `接触器 KM (正泰 ${curA > 18 ? 'NXC-25' : 'NXC-09'})`;
+
         // 三相 380V 动力回路 (L1, L2, L3, PE)
         // A相 (黄)
         power.push({
@@ -67,7 +71,7 @@ export function generateCategorizedWiringSchedule(topology: PlantWideTopology): 
           spec: `${ckt.cable.spec.split('+')[0] || 'BVR 2.5mm²'}`,
           fromComponent: `微断 ${ckt.breaker.model}`,
           fromTerminal: '2 (L1下出线)',
-          toComponent: isVfd ? '变频器 VFD' : isDolMotor ? '接触器 KM (NXC-09)' : `强电端子排 XT1-${panel.panel_id}`,
+          toComponent: isVfd ? '变频器 VFD' : isDolMotor ? starterName : `强电端子排 XT1-${panel.panel_id}`,
           toTerminal: isVfd ? 'R / L1' : isDolMotor ? '1/L1 (经FR至XT1)' : '1 (L1端子)',
           stripLengthMm: 10,
           torqueNm: 1.8,
@@ -88,7 +92,7 @@ export function generateCategorizedWiringSchedule(topology: PlantWideTopology): 
           spec: `${ckt.cable.spec.split('+')[0] || 'BVR 2.5mm²'}`,
           fromComponent: `微断 ${ckt.breaker.model}`,
           fromTerminal: '4 (L2下出线)',
-          toComponent: isVfd ? '变频器 VFD' : isDolMotor ? '接触器 KM (NXC-09)' : `强电端子排 XT1-${panel.panel_id}`,
+          toComponent: isVfd ? '变频器 VFD' : isDolMotor ? starterName : `强电端子排 XT1-${panel.panel_id}`,
           toTerminal: isVfd ? 'S / L2' : isDolMotor ? '3/L2 (经FR至XT1)' : '2 (L2端子)',
           stripLengthMm: 10,
           torqueNm: 1.8,
@@ -109,7 +113,7 @@ export function generateCategorizedWiringSchedule(topology: PlantWideTopology): 
           spec: `${ckt.cable.spec.split('+')[0] || 'BVR 2.5mm²'}`,
           fromComponent: `微断 ${ckt.breaker.model}`,
           fromTerminal: '6 (L3下出线)',
-          toComponent: isVfd ? '变频器 VFD' : isDolMotor ? '接触器 KM (NXC-09)' : `强电端子排 XT1-${panel.panel_id}`,
+          toComponent: isVfd ? '变频器 VFD' : isDolMotor ? starterName : `强电端子排 XT1-${panel.panel_id}`,
           toTerminal: isVfd ? 'T / L3' : isDolMotor ? '5/L3 (经FR至XT1)' : '3 (L3端子)',
           stripLengthMm: 10,
           torqueNm: 1.8,

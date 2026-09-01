@@ -62,6 +62,41 @@ export const CadViewport: React.FC<CadViewportProps> = ({
     return <Sheet3RS485 topology={topology} onHover={setHoverInfo} />;
   };
 
+  // 根据图卷与拓扑内容动态计算 SVG 画布总尺寸 (避免硬编码 2400 导致右侧箱体被裁剪截断)
+  const getCanvasDimensions = () => {
+    if (!topology) return { width: 3600, height: 1400 };
+    if (activeSheet === 1) {
+      const subPanels = topology.power_distribution?.sub_panels || [];
+      const CKT_COL_WIDTH = 135;
+      const PANEL_PAD_X = 40;
+      const PANEL_GAP = 70;
+      let totalW = 420;
+      subPanels.forEach((p) => {
+        const pWidth = Math.max(PANEL_PAD_X * 2 + p.circuits.length * CKT_COL_WIDTH, 580);
+        totalW += pWidth + PANEL_GAP;
+      });
+      return {
+        width: Math.max(totalW + 180, 3600),
+        height: 1300,
+      };
+    }
+    if (activeSheet === 2) {
+      const plc = topology.plc_controller;
+      const maxPts = Math.max(plc?.digital_inputs?.length || 0, plc?.digital_outputs?.length || 0, 6);
+      return {
+        width: 2600,
+        height: Math.max(300 + maxPts * 75, 1400),
+      };
+    }
+    const slaves = topology.rs485_fieldbus?.slaves || [];
+    return {
+      width: Math.max(350 + slaves.length * 270 + 300, 2600),
+      height: 1200,
+    };
+  };
+
+  const { width: canvasWidth, height: canvasHeight } = getCanvasDimensions();
+
   return (
     <main
       ref={containerRef}
@@ -99,12 +134,16 @@ export const CadViewport: React.FC<CadViewportProps> = ({
         </div>
       )}
 
-      {/* SVG 矢量绘制层 */}
+      {/* SVG 矢量绘制层 (自适应 viewBox 宽与高) */}
       <svg
         ref={svgRef}
-        className="w-[2400px] h-[1600px] absolute transition-transform duration-75 origin-top-left"
-        style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})` }}
-        viewBox="0 0 2400 1600"
+        className="absolute transition-transform duration-75 origin-top-left"
+        style={{
+          width: `${canvasWidth}px`,
+          height: `${canvasHeight}px`,
+          transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+        }}
+        viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
         xmlns="http://www.w3.org/2000/svg"
       >
         {renderSheetContent()}

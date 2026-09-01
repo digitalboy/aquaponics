@@ -21,8 +21,8 @@ export function App() {
   const [topology, setTopology] = useState<PlantWideTopology | null>(null);
   const [activeSheet, setActiveSheet] = useState<number>(1);
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-  const [zoom, setZoom] = useState<number>(0.95);
-  const [pan, setPan] = useState<{ x: number; y: number }>({ x: 40, y: 40 });
+  const [zoom, setZoom] = useState<number>(0.55);
+  const [pan, setPan] = useState<{ x: number; y: number }>({ x: 30, y: 30 });
 
   // 侧边栏工具箱状态 (默认展开 ERC 诊断侧边栏)
   const [activeSidebar, setActiveSidebar] = useState<SidebarTab>('erc');
@@ -44,6 +44,10 @@ export function App() {
         try {
           const validated = PlantWideTopologySchema.parse(data);
           loadTopologyData(validated);
+          // 初始自适应计算最佳可视比例
+          const viewportWidth = typeof window !== 'undefined' ? window.innerWidth - 60 : 1600;
+          const fitScale = Math.min(Math.max((viewportWidth / 3600) * 0.95, 0.35), 0.95);
+          setZoom(Number(fitScale.toFixed(2)));
         } catch (e) {
           console.warn('默认样例加载回退', e);
         }
@@ -71,11 +75,14 @@ export function App() {
   const handleZoomOut = () => setZoom((z) => Math.max(z * 0.833, 0.2));
   const handleResetZoom = () => {
     setZoom(1.0);
-    setPan({ x: 40, y: 40 });
+    setPan({ x: 30, y: 30 });
   };
   const handleFitZoom = () => {
-    setZoom(0.82);
-    setPan({ x: 20, y: 20 });
+    const viewportWidth = typeof window !== 'undefined' ? window.innerWidth - 60 : 1600;
+    const targetCanvasWidth = activeSheet === 1 ? 3600 : (activeSheet === 2 ? 2600 : 2600);
+    const fitScale = Math.min(Math.max((viewportWidth / targetCanvasWidth) * 0.95, 0.25), 1.0);
+    setZoom(Number(fitScale.toFixed(2)));
+    setPan({ x: 30, y: 30 });
   };
 
   // 导出 AutoCAD DXF (严格 ERC 门禁)
