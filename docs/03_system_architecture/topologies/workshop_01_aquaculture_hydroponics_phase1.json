@@ -320,11 +320,11 @@
       "services_running": ["modbus_bridge_5s", "yolo11_feeding_inference", "cloudflare_d1_sync"]
     },
     "poe_switch": {
-      "model": "TP-Link TL-SL1218P (16PoE + 2千兆上联)",
-      "total_power_budget_w": 150
+      "model": "TP-Link TL-SG2016MP (16口全千兆云管理 PoE 交换机)",
+      "total_power_budget_w": 110
     },
     "nvr_recorder": {
-      "model": "海康威视 DS-7816N-Q2 (16路高清 NVR)",
+      "model": "TP-Link TL-NVR6116K-L (16路铁壳 NVR)",
       "ip_address": "192.168.1.100",
       "storage_capacity_tb": 4
     },

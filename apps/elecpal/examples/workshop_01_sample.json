@@ -337,10 +337,10 @@
           },
           {
             "circuit_id": "WL-CTRL-02",
-            "name": "全厂 10 组 24V 自动化阀门供电",
+            "name": "控制柜继电器隔离控制回路与柜内 24V 辅电",
             "breaker": { "brand": "正泰 (CHNT)", "model": "NXB-63", "poles": "2P", "rated_current_a": 10, "trip_curve": "D", "breaking_capacity_ka": 6, "status": "CLOSED" },
-            "cable": { "cable_type": "RVV", "spec": "3x2.5", "conductors": { "live_conductors_count": 1, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 12, "allowable_ampacity_a": 20, "calculated_voltage_drop_pct": 0.22 },
-            "load": { "device_id": "VALVES-24V", "name": "10组电动蝶阀/球阀/电磁阀 (V-01~V-10)", "type": "actuator_motor", "rated_power_kw": 0.35, "rated_voltage_v": 220, "rated_current_a": 1.6, "is_vfd_driven": false, "duty_cycle_hours_per_day": 4 }
+            "cable": { "cable_type": "RVV", "spec": "3x2.5", "conductors": { "live_conductors_count": 1, "live_cross_section_mm2": 2.5, "has_neutral": true, "neutral_cross_section_mm2": 2.5, "pe_cross_section_mm2": 2.5 }, "installation_method": "CT", "length_m": 5, "allowable_ampacity_a": 20, "calculated_voltage_drop_pct": 0.08 },
+            "load": { "device_id": "RELAY-ISOLATION-HUB", "name": "无源干触点隔离中继组 (就地驱动各箱24V阀门，彻底消除长距直流线损)", "type": "actuator_motor", "rated_power_kw": 0.20, "rated_voltage_v": 220, "rated_current_a": 0.9, "is_vfd_driven": false, "duty_cycle_hours_per_day": 24 }
           },
           {
             "circuit_id": "WL-CTRL-03",
@@ -374,18 +374,50 @@
       "battery_spec": "24V 20Ah 密闭铅酸/铁锂电池组",
       "backup_hours_at_full_load": 5.1
     },
-    "dc_power_supply": {
-      "brand": "明纬 (MeanWell)",
-      "model": "NDR-120-24",
-      "output_voltage_v": 24,
-      "output_current_a": 5,
-      "max_measured_line_drop_v": 0.59
-    }
+    "dc_power_supplies": [
+      {
+        "location": "AP-CTRL 中控柜",
+        "brand": "明纬 (MeanWell)",
+        "model": "NDR-120-24",
+        "output_voltage_v": 24,
+        "output_current_a": 5.0,
+        "rated_power_w": 120,
+        "purpose": "专供 PLC 主机/扩展模块、研华工控机及核心水质探头(DO/氨氮/pH/EC)保命回路"
+      },
+      {
+        "location": "AP-WELL 深井动力箱",
+        "brand": "明纬 (MeanWell)",
+        "model": "HDR-30-24",
+        "output_voltage_v": 24,
+        "output_current_a": 1.5,
+        "rated_power_w": 36,
+        "purpose": "就地专供 V-01、V-02、V-03 补水电动阀与深井浮球开关回路 (消灭60米长距压降)"
+      },
+      {
+        "location": "AP-HYDRO 水培动力箱",
+        "brand": "明纬 (MeanWell)",
+        "model": "NDR-75-24",
+        "output_voltage_v": 24,
+        "output_current_a": 3.2,
+        "rated_power_w": 75,
+        "purpose": "就地专供 B3 立体架加压供水阀、V-05 喷淋阀及就地自控回路 (消灭120米长距压降)"
+      },
+      {
+        "location": "AP-HVAC 环控动力箱",
+        "brand": "明纬 (MeanWell)",
+        "model": "NDR-75-24",
+        "output_voltage_v": 24,
+        "output_current_a": 3.2,
+        "rated_power_w": 75,
+        "purpose": "就地专供 V-04 B2棚顶高压喷淋阀、天窗开闭电控回路"
+      }
+    ],
+    "distribution_architecture": "分布式就地供电 (Distributed Local DC Architecture) + 继电器无源干触点物理隔离"
   },
 
   "plc_controller": {
     "controller_brand": "汇川 (Inovance)",
-    "controller_model": "Easy320-0808TN",
+    "controller_model": "Easy320-0808TN + GL20-0808ETN (16DI/16DO)",
     "ip_address": "192.168.1.10",
     "port": 502,
     "protocol": "Modbus-TCP",
