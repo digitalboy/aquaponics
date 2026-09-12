@@ -66,9 +66,17 @@ docs/
     │   ├── README.md                                  # IQC/IPQC/OQC三道防线、仪器台账与 e-COA 防伪存证
     │   └── 01_全球主要国家与地区农业食品安全标准比对规范.md # 🌍 欧盟EU/日本肯定列表/中国GB/美国FDA/德瑞私标全景对比与工厂内控SOP
     │
-    └── 08_agronomy_knowledge_rnd/                     # 🧑‍🔬 08. 农艺机理与学术知识支持子系统
-        ├── README.md                                  # Crop Ontology本体、FvCB光合模型、12座试验舱配方R&D与GraphRAG
-        └── 01_温室作物蒸腾量估算与感知算法规范.md     # 🍃 Stanghellini 蒸腾模型、红外叶温感知与 Jarvis 气孔模型
+│   └── 08_agronomy_knowledge_rnd/                     # 🧑‍🔬 08. 农艺机理与学术知识支持子系统
+│       ├── README.md                                  # Crop Ontology本体、FvCB光合模型、12座试验舱配方R&D与GraphRAG
+│       └── 01_温室作物蒸腾量估算与感知算法规范.md     # 🍃 Stanghellini 蒸腾模型、红外叶温感知与 Jarvis 气孔模型
+│
+└── 05_brand_and_marketing/                            # 💼 05. 品牌战略、感性工程与营销实战知识库
+    ├── README.md                                      # 品牌体系全景图、双轴法则与模块导读
+    ├── 01_品牌战略与认知系统工程白皮书.md              # 🌟 品牌战略纲领：双轮驱动(Intel Inside)、数据到品牌的工程编译与全链风控防线
+    ├── 02_感性体验与多模态情绪设计规范.md              # 🌸 情绪与体验工程：五感设计(呼吸包装/脆响ASMR)、自律生活方式与生命生态叙事
+    ├── 03_农水产品客户异议与品质答辩手册.md            # 🛡️ 营销防御武器库：13 大尖锐客户与买手异议物理/机理答辩实战
+    ├── 04_跨界品牌工程与消费心智启示录.md              # 💡 跨界启示录：美妆面膜/戴森美学/依云神圣化/Lululemon身体觉知与实操工具箱
+    └── 05_全球标杆农产品品牌工程与溢价启示录.md        # 🏆 同界标杆篇：新西兰佳沛/近大金枪鱼/夕张甜瓜/5J火腿四大神话与落地工具箱
 ```
 
 ---
@@ -114,6 +122,14 @@ docs/
   - 细节规范：[01_全球主要国家与地区农业食品安全标准比对规范.md](./04_subsystems/07_quality_assurance_lab/01_全球主要国家与地区农业食品安全标准比对规范.md)
 * **🧑‍🔬 08. 农艺机理与学术支持**：[04_subsystems/08_agronomy_knowledge_rnd/README.md](./04_subsystems/08_agronomy_knowledge_rnd/README.md)（Crop Ontology本体、FvCB光合与Stanghellini模型、12座试验舱配方R&D与GraphRAG）
   - 细节规范：[01_温室作物蒸腾量估算与感知算法规范.md](./04_subsystems/08_agronomy_knowledge_rnd/01_温室作物蒸腾量估算与感知算法规范.md)
+
+### 5. 品牌战略与感性营销工程 (Brand Strategy & Emotional Engineering)
+* 研读 [05_brand_and_marketing/README.md](./05_brand_and_marketing/README.md) 掌握品牌认知双轴定位法则（理性确定性底座 $\times$ 感性情绪共鸣力）与知识库全景。
+* 精读 [01_品牌战略与认知系统工程白皮书.md](./05_brand_and_marketing/01_品牌战略与认知系统工程白皮书.md) 掌握母品牌与认证子品牌的 Intel Inside 协同模型、技术参数编译矩阵及食品安全秒级熔断机制。
+* 研读 [02_感性体验与多模态情绪设计规范.md](./05_brand_and_marketing/02_感性体验与多模态情绪设计规范.md) 掌握去科技冰冷感原则、五感多模态体验设计（防雾微孔包装/手掰咔嚓 ASMR）、四大客群情绪叙事与生命日记扫码体验。
+* 查阅 [03_农水产品客户异议与品质答辩手册.md](./05_brand_and_marketing/03_农水产品客户异议与品质答辩手册.md) 作为面向精品商超买手、米其林主厨与挑剔中产消费者的 13 大尖锐异议物理/机理实战答辩武器库。
+* 精读 [04_跨界品牌工程与消费心智启示录.md](./05_brand_and_marketing/04_跨界品牌工程与消费心智启示录.md) 掌握美妆面膜（即刻反馈/独处仪式/健康赎罪券）、戴森工业美学、依云水源神圣化与Lululemon身体觉知的跨界心智炼金术与五大落地实操工具箱。
+* 精读 [05_全球标杆农产品品牌工程与溢价启示录.md](./05_brand_and_marketing/05_全球标杆农产品品牌工程与溢价启示录.md) 掌握新西兰佳沛干物质门禁与品种垄断、日本近大金枪鱼科学反杀野生迷信、夕张甜瓜价格锚点公关、西班牙5J火腿代谢叙事与四大同界落地战术工具箱。
 
 ---
 
