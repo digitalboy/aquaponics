@@ -1,0 +1,159 @@
+{
+  "project": "FAO Fisheries and Aquaculture Technical Paper No. 589: Small-scale aquaponic food production",
+  "source_file": "c:\\DavidCode\\aquaponics\\books\\联合国粮农组织蔬菜数据.pdf",
+  "total_pages": 288,
+  "last_updated": "2026-09-12T06:51:00.000Z",
+  "status_summary": {
+    "total_modules": 16,
+    "completed": 16,
+    "in_progress": 0,
+    "pending": 0,
+    "overall_status": "completed"
+  },
+  "modules": [
+    {
+      "id": "00_front_matter",
+      "title": "Front Matter (Title, Abstract, Acknowledgements, Abbreviations, TOC)",
+      "title_zh": "前言与总览（书名、摘要、致谢、缩写词与符号表、全书总目录）",
+      "pages": [1, 22],
+      "target_file": "docs/06_fao_manual_589/00_front_matter.md",
+      "status": "completed",
+      "completed_at": "2026-09-12T06:06:00.000Z"
+    },
+    {
+      "id": "01_ch01_introduction",
+      "title": "Chapter 1: Introduction to aquaponics",
+      "title_zh": "第1章 鱼菜共生导论",
+      "pages": [23, 32],
+      "target_file": "docs/06_fao_manual_589/01_ch01_introduction.md",
+      "status": "completed",
+      "completed_at": "2026-09-12T06:06:00.000Z"
+    },
+    {
+      "id": "02_ch02_understanding_aquaponics",
+      "title": "Chapter 2: Understanding aquaponics",
+      "title_zh": "第2章 认知鱼菜共生：生态系统与物质循环",
+      "pages": [33, 42],
+      "target_file": "docs/06_fao_manual_589/02_ch02_understanding_aquaponics.md",
+      "status": "completed",
+      "completed_at": "2026-09-12T06:11:00.000Z"
+    },
+    {
+      "id": "03_ch03_water_quality",
+      "title": "Chapter 3: Water quality in aquaponics",
+      "title_zh": "第3章 鱼菜共生中的水质管理",
+      "pages": [43, 56],
+      "target_file": "docs/06_fao_manual_589/03_ch03_water_quality.md",
+      "status": "completed",
+      "completed_at": "2026-09-12T06:11:00.000Z"
+    },
+    {
+      "id": "04_ch04_system_design",
+      "title": "Chapter 4: Design of aquaponic units",
+      "title_zh": "第4章 鱼菜共生系统组件设计与构建",
+      "pages": [57, 96],
+      "target_file": "docs/06_fao_manual_589/04_ch04_system_design.md",
+      "status": "completed",
+      "completed_at": "2026-09-12T06:14:00.000Z"
+    },
+    {
+      "id": "05_ch05_bacteria",
+      "title": "Chapter 5: Bacteria in aquaponics",
+      "title_zh": "第5章 鱼菜共生中的细菌与生物过滤",
+      "pages": [97, 104],
+      "target_file": "docs/06_fao_manual_589/05_ch05_bacteria.md",
+      "status": "completed",
+      "completed_at": "2026-09-12T06:14:00.000Z"
+    },
+    {
+      "id": "06_ch06_plants",
+      "title": "Chapter 6: Plants in aquaponics",
+      "title_zh": "第6章 鱼菜共生中的植物生理与种植管理",
+      "pages": [105, 124],
+      "target_file": "docs/06_fao_manual_589/06_ch06_plants.md",
+      "status": "completed",
+      "completed_at": "2026-09-12T06:39:00.000Z"
+    },
+    {
+      "id": "07_ch07_fish",
+      "title": "Chapter 7: Fish in aquaponics",
+      "title_zh": "第7章 鱼菜共生中的鱼类生物学与养殖管理",
+      "pages": [125, 144],
+      "target_file": "docs/06_fao_manual_589/07_ch07_fish.md",
+      "status": "completed",
+      "completed_at": "2026-09-12T06:39:00.000Z"
+    },
+    {
+      "id": "08_ch08_management",
+      "title": "Chapter 8: Management and operation of aquaponic units",
+      "title_zh": "第8章 系统日常运营管理与故障排查",
+      "pages": [145, 162],
+      "target_file": "docs/06_fao_manual_589/08_ch08_management.md",
+      "status": "completed",
+      "completed_at": "2026-09-12T06:42:00.000Z"
+    },
+    {
+      "id": "09_ch09_additional_topics",
+      "title": "Chapter 9: Additional topics on aquaponics",
+      "title_zh": "第9章 拓展话题：资源替代、安全冗余与多模态集成",
+      "pages": [163, 178],
+      "target_file": "docs/06_fao_manual_589/09_ch09_additional_topics.md",
+      "status": "completed",
+      "completed_at": "2026-09-12T06:42:00.000Z"
+    },
+    {
+      "id": "10_glossary_references",
+      "title": "Further reading & Glossary",
+      "title_zh": "延伸阅读与专业词汇表",
+      "pages": [179, 188],
+      "target_file": "docs/06_fao_manual_589/10_glossary_references.md",
+      "status": "completed",
+      "completed_at": "2026-09-12T06:44:00.000Z"
+    },
+    {
+      "id": "11_appendix_1_vegetables",
+      "title": "Appendix 1: Vegetable production guidelines for 12 common aquaponic plants",
+      "title_zh": "附录1 12种常见鱼菜共生蔬菜生产指南",
+      "pages": [189, 204],
+      "target_file": "docs/06_fao_manual_589/11_appendix_1_vegetables.md",
+      "status": "completed",
+      "completed_at": "2026-09-12T06:44:00.000Z"
+    },
+    {
+      "id": "12_appendix_2_3_pest_disease",
+      "title": "Appendix 2 & 3: Plant and fish pests and disease control",
+      "title_zh": "附录2与附录3 植物与鱼类病虫害综合防治手册",
+      "pages": [205, 212],
+      "target_file": "docs/06_fao_manual_589/12_appendix_2_3_pest_disease.md",
+      "status": "completed",
+      "completed_at": "2026-09-12T06:45:00.000Z"
+    },
+    {
+      "id": "13_appendix_4_7_engineering_economics",
+      "title": "Appendix 4-7: Ammonia & biofilter calcs, homemade feed, setup considerations, cost-benefit",
+      "title_zh": "附录4至7 氨氮与滤材计算、自制饲料、规划考量与成本效益分析",
+      "pages": [213, 230],
+      "target_file": "docs/06_fao_manual_589/13_appendix_4_7_engineering_economics.md",
+      "status": "completed",
+      "completed_at": "2026-09-12T06:46:00.000Z"
+    },
+    {
+      "id": "14_appendix_8_construction",
+      "title": "Appendix 8: Step-by-step guide to constructing small-scale aquaponic systems",
+      "title_zh": "附录8 小型鱼菜共生系统手把手搭建指南（IBC实操手册）",
+      "pages": [231, 270],
+      "target_file": "docs/06_fao_manual_589/14_appendix_8_construction.md",
+      "status": "completed",
+      "completed_at": "2026-09-12T06:49:00.000Z"
+    },
+    {
+      "id": "15_quick_reference",
+      "title": "Aquaponics quick-reference handout",
+      "title_zh": "鱼菜共生快速参考备忘折页",
+      "pages": [271, 288],
+      "target_file": "docs/06_fao_manual_589/15_quick_reference.md",
+      "status": "completed",
+      "completed_at": "2026-09-12T06:51:00.000Z"
+    }
+  ]
+}
