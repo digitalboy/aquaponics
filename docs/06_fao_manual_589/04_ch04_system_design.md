@@ -141,12 +141,12 @@ flowchart LR
 整个闭合回路中，水流的驱动与输送方式决定了系统的安全冗余度：
 
 ```mermaid
-flowchart TD
-    subgraph CHIFT-PIST 经典黄金水力安全回路
-        FishTank[🐟 鱼池 (最高水位点)] -->|重力自然溢流| Swirl[旋流沉淀池]
-        Swirl -->|重力自然溢流| Bio[生物滤槽]
-        Bio -->|重力自然溢流| GrowBeds[🥬 水培床 (介质床/NFT/DWC)]
-        GrowBeds -->|重力排空汇流| Sump[💧 集水箱 Sump (全系统最低水位点)]
+flowchart LR
+    subgraph Loop ["CHIFT-PIST 经典黄金水力安全回路"]
+        FishTank["🐟 鱼池 (最高水位点)"] -->|重力自然溢流| Swirl["旋流沉淀池"]
+        Swirl -->|重力自然溢流| Bio["生物滤槽"]
+        Bio -->|重力自然溢流| GrowBeds["🥬 水培床 (介质床/NFT/DWC)"]
+        GrowBeds -->|重力排空汇流| Sump["💧 集水箱 Sump (全系统最低水位点)"]
         Sump -->|⚡ 潜水泵单向强力抽送| FishTank
     end
 ```

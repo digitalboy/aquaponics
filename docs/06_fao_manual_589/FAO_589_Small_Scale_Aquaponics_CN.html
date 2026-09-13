@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     mermaid.initialize({
         startOnLoad: false,
         theme: 'neutral',
+        suppressErrorRendering: true,
         flowchart: { useMaxWidth: true, htmlLabels: true }
     });
 
@@ -38,8 +39,12 @@ document.addEventListener("DOMContentLoaded", async function() {
             div.innerHTML = svg;
         } catch (err) {
             console.error('Mermaid render error for chart ' + i, err);
+            const errEl = document.getElementById('d' + id);
+            if (errEl) errEl.remove();
         }
     }
+    // 彻底清除任何可能残留挂载在 DOM 上的 Mermaid 错误元素
+    document.querySelectorAll('[id^="dmermaid-"]').forEach(el => el.remove());
     window.__MERMAID_RENDERED__ = true;
 });
 </script>
@@ -385,8 +390,9 @@ pre code {
 .mermaid svg {
     display: block;
     margin: 0 auto;
-    width: 100% !important;
     max-width: 100% !important;
+    max-height: 380px !important;
+    width: auto !important;
     height: auto !important;
 }
 
@@ -1827,12 +1833,12 @@ flowchart LR
 <h3>4.2.4 水流动力学与水力学循环构型（Water Movement）</h3>
 <p>整个闭合回路中，水流的驱动与输送方式决定了系统的安全冗余度：</p>
 <div class="mermaid">
-flowchart TD
-    subgraph CHIFT-PIST 经典黄金水力安全回路
-        FishTank[ 鱼池 (最高水位点)] -->|重力自然溢流| Swirl[旋流沉淀池]
-        Swirl -->|重力自然溢流| Bio[生物滤槽]
-        Bio -->|重力自然溢流| GrowBeds[ 水培床 (介质床/NFT/DWC)]
-        GrowBeds -->|重力排空汇流| Sump[ 集水箱 Sump (全系统最低水位点)]
+flowchart LR
+    subgraph Loop ["CHIFT-PIST 经典黄金水力安全回路"]
+        FishTank[" 鱼池 (最高水位点)"] -->|重力自然溢流| Swirl["旋流沉淀池"]
+        Swirl -->|重力自然溢流| Bio["生物滤槽"]
+        Bio -->|重力自然溢流| GrowBeds[" 水培床 (介质床/NFT/DWC)"]
+        GrowBeds -->|重力排空汇流| Sump[" 集水箱 Sump (全系统最低水位点)"]
         Sump -->| 潜水泵单向强力抽送| FishTank
     end
 </div>
@@ -3351,24 +3357,24 @@ flowchart LR
 <div class="mermaid">
 mindmap
   root((拓展话题与多模态集成))
-    9.1 可持续本土化替代投入品
-      有机补肥: 好氧堆肥茶 / 海藻茶 / 草木灰浸出液
-      替代蛋白饲料: 浮萍 (粗蛋白40%) / 黑水虻幼虫 / 红蚯蚓
-      自主种子收集: 传家宝品种留种与干燥储藏
-      雨水收集: 初雨弃流装置 First-flush
-      低成本建造: 生土袋 Earthbags / 竹木工程
-      清洁能源: 太阳能光伏 PV + DC 低压直流泵 + 太阳能螺旋盘管加热
-    9.2 关键水力安全防线
-      机械浮球补水阀 + 电子低液位断电开关
-      高位防溢流安全管 (Overflow Pipes)
-      破虹吸防抽干立管 (Standpipes)
-    9.3 跨系统复合延伸
-      浓缩固废与排污水大田果园灌溉
-      毛细自吸芯吸床 Wicking Beds (攻克土豆/胡萝卜块根种植)
-    9.4 全球创新案例剖析
-      缅甸重力流小农生计鱼菜示范
-      微咸水共生: 海鲈/鲷鱼 + 盐地碱蓬/海蓬子
-      印尼池塘 Yumina (菜鱼) 与 Bumina (果鱼) 模式
+    ["9.1 可持续本土化替代投入品"]
+      ["有机补肥：好氧堆肥茶、海藻茶、草木灰浸出液"]
+      ["替代蛋白饲料：浮萍（粗蛋白40%）、黑水虻幼虫、红蚯蚓"]
+      ["自主种子收集：传家宝品种留种与干燥储藏"]
+      ["雨水收集：初雨弃流装置 First-flush"]
+      ["低成本建造：生土袋 Earthbags 与竹木工程"]
+      ["清洁能源：太阳能光伏与直流泵供电"]
+    ["9.2 关键水力安全防线"]
+      ["机械浮球补水阀与电子低液位断电开关"]
+      ["高位防溢流安全管 Overflow Pipes"]
+      ["破虹吸防抽干立管 Standpipes"]
+    ["9.3 跨系统复合延伸"]
+      ["浓缩固废与排污水大田果园灌溉"]
+      ["毛细自吸芯吸床 Wicking Beds（块根块茎种植）"]
+    ["9.4 全球创新案例剖析"]
+      ["缅甸重力流小农生计鱼菜示范"]
+      ["微咸水共生：海鲈/鲷鱼与盐地碱蓬"]
+      ["印尼池塘 Yumina 菜鱼与 Bumina 果鱼模式"]
 </div>
 <hr>
 <h2>9.1 可持续本土化替代投入品（Sustainable Local Inputs）</h2>
@@ -3411,13 +3417,13 @@ flowchart LR
 mindmap
   root((农场内生替代饲料库))
     水生植物蛋白
-      浮萍 (Lemna minor): 粗蛋白高达 35-40%
-      满江红红萍 (Azolla): 粗蛋白 25-30%
-      辣木鲜叶 (Moringa): 粗蛋白 25-28%
+      ["浮萍 Lemna minor：粗蛋白高达 35-40%"]
+      ["满江红红萍 Azolla：粗蛋白 25-30%"]
+      ["辣木鲜叶 Moringa：粗蛋白 25-28%"]
     昆虫与无脊椎鲜活蛋白
-      黑水虻幼虫 (BSF): 粗蛋白 42% / 优质脂质 35%
-      赤子爱胜蚓 (红蚯蚓): 粗蛋白 60% / 促摄食引诱活性
-      蝇蛆干粉: 鲜活诱食
+      ["黑水虻幼虫 BSF：粗蛋白 42% 与优质脂质 35%"]
+      ["赤子爱胜蚓红蚯蚓：粗蛋白 60% 与促摄食活性"]
+      ["蝇蛆干粉：鲜活诱食"]
 </div>
 <ol>
 <li>**浮萍（Duckweed, <em>Lemna minor</em>）与满江红（<em>Azolla</em> spp.）**：</li>
@@ -3512,7 +3518,7 @@ flowchart TD
 <div class="callout callout-important"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span> <strong>核心要点 (Important)</strong></div><div class="callout-body"><p><strong>破除传统水培局限的世纪创新——芯吸床（Wicking Bed）</strong>：</p><p>传统水培（NFT、DWC 和潮汐床）只能栽培叶菜或攀援果菜，<strong>绝不可能栽培马铃薯、胡萝卜、洋葱、大蒜等块根块茎作物</strong>（块茎长时间泡在流动水中会直接腐烂发臭）。</p><p><strong>芯吸床结构彻底攻克了这一痛点</strong>！</p></div></div>
 <div class="mermaid">
 flowchart TD
-    subgraph 芯吸床解剖结构 (深度 50 cm)
+    subgraph Wicking ["芯吸床解剖结构 (深度 50 cm)"]
         SoilZone[" 上层透气土壤有机种植层 (厚度 25 - 30 cm)\n由腐殖土、沙壤土与堆肥构成\n疏松透气干燥，土豆/胡萝卜在其中膨大"]
         Geotextile["➖ 透水透气土工织物隔离层 (无纺布)\n物理隔离泥土，仅允许水分毛细穿透，防泥土下漏"]
         WaterZone[" 底层粗砾石密闭水库 (厚度 15 - 20 cm)\n注满来自鱼菜系统的富营养尾水\n内铺打孔注水管与溢流出水孔"]
@@ -4393,10 +4399,10 @@ flowchart TD
 <p>设计一个稳定不倒缸的鱼菜共生系统，必须通过物质守恒定律精确核算 <strong>“投饲负荷 $\rightarrow$ 氨氮释放量 $\rightarrow$ 微生物氧化所需表面积 $\rightarrow$ 生物填料体积”</strong>。</p>
 <div class="mermaid">
 flowchart LR
-    Feed[1. 每日投入饲料量 F (克)\n及其粗蛋白含量 CP%] --> N_in[2. 饲料含氮总量\nN = F × CP% × 16%]
-    N_in --> TAN[3. 鱼类鳃部排泄总氨氮 TAN\n约 70% 氮转化为游离 TAN]
-    TAN --> Area[4. 所需生物膜总比表面积\n每克 TAN 需 1.75 m² 表面积]
-    Area --> Volume[5. 换算生物填料净体积\n填料体积 = 总面积 / 填料比表面积 SSA]
+    Feed["1. 每日投入饲料量 F (克)\n及其粗蛋白含量 CP%"] --> N_in["2. 饲料含氮总量\nN = F × CP% × 16%"]
+    N_in --> TAN["3. 鱼类鳃部排泄总氨氮 TAN\n约 70% 氮转化为游离 TAN"]
+    TAN --> Area["4. 所需生物膜总比表面积\n每克 TAN 需 1.75 m² 表面积"]
+    Area --> Volume["5. 换算生物填料净体积\n填料体积 = 总面积 / 填料比表面积 SSA"]
 </div>
 <h2>4.1 步进式数学推导与计算实例</h2>
 <h3>第一步：计算每日饲料中的总氮素输入量</h3>
@@ -4574,21 +4580,21 @@ flowchart TD
 <div class="mermaid">
 mindmap
   root((建厂前五维可行性核验))
-    1. 宏观气候微环境
-      全年极值气温与日照时数
-      冬季防冻加温能耗经济性
-    2. 水电生命线
-      水源是否含剧毒高余氯或重金属
-      电网年跳闸停电频率与备用发电机
-    3. 农资与种源供应链
-      本地是否有稳定健康的优质鱼苗场
-      商业配合浮水料采购可达性
-    4. 法律法规与环保合规
-      外来水产物种 (罗非鱼) 养殖行政许可
-      农产品直接鲜食卫生上市资质
-    5. 市场与投资回报
-      当地鲜活鱼与沙拉菜的零售竞价空间
-      目标客群与溢价认同度
+    ["1. 宏观气候微环境"]
+      ["全年极值气温与日照时数"]
+      ["冬季防冻加温能耗经济性"]
+    ["2. 水电生命线"]
+      ["水源是否含剧毒高余氯或重金属"]
+      ["电网年跳闸停电频率与备用发电机"]
+    ["3. 农资与种源供应链"]
+      ["本地是否有稳定健康的优质鱼苗场"]
+      ["商业配合浮水料采购可达性"]
+    ["4. 法律法规与环保合规"]
+      ["外来水产物种（罗非鱼）养殖行政许可"]
+      ["农产品直接鲜食卫生上市资质"]
+    ["5. 市场与投资回报"]
+      ["当地鲜活鱼与沙拉菜的零售竞价空间"]
+      ["目标客群与溢价认同度"]
 </div>
 <h3>1. 气候与地理微环境自查</h3>
 <ul>
