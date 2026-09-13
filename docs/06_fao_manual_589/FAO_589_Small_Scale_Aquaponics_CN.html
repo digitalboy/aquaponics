@@ -312,6 +312,23 @@ tbody tr:nth-child(even) {
     line-height: 1.55;
 }
 
+.callout-subheading {
+    margin: 8px 0 6px 0;
+    font-size: 11pt;
+    font-weight: 700;
+    color: inherit;
+}
+
+.callout-ol, .callout-ul {
+    margin: 4px 0 6px 0;
+    padding-left: 22px;
+}
+
+.callout-ol li, .callout-ul li {
+    margin: 3px 0;
+    line-height: 1.55;
+}
+
 .callout-title {
     font-size: 10.5pt;
     font-weight: 700;
@@ -493,7 +510,7 @@ strong {
 <h2>内容提要（Abstract）</h2>
 <p>本技术白皮书系统全面地阐述了小型鱼菜共生食品生产的理论基石与实操工程。</p>
 <p>全书首先从鱼菜共生的起源、发展历史及其在现代无土栽培体系中的生态定位展开，深入剖析了系统内部维持生态动力学平衡的核心原则。随后，全书系统拆解了水质管理的五大核心参数（溶解氧、pH、水温、总氮化合物、水体硬度）、现场水质测试与安全水源选择，并深入分析了三大主流技术流派的工程构型：</p>
-<ol>
+<ol start="1">
 <li><strong>介质床系统（Media Bed Units）</strong>；</li>
 <li><strong>营养液膜技术（Nutrient Film Technique, NFT）</strong>；</li>
 <li><strong>深水浮筏培养系统（Deep Water Culture, DWC）</strong>。</li>
@@ -860,7 +877,7 @@ flowchart LR
 <h2>1.1 无土栽培（Hydroponics）</h2>
 <p>无土栽培（Hydroponics）是指在不利用天然土壤作为支撑和养分介质的环境中培育植物的技术。在无土栽培体系中，植物通常定植于惰性基质（如砾石、砂粒、泥炭苔、浮石、椰糠、岩棉或陶粒）中，或者直接将裸根悬浮于富含植物必需无机离子的营养水溶液之中。</p>
 <p>人类对水培技术的系统研究最早可追溯至 17 世纪末英格兰学者约翰·伍德沃德（John Woodward）关于植物营养源的经典实验。19 世纪 60 年代，德国植物生理学家萨克斯（Julius von Sachs）与诺普（Wilhelm Knop）通过人工配制无机盐营养液成功培育植物，确立了植物矿质营养理论。20 世纪 30 年代，美国加州大学伯克利分校的威廉·格里克（William Gericke）首次将营养液栽培推向大规模农业应用，并正式创造了“水培（Hydroponics）”这一术语（源自希腊语 <em>hydros</em> 水 与 <em>ponos</em> 劳作）。现代无土栽培主要衍生出三大分支：</p>
-<ol>
+<ol start="1">
 <li><strong>基质栽培（Substrate Culture）</strong>：利用固体多孔惰性材料提供根系锚固与水分缓冲；</li>
 <li><strong>水培（Water Culture / Hydroponics）</strong>：包含营养液膜技术（NFT）与深水浮筏栽培（DWC）；</li>
 <li><strong>气雾培（Aeroponics）</strong>：将高压雾化的微细营养液直接定时喷射至植物悬垂根系。</li>
@@ -872,7 +889,7 @@ flowchart LR
 <li><strong>化肥生产的生态足迹与矿产瓶颈</strong>：现代工业农业高度依赖合成化肥。合成氮肥的哈伯法（Haber-Bosch Process）是高耗能、高碳排放过程；而不可再生的磷矿（Phosphate Rock）储量正快速消耗，面临未来数十年内的全球供应告警。</li>
 </ul>
 <p>无土栽培通过提供完全可控的根区水肥气热环境，展现出显著优势：</p>
-<ol>
+<ol start="1">
 <li><strong>阻断土传病虫害</strong>：脱离土壤介质后，免除了土壤熏蒸与剧毒化学农药使用；</li>
 <li><strong>环境精准调控与高产出</strong>：营养液配比与微环境可根据作物生长阶段精确调谐，单产可达土壤种植的数倍；</li>
 <li><strong>极端节水省肥</strong>：闭环循环水培系统的水肥利用效率显著高于传统漫灌或滴灌；</li>
@@ -882,21 +899,21 @@ flowchart LR
 <h2>1.2 现代水产养殖（Aquaculture）</h2>
 <p>水产养殖（Aquaculture）是指在人工受控水体环境中对鱼类、甲壳类、软体动物及水生植物等水生生物进行人工繁育、养殖与收获的生产活动。随着全球野生捕捞渔业资源逼近生物承载极限，水产养殖已跃升为全球优质动物蛋白供应增长最核心的来源。</p>
 <p>目前全球主流的水产养殖工程模式主要涵盖四大流派：</p>
-<ol>
+<ol start="1">
 <li><strong>开放水域网箱养殖（Open Water Cages / Pens）</strong>：利用天然湖泊、水库或近海潮汐自然换水，基建投资低但对水域生态环境溢出风险大；</li>
 <li><strong>传统静水池塘养殖（Pond Culture）</strong>：依赖水体自身初级生产力与人工投饵，占地面积巨大且水体蒸发渗漏严重；</li>
 <li><strong>流水水槽养殖（Flow-Through Raceways）</strong>：依赖持续引入外部大量新鲜地表水或冷泉水排出代谢废物，水资源消耗强度极高；</li>
 <li><strong>工厂化循环水产养殖系统（Recirculating Aquaculture Systems, RAS）</strong>：通过物理微滤固液分离、生物硝化转盘/流化床脱氮、蛋白分离、脱气增氧及紫外/臭氧消毒等一系列工业化水处理单元，使养殖尾水经过深度净化后循环复用率达到 90%~99%。</li>
 </ol>
 <p>虽然 RAS 模式因高昂的初期基建投入、设备折旧和泵送曝气电力成本而推高了生产门槛，但其具有单位占地单产极高、水资源消耗极致节约、养殖环境全年恒温恒质、病原物理隔离等战略优势。</p>
-<div class="callout callout-warning"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></span> <strong>警示说明 (Warning)</strong></div><div class="callout-body"><p><strong>现代水产养殖的可持续性挑战</strong>：</p><p>1. <strong>高浓度富营养化尾水排放</strong>：未经处理的高浓度鱼类排泄物直接排放会导致受纳水体发生富营养化（Eutrophication）、藻华爆发与水体缺氧（Hypoxia），甚至造成沿海珊瑚礁与湿地生态系统瓦解；</p><p>2. <strong>鱼粉依赖性（Fishmeal Dependency）</strong>：高营养级肉食性养殖鱼类高度依赖海洋低营养级野生小杂鱼制成的鱼粉与鱼油，在生态学上存在“以鱼养鱼”的资源悖论。</p></div></div>
+<div class="callout callout-warning"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></span> <strong>警示说明 (Warning)</strong></div><div class="callout-body"><p><strong>现代水产养殖的可持续性挑战</strong>：</p><ol class="callout-ol" start="1"><li><strong>高浓度富营养化尾水排放</strong>：未经处理的高浓度鱼类排泄物直接排放会导致受纳水体发生富营养化（Eutrophication）、藻华爆发与水体缺氧（Hypoxia），甚至造成沿海珊瑚礁与湿地生态系统瓦解；</li><li><strong>鱼粉依赖性（Fishmeal Dependency）</strong>：高营养级肉食性养殖鱼类高度依赖海洋低营养级野生小杂鱼制成的鱼粉与鱼油，在生态学上存在“以鱼养鱼”的资源悖论。</li></ol></div></div>
 <p>鱼菜共生的诞生，正是为了<strong>将 RAS 排放的高营养负荷尾水直接转化为蔬菜生产的优质肥源</strong>，彻底扭转水产养殖的环境负外部性。</p>
 <hr>
 <h2>1.3 什么是鱼菜共生（Aquaponics）</h2>
 <p>鱼菜共生是将 <strong>循环水产养殖（RAS）</strong> 与 <strong>无土水培栽培（Hydroponics）</strong> 深度耦合在同一个连续循环水回路中的综合生态农业系统。</p>
 <h3>系统生态动力学闭环</h3>
 <p>在一个典型的鱼菜共生系统内，包含三个协同演化、相互依存的核心生命群体：</p>
-<ol>
+<ol start="1">
 <li><strong>水生动物（鱼类/虾类）</strong>：摄入高蛋白饵料，通过鳃部排泄非离子氨（$\text{NH}_3$）和尿素，并通过排便释放大量富含氮磷钾及微量元素的有机颗粒废弃物；</li>
 <li><strong>有益微生物群落（异养菌与自养硝化菌）</strong>：</li>
 </ol>
@@ -905,7 +922,7 @@ flowchart LR
 <li>**氨氧化细菌（AOB，如 <em>Nitrosomonas</em>）** 将具有高度水生毒性的氨氮氧化为亚硝酸盐（$\text{NO}_2^-$）；</li>
 <li>**亚硝酸盐氧化细菌（NOB，如 <em>Nitrobacter</em> / <em>Nitrospira</em>）** 将亚硝酸盐进一步氧化为低毒且易被植物根系同化的硝酸盐（$\text{NO}_3^-$）；</li>
 </ul>
-<ol>
+<ol start="3">
 <li><strong>经济植物（蔬菜/果瓜/草本花卉）</strong>：植物悬垂的根系自水体中吸收硝酸盐及其他微量元素作为生长养分，吸收作用同时完成了对水质的生物深度脱氮与净化，净化后的低氮富氧清水通过重力或水泵回流至鱼池，维系水生动物的健康生存环境。</li>
 </ol>
 <p>通过这种自维持的内循环体系，水产养殖的“排污负债”被完全转化为水培植物的“生产资料”，消除了传统水培对昂贵人造化学合成配方肥料的绝对依赖，达成了生态农业的高阶协同。</p>
@@ -994,7 +1011,7 @@ flowchart LR
 <li><strong>阿兹特克奇南帕农业（Chinampas）</strong>：墨西哥古代阿兹特克人在浅水湖泊中用泥土和芦苇构筑人工漂浮岛栽培作物，作物根系穿透岛床吸收湖中丰富养分。</li>
 </ul>
 <h3>现代科学体系的确立（1970s–1990s）</h3>
-<ol>
+<ol start="1">
 <li><strong>新炼金术研究所（New Alchemy Institute, 1970s）</strong>：美国马萨诸塞州的先锋科学家首次将太阳能温室、闭环水产养殖与室内水培蔬菜系统进行工程级集成，开启了现代鱼菜共生工程化研究的序幕；</li>
 <li><strong>北卡罗来纳州立大学（NCSU, 1980s）</strong>：Mark McMurtry 等学者发明了“流水式基质床与罗非鱼养殖联动系统”，首次在严格科研试验中证实：集成系统的耗水量<strong>仅为传统池塘养殖罗非鱼的 5%</strong>，确立了鱼菜共生在水资源匮乏地区的无可匹敌的节水地位；</li>
 <li><strong>维尔京群岛大学的里程碑突破（UVI, James Rakocy 团队）</strong>：从 20 世纪 80 年代起，詹姆斯·拉科西（James Rakocy）博士在维尔京群岛大学（UVI）主持进行了长达近三十年的系统定量研究。Rakocy 团队确立了现代鱼菜共生领域的黄金技术基石：</li>
@@ -1003,7 +1020,7 @@ flowchart LR
 <li>提出了著名的 <strong>“投饵量与种植面积平衡比率”（Feed Rate Ratio）</strong>，建立了科学量化的工程计算模型；</li>
 <li>奠定了工业级深水浮筏培养系统（DWC）的设计规范与固液微滤沉淀工艺；</li>
 </ul>
-<ol>
+<ol start="4">
 <li><strong>全球科研拓展与深化（2000s 至今）</strong>：</li>
 </ol>
 <ul>
@@ -1100,7 +1117,7 @@ flowchart TD
 <hr>
 <h2>2.1 鱼菜共生的关键生物组件</h2>
 <p>如第 1 章所述，鱼菜共生并非简单的水管拼接，而是一个高度精密的复合微生态循环系统。在连续循环回路中，养殖水体自鱼池流出，携带鱼类的代谢排泄物依次流经：</p>
-<ol>
+<ol start="1">
 <li><strong>机械过滤单元（Mechanical Filter）</strong>：物理沉淀并截留沉降固态粪便与残饵碎屑；</li>
 <li><strong>生物过滤单元（Biofilter）</strong>：依靠附着生长在填料表面的硝化细菌菌膜，将水溶性氨氮氧化为低毒且易吸收的硝酸盐；</li>
 <li><strong>植物水培床（Grow Beds）</strong>：植物根系直接自水体中吸收硝酸盐及其他微量矿质元素，完成水质深度生物净化；</li>
@@ -1113,7 +1130,7 @@ flowchart TD
 <p>氮元素（$\text{N}$）是一切生命结构不可或缺的核心基石。它是构成氨基酸、蛋白质、核酸（DNA/RNA）及酶系统的核心成分。虽然大气中约 78% 的组分是分子态氮气（$\text{N}_2$），但由于两个氮原子间存在极强的共价三键（$\text{N}\equiv\text{N}$），绝大多数高等植物无法直接吸收利用，必须经过<strong>生物固氮</strong>或工业哈伯法固氮转化为化合态氮。</p>
 <p>在养殖水体中，鱼类摄入饲料蛋白后，通过鳃上皮细胞排泄大量的<strong>非离子氨（$\text{NH}_3$）</strong> 与尿素。在水中，非离子氨与水分子建立解离平衡，形成游离氨与铵根离子（$\text{NH}_4^+$）：</p>
 <div class="math-display">$$\text{NH}_3 + \text{H}_2\text{O} \rightleftharpoons \text{NH}_4^+ + \text{OH}^-$$</div>
-<div class="callout callout-warning"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></span> <strong>警示说明 (Warning)</strong></div><div class="callout-body"><p><strong>非离子氨（$\text{NH}_3$）与铵离子（$\text{NH}_4^+$）的毒性差异</strong>：</p><p>- <strong>非离子氨（$\text{NH}_3$）</strong> 属于脂溶性非电离分子，极易穿透鱼类鳃小片细胞膜进入血液组织，破坏红细胞中枢、引起鳃丝肿胀与组织坏死，即使在极低浓度（$> 0.05\text{ mg/L}$）下也会对鱼类产生强烈的神经与呼吸毒性；</p><p>- <strong>铵离子（$\text{NH}_4^+$）</strong> 带有正电荷，难以被动扩散穿过生物膜，毒性显著低于 $\text{NH}_3$；</p><p>- 两者的解离平衡强烈受水温与 pH 驱动：<strong>水体 pH 越高、水温越高，剧毒游离氨 $\text{NH}_3$ 的占比呈指数级攀升</strong>。</p></div></div>
+<div class="callout callout-warning"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></span> <strong>警示说明 (Warning)</strong></div><div class="callout-body"><p><strong>非离子氨（$\text{NH}_3$）与铵离子（$\text{NH}_4^+$）的毒性差异</strong>：</p><ul class="callout-ul"><li><strong>非离子氨（$\text{NH}_3$）</strong> 属于脂溶性非电离分子，极易穿透鱼类鳃小片细胞膜进入血液组织，破坏红细胞中枢、引起鳃丝肿胀与组织坏死，即使在极低浓度（$> 0.05\text{ mg/L}$）下也会对鱼类产生强烈的神经与呼吸毒性；</li><li><strong>铵离子（$\text{NH}_4^+$）</strong> 带有正电荷，难以被动扩散穿过生物膜，毒性显著低于 $\text{NH}_3$；</li><li>两者的解离平衡强烈受水温与 pH 驱动：<strong>水体 pH 越高、水温越高，剧毒游离氨 $\text{NH}_3$ 的占比呈指数级攀升</strong>。</li></ul></div></div>
 <p>在成熟的鱼菜共生系统中，两类专性化能自养细菌主导了至关重要的两步好氧硝化反应：</p>
 <h4>第一步：氨氧化过程（Ammonia Oxidation）</h4>
 <p>由**氨氧化细菌（Ammonia-Oxidizing Bacteria, AOB，如亚硝化单胞菌 <em>Nitrosomonas</em> 属）** 主导，在充足溶解氧条件下将氨氧化为具有水生毒性的亚硝酸盐（$\text{NO}_2^-$）：</p>
@@ -1124,7 +1141,7 @@ flowchart TD
 <h4>全系统硝化总反应方程</h4>
 <p>综合两步反应，完整的硝化生化总方程可表示为：</p>
 <div class="math-display">$$\text{NH}_4^+ + 2\text{O}_2 \rightarrow \text{NO}_3^- + 2\text{H}^+ + \text{H}_2\text{O}$$</div>
-<div class="callout callout-important"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span> <strong>核心要点 (Important)</strong></div><div class="callout-body"><p><strong>硝化反应的工程启示</strong>：</p><p>1. <strong>高耗氧反应</strong>：每氧化 $1\text{ mg}$ 氨氮（以 $\text{N}$ 计）需要消耗约 $4.57\text{ mg}$ 的溶解氧（$\text{O}_2$）。生物滤池必须维持强劲的曝气增氧；</p><p>2. <strong>持续酸化产氢离子</strong>：反应持续释放氢离子（$\text{H}^+$），不断中和消耗水体中的碳酸盐碱度（$\text{KH}$）。若无外源缓冲剂补充，水体 pH 会不可逆地急剧下跌，导致硝化停滞甚至倒缸。</p></div></div>
+<div class="callout callout-important"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span> <strong>核心要点 (Important)</strong></div><div class="callout-body"><p><strong>硝化反应的工程启示</strong>：</p><ol class="callout-ol" start="1"><li><strong>高耗氧反应</strong>：每氧化 $1\text{ mg}$ 氨氮（以 $\text{N}$ 计）需要消耗约 $4.57\text{ mg}$ 的溶解氧（$\text{O}_2$）。生物滤池必须维持强劲的曝气增氧；</li><li><strong>持续酸化产氢离子</strong>：反应持续释放氢离子（$\text{H}^+$），不断中和消耗水体中的碳酸盐碱度（$\text{KH}$）。若无外源缓冲剂补充，水体 pH 会不可逆地急剧下跌，导致硝化停滞甚至倒缸。</li></ol></div></div>
 <hr>
 <h2>2.2 生物滤器（The Biofilter）</h2>
 <p>生物滤器（Biofilter）是鱼菜共生系统中最关键却最容易被忽视的“隐形心脏”。它并非物理筛除颗粒的滤网，而是<strong>专门为数以亿计的硝化细菌提供极高微孔表面积与优渥生境的人工生化反应器</strong>。</p>
@@ -1270,9 +1287,9 @@ flowchart LR
 <hr>
 <h3>2.4.2 投饵量比率（Feed Rate Ratio）：系统工程配比设计的金标准</h3>
 <p>早期鱼菜共生设计往往依赖“水体容积比”或“鱼与植物的重量比”，但在实际运营中，鱼体规格会持续增长，不同鱼种的新陈代谢率也完全不同。经维尔京群岛大学（UVI）等科研机构多年的系统试验，业界确立了<strong>以“日投饵量与种植面积比率（Feed Rate Ratio）”作为全系统容量规划的唯一科学基准</strong>。</p>
-<div class="callout callout-tip"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span> <strong>工程诀窍 (Tip)</strong></div><div class="callout-body"><p><strong>FAO 推荐的日常投饵量基准比率</strong>：</p><p>- <strong>种植常规绿叶蔬菜（如生菜、小白菜、瑞士甜菜、香草草本）</strong>：</p><p>$$\mathbf{40 \sim 50 \text{ 克饲料 / 平方米种植面积 / 每天}}$$</p><p>- <strong>种植茄果瓜类蔬菜（如番茄、黄瓜、辣椒、茄子、草莓）</strong>：</p><p>$$\mathbf{50 \sim 80 \text{ 克饲料 / 平方米种植面积 / 每天}}$$</p></div></div>
+<div class="callout callout-tip"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span> <strong>工程诀窍 (Tip)</strong></div><div class="callout-body"><p><strong>FAO 推荐的日常投饵量基准比率</strong>：</p><ul class="callout-ul"><li><strong>种植常规绿叶蔬菜（如生菜、小白菜、瑞士甜菜、香草草本）</strong>：</li></ul><p>$$\mathbf{40 \sim 50 \text{ 克饲料 / 平方米种植面积 / 每天}}$$</p><ul class="callout-ul"><li><strong>种植茄果瓜类蔬菜（如番茄、黄瓜、辣椒、茄子、草莓）</strong>：</li></ul><p>$$\mathbf{50 \sim 80 \text{ 克饲料 / 平方米种植面积 / 每天}}$$</p></div></div>
 <p><strong>核心设计逻辑</strong>：</p>
-<ol>
+<ol start="1">
 <li>先根据家庭或商业需求确定<strong>种植床的实际有效采光生产面积（$\text{m}^2$）</strong>；</li>
 <li>依据作物类型（绿叶菜或果菜），计算每天系统所需的总饲料投入重量（$\text{g/天}$）；</li>
 <li>按照成年鱼每日健康摄食率为自身体重的 <strong>1%~2%</strong>，反推鱼池内所需的健康<strong>鱼类总存塘生物量（Biomass）</strong>；</li>
@@ -1281,7 +1298,7 @@ flowchart LR
 <hr>
 <h3>2.4.3 动植物生理表征现场巡检法（Health Check）</h3>
 <p>日常运维中，动植物的生理表征是比化学试剂更敏锐直观的“生物传感器”：</p>
-<ol>
+<ol start="1">
 <li><strong>植物异常表征与诊断</strong>：</li>
 </ol>
 <ul>
@@ -1290,7 +1307,7 @@ flowchart LR
 <li><strong>老叶边缘灼伤、呈红褐色斑点</strong>：缺钾征兆，需补充碳酸氢钾；</li>
 <li><strong>新叶心叶大面积黄白化但叶脉保持绿色</strong>：缺铁失绿症（在 pH $> 7.0$ 条件下尤其高发），需定期叶面喷施或水体添加螯合铁（Fe-EDDHA / Fe-DTPA）。</li>
 </ul>
-<ol>
+<ol start="2">
 <li><strong>鱼类应激与异常表征</strong>：</li>
 </ol>
 <ul>
@@ -1365,7 +1382,7 @@ mindmap
 <hr>
 <h2>3.1 生物耐受极限与系统综合妥协</h2>
 <p>在独立的水产养殖或商业无土水培中，管理者可以根据单一物种的生理嗜好将水质指标调节至绝对极限最佳工况。然而在鱼菜共生系统中，管理者必须同时服务于三个生物学特性截然不同的生物界：</p>
-<ol>
+<ol start="1">
 <li><strong>鱼类（水生脊椎动物）</strong>：偏好中性至弱碱性水质（pH 6.5–8.0），极度依赖高溶氧，对非离子氨与亚硝酸盐极度敏感；</li>
 <li><strong>植物（高等自养绿色植物）</strong>：偏好微酸性根区环境（pH 5.5–6.5），以保证铁、磷、锰、锌等微量阳离子处于游离螯合态以利于吸收；</li>
 <li><strong>硝化细菌（化能自养微生物）</strong>：偏好弱碱性环境（pH 7.2–8.2）与温暖水温（24–28 °C），耐受低 pH 能力极差。</li>
@@ -1381,7 +1398,7 @@ mindmap
 <li><strong>植物根系</strong>：根系的有氧呼吸对主动吸收矿质离子至关重要。若根区缺氧（$\text{DO} < 3\text{ mg/L}$），植物根毛细胞迅速窒息并诱发厌氧病原菌（如腐霉菌 <em>Pythium</em>）入侵，引发致命的<strong>根腐病（Root Rot）</strong>；</li>
 <li><strong>硝化细菌</strong>：每氧化 $1\text{ mg}$ 氨氮需要消耗约 $4.57\text{ mg}$ 溶解氧。当生物滤池内 $\text{DO} < 2\text{ mg/L}$ 时，硝化进程几乎停摆。</li>
 </ul>
-<div class="callout callout-important"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span> <strong>核心要点 (Important)</strong></div><div class="callout-body"><p><strong>水温与溶氧的逆向热力学矛盾</strong>：</p><p>水中氧气的物理饱和溶解度随水温升高而显著下降。例如在 1 个标准大气压下：</p><p>- 水温 $15\text{ }^\circ\text{C}$ 时，纯水饱和溶氧约为 $10.1\text{ mg/L}$；</p><p>- 水温升至 $30\text{ }^\circ\text{C}$ 时，饱和溶氧骤跌至 $7.5\text{ mg/L}$。</p><p></p><p>与此同时，水生冷血动物（鱼类）与微生物在新陈代谢动力学规律（$Q_{10}$ 效应）驱使下，<strong>温度越高其呼吸耗氧速率越快</strong>。因此，在夏季高温期，系统极易发生“耗氧需求飙升与物理溶氧能力萎缩”的双重剪刀差，必须配置强化气泵曝气与水流文丘里喷管（Venturi injectors）。</p></div></div>
+<div class="callout callout-important"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span> <strong>核心要点 (Important)</strong></div><div class="callout-body"><p><strong>水温与溶氧的逆向热力学矛盾</strong>：</p><p>水中氧气的物理饱和溶解度随水温升高而显著下降。例如在 1 个标准大气压下：</p><ul class="callout-ul"><li>水温 $15\text{ }^\circ\text{C}$ 时，纯水饱和溶氧约为 $10.1\text{ mg/L}$；</li><li>水温升至 $30\text{ }^\circ\text{C}$ 时，饱和溶氧骤跌至 $7.5\text{ mg/L}$。</li></ul><p>与此同时，水生冷血动物（鱼类）与微生物在新陈代谢动力学规律（$Q_{10}$ 效应）驱使下，<strong>温度越高其呼吸耗氧速率越快</strong>。因此，在夏季高温期，系统极易发生“耗氧需求飙升与物理溶氧能力萎缩”的双重剪刀差，必须配置强化气泵曝气与水流文丘里喷管（Venturi injectors）。</p></div></div>
 <hr>
 <h3>3.2.2 水体酸碱度（pH）</h3>
 <p>pH 是水中氢离子（$\text{H}^+$）活度的负对数度量（$\text{pH} = -\log[\text{H}^+]$），是整个系统生物化学反应的“总阀门”。</p>
@@ -1398,27 +1415,27 @@ graph LR
     BacteriaOpt -.-> Target
     FishOpt -.-> Target
 </div>
-<ol>
+<ol start="1">
 <li><strong>pH 偏高（$> 7.5$）的系统灾害</strong>：</li>
 </ol>
 <ul>
 <li><strong>养分沉淀与缺素</strong>：微量营养阳离子（$\text{Fe}^{2+}, \text{Mn}^{2+}, \text{Zn}^{2+}, \text{Cu}^{2+}$）与磷酸根离子形成不溶性沉淀，导致植物表现出严重的顶芽失绿黄化与落花落果；</li>
 <li><strong>非离子氨毒性激增</strong>：促使水体中的无毒铵离子（$\text{NH}_4^+$）快速转化为剧毒的游离非离子氨（$\text{NH}_3$）。</li>
 </ul>
-<ol>
+<ol start="2">
 <li><strong>pH 偏低（$< 6.0$）的系统灾害</strong>：</li>
 </ol>
 <ul>
 <li><strong>硝化系统完全崩溃</strong>：硝化酶活性受到不可逆破坏，氨氮开始急剧累积；</li>
 <li><strong>鱼类鳃丝烧伤</strong>：水体酸性直接侵蚀鱼体黏膜，引发渗透压调节衰竭。</li>
 </ul>
-<ol>
+<ol start="3">
 <li><strong>工程目标值</strong>：在日常运营中，<strong>强行将 pH 稳定在 6.0–7.0（最佳 6.8–7.0）</strong> 是唯一能同时兼顾动植物与菌群的可行区间。</li>
 </ol>
 <hr>
 <h3>3.2.3 水温（Temperature）</h3>
 <p>水温直接制约鱼类的摄食消化速率、植物的光合代谢与微生物的硝化增殖速率。</p>
-<ol>
+<ol start="1">
 <li><strong>适养鱼种温区分类</strong>：</li>
 </ol>
 <ul>
@@ -1429,7 +1446,7 @@ graph LR
 <li><strong>冷水性鱼类（Cold-water species）</strong>：</li>
 <li><strong>虹鳟（Rainbow Trout）</strong>：最适水温 $12\sim 18\text{ }^\circ\text{C}$，超过 $21\text{ }^\circ\text{C}$ 即产生严重热应激并伴随高死亡率。</li>
 </ul>
-<ol>
+<ol start="2">
 <li><strong>植物根温效应</strong>：</li>
 </ol>
 <ul>
@@ -1759,7 +1776,7 @@ mindmap
 <ul>
 <li><strong>结构荷载（Structural Load）</strong>：普通居民楼非上人平屋顶的设计活荷载通常仅为 $1.5\sim 2.0\text{ kN/m}^2$（约 $150\sim 200\text{ kg/m}^2$），完全无法承受深水池和重质碎石介质床。在屋顶建设时：</li>
 </ul>
-<ol>
+<ol start="1">
 <li>必须将重型蓄水桶尽量布置在<strong>承重墙或承重梁柱</strong>的正上方；</li>
 <li>严禁使用重达数百公斤的碎石，必须改用超轻质水培技术（如 NFT 管道）或超轻陶粒；</li>
 </ol>
@@ -1788,7 +1805,7 @@ flowchart TD
     AirPump -.->|深水曝气| Hydroponic
 </div>
 <h3>4.2.1 养殖鱼池（Fish Tank）</h3>
-<ol>
+<ol start="1">
 <li><strong>材质选型</strong>：必须采用<strong>惰性、无毒、食品级</strong>材质。强烈推荐高密度聚乙烯（HDPE）、聚丙烯（PP）、食品级玻璃钢（FRP）或带有饮用水级聚氯乙烯内衬（PVC Liner）的储水容器。严禁使用回收旧化工桶或镀锌铁桶（锌元素溶出会直接毒死鱼类）；</li>
 <li><strong>几何构型</strong>：</li>
 </ol>
@@ -1796,7 +1813,7 @@ flowchart TD
 <li><strong>圆形平底/微锥底（最佳）</strong>：水流在圆桶内受推水切向流作用自发形成温和的“茶杯涡流效应（Teacup Effect）”，带动鱼粪和残饵自动向中央最低点汇聚，通过中央排污管（Sloppy / Bottom Drain）排出，彻底消除了死角；</li>
 <li><strong>矩形方池</strong>：若必须使用方池，应在四角用 PVC 板或水泥倒角制成弧形圆角，防止死角积粪发黑发臭。</li>
 </ul>
-<ol>
+<ol start="3">
 <li><strong>色彩管理</strong>：推荐内壁选用<strong>浅灰色或白色</strong>。浅色便于巡检者清晰观察池底清洁度、鱼群摄食体表病变，且在夏季具有优异的日光反光降温效果。</li>
 </ol>
 <hr>
@@ -1842,7 +1859,7 @@ flowchart LR
         Sump -->| 潜水泵单向强力抽送| FishTank
     end
 </div>
-<div class="callout callout-important"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span> <strong>核心要点 (Important)</strong></div><div class="callout-body"><p><strong>CHIFT-PIST 黄金水力学准则（Constant Height In Fish Tank – Pump In Sump Tank）</strong>：</p><p>- <strong>永远不要把循环水泵直接置于主鱼池内部</strong>！若水泵放在鱼池内，一旦下游水培床或管道发生脱扣泄漏，水泵会在数十分钟内将鱼池抽干，导致所有鱼群因干涸暴晒而全部死亡；</p><p>- <strong>正确构型</strong>：鱼池处于高位，鱼池的水依靠表面<strong>溢流管</strong>以重力自流方式流向沉淀器、水培床，最终全部回流到处于地势最低处的<strong>集水箱（Sump Tank）</strong>。潜水泵只安装在集水箱内，负责将水抽回鱼池。</p><p>- <strong>安全防线</strong>：即使集水箱或管路破裂，水泵最多只能将集水箱内部有限的水抽干，鱼池由于采用高位溢流出水，其水位将<strong>永远恒定不变</strong>，鱼池内的生命得到绝对安全保障。</p></div></div>
+<div class="callout callout-important"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span> <strong>核心要点 (Important)</strong></div><div class="callout-body"><p><strong>CHIFT-PIST 黄金水力学准则（Constant Height In Fish Tank – Pump In Sump Tank）</strong>：</p><ul class="callout-ul"><li><strong>永远不要把循环水泵直接置于主鱼池内部</strong>！若水泵放在鱼池内，一旦下游水培床或管道发生脱扣泄漏，水泵会在数十分钟内将鱼池抽干，导致所有鱼群因干涸暴晒而全部死亡；</li><li><strong>正确构型</strong>：鱼池处于高位，鱼池的水依靠表面<strong>溢流管</strong>以重力自流方式流向沉淀器、水培床，最终全部回流到处于地势最低处的<strong>集水箱（Sump Tank）</strong>。潜水泵只安装在集水箱内，负责将水抽回鱼池。</li><li><strong>安全防线</strong>：即使集水箱或管路破裂，水泵最多只能将集水箱内部有限的水抽干，鱼池由于采用高位溢流出水，其水位将<strong>永远恒定不变</strong>，鱼池内的生命得到绝对安全保障。</li></ul></div></div>
 <ul>
 <li><strong>循环水流量计算</strong>：工程经验要求，<strong>小型系统的水泵实际净流量，应能做到每 1~2 小时将养殖鱼池总水体完整循环过滤一遍</strong>（即每小时流量 $Q \ge 0.5 \sim 1.0 \times V_{\text{fish}}$）。</li>
 </ul>
@@ -2000,7 +2017,7 @@ flowchart TD
     Top --- Middle
     Middle --- Bottom
 </div>
-<ol>
+<ol start="1">
 <li><strong>表层干燥防护层（Dry Zone, 0–5 cm）</strong>：此层基质完全高出潮汐最高水位线，常年保持干燥。强日光照射抑制了蓝绿藻在床面滋生，同时隔离了潮气，防止植株茎基部发生猝倒病与霉烂；</li>
 <li><strong>中层潮汐根系生化层（Root/Nitrification Zone, 5–20 cm）</strong>：潮涨时水体带来丰富养分，潮退时吸入新鲜空气，是植物须根吸收硝酸盐的主阵地，也是硝化菌生物膜最厚重的区域；</li>
 <li><strong>底层沉淀矿化层（Mineralization Zone, 20–30 cm）</strong>：每次潮汐后底部保留约 2~5 cm 的微量积水，沉淀的固态微细有机物在此处被**红蚯蚓（Red Wiggler Worms, <em>Eisenia fetida</em>）** 以及异养腐生细菌深度消化吞食，转化为微溶于水的优质生物腐殖质与可溶性矿质肥，实现介质床长年不换土、不翻缸。</li>
@@ -2124,7 +2141,7 @@ flowchart LR
 </tbody></table></div>
 <hr>
 <h2>4.7 本章小结（Chapter Summary）</h2>
-<ol>
+<ol start="1">
 <li><strong>选址安全基石</strong>：地基承重与平整度决定管路寿命；鱼池必须坚决避光遮阳以杜绝有害绿藻爆发；屋顶作业必须校核建筑结构荷载并杜绝重石荷载。</li>
 <li><strong>水力学红线安全设计</strong>：坚决推行 <strong>CHIFT-PIST 构型</strong>（泵置集水箱，鱼池高位重力溢流），从物理结构上杜绝由于漏水断管导致鱼池抽干死鱼的致命风险。</li>
 <li><strong>介质床的潮汐呼吸机理</strong>：利用<strong>自动钟罩虹吸阀</strong>构建涨退潮循环，在 30 厘米基质床内营造“表层干燥防病、中层硝化吸肥、底层蚯蚓矿化”的垂直微生态群落。</li>
@@ -2175,7 +2192,7 @@ flowchart TD
 </ul>
 <hr>
 <h3>5.1.2 菌群健康五大环境控制基准（回顾与深化）</h3>
-<ol>
+<ol start="1">
 <li><strong>高比表面积载体（High Surface Area Media）</strong>：硝化菌必须固着在坚硬固相表面分泌胞外多聚物形成生物被膜（Biofilm）。填料比表面积越大，容纳的活菌总生物量越庞大；</li>
 <li><strong>水质 pH 黄金带（6.0–7.0 折中）</strong>：硝化菌原生适宜 pH 为 $7.2\sim 8.2$，但在鱼菜系统中为兼顾植物根系对铁、磷微量元素的吸收，工程上必须动态压制在 <strong>$6.0\sim 7.0$（最佳 $6.8\sim 7.0$）</strong>。严禁跌破 $6.0$（会导致酶构象破坏彻底停摆）；</li>
 <li><strong>水温区间（17–34 °C）</strong>：$24\sim 28\text{ }^\circ\text{C}$ 时繁殖最旺盛。$< 15\text{ }^\circ\text{C}$ 硝化速率腰斩；$< 10\text{ }^\circ\text{C}$ 仅剩 25% 活性；</li>
@@ -2202,7 +2219,7 @@ flowchart TD
 <li><strong>异养菌优势</strong>：分裂极快（20~30 分钟增殖一代），耗氧极猛；</li>
 <li><strong>潜在风险</strong>：若机械沉淀不彻底，过量固态鱼粪长期在生物滤槽堆积，异养菌将发生爆发式增殖，在填料表面形成厚重的灰色滑腻污泥膜。这会产生两大严重恶果：</li>
 </ul>
-<ol>
+<ol start="1">
 <li><strong>空间覆盖窒息</strong>：过厚的异养菌膜会物理覆盖附着在下层的自养硝化菌，阻断其氧气与氨氮扩散通道；</li>
 <li><strong>剧烈争夺溶解氧</strong>：异养菌的剧烈呼吸会使滤池底层迅速沦为无氧状态。</li>
 </ol>
@@ -2261,7 +2278,7 @@ gantt
     极低浓度: 0, 12
     随硝化完全展开呈直线上升 (>50mg/L): 12, 30
 </div>
-<ol>
+<ol start="1">
 <li><strong>第 1–7 天（氨氮蓄积期）</strong>：加入外源氨后，空气与水源中自然游离的极少量 AOB 开始附着在填料上，开始微弱氧化；</li>
 <li><strong>第 8–18 天（亚硝酸盐峰值危险期）</strong>：AOB 种群壮大，大量氨转化为 $\text{NO}_2^-$。水体中亚硝酸盐浓度常常暴飙至数个 $\text{mg/L}$。此时 NOB 细菌才被高浓度底物唤醒，开始缓慢定殖；</li>
 <li><strong>第 20–35 天（硝酸盐生成与终点标志）</strong>：NOB 菌膜完全成型，氧化速率超过生成速率，水中亚硝酸盐在一两天内垂直归零，水体中硝酸盐大幅蓄积。</li>
@@ -2309,21 +2326,21 @@ gantt
 <hr>
 <h3>5.4.3 开缸加速“引种（Seeding）”秘籍</h3>
 <p>为了将长达 4~6 周的漫长开缸周期压缩至 <strong>7~10 天</strong>，可以采用成熟生物膜物理接种法：</p>
-<ol>
+<ol start="1">
 <li><strong>移植老缸滤料</strong>：自一台运行多年的健康老鱼菜系统或观赏鱼缸中，取出一小袋生化棉、陶粒或 K1 生化填料，直接浸入新系统的生物滤池中；</li>
 <li><strong>挤入老生化棉泥浆</strong>：将老缸滤棉浸入水桶拧出的浓稠棕褐色“菌泥浆”，直接泼入新系统生化池。该泥浆中富含数十亿现成的高活性硝化菌群与胞外聚合物，能在数小时内吸附定殖；</li>
 <li><strong>商用硝化菌液体胶囊制剂</strong>：市售冷链保存的鲜活硝化细菌菌液也可辅助加速，但需确认出厂保质期与活性。</li>
 </ol>
 <hr>
 <h3>5.4.4 动植物进场节奏管理</h3>
-<ol>
+<ol start="1">
 <li><strong>植物苗移栽节点</strong>：</li>
 </ol>
 <ul>
 <li>可以在开缸中后期（亚硝酸盐峰值回落、硝酸盐刚刚起步上升时）定植首批耐贫瘠的先锋绿叶菜（如生菜、薄荷苗）；</li>
 <li><strong>注意预期</strong>：初期幼苗可能表现出微量元素缺乏症（如叶片微黄），随着后续鱼群加入与饲料投喂量递增，养分谱系完备后植物即可自发恢复浓绿；</li>
 </ul>
-<ol>
+<ol start="2">
 <li><strong>养殖鱼类下塘节点</strong>：</li>
 </ol>
 <ul>
@@ -2422,7 +2439,7 @@ mindmap
 <h2>6.2 植物基础生物学与矿质营养动力学</h2>
 <h3>6.2.1 植物解剖结构与水分养分运移机制</h3>
 <p>植物通过根、茎、叶构建起贯穿全株的水力输导网络：</p>
-<ol>
+<ol start="1">
 <li><strong>根系结构（Roots）</strong>：幼嫩白色根尖的根毛区提供巨大的吸收表面积。植物根细胞通过质膜上的离子通道与质子泵（$\text{H}^+\text{-ATPase}$）进行<strong>主动逆浓度梯度吸收</strong>矿质阳离子与阴离子；</li>
 <li><strong>蒸腾拉力（Transpiration Pull）</strong>：叶片表皮的气孔（Stomata）在蒸发散失水分的同时，在植物体木质部导管内部形成巨大的水柱负压，产生自根系向上奔涌的“蒸腾流”，带动水溶性钙、镁、硝酸盐等养分输送至全株顶端；</li>
 <li><strong>韧皮部同化产物输送（Phloem）</strong>：成熟叶片光合作用合成的糖分（蔗糖）通过韧皮部筛管，双向运移至根尖分生组织、膨大果实与生长点。</li>
@@ -2453,37 +2470,37 @@ mindmap
       铜 Cu / 锌 Zn / 钼 Mo: 酶系统辅助因子
 </div>
 <h4>常见营养失调外在病理表征与诊断</h4>
-<ol>
+<ol start="1">
 <li><strong>缺氮（Nitrogen Deficiency）</strong>：</li>
 </ol>
 <ul>
 <li><strong>典型表征</strong>：全株生长停滞矮化；由于氮素在韧皮部中流动性极强，植株会分解老叶蛋白向新叶转移，导致<strong>底部老叶整体均匀黄白化</strong>，叶脉亦褪色，茎秆变硬发紫；</li>
 </ul>
-<ol>
+<ol start="2">
 <li><strong>缺磷（Phosphorus Deficiency）</strong>：</li>
 </ol>
 <ul>
 <li><strong>典型表征</strong>：根系发育严重萎缩受限；老叶呈现不正常的<strong>暗蓝绿色，叶背或叶脉显现深紫色红斑</strong>，推迟开花坐果；</li>
 </ul>
-<ol>
+<ol start="3">
 <li><strong>缺钾（Potassium Deficiency）</strong>：</li>
 </ol>
 <ul>
 <li><strong>典型表征</strong>：植株抗逆性变差；老叶<strong>边缘与尖端呈现灼伤状焦枯褐变（Marginal Chlorosis/Necrosis）</strong>，叶缘卷曲，果实发育干瘪无味；</li>
 </ul>
-<ol>
+<ol start="4">
 <li><strong>缺钙（Calcium Deficiency）</strong>：</li>
 </ol>
 <ul>
 <li><strong>典型表征</strong>：钙在植物体内移动性极差。缺素症状首先从新生组织爆发：<strong>新生顶芽扭曲畸形、幼叶边缘黑褐色枯死（生菜干烧心病 Tipburn）</strong>；番茄和辣椒果实脐部组织溃烂凹陷，爆发典型的<strong>脐腐病（Blossom-End Rot）</strong>；</li>
 </ul>
-<ol>
+<ol start="5">
 <li><strong>缺铁（Iron Deficiency）</strong>：</li>
 </ol>
 <ul>
 <li><strong>典型表征</strong>：铁在植物体内不可移动。症状特异性表现在<strong>顶端新嫩叶片上：发生极具辨识度的“脉间失绿（Interveinal Chlorosis）”</strong>——新生叶脉清晰保持鲜绿色，而叶脉之间的叶肉组织全部褪绿变成苍白色甚至象牙白；</li>
 </ul>
-<ol>
+<ol start="6">
 <li><strong>缺镁（Magnesium Deficiency）</strong>：</li>
 </ol>
 <ul>
@@ -2510,7 +2527,7 @@ mindmap
 </ul>
 <hr>
 <h2>6.3 针对植物生长的水质调控</h2>
-<ol>
+<ol start="1">
 <li><strong>pH 调谐</strong>：植物根系吸收矿质离子的最佳根区环境为 <strong>5.5–6.5</strong>。但为兼顾自养硝化细菌活性，工程妥协点维持在 <strong>6.5–7.0</strong>。若水体 pH 长期超过 7.5，缺铁失绿症发生率上升 80%；</li>
 <li><strong>溶解氧（DO）</strong>：水培槽根区水体 DO 必须恒定保持在 <strong>$> 3.0\text{ mg/L}$</strong>（深水 DWC 槽推荐维持在 <strong>$5.0\sim 8.0\text{ mg/L}$</strong>），严防缺氧诱发腐霉菌侵染；</li>
 <li><strong>水温与抽薹防范</strong>：绿叶生菜类最适根温为 $16\sim 22\text{ }^\circ\text{C}$。盛夏期水温若超过 $26\text{ }^\circ\text{C}$，生菜将迅速发生生殖抽薹，叶片内苦味素（莴苣素）急剧积聚，商业价值完全丧失。可通过深水 DWC 浮板遮光隔热或冷水机控温。</li>
@@ -2527,14 +2544,14 @@ graph LR
         B[番茄 / 樱桃圣女果\n水果黄瓜 / 甜椒\n茄子 / 草莓 / 矮生豆类]
     end
 </div>
-<ol>
+<ol start="1">
 <li><strong>低营养需求作物（Low-nutrient demand plants）</strong>：</li>
 </ol>
 <ul>
 <li>包括全部散叶生菜、结球生菜、罗勒、水芹、薄荷等绿叶沙拉蔬菜与芳香草本；</li>
 <li><strong>特点</strong>：营养生长周期极短（移栽后 25~35 天即可采收），只长茎叶不结实，耐贫瘠营养液，对水产系统负荷小，是<strong>新建系统或初学者的绝对首选</strong>；</li>
 </ul>
-<ol>
+<ol start="2">
 <li><strong>高营养需求作物（High-nutrient demand plants）</strong>：</li>
 </ol>
 <ul>
@@ -2556,7 +2573,7 @@ flowchart TD
     L1 --> L2 --> L3 --> L4
 </div>
 <h3>6.5.1 常见害虫及其靶向生物物理防治</h3>
-<ol>
+<ol start="1">
 <li><strong>刺吸式小型害虫（蚜虫、白粉虱、叶螨红蜘蛛、蓟马）</strong>：</li>
 </ol>
 <ul>
@@ -2600,7 +2617,7 @@ flowchart TD
 </tr>
 </tbody></table></div>
 <h4>典型真菌病害防治实战</h4>
-<ol>
+<ol start="1">
 <li>**灰霉病（<em>Botrytis cinerea</em>）与白粉病（Powdery Mildew）**：</li>
 </ol>
 <ul>
@@ -2609,7 +2626,7 @@ flowchart TD
 <li><strong>生物防治</strong>：叶面微喷 **枯草芽孢杆菌（<em>Bacillus subtilis</em>）<strong> 或 </strong>哈茨木霉菌（<em>Trichoderma harzianum</em>）** 可湿性粉剂，有益微生态菌在叶面迅速占据生态位，分泌抗真菌素杀灭真菌孢子；</li>
 <li><strong>食品级小苏打（碳酸氢钠）叶面弱碱喷雾</strong>：配制 $0.2\%\sim 0.3\%$ 极稀小苏打水进行叶面喷雾，瞬间改变叶表酸碱微生境，直接使白粉菌菌丝破裂脱水死亡。</li>
 </ul>
-<ol>
+<ol start="2">
 <li><strong>水培根腐病（Pythium Root Rot）</strong>：</li>
 </ol>
 <ul>
@@ -2637,14 +2654,14 @@ gantt
     定植生长: 3, 7
     采收清茬: 7, 8
 </div>
-<ol>
+<ol start="1">
 <li><strong>独立洁净育苗区（Plant Nursery）</strong>：</li>
 </ol>
 <ul>
 <li>绝不在主系统种植床上直接播撒生种子！应在独立的微型育苗托盘内，利用洁净珍珠岩、椰糠或育苗岩棉块进行人工播种育苗；</li>
 <li>待幼苗长出 2~3 片真叶、根系发达盘结后，清洗浮杂后再定植入鱼菜系统；</li>
 </ul>
-<ol>
+<ol start="2">
 <li><strong>四阶段错峰循环采收</strong>：</li>
 </ol>
 <ul>
@@ -2707,21 +2724,21 @@ flowchart LR
     Skin[鱼体表皮黏液层\n物理免疫屏障\n防病原真菌细菌入侵] --> Osmoregulation[渗透压调节\n淡水鱼体内吸水排盐\n肾脏持续排出大量稀释尿液]
     Sensory[侧线神经系统\n感知水流振动与水压变化] --> Behavior[摄食与集群避障游弋]
 </div>
-<ol>
+<ol start="1">
 <li><strong>鳃丝微循环与气体代谢中枢（Gills）</strong>：</li>
 </ol>
 <ul>
 <li>鱼鳃不仅是呼吸器官，更是<strong>全系统氨氮排泄的最核心通道</strong>。鱼类摄食蛋白质后代谢产生的游离氨（$\text{NH}_3$），约有 <strong>$80\% \sim 90\%$ 直接通过鳃小片的毛细血管上皮以被动扩散方式直接排入水体</strong>，仅有极少部分经由肾脏尿液排出；</li>
 <li>鳃丝具有极大的微血管表面积，水流与血液在鳃片中呈“逆流交换（Counter-Current Exchange）”，确保即使在低氧环境下也能最大限度摄取水中的溶解氧；</li>
 </ul>
-<ol>
+<ol start="2">
 <li><strong>冷血变温生理特性（Poikilothermic Metabolism）</strong>：</li>
 </ol>
 <ul>
 <li>鱼类不具备恒温动物的体温调节中枢，其<strong>体温完全随水温波动</strong>；</li>
 <li>水温直接控制其体内消化酶与代谢酶的催化速率。水温每下降 10 °C，鱼类的基础代谢率与摄食强度将暴跌 50% 以上；</li>
 </ul>
-<ol>
+<ol start="3">
 <li><strong>渗透压动态平衡（Osmoregulation）</strong>：</li>
 </ol>
 <ul>
@@ -2731,7 +2748,7 @@ flowchart LR
 <hr>
 <h3>7.1.2 鱼类生命周期与分级饲养（Life Cycle）</h3>
 <p>商业与家庭养殖通常将鱼类生命周期划分为若干关键阶段：</p>
-<ol>
+<ol start="1">
 <li><strong>亲鱼产卵与受精卵（Broodstock & Eggs）</strong>；</li>
 <li><strong>卵黄囊仔鱼（Sac-fry / Larvae）</strong>：刚孵化的仔鱼自带腹部卵黄囊，暂不摄食，依靠内源性营养生存；</li>
 <li><strong>开口稚鱼（Fry）</strong>：卵黄吸收完毕，必须投喂微细鲜活浮游动物（轮虫、丰年虾幼虫）或超微粉状配合饲料；</li>
@@ -2751,7 +2768,7 @@ flowchart LR
 <hr>
 <h3>7.2.2 膨化浮性颗粒料的工程决定性优势</h3>
 <p>市售水产颗粒料分为“硬质沉水颗粒料”与“膨化浮性颗粒料”：</p>
-<div class="callout callout-tip"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span> <strong>工程诀窍 (Tip)</strong></div><div class="callout-body"><p><strong>鱼菜共生绝对首选：膨化浮性颗粒料（Floating Pellets）</strong>：</p><p>1. <strong>直观监控摄食活力</strong>：浮水料漂浮在水面，管理者能清晰肉眼观察到鱼群上浮抢食的凶猛程度，秒级判断鱼群健康状态；</p><p>2. <strong>残饵零盲区与防坏水</strong>：投喂 15~20 分钟后若水面仍漂浮有未吃完的浮料，可轻松用手抄网捞出，彻底杜绝残饵沉降至池底发酵败坏水质并堵塞滤网；</p><p>3. 沉水料落入池底后混入鱼粪排污口，操作者完全无法判断鱼群是否吃饱，极易导致过量投喂灾难。</p></div></div>
+<div class="callout callout-tip"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span> <strong>工程诀窍 (Tip)</strong></div><div class="callout-body"><p><strong>鱼菜共生绝对首选：膨化浮性颗粒料（Floating Pellets）</strong>：</p><ol class="callout-ol" start="1"><li><strong>直观监控摄食活力</strong>：浮水料漂浮在水面，管理者能清晰肉眼观察到鱼群上浮抢食的凶猛程度，秒级判断鱼群健康状态；</li><li><strong>残饵零盲区与防坏水</strong>：投喂 15~20 分钟后若水面仍漂浮有未吃完的浮料，可轻松用手抄网捞出，彻底杜绝残饵沉降至池底发酵败坏水质并堵塞滤网；</li><li>沉水料落入池底后混入鱼粪排污口，操作者完全无法判断鱼群是否吃饱，极易导致过量投喂灾难。</li></ol></div></div>
 <hr>
 <h3>7.2.3 饲料转化比（FCR）与每日投饲率计算法则</h3>
 <h4>1. 饲料转化比（Feed Conversion Ratio, FCR）</h4>
@@ -2961,16 +2978,16 @@ sequenceDiagram
 <hr>
 <h3>7.6.3 鱼病安全综合防治与粗盐（NaCl）药浴绝技</h3>
 <p>在鱼菜共生系统中，<strong>严禁向主水体泼洒任何化学抗生素、孔雀石绿、重金属硫酸铜或有机磷杀虫剂</strong>！这些药剂不仅在蔬菜中形成非法残留，更会彻底杀灭生物滤池内的硝化细菌。</p>
-<div class="callout callout-tip"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span> <strong>工程诀窍 (Tip)</strong></div><div class="callout-body"><p><strong>鱼菜系统唯一安全通用鱼药：农用无碘粗盐（NaCl）</strong>：</p><p>- <strong>物理药理机制</strong>：提高水体盐度一方面能改变水体渗透压，促使单细胞体表寄生虫（如车轮虫、斜管虫、小瓜虫/白点病）细胞脱水破裂致死；另一方面向水体释放大量氯离子（$\text{Cl}^-$），竞争性阻断亚硝酸盐穿透鱼鳃进入血液；同时刺激鱼体表皮重新分泌健康黏液保护层。</p></div></div>
+<div class="callout callout-tip"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span> <strong>工程诀窍 (Tip)</strong></div><div class="callout-body"><p><strong>鱼菜系统唯一安全通用鱼药：农用无碘粗盐（NaCl）</strong>：</p><ul class="callout-ul"><li><strong>物理药理机制</strong>：提高水体盐度一方面能改变水体渗透压，促使单细胞体表寄生虫（如车轮虫、斜管虫、小瓜虫/白点病）细胞脱水破裂致死；另一方面向水体释放大量氯离子（$\text{Cl}^-$），竞争性阻断亚硝酸盐穿透鱼鳃进入血液；同时刺激鱼体表皮重新分泌健康黏液保护层。</li></ul></div></div>
 <h4>粗盐药浴操作规范</h4>
-<ol>
+<ol start="1">
 <li><strong>主系统预防性低浓度长效药浴</strong>：</li>
 </ol>
 <ul>
 <li>维持主水体盐度在 <strong>$1 \sim 2\text{ ppt}$</strong>（即每 1000 升系统总水体投加 $1\sim 2\text{ kg}$ 纯粗盐）；</li>
 <li>该浓度对所有淡水鱼极度安全舒适，且<strong>绝大多数耐盐力较强的蔬菜（如番茄、生菜、甜菜）完全不受影响</strong>；</li>
 </ul>
-<ol>
+<ol start="2">
 <li><strong>隔离桶高浓度短时间速效强药浴（针对重症鱼体）</strong>：</li>
 </ol>
 <ul>
@@ -3044,14 +3061,14 @@ flowchart LR
     Feed -->|按蛋白质含量与比表面积计算| FilterVol[5. 确定生物滤料体积\nBio-balls / 火山岩 / K1]
 </div>
 <h3>8.1.1 种植面积、日饲料量与鱼类存塘量的联动模型</h3>
-<ol>
+<ol start="1">
 <li><strong>投饵量比率（Feed Rate Ratio）基准</strong>：</li>
 </ol>
 <ul>
 <li><strong>绿叶蔬菜类（生菜、罗勒、菠菜、瑞士甜菜）</strong>：<strong>$40 \sim 50\text{ 克饲料 / 平方米种植面积 / 每天}$</strong>；</li>
 <li><strong>茄果瓜类（番茄、黄瓜、甜椒、草莓）</strong>：<strong>$50 \sim 80\text{ 克饲料 / 平方米种植面积 / 每天}$</strong>；</li>
 </ul>
-<ol>
+<ol start="2">
 <li><strong>鱼池蓄养总重量反推</strong>：</li>
 </ol>
 <ul>
@@ -3059,7 +3076,7 @@ flowchart LR
 <li>设全天需投入 500 克饲料，则鱼池内需蓄养的总鱼体生物量为：</li>
 </ul>
 <div class="math-display">$$\text{鱼类总存塘生物量} = \frac{500\text{ 克}}{1.5\%} \approx 33.3\text{ kg}$$</div>
-<ol>
+<ol start="3">
 <li><strong>鱼类放养安全密度（Stocking Density）</strong>：</li>
 </ol>
 <ul>
@@ -3075,7 +3092,7 @@ flowchart LR
 </ul>
 <hr>
 <h3>8.1.3 过滤系统工程选型与计算（Filtration Sizing）</h3>
-<ol>
+<ol start="1">
 <li><strong>机械沉淀器容积</strong>：旋流沉淀器或径向流沉淀槽的有效沉降水体容积，通常设计为<strong>鱼池总容积的 1/6 至 1/5</strong>（停留时间 HRT 至少 20~30 分钟），保障悬浮大颗粒在重力下彻底下沉；</li>
 <li><strong>生物滤料有效体积</strong>：</li>
 </ol>
@@ -3145,7 +3162,7 @@ flowchart LR
 </tbody></table></div>
 <hr>
 <h2>8.2 新系统启动验收与水力运行调试</h2>
-<ol>
+<ol start="1">
 <li><strong>结构承重与水平找平复验</strong>：系统注水前，使用水平尺重新复验鱼池基座与水培支架的水平度；</li>
 <li><strong>72 小时闭水气密性试漏（Pressure & Leak Testing）</strong>：</li>
 </ol>
@@ -3153,7 +3170,7 @@ flowchart LR
 <li>注入全容量清水，开启水泵进行连续 72 小时不间断带水循环运转；</li>
 <li>细致勘验所有 PVC 胶水粘接管件、活接球阀、桶壁开孔密封圈（Uniseal / Bulkheads）及种植槽排水口，发现渗漏立即排空补胶修复；</li>
 </ul>
-<ol>
+<ol start="3">
 <li><strong>脱氯与管道清洗排空</strong>：</li>
 </ol>
 <ul>
@@ -3176,21 +3193,21 @@ flowchart LR
         Transplant --> Whole[整株拔除法\n清洗根系带根上市包装]
     end
 </div>
-<ol>
+<ol start="1">
 <li><strong>建立洁净育苗区（Nursery Base）</strong>：</li>
 </ol>
 <ul>
 <li>严禁在大田泥土中直接育苗后移入鱼菜系统！泥土带有土壤线虫与腐霉真菌；</li>
 <li>应在专用的塑料育苗穴盘中，选用高温消毒的<strong>岩棉育苗塞（Rockwool Plugs）、膨胀珍珠岩或细椰糠</strong>作为育苗介质；</li>
 </ul>
-<ol>
+<ol start="2">
 <li><strong>洗根定植工艺</strong>：</li>
 </ol>
 <ul>
 <li>幼苗长出 3~4 片真叶时即可移栽；移栽前在水桶中轻轻漂洗根系，去除粘附的杂质后轻轻定植入定植杯或陶粒床中；</li>
 <li><strong>移栽时间选在傍晚日落后或阴天</strong>，给新生根系整夜时间适应水质，避免次日正午强烈蒸腾导致幼苗萎蔫；</li>
 </ul>
-<ol>
+<ol start="3">
 <li><strong>采收模式选择</strong>：</li>
 </ol>
 <ul>
@@ -3203,7 +3220,7 @@ flowchart LR
 <ul>
 <li><strong>灾难后果</strong>：小鱼期排泄极少，植物长期脱肥饥饿；中鱼期水质达峰；而成鱼一次性清池卖空后，系统养分输入瞬间归零，植物大面积枯萎脱肥，同时生物滤膜因缺乏氨源大批饿死崩溃！</li>
 </ul>
-<div class="callout callout-important"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span> <strong>核心要点 (Important)</strong></div><div class="callout-body"><p><strong>阶梯式轮捕轮放制度（Staggered Stocking Protocol）</strong>：</p><p>- 鱼池内必须<strong>常态化维持 3 个大小不同规格的鱼群梯队</strong>：</p><p>- <strong>梯队 A（大鱼组，约占总重量 50%）</strong>：处于最后育成期（$350\sim 500\text{ g}$），即将分批上市；</p><p>- <strong>梯队 B（中鱼组，约占总重量 35%）</strong>：处于快速骨骼肌肉生长期（$150\sim 300\text{ g}$）；</p><p>- <strong>梯队 C（幼鱼苗组，约占总重量 15%）</strong>：新引入的优质苗种（$20\sim 50\text{ g}$）。</p><p>- <strong>操作实现</strong>：可以通过多养殖桶并联循环，或者在单个大鱼池内加装尼龙网箱隔板进行物理分选分级；</p><p>- <strong>生态收益</strong>：每月定期捞出捕获最大规格的成鱼上市，并同步补充等量幼鱼苗。全系统总生物量与日投饲排氨量常年保持恒定，形成完美的营养稳态。</p></div></div>
+<div class="callout callout-important"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span> <strong>核心要点 (Important)</strong></div><div class="callout-body"><p><strong>阶梯式轮捕轮放制度（Staggered Stocking Protocol）</strong>：</p><ul class="callout-ul"><li>鱼池内必须<strong>常态化维持 3 个大小不同规格的鱼群梯队</strong>：</li><li><strong>梯队 A（大鱼组，约占总重量 50%）</strong>：处于最后育成期（$350\sim 500\text{ g}$），即将分批上市；</li><li><strong>梯队 B（中鱼组，约占总重量 35%）</strong>：处于快速骨骼肌肉生长期（$150\sim 300\text{ g}$）；</li><li><strong>梯队 C（幼鱼苗组，约占总重量 15%）</strong>：新引入的优质苗种（$20\sim 50\text{ g}$）。</li><li><strong>操作实现</strong>：可以通过多养殖桶并联循环，或者在单个大鱼池内加装尼龙网箱隔板进行物理分选分级；</li><li><strong>生态收益</strong>：每月定期捞出捕获最大规格的成鱼上市，并同步补充等量幼鱼苗。全系统总生物量与日投饲排氨量常年保持恒定，形成完美的营养稳态。</li></ul></div></div>
 <hr>
 <h2>8.5 标准化日常巡检与运维时间表</h2>
 <h3>8.5.1 每日工作清单（Daily Checklist，10~15 分钟）</h3>
@@ -3239,7 +3256,7 @@ flowchart LR
 <li><strong>高危环境</strong>：鱼菜共生属于水利与电气设备高度密集交织的湿热环境；</li>
 <li><strong>核心防护</strong>：</li>
 </ul>
-<ol>
+<ol start="1">
 <li>所有用电设备总回路必须配备高灵敏度<strong>剩余电流动作保护器（RCD / GFCI，动作电流 $\le 30\text{ mA}$）</strong>；</li>
 <li>插座与接线盒必须使用 <strong>IP55 以上防水防溅盒</strong>，并架设在高出地面最高水位线 $50\text{ cm}$ 以上的安全高处；</li>
 <li>电源线进入插座前必须向下自然下垂弯曲形成 <strong>“滴水弯（Drip Loop）”</strong>，防止凝结水顺着电线直接流入插座引发短路爆燃。</li>
@@ -3334,7 +3351,7 @@ flowchart LR
 </tbody></table></div>
 <hr>
 <h2>8.8 系统日常运营管理的“十大黄金戒律”（Ten Golden Rules）</h2>
-<ol>
+<ol start="1">
 <li><strong>每日坚持 10 分钟目视巡检</strong>：观察鱼类游泳摄食、植物叶色生长以及水泵气石运转；</li>
 <li><strong>保障充沛强劲的曝气充氧</strong>：维持鱼池出水与水培根区 $\text{DO} > 5.0\text{ mg/L}$；</li>
 <li><strong>将水质锁定在黄金折中带</strong>：pH 恒定在 6.0–7.0，水温 18–26 °C，氨氮与亚硝酸盐趋近于 0；</li>
@@ -3388,7 +3405,7 @@ flowchart LR
     Aerate --> Tea[好氧充氧堆肥茶\n富含数亿有益放线菌/芽孢杆菌\n解离钾/钙/镁/微量元素]
     Tea -->|叶面喷施或微量点滴入水培床| System[激活植物抗逆免疫系统]
 </div>
-<ol>
+<ol start="1">
 <li><strong>好氧充氧堆肥茶（Aerated Compost Tea, ACT）</strong>：</li>
 </ol>
 <ul>
@@ -3396,14 +3413,14 @@ flowchart LR
 <li><strong>制作规程</strong>：将数大把完全腐熟的优质热力堆肥或纯蚯蚓粪（Vermicompost）装入密目网袋，悬吊于 20 升清水桶中。在网袋底部放置强力气石，<strong>连续剧烈曝气翻滚 24~48 小时</strong>；</li>
 <li>气泡 agitation 剧烈剥离并增殖有益放线菌与枯草芽孢杆菌，矿化溶出丰富的可溶性钾、磷、钙及腐殖酸。取出后稀释 5~10 倍用于叶面喷施或少量兑入种植槽；</li>
 </ul>
-<ol>
+<ol start="2">
 <li><strong>海藻提取液（Seaweed Tea）</strong>：</li>
 </ol>
 <ul>
 <li>将海滩收集的新鲜海藻反复浸泡漂洗褪去有害表面海盐（$\text{NaCl}$），切碎后进行好氧浸提；</li>
 <li>海藻提取液富含天然<strong>细胞分裂素（Cytokinins）、生长素与 60 余种海洋微量矿物质</strong>，对诱导果菜生根和膨果具有奇效；</li>
 </ul>
-<ol>
+<ol start="3">
 <li><strong>草木灰浸出液（Wood Ash Extract）</strong>：</li>
 </ol>
 <ul>
@@ -3425,7 +3442,7 @@ mindmap
       ["赤子爱胜蚓红蚯蚓：粗蛋白 60% 与促摄食活性"]
       ["蝇蛆干粉：鲜活诱食"]
 </div>
-<ol>
+<ol start="1">
 <li>**浮萍（Duckweed, <em>Lemna minor</em>）与满江红（<em>Azolla</em> spp.）**：</li>
 </ol>
 <ul>
@@ -3433,7 +3450,7 @@ mindmap
 <li><strong>生产特性</strong>：漂浮在浅水静水面上，在适宜温度下生物量 <strong>每 2~3 天即可翻倍扩繁一次</strong>；</li>
 <li><strong>投喂实践</strong>：每天用捞网打捞新鲜鲜嫩浮萍，直接泼洒在鱼池水面。草食性与杂食性鱼类（草鱼、罗非鱼、鲤鱼）极为嗜食，可<strong>安全替代商业颗粒饲料总量的 30%~50%</strong>；</li>
 </ul>
-<ol>
+<ol start="2">
 <li>**黑水虻幼虫（Black Soldier Fly Larvae, BSFL, <em>Hermetia illucens</em>）**：</li>
 </ol>
 <ul>
@@ -3441,7 +3458,7 @@ mindmap
 <li><strong>营养剖面</strong>：老熟预蛹风干物质中，<strong>粗蛋白质含量高达 40%~44%，粗脂肪 30%~35%</strong>，富含抗菌肽与月桂酸；</li>
 <li><strong>投喂规范</strong>：鲜活幼虫可直接投喂给大中规格罗非鱼、鲶鱼与鲈鱼。因其脂肪含量偏高，推荐投喂量占全天日粮的 <strong>$15\% \sim 25\%$</strong> 为宜，避免鱼体发生脂肪肝。</li>
 </ul>
-<ol>
+<ol start="3">
 <li>**蚯蚓与红蚯蚓（Earthworms, <em>Eisenia fetida</em>）**：</li>
 </ol>
 <ul>
@@ -3493,7 +3510,7 @@ flowchart TD
         Overflow[防线三: 种植床高位应急防溢管\n下水管万一被树叶堵死, 备用高位管自动重力排水防漫顶]
     end
 </div>
-<ol>
+<ol start="1">
 <li><strong>机械浮球补水阀（Ballcock Float Valve）</strong>：类似于抽水马桶浮球阀，安装在集水箱内。一旦系统蒸腾使水位下降，浮球下沉自动打开市政给水管补水，水满自动闭锁；</li>
 <li><strong>防干烧电子液位继电器（Float Switch）</strong>：串联在潜水泵电源零线上。当集水槽水位跌破潜水泵吸水网罩前 $5\text{ cm}$ 时，浮球倾倒自动切断水泵供电，彻底消除电机干烧火灾隐患；</li>
 <li><strong>紧急防溢流支管（Emergency Overflow Pipes）</strong>：每个种植床与沉淀槽的排水侧，必须在<strong>高于正常工作水位 $3 \sim 5\text{ cm}$ 处打孔安装一根内径 $\ge 50\text{ mm}$ 的粗溢流管</strong>。即使主出水阀被蜗牛、烂叶或陶粒彻底堵死，水流也能通过备用管无声排回集水箱，绝不漫溢淹没地面。</li>
@@ -3913,7 +3930,7 @@ flowchart TD
 <li><strong>推荐系统模式</strong>：<strong>介质床、NFT 管道与 DWC 深水浮筏全通用（商业鱼菜农场首选香草）</strong></li>
 </ul>
 <h3>鱼菜共生种植精要</h3>
-<ol>
+<ol start="1">
 <li><strong>适栽优势</strong>：罗勒是全球商业鱼菜共生农场回报率最高的明星香草。对硝酸盐需求适中，对微量元素缺乏具有较好耐受力；其浓郁的芳香气味对许多害虫具有天然驱避作用；</li>
 <li><strong>温湿度与环境调控</strong>：罗勒属于典型的喜温作物，<strong>极不耐霜冻与低温（$< 10\text{ }^\circ\text{C}$ 时叶片发黑腐烂）</strong>。在高湿环境下极易感染镰刀菌叶枯病与灰霉病，温室必须强制横向对流通风；</li>
 <li><strong>田间管理与摘心（Pinching）</strong>：幼苗长至 4~5 片真叶时定植。当植株长至 $15\text{ cm}$ 高时，必须对主茎顶芽进行 <strong>“打顶摘心”</strong>，强制打破顶端优势，刺激侧枝分生呈饱满灌木状；一旦见到花薹萌发，<strong>必须立即掐除花苞</strong>，防止叶片老化发苦；</li>
@@ -3933,7 +3950,7 @@ flowchart TD
 <li><strong>推荐系统模式</strong>：<strong>仅限介质床（Media Bed）</strong>。植株极其沉重且头重脚轻，NFT 管道与塑料浮筏完全无法承载其自重。</li>
 </ul>
 <h3>鱼菜共生种植精要</h3>
-<ol>
+<ol start="1">
 <li><strong>营养需求特性</strong>：花椰菜属于高养分消耗型作物，<strong>严禁在新建未满 4 个月的幼稚系统中种植</strong>。在花球膨大期需要极高浓度的磷、钾与硼元素；</li>
 <li><strong>花球遮阴增白（Blanching）</strong>：当白色花球直径生长至 $5\sim 8\text{ cm}$ 时，太阳强紫外线会导致花球发黄、质地粗糙甚至变紫。<strong>必须将外围 2~3 片大叶向上折叠聚拢，用橡皮筋或细麻绳将叶片轻轻束扎将花球遮盖</strong>，在纯黑暗下生长出洁白致密的特级花球；</li>
 <li><strong>采收标准</strong>：当花球直径达到 $15\sim 20\text{ cm}$、表面紧密坚实时立即用利刃平切割下；若花球小蕾蕾粒松散分开，表明已过熟老化。</li>
@@ -3952,7 +3969,7 @@ flowchart TD
 <li><strong>推荐系统模式</strong>：<strong>NFT 管道与 DWC 深水浮筏的绝对王者！全系统均极其适应</strong></li>
 </ul>
 <h3>鱼菜共生种植精要</h3>
-<ol>
+<ol start="1">
 <li><strong>鱼菜第一先锋作物</strong>：需肥量与鱼类代谢排泄负荷天然吻合，耐低硝酸盐，病害极少，移栽成活率接近 100%；</li>
 <li><strong>防抽薹与防焦边（Bolting & Tipburn）</strong>：</li>
 </ol>
@@ -3960,7 +3977,7 @@ flowchart TD
 <li><strong>抽薹防范</strong>：生菜对高温长日照极度敏感。盛夏水温若持续 $> 24\text{ }^\circ\text{C}$，植株主轴会迅速拔高抽薹变苦。夏季必须选用耐热耐抽薹品种，并加大深水池遮阴；</li>
 <li><strong>干烧心病预防</strong>：由局部缺乏活动钙引起。必须确保槽内夜间空气流速，并维持水质 $\text{KH} > 60\text{ mg/L}$；</li>
 </ul>
-<ol>
+<ol start="3">
 <li><strong>采收方式</strong>：商业化多采用“整株拔除洗根法”，装入食品级保鲜袋冷链销售；家庭自给则推荐外叶采收。</li>
 </ol>
 <hr>
@@ -3977,7 +3994,7 @@ flowchart TD
 <li><strong>推荐系统模式</strong>：<strong>介质床最佳</strong>；DWC 需加装专用高强重型吊架。<strong>严禁种植于普通窄 NFT 管道中（根团会迅速胀破堵死管道）</strong></li>
 </ul>
 <h3>鱼菜共生种植精要</h3>
-<ol>
+<ol start="1">
 <li><strong>水肥重消耗特性</strong>：果实膨大期耗水量和耗肥量惊人。必须在成鱼存塘量充足（投饵量 $> 60\text{ g/m}^2/\text{d}$）的成熟系统中种植，并定期向水体追加<strong>螯合铁与碳酸氢钾</strong>；</li>
 <li><strong>攀援吊蔓与落蔓管理</strong>：必须在介质床上方拉设镀锌钢丝绳，垂直吊挂尼龙吊绳。主蔓沿吊绳单杆盘旋向上，侧枝保留 1 瓜 1 叶后及时掐尖；</li>
 <li><strong>单性结实品种优选</strong>：温室封闭栽培必须选用<strong>全雌系、单性结实（Parthenocarpic）杂交水果黄瓜</strong>品种，无须蜜蜂人工授粉即可 100% 自动坐果；</li>
@@ -3997,7 +4014,7 @@ flowchart TD
 <li><strong>推荐系统模式</strong>：<strong>介质床或芯吸盆栽床</strong>（分枝木质化，果实体大下坠，需要极强固根支撑力）</li>
 </ul>
 <h3>鱼菜共生种植精要</h3>
-<ol>
+<ol start="1">
 <li><strong>整枝与打叶</strong>：采用“双杆整枝法”或“三杆整枝法”，插设竹竿或绑扎吊绳固定主分叉。门茄（第一朵花结出的果实）下部的老黄叶、老侧芽必须彻底剪除抹掉，改善下部通风采光；</li>
 <li><strong>微量元素管理</strong>：开花期若缺铁，花蕾黄化脱落；坐果期需要充沛的钾和钙。若出现果皮暗淡无光泽，说明硝酸盐偏低，需适度提高投饲率。</li>
 </ol>
@@ -4015,7 +4032,7 @@ flowchart TD
 <li><strong>推荐系统模式</strong>：<strong>介质床与大口径浮筏 DWC 通用</strong></li>
 </ul>
 <h3>鱼菜共生种植精要</h3>
-<ol>
+<ol start="1">
 <li><strong>水质敏感度与钙缺乏</strong>：甜椒对根区淹水与缺氧高度敏感，介质床的潮汐呼吸为其提供了理想环境。在果实膨大期极易因缺钙爆发<strong>脐腐病（果实尖端黑腐凹陷）</strong>，必须确保系统水质 $\text{KH} > 80\text{ mg/L}$，必要时叶面轻微喷施 $0.5\%$ 硝酸钙防病；</li>
 <li><strong>采收灵活性</strong>：青椒可在果实充分膨大硬实时提前采摘以促进后续花蕾坐果；若追求高糖度与高维生素 C，可留树多养护 2~3 周，待果皮完全转为鲜艳的红、黄或橙色后再行采收。</li>
 </ol>
@@ -4033,7 +4050,7 @@ flowchart TD
 <li><strong>推荐系统模式</strong>：<strong>介质床最佳</strong>；DWC 深水系统需配合重型顶棚吊线与高流量曝气</li>
 </ul>
 <h3>鱼菜共生种植精要</h3>
-<ol>
+<ol start="1">
 <li><strong>养分消耗天花板</strong>：番茄是所有蔬菜中对养分需求最全、消耗最凶猛的“重肥作物”。要求日投饲比率达到 <strong>$60\sim 80\text{ g/m}^2/\text{d}$</strong>。在挂果期，必须常态化维持水中螯合铁在 $2\sim 3\text{ mg/L}$，并持续轮换添加碳酸氢钾与氢氧化钙；</li>
 <li><strong>单杆吊蔓与无限打杈（Suckering）</strong>：</li>
 </ol>
@@ -4041,7 +4058,7 @@ flowchart TD
 <li>商业栽培绝不保留灌木丛！必须严格执行 <strong>“单杆整枝法”</strong>：只保留一根粗壮的主干向上攀援；</li>
 <li><strong>主干与叶柄夹角处萌发出的所有侧芽（腋芽/杈子）必须在长度达到 3 厘米内用手指全部掰除抹掉</strong>，集中全部养分供给主穗果实；</li>
 </ul>
-<ol>
+<ol start="3">
 <li><strong>下部老叶定期清膛（Pruning）</strong>：当第一穗果实开始转色红熟时，将其下方的全部老叶片整齐剪除。这不仅能极大幅度增强下部空气流速、斩断灰霉病通道，更能促使阳光直接照射果实促进均匀着色。</li>
 </ol>
 <hr>
@@ -4058,7 +4075,7 @@ flowchart TD
 <li><strong>推荐系统模式</strong>：<strong>介质床（矮生豆丛生定植极佳）</strong></li>
 </ul>
 <h3>鱼菜共生种植精要</h3>
-<ol>
+<ol start="1">
 <li><strong>根瘤菌共生固氮奇效</strong>：豆科植物根系能够与水体或基质中的根瘤菌（<em>Rhizobium</em>）共生结瘤，自主固定空气中的分子态氮素。因此，<strong>菜豆是整个系统中对水体硝酸盐依赖度最低的作物</strong>，在硝酸盐相对贫瘠的初期系统中表现极其优异；</li>
 <li><strong>防过量氮素徒长</strong>：若系统水中硝酸盐浓度极高（$> 100\text{ mg/L}$），菜豆会表现为茎叶疯狂徒长而不肯开花结荚。此时应适当控氮或将其作为吸肥隔离缓冲作物；</li>
 <li><strong>适期采摘</strong>：当豆荚饱满但内部豆粒尚未硬化突起时采收，豆荚鲜嫩无筋丝。</li>
@@ -4077,7 +4094,7 @@ flowchart TD
 <li><strong>推荐系统模式</strong>：<strong>仅限介质床</strong></li>
 </ul>
 <h3>鱼菜共生种植精要</h3>
-<ol>
+<ol start="1">
 <li><strong>结球期磷钾需求</strong>：莲座期向包心结球期转折时，磷钾消耗剧增；</li>
 <li><strong>防裂球技巧</strong>：当叶球紧实度达到 85% 时应控制供水量，避免大旱大水导致紧绷的叶球瞬间胀裂；</li>
 <li><strong>菜青虫与小菜蛾物理防控</strong>：甘蓝是粉蝶科幼虫的最爱。必须在移栽第一天就罩上 <strong>50 目防虫网</strong>，严防成虫产卵。</li>
@@ -4096,7 +4113,7 @@ flowchart TD
 <li><strong>推荐系统模式</strong>：<strong>仅限介质床</strong></li>
 </ul>
 <h3>鱼菜共生种植精要</h3>
-<ol>
+<ol start="1">
 <li><strong>主花球采收时机</strong>：当中心花球表面紧密饱满、花蕾呈深蓝绿色颗粒状时立即采收。<strong>一旦看到个别花蕾变黄松散甚至开出黄色小花，表明花球品质已严重衰退木质化</strong>；</li>
 <li><strong>侧枝腋芽二次丰产（Side Shoots）</strong>：主花球被割除后，千万不要将整株拔掉！保持常规水肥供应，茎秆叶腋处会在 2~3 周内迅速萌发出 4~8 个小规格的“侧花球”，可持续多次采收，大幅提升单株总产值。</li>
 </ol>
@@ -4114,7 +4131,7 @@ flowchart TD
 <li><strong>推荐系统模式</strong>：<strong>介质床、NFT 管道与 DWC 浮筏全适配</strong></li>
 </ul>
 <h3>鱼菜共生种植精要</h3>
-<ol>
+<ol start="1">
 <li><strong>抗逆与广谱耐盐王</strong>：瑞士甜菜属于中度耐盐作物，在水体微咸（含有 $1\sim 3\text{ ppt}$ 盐度粗盐药浴环境）下长势依然极其旺盛，是配合鱼类盐浴防病的黄金共生搭档；</li>
 <li><strong>观赏与商品价值</strong>：叶柄呈现极其艳丽的鲜红、亮黄、金橙或粉紫色（“彩虹甜菜”），在高端餐饮沙拉界极受青睐；</li>
 <li><strong>连续剥采采收法</strong>：叶柄长达 $20\sim 25\text{ cm}$ 时，自下部基部外侧向外按压掰下成熟叶柄，中心新芽持续不绝生长。</li>
@@ -4133,7 +4150,7 @@ flowchart TD
 <li><strong>推荐系统模式</strong>：<strong>介质床、NFT 与 DWC 全通用</strong></li>
 </ul>
 <h3>鱼菜共生种植精要</h3>
-<ol>
+<ol start="1">
 <li><strong>破眠浸种绝技</strong>：欧芹发芽极度迟缓（常需 3 周以上）。播种前必须将种子投入 <strong>$25\sim 30\text{ }^\circ\text{C}$ 温水中连续浸泡 24~48 小时</strong>，搓洗洗去外壳挥发油抑制剂，可将出苗时间缩短一半；</li>
 <li><strong>采收精要</strong>：当外层叶柄长度超过 $15\text{ cm}$ 时，紧贴基部齐根剪切外围老枝。严禁只摘顶端叶片而留下光秃秃的茎杆，齐根修剪能强烈刺激根冠萌发更密集的嫩茎。</li>
 </ol>
@@ -4393,7 +4410,7 @@ flowchart TD
         <h1>附录 4 至 7：工程计算、自制饲料、规划考量与经济效益分析</h1>
 <h2>Appendix 4–7: Calculations, feed making, setup considerations, cost-benefit</h2>
 <hr>
-<div class="callout callout-note"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span> <strong>提示 (Note)</strong></div><div class="callout-body"><p><strong>附录导读</strong>：</p><p>本篇系统整合了 FAO 589 技术报告中四个极具工程落地与产业投资指导价值的实操附录：</p><p>1. <strong>附录 4</strong>：氨氮生成量与生物滤料体积精准生化工程计算模型（涵盖步进式数学公式与填料比表面积表）；</p><p>2. <strong>附录 5</strong>：自制鱼配合饲料的配方设计（皮尔逊十字法）与手工颗粒挤出干燥全流程；</p><p>3. <strong>附录 6</strong>：建厂前气候、水质、供应链、法律合规与市场可行性自检清单；</p><p>4. <strong>附录 7</strong>：标准 1000 升小型介质床系统的全生命周期财务成本-效益分析（CAPEX、OPEX、产出测算与 19 个月回本模型）。</p></div></div>
+<div class="callout callout-note"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span> <strong>提示 (Note)</strong></div><div class="callout-body"><p><strong>附录导读</strong>：</p><p>本篇系统整合了 FAO 589 技术报告中四个极具工程落地与产业投资指导价值的实操附录：</p><ol class="callout-ol" start="1"><li><strong>附录 4</strong>：氨氮生成量与生物滤料体积精准生化工程计算模型（涵盖步进式数学公式与填料比表面积表）；</li><li><strong>附录 5</strong>：自制鱼配合饲料的配方设计（皮尔逊十字法）与手工颗粒挤出干燥全流程；</li><li><strong>附录 6</strong>：建厂前气候、水质、供应链、法律合规与市场可行性自检清单；</li><li><strong>附录 7</strong>：标准 1000 升小型介质床系统的全生命周期财务成本-效益分析（CAPEX、OPEX、产出测算与 19 个月回本模型）。</li></ol></div></div>
 <hr>
 <h1>第一部分：附录 4 氨氮生成量与生物滤料体积工程计算模型</h1>
 <p>设计一个稳定不倒缸的鱼菜共生系统，必须通过物质守恒定律精确核算 <strong>“投饲负荷 $\rightarrow$ 氨氮释放量 $\rightarrow$ 微生物氧化所需表面积 $\rightarrow$ 生物填料体积”</strong>。</p>
@@ -4528,7 +4545,7 @@ flowchart LR
 <hr>
 <h2>5.2 饲料配方设计：皮尔逊十字法（Pearson's Square Method）</h2>
 <p>皮尔逊十字法是水产与畜牧营养学中最简便高效的双原料蛋白配平计算工具。</p>
-<div class="callout callout-note"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span> <strong>提示 (Note)</strong></div><div class="callout-body"><p><strong>计算场景</strong>：</p><p>设我们手头有两种本地极其充裕的饲料原料：</p><p>- <strong>大豆粕（高蛋白源）</strong>：粗蛋白含量 $\text{CP}_A = 44\%$</p><p>- <strong>碎小麦粉（能量源与粘结剂）</strong>：粗蛋白含量 $\text{CP}_B = 12\%$</p><p>目标：配制出一款适合育成期罗非鱼的 <strong>$32\%$ 粗蛋白全价饲料</strong>。</p></div></div>
+<div class="callout callout-note"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span> <strong>提示 (Note)</strong></div><div class="callout-body"><p><strong>计算场景</strong>：</p><p>设我们手头有两种本地极其充裕的饲料原料：</p><ul class="callout-ul"><li><strong>大豆粕（高蛋白源）</strong>：粗蛋白含量 $\text{CP}_A = 44\%$</li><li><strong>碎小麦粉（能量源与粘结剂）</strong>：粗蛋白含量 $\text{CP}_B = 12\%$</li></ul><p>目标：配制出一款适合育成期罗非鱼的 <strong>$32\%$ 粗蛋白全价饲料</strong>。</p></div></div>
 <pre><code class="language-">大豆粕 (44% CP)                20 份大豆粕 (32 - 12 = 20)
                   \        /
                     目标: 32%
@@ -4536,7 +4553,7 @@ flowchart LR
 碎小麦 (12% CP)                12 份碎小麦 (44 - 32 = 12)
                              -------------------------
                              总计: 32 份原料</code></pre>
-<ol>
+<ol start="1">
 <li><strong>沿对角线相减（大数减小数，取绝对值）</strong>：</li>
 </ol>
 <ul>
@@ -4544,14 +4561,14 @@ flowchart LR
 <li>对应碎小麦的份额：$|44 - 32| = 12\text{ 份}$</li>
 <li>两者合计总份数：$20 + 12 = 32\text{ 份}$</li>
 </ul>
-<ol>
+<ol start="2">
 <li><strong>计算各原料百分比配比</strong>：</li>
 </ol>
 <ul>
 <li><strong>大豆粕比例</strong>：$\frac{20}{32} \times 100\% = \mathbf{62.5\%}$</li>
 <li><strong>碎小麦比例</strong>：$\frac{12}{32} \times 100\% = \mathbf{37.5\%}$</li>
 </ul>
-<ol>
+<ol start="3">
 <li><strong>验证复合蛋白含量</strong>：</li>
 </ol>
 <div class="math-display">$$(62.5\% \times 44\%) + (37.5\% \times 12\%) = 27.5\% + 4.5\% = \mathbf{32.0\% \text{ CP}}$$</div>
@@ -4566,7 +4583,7 @@ flowchart TD
     Step4 --> Step5[5. 手摇绞肉机挤条切粒\n换装 2mm/4mm 孔板挤出圆柱颗粒]
     Step5 --> Step6[6. 避光风干脱水储藏\n晾晒至含水量 < 10% 密封防霉]
 </div>
-<ol>
+<ol start="1">
 <li><strong>微细粉碎过筛</strong>：鱼类肠道短小，原料颗粒必须细碎。将大豆粕、干浮萍、鱼粉彻底磨粉，过筛除去粗硬纤维；</li>
 <li><strong>添加天然粘结剂与预混料</strong>：按比例加入 $2\%\sim 5\%$ 的木薯淀粉或小麦面筋粉（谷朊粉），并添加 $1\%$ 的水产专用复合维生素与矿物质；</li>
 <li><strong>加水揉团</strong>：加入原料总重约 $30\%\sim 35\%$ 的清洁温水，反复揉搓成均匀不黏手的面团；</li>
@@ -4805,14 +4822,14 @@ mindmap
 <hr>
 <h2>导言与三大标准系统设计原则</h2>
 <p>本附录是一份详细的手把手（Step-by-step）工程施工与组装实操指南，旨在指导读者如何以最低成本、使用全球广泛易得的标准材料，完整亲手搭建出第 4 章详述的三种典型小型鱼菜共生单元：</p>
-<ol>
+<ol start="1">
 <li><strong>介质床单元（The Media Bed Unit）</strong>：全重力/虹吸潮汐式介质床；</li>
 <li><strong>营养液膜技术单元（The Nutrient Film Technique / NFT Unit）</strong>：管道水培系统；</li>
 <li><strong>深水浮筏培养单元（The Deep Water Culture / DWC Unit）</strong>：连续层流浮筏水培槽。</li>
 </ol>
 <h3>三大系统的关键选材与设计基准</h3>
 <p>本附录设计的核心衡量原则为：</p>
-<ol>
+<ol start="1">
 <li><strong>材料成本（Material Cost）</strong>：选用廉价、标准化的通用工业与民用配件；</li>
 <li><strong>材料可获取性（Material Availability）</strong>：全球各地均可轻易采购的五金管件；</li>
 <li><strong>生产产能（Production Capacity）</strong>：满足一个 4~5 口之家常年蔬菜与优质鱼蛋白自给自足。</li>
@@ -5182,7 +5199,7 @@ graph TD
 <hr>
 <h3>1.2 施工工具索引（Index of Tools）</h3>
 <p>> 对应原书表 A8.2（Table A8.2: Index of tools）</p>
-<ol>
+<ol start="1">
 <li><strong>劳保耳罩（Ear protection）</strong>：角磨机切割高频噪音防护；</li>
 <li><strong>重型防割劳保手套（Work gloves）</strong>：切割镀锌铁架与锋利塑料时防划伤；</li>
 <li><strong>护目镜（Safety goggles）</strong>：防止飞溅铁屑和塑料碎屑伤害眼睛；</li>
@@ -5230,7 +5247,7 @@ graph LR
 <hr>
 <h3>2.2 十二步标准施工工序图解与操作标准</h3>
 <h4>步骤 1：处理鱼缸（Preparing the Fish Tank）</h4>
-<ol>
+<ol start="1">
 <li>将第 1 个 IBC 吨桶竖直放置，撕去原有所有化学品/工业标签。</li>
 <li>用卷尺沿桶身自顶向下测量 $20\text{ cm}$，使用记号笔沿四周画出一整圈水平切割线。</li>
 <li>佩戴护目镜与劳保手套，用角磨机先切断外层镀锌钢管网格框架；随后使用曲线锯或角磨机沿线切开塑料内胆。</li>
@@ -5238,7 +5255,7 @@ graph LR
 <li>使用无毒生态环保洗洁精或中性肥皂配合温水，使用海绵和高压水枪彻底清洗内壁至少 3 遍，倒置通风干燥 24 小时。</li>
 </ol>
 <h4>步骤 2：安装鱼缸溢流出水管（Fish Tank Exit Pipe）</h4>
-<ol>
+<ol start="1">
 <li>在鱼缸侧壁选定出水口位置：自桶顶口向下量取 $12\text{ cm}$，自侧棱向内量取 $12\text{ cm}$，使用记号笔画出中心交叉定位点。</li>
 <li>选用 $57\text{ mm}$ 环形开孔锯（Hole saw），低速垂直钻孔，使用美工刀仔细修刮孔壁两面毛刺，确保切口绝对平整光滑。</li>
 <li>将 $50\text{ mm}$ Uniseal® 专用密封圈涂抹少量中性肥皂水作为润滑，准确嵌入钻孔中。</li>
@@ -5246,12 +5263,12 @@ graph LR
 <li>在鱼缸内部的该管端接一个 $50\text{ mm}$ 90° PVC 弯头，向下延伸一根套有防吸鱼网罩的排污吸管（底吸结构），确保能将缸底沉淀残饵与鱼粪抽吸溢流。</li>
 </ol>
 <h4>步骤 3：鱼缸底部排污阀门改造（Fish Tank Sump Drain）</h4>
-<ol>
+<ol start="1">
 <li>检查 IBC 底部自带的 2 英寸凸轮锁定（Camlock）或螺纹放水阀门，彻底冲洗阀芯内的工业残留。</li>
 <li>缠绕充足的 PTFE 生料带，加装 2 英寸转 1 寸或 3/4 寸活接球阀，以便日后停机排空或冲洗底泥。</li>
 </ol>
 <h4>步骤 4：利用第 2 个 IBC 制作 2 个标准介质床（Making 2 Media Beds）</h4>
-<ol>
+<ol start="1">
 <li>观察第 2 个 IBC 的外层镀锌钢管，顶面中间通常有两根加固横梁，使用星形内梅花螺丝刀（Torx T30/T40）拧下固定螺栓并取下横梁。</li>
 <li>将塑料内胆自铁笼中整体抽出。</li>
 <li>制作第 1、第 2 个介质床（每个床深为严格的 $30\text{ cm}$，这是保证植物根系深度与好氧干湿交替的最佳生理学深度）：</li>
@@ -5260,19 +5277,19 @@ graph LR
 <li>在塑料内胆的顶部和底部，分别自两端边缘向内量取 $30\text{ cm}$，各画出一圈完整水平切割线。</li>
 <li>用曲线锯沿着两圈标线平整切开，得到 2 个深度均为 $30\text{ cm}$ 的大托盘（介质床内胆）。中间剩余约 $40\text{ cm}$ 的桶身材料切开作为挡板备用。</li>
 </ul>
-<ol>
+<ol start="4">
 <li>用角磨机将对应的 IBC 镀锌铁笼从中央横向切断，修磨锋利切口，重新将切好的 2 个塑料托盘嵌入对应的上下两半金属框架内，形成极高结构强度的种植床单元。</li>
 <li>用环保肥皂彻底清洗内壁并沥干。</li>
 </ol>
 <h4>步骤 5：托架木方安装与水平校准（Support Framing & Leveling）</h4>
-<ol>
+<ol start="1">
 <li>介质床盛满湿润火山石和水后自重高达 $350\sim 400\text{ kg}$，必须有极其稳固的托底支撑。</li>
 <li>准备规格 $8 \times 1\text{ cm}$ 的防腐木方龙骨板：4 根各长 $104\text{ cm}$，1 根长 $42\text{ cm}$，1 根长 $48\text{ cm}$。</li>
 <li>将木方龙骨水平铺垫于金属托架与塑料床底之间，防止床底在满载高压下中央下凹变形。</li>
 <li><strong>核心红线</strong>：架设完成后，必须使用水平仪在介质床四个边缘和对角线反复检测，<strong>床体必须处于绝对水平状态</strong>。如果床身发生倾斜，会导致床内水位不均，钟罩虹吸管将无法形成瞬间气塞，造成虹吸无法启动或断开。</li>
 </ol>
 <h4>步骤 6：利用第 3 个 IBC 制作集水槽与第 3 个介质床（Sump Tank & 3rd Bed）</h4>
-<ol>
+<ol start="1">
 <li>将第 3 个 IBC 竖直放置，自底向上测量 $70\text{ cm}$，画出一圈水平切割线。</li>
 <li>用角磨机同时切断钢架立柱与内部塑料内胆。</li>
 <li>下半部分（高 $70\text{ cm}$，有效容积约 $700\text{ L}$）作为系统底部的<strong>核心集水槽（Sump Tank）</strong>；</li>
@@ -5297,7 +5314,7 @@ graph LR
                                │ 25mm V型穿墙螺栓  │
                                └─────────┬─────────┘
                                          ▼ 排向集水槽</code></pre>
-<ol>
+<ol start="1">
 <li><strong>制作虹吸钟罩（The Bell）</strong>：</li>
 </ol>
 <ul>
@@ -5305,14 +5322,14 @@ graph LR
 <li>在切口上方 $1.5\text{ cm}$ 处的管壁上，用电钻打一个直径为 $10\text{ mm}$ 的圆孔。此孔为<strong>破虹吸气孔（Siphon Break Hole）</strong>；当排水至该高度时空气暴入，立即截断虹吸，防止水被抽干挂死。</li>
 <li>在钟罩顶端紧密压入 $75\text{ mm}$ PVC 管帽并衬垫橡胶密封垫圈，做到百分之百气密（若漏气则永远无法形成负压抽吸）。</li>
 </ul>
-<ol>
+<ol start="2">
 <li><strong>制作介质防护套管（Media Guard）</strong>：</li>
 </ol>
 <ul>
 <li>取一截长 $35\text{ cm}$ 的 $110\text{ mm}$ PVC 管。使用角磨机沿其整个圆周和管长，每隔 $2\sim 3\text{ cm}$ 切出宽约 $5\text{ mm}$ 的纵向密集栅缝。</li>
 <li>其作用为永久隔离火山石/陶粒，防止碎石堵塞虹吸钟罩，同时便于日常掀盖检查立管与排障。</li>
 </ul>
-<ol>
+<ol start="3">
 <li><strong>安装立管与穿墙件（Standpipe & Bulkhead）</strong>：</li>
 </ol>
 <ul>
@@ -5320,21 +5337,21 @@ graph LR
 <li>安装 25mm V 型桶接穿墙件（Barrel connector），平胶垫置于床内侧，两面用力旋紧锁母。</li>
 <li>在床内穿墙件上端，垂直插入长 $16\text{ cm}$ 的 $25\text{ mm}$ PVC 立管；在立管顶端套接一个 $40\text{–}25\text{ mm}$ PVC 大小头（变径扩口漏斗）。此漏斗能在水位涨至最高点时，引发薄壁溢流水跌落瀑布效应，极大加速排气并诱发虹吸锁流。</li>
 </ul>
-<ol>
+<ol start="4">
 <li><strong>床底出水导流</strong>：</li>
 </ol>
 <ul>
 <li>介质床底部穿墙件外端朝下连接 $25\text{ mm} \times 1\text{ in}$ 螺纹直角弯头，接出排水管。将制作好的钟罩套在立管上，外套防护套管。</li>
 </ul>
 <h4>步骤 8：整体基座砌块堆叠与系统空间定位（Layout & Blocks Positioning）</h4>
-<ol>
+<ol start="1">
 <li>找平场地，按照图纸预留距离堆叠 48 块标准混凝土空心砖。</li>
 <li><strong>集水槽就位</strong>：集水槽置于中央地面最低处，两侧各用 6 块混凝土砖（共 12 块）砌墙夹紧加固，防止水压将塑料槽壁向外胀破膨胀。注意砖块避开侧壁预钻孔。</li>
 <li><strong>鱼缸就位</strong>：鱼缸基底垫高约 $15\text{ cm}$（平铺 1 层混凝土砖），使鱼缸高位溢流口自然高于介质床表面，实现全程无动力重力自流。</li>
 <li><strong>介质床就位</strong>：3 个介质床分别通过混凝土砖墩架高支撑（床底距地面约 $60\text{ cm}$），悬跨于集水槽两侧与上方，确保介质床底部出水口高于集水槽顶沿，保证出水全程重力跌落回流。</li>
 </ol>
 <h4>步骤 9：敷设鱼缸至介质床进水分配支管网（Inlet Distribution Manifold）</h4>
-<ol>
+<ol start="1">
 <li>自鱼缸外壁 $50\text{ mm}$ Uniseal 伸出的出水管，连接 $50\text{ mm}$ 弯头向下，再通过弯头引向介质床上方。</li>
 <li>沿介质床边缘架设 $50\text{ mm}$ PVC 供水干管（长约 $150\text{ cm}$ 与 $85\text{ cm}$ 段）。</li>
 <li>在对应每个介质床正上方位置，接入 $50\text{ mm}$ 等径三通或弯头。</li>
@@ -5342,20 +5359,20 @@ graph LR
 <li>操作者可通过这 3 个独立球阀，极其灵敏地单独特调流向每个介质床的进水量，使其恰好匹配钟罩虹吸的黄金流量区间。</li>
 </ol>
 <h4>步骤 10：敷设介质床至集水槽排水管网（Drain Plumbing）</h4>
-<ol>
+<ol start="1">
 <li><strong>A 床出水</strong>：A 床最靠近集水槽，底端弯头直接连接一根长 $60\text{ cm}$ 的 $25\text{ mm}$ PVC 硬管，直插集水槽侧壁孔洞倾泻入槽。</li>
 <li><strong>B 床与 C 床汇流</strong>：B 床与 C 床出水各引出一根长 $70\text{ cm}$ 的管线，通过 25mm PVC 正三通接入总汇流管，一并由集水槽上沿跌水跌入。</li>
 <li><strong>跌水增氧设计</strong>：排水管出口严禁深潜入水中，必须悬空高于集水槽液面至少 $15\sim 20\text{ cm}$，利用重力泄水强劲气水卷吸，为集水槽提供充沛的二次被动增氧。</li>
 </ol>
 <h4>步骤 11：安装循环潜水泵与高位电气盒（Pump & Electrical Installation）</h4>
-<ol>
+<ol start="1">
 <li>将额定流量 $\ge 2000\text{ L/h}$ 的潜水泵稳固沉放在集水槽底部正中央。</li>
 <li>水泵出水口通过 $1\text{ 寸转 }25\text{ mm}$ 螺纹转接头，紧固连接 $25\text{ mm}$ 高强度 PE 输水管。</li>
 <li>将 PE 软管直接沿池体拉升接入鱼缸顶端，并牢固绑扎。管路力求顺直，<strong>严禁使用过多 90° 弯头</strong>，以避免扬程沿程水头损失导致流量剧烈衰减。</li>
 <li>将防水电气箱（IP65）固定于背阴干燥处的高墙或坚固立柱上，<strong>其标高必须绝对高于全系统所有最高水位线</strong>，防止暴雨喷淋或管道崩脱水淹导致漏电短路。</li>
 </ol>
 <h4>步骤 12：填装火山石基质、加水试车与虹吸调谐（Filling Media & Commissioning）</h4>
-<ol>
+<ol start="1">
 <li><strong>试水查漏</strong>：<strong>严禁在未试水前直接倾倒填料！</strong> 先向鱼缸和集水槽灌入清水至运转水位，插电开启水泵试运行 2 小时，全方位检查各个穿墙胶圈、胶合接头和阀门是否存在微渗或漏水。</li>
 <li><strong>调试钟罩虹吸</strong>：微调各床进水球阀，观察水位涨落循环。标准状态下，水位上升至距床面 $3\sim 5\text{ cm}$ 时，虹吸应在 $10\sim 20$ 秒内强劲暴发启动，并在 $1.5\sim 3$ 分钟内彻底抽干底水，随后破虹吸气孔吸入空气瞬间切断，进入下一轮储水循环（完整单次潮汐周期宜在 $15\sim 25$ 分钟）。</li>
 <li><strong>填料冲洗与铺设</strong>：将 750L 粒径 $8\sim 20\text{ mm}$ 的火山岩或陶粒装入网兜或筛网，用大水反复冲洗去除微尘和粉末，然后平整铺装至 3 个介质床内，填装深度统一为 $28\sim 30\text{ cm}$。</li>
@@ -5385,7 +5402,7 @@ graph TD
 <hr>
 <h3>3.2 十四步标准施工工序详解</h3>
 <h4>步骤 1~3：鱼缸与两级过滤桶准备</h4>
-<ol>
+<ol start="1">
 <li><strong>鱼缸制作</strong>：同介质床单元步骤 1~3，将 1 个 IBC 吨桶上部切除 $20\text{ cm}$，保留 $800\text{ L}$ 净水体，安装高位出水 $50\text{ mm}$ Uniseal 穿墙件。</li>
 <li><strong>旋流沉淀桶（Swirl Separator）制作</strong>：</li>
 </ol>
@@ -5396,7 +5413,7 @@ graph TD
 <li>在桶正中心悬吊一个切除底部的 20L 塑料手提桶作为中心防紊流挡板（Stilling well）；</li>
 <li>在桶壁距顶 $15\text{ cm}$ 处安装高位出水口，加装防逃逸滤网，接出至生物滤桶。</li>
 </ul>
-<ol>
+<ol start="3">
 <li><strong>生物滤桶（Biofilter）制作</strong>：</li>
 </ol>
 <ul>
@@ -5407,7 +5424,7 @@ graph TD
 <h4>步骤 4：两级滤桶间管道重力连通</h4>
 <p>用 50mm PVC 管和 Uniseal 橡胶圈，将沉淀桶高位溢流口与生物滤桶进水口刚性连通，确保两桶水面保持平衡，水流平顺无阻滞。</p>
 <h4>步骤 5：砌筑管道支撑架与设定 1:35 黄金坡度</h4>
-<ol>
+<ol start="1">
 <li>采用 32 块混凝土砖在平整地面上砌筑 3 组砖墩柱（每组 2 根立柱，共 6 根砖墩），两端砖墩间距 $2.5\text{ 米}$。</li>
 <li>铺设 8 米 $8 \times 1\text{ cm}$ 防腐木方龙骨作为承重托梁。</li>
 <li><strong>核心红线——坡度设定</strong>：</li>
@@ -5418,19 +5435,19 @@ graph TD
 <li>若坡度太缓（$<1:50$），管内积水变深，丧失营养液“薄膜（Film）”特性，根系缺氧腐烂；若坡度太陡（$>1:25$），流速太快，根系来不及吸收养分且幼苗易被冲倒。</li>
 </ul>
 <h4>步骤 6~7：110mm PVC 管道打孔与固定</h4>
-<ol>
+<ol start="1">
 <li>5 根 3 米长 110mm PVC 管道平行排列在木架上，间距保持 $15\text{–}20\text{ cm}$。</li>
 <li><strong>打定植孔</strong>：使用卷尺在管顶中心轴线上划线。自一端向内量取 $15\text{ cm}$ 打第 1 个孔，随后<strong>每隔 $20\text{ cm}$ 钻一个定植孔</strong>，每根管开孔 14~16 个，5 根管共计提供约 80 个标准水培定植位点。使用 $50\text{ mm}$ 或 $75\text{ mm}$ 环形开孔锯钻孔，用美工刀清除毛刺。</li>
 <li><strong>进水小孔</strong>：在进水端管帽内侧 $7\text{ cm}$ 处的管顶，打一个 $20\text{ mm}$ 进水孔，用于插入供水软管。</li>
 <li>使用耐候尼龙扎带将 5 根 PVC 管牢固捆扎锁定在木质龙骨上，防止侧滚位移。</li>
 </ol>
 <h4>步骤 8：构建末端汇流排水主管（Drain Manifold）</h4>
-<ol>
+<ol start="1">
 <li>在 5 根管道的低端出水侧，分别安装 110mm 等径三通与 90° 弯头，将 5 路出水横向汇集串联进一根 110mm 集水总管。</li>
 <li>集水总管末端加装 $110\text{–}50\text{ mm}$ 偏心大小头变径，引出一根 50mm PVC 回流弯管，悬空伸入生物滤桶上方，利用高位落差跌水复氧冲入生物滤桶。</li>
 </ol>
 <h4>步骤 9~12：敷设分水管路与 80/20 分流控制</h4>
-<ol>
+<ol start="1">
 <li>水泵出水口接一根 $25\text{ mm}$ PE 主管，在离开生物桶后接入一个 $25\text{ mm}$ 正三通。</li>
 <li><strong>80/20 水力分配原则</strong>：</li>
 </ol>
@@ -5438,12 +5455,12 @@ graph TD
 <li><strong>80% 主循环流量</strong>：三通直行支路由 $25\text{ mm}$ 管直接打入鱼缸，并在鱼缸管端安装控制阀和射流混气嘴，为鱼缸提供强劲的水体翻滚和高溶氧；</li>
 <li><strong>20% 水培分流流量</strong>：三通侧向分支接入变径接头，引向 20mm PE 软管分配歧管。</li>
 </ul>
-<ol>
+<ol start="3">
 <li>在 5 根 NFT 管道上方架设 20mm 分配干管，对应每根管道入口安装一个 20mm 快插微调球阀，阀后伸出细软管插入 110mm 管道顶部的 $20\text{ mm}$ 进水孔。</li>
 <li>调节微调阀，使<strong>每根 NFT 管内的水流速度精确恒定在 $1\sim 2\text{ L/min}$</strong>（在管底形成厚度仅几毫米的薄水层）。</li>
 </ol>
 <h4>步骤 13~14：定植杯制作与闭水系统调试</h4>
-<ol>
+<ol start="1">
 <li>制作定植杯：在塑料网杯底部垫放数粒火山石，或使用 50mm PVC 短套管自制，装入洗净陶粒固定幼苗根须。</li>
 <li>全系统注水测试，检查旋流器旋转分离状态、生物球充氧沸腾状态，以及 NFT 管底水膜流动态势。</li>
 </ol>
@@ -5475,7 +5492,7 @@ graph LR
 <hr>
 <h3>4.2 十一步标准施工工序详解</h3>
 <h4>步骤 1~4：鱼缸、双级滤桶与 3 个 DWC 种植槽制作</h4>
-<ol>
+<ol start="1">
 <li><strong>鱼缸制作</strong>：同前，利用第 1 个 IBC 制作深 $80\text{ cm}$ 的标准鱼缸。</li>
 <li><strong>两级滤桶制作</strong>：同 NFT 单元步骤 2~3，制作 200L 旋流沉淀器与 200L 移动床生物滤桶。</li>
 <li><strong>制作 3 个 DWC 种植水槽</strong>：</li>
@@ -5483,7 +5500,7 @@ graph LR
 <ul>
 <li>取第 2 和第 3 个 IBC 吨桶，按照介质床的做法，分别切下 3 个深度均为 $30\text{ cm}$ 的金属包边塑料长槽（每个长宽 $1.2\text{ m} \times 1.0\text{ m}$，有效水深约 $25\text{ cm}$，容水量约 $300\text{ L}$，3 槽总有效水培水体近 $900\text{ L}$）。</li>
 </ul>
-<ol>
+<ol start="4">
 <li><strong>砌筑基台就位</strong>：</li>
 </ol>
 <ul>
@@ -5491,7 +5508,7 @@ graph LR
 <li><strong>核心红线</strong>：3 个水槽必须调在<strong>同一个绝对水平面</strong>上，防止槽与槽之间因高差导致末端水槽漫顶溢流。</li>
 </ul>
 <h4>步骤 5~7：槽间底部对流管道与排污系统安装</h4>
-<ol>
+<ol start="1">
 <li><strong>安装槽底排污阀</strong>：在每个 DWC 槽底板最低处，使用阶梯钻钻孔安装一个 25mm 穿墙接头，外接一个 $3/4$ 寸球阀，用于定期排空底层沉积的微量植物细根与老旧沉积物。</li>
 <li><strong>槽间大通径串联连通管</strong>：</li>
 </ol>
@@ -5500,23 +5517,23 @@ graph LR
 <li>同样在槽 B 与槽 C 之间安装 50mm 连通管；</li>
 <li>采用底部大通径低位连通，可迫使水流在槽内形成由表及里的立体推流，避免死水区停滞。</li>
 </ul>
-<ol>
+<ol start="3">
 <li><strong>C 槽末端出水回流</strong>：在槽 C 侧壁标高 $25\text{ cm}$ 处安装 50mm 溢流穿墙管，出水管以大斜度延伸回流跌入生物滤桶。</li>
 </ol>
 <h4>步骤 8：敷设水泵分流系统（80/20 比例）</h4>
-<ol>
+<ol start="1">
 <li>生物滤桶内的潜水泵接出 25mm PE 主管，通过三通分流：</li>
 </ol>
 <ul>
 <li>80% 流量回冲鱼缸，维系高换水率；</li>
 <li>20% 流量引入 DWC 第一个种植槽（槽 A）前端。</li>
 </ul>
-<ol>
+<ol start="2">
 <li>缓慢的进水（约 $2\sim 4\text{ L/min}$）使整个近千升的 DWC 水培区保持极其宁静平稳的层流水环境，极利于植物根系向四周均匀舒展延伸。</li>
 </ol>
 <h4>步骤 9：敷设超强曝气气石网络（Aeration Grid）</h4>
 <div class="callout callout-important"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span> <strong>核心要点 (Important)</strong></div><div class="callout-body"><p><strong>DWC 系统的绝对成败关键——水培槽曝气</strong></p><p>DWC 水槽深度达 $25\text{ cm}$ 且水流极缓，若溶氧不足，根系将在 24~48 小时内发生大面积无氧呼吸而黑根腐烂窒息。</p></div></div>
-<ol>
+<ol start="1">
 <li>将大功率电磁气泵固定在干燥高位。</li>
 <li>使用气管分支器将输气管分出 4~6 路：</li>
 </ol>
@@ -5524,11 +5541,11 @@ graph LR
 <li>鱼缸内投入 1~2 个大流量气石；</li>
 <li><strong>每个 DWC 种植槽底部分散布置至少 1~2 个大气量气石</strong>，并用扎带绑小石块沉底。</li>
 </ul>
-<ol>
+<ol start="3">
 <li>开启气泵，确保每个槽内气泡翻滚密集成幕，保持水体溶氧稳定达到饱和极限（$\text{DO} \ge 5\sim 6\text{ mg/L}$）。</li>
 </ol>
 <h4>步骤 10：精准裁切与打孔制作聚苯乙烯浮筏（Making the Rafts）</h4>
-<ol>
+<ol start="1">
 <li><strong>板材选用</strong>：选用厚度 $3\sim 5\text{ cm}$ 的<strong>高密度挤塑聚苯乙烯泡沫板（XPS）</strong>。XPS 板密度高、吸水率极低、浮力强劲且不透光。</li>
 <li><strong>尺寸裁剪</strong>：按照水槽内口净尺寸（约 $118\text{ cm} \times 98\text{ cm}$），将泡沫板裁切成略小 $1\sim 2\text{ cm}$ 的规整矩形板，确保浮筏能在水槽内自由随液面升降，无任何卡边卡滞。</li>
 <li><strong>钻削定植孔</strong>：</li>
@@ -5537,11 +5554,11 @@ graph LR
 <li>在泡沫板表面画出 $20\text{ cm} \times 20\text{ cm}$ 的均匀方格网；</li>
 <li>使用与水培定植杯外径精准匹配的环形开孔锯（通常为 $50\text{ mm}$），在网格交叉点钻孔，每块板打孔 24~28 个，3 块浮筏总计容纳约 80 棵蔬菜。</li>
 </ul>
-<ol>
+<ol start="4">
 <li><strong>彻底遮光防藻原则</strong>：浮筏边缘若有微小间隙，必须用黑色遮光膜或边角料封盖。水体一旦见光，单细胞绿藻会暴发性滋生，与蔬菜争夺养分并恶化根区环境。</li>
 </ol>
 <h4>步骤 11：全系统灌水排漏、气流核验与定植试车</h4>
-<ol>
+<ol start="1">
 <li>向鱼缸、旋流桶、生物桶和 3 个 DWC 槽灌满清水，仔细检查槽间 50mm 穿墙管及各底部排污阀门；</li>
 <li>启动水泵与气泵，观察 DWC 3 槽水位差（正常推流下两槽间水头差应 $<5\text{ mm}$）；</li>
 <li>将植有生菜或甘蓝幼苗的定植杯卡入浮筏孔洞，确保杯底浸入水中约 $1\sim 2\text{ cm}$，完成搭建。</li>
@@ -5587,7 +5604,7 @@ graph LR
 </tbody></table></div>
 <hr>
 <h3>5.2 施工八大安全与工艺铁律（Golden Engineering Rules）</h3>
-<div class="callout callout-caution"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg></span> <strong>绝对禁忌与操作红线 (Caution)</strong></div><div class="callout-body"><p>1. <strong>严禁使用盛装过有毒工业化学品、农药、溶剂或石油类废旧 IBC 桶</strong>：内胆材料具有微孔吸附性，任何化学渗透均会永久性杀死硝化细菌、致死鱼类并富集于蔬菜。必须使用食品级原装桶（如运输糖浆、果汁、食用油）。</p><p>2. <strong>角磨机操作必须佩戴全封闭护目镜与劳保手套</strong>：切割 IBC 镀锌铁笼钢管时火星剧烈，金属薄片极易反弹伤人。</p><p>3. <strong>电气设备必须架设在全系统最高水线之上并配置漏电保护器（RCD/GFCI）</strong>：凡浸水水泵与气泵电源必须配备灵敏度 $30\text{ mA}$ 的漏电断路器，电源线留出防雨滴弯弧，严防水流顺线渗入插座。</p><p>4. <strong>火山岩/陶粒在入床前必须彻底用筛网冲洗去除微尘</strong>：未冲洗的粉尘会瞬间将全系统染成红褐色，堵塞水泵叶轮、划伤鱼鳃致窒息并污染滤棉。</p><p>5. <strong>介质床支撑结构必须达到抗剪与抗倾覆安全标准</strong>：单个满载介质床自重接近半吨，严禁直接悬空搁置在单块未经支撑的空心砖上。</p><p>6. <strong>PVC 供水管件胶粘后必须静置通风固化至少 24 小时</strong>：胶水内含有挥发性强溶剂（如丁酮、四氢呋喃），过早通水会使溶剂溶入水体导致鱼类中枢神经中毒死亡。</p><p>7. <strong>DWC 浮筏必须完全遮光封严</strong>：任何漏光逢隙均会诱发绿藻暴发，降低夜间水体溶氧并使根系窒息。</p><p>8. <strong>所有带切口的金属与硬质塑料管口必须用角磨片或美工刀刮除锋利毛刺</strong>，防止操作割伤与刺破橡胶密封件。</p></div></div>
+<div class="callout callout-caution"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg></span> <strong>绝对禁忌与操作红线 (Caution)</strong></div><div class="callout-body"><ol class="callout-ol" start="1"><li><strong>严禁使用盛装过有毒工业化学品、农药、溶剂或石油类废旧 IBC 桶</strong>：内胆材料具有微孔吸附性，任何化学渗透均会永久性杀死硝化细菌、致死鱼类并富集于蔬菜。必须使用食品级原装桶（如运输糖浆、果汁、食用油）。</li><li><strong>角磨机操作必须佩戴全封闭护目镜与劳保手套</strong>：切割 IBC 镀锌铁笼钢管时火星剧烈，金属薄片极易反弹伤人。</li><li><strong>电气设备必须架设在全系统最高水线之上并配置漏电保护器（RCD/GFCI）</strong>：凡浸水水泵与气泵电源必须配备灵敏度 $30\text{ mA}$ 的漏电断路器，电源线留出防雨滴弯弧，严防水流顺线渗入插座。</li><li><strong>火山岩/陶粒在入床前必须彻底用筛网冲洗去除微尘</strong>：未冲洗的粉尘会瞬间将全系统染成红褐色，堵塞水泵叶轮、划伤鱼鳃致窒息并污染滤棉。</li><li><strong>介质床支撑结构必须达到抗剪与抗倾覆安全标准</strong>：单个满载介质床自重接近半吨，严禁直接悬空搁置在单块未经支撑的空心砖上。</li><li><strong>PVC 供水管件胶粘后必须静置通风固化至少 24 小时</strong>：胶水内含有挥发性强溶剂（如丁酮、四氢呋喃），过早通水会使溶剂溶入水体导致鱼类中枢神经中毒死亡。</li><li><strong>DWC 浮筏必须完全遮光封严</strong>：任何漏光逢隙均会诱发绿藻暴发，降低夜间水体溶氧并使根系窒息。</li><li><strong>所有带切口的金属与硬质塑料管口必须用角磨片或美工刀刮除锋利毛刺</strong>，防止操作割伤与刺破橡胶密封件。</li></ol></div></div>
     </div>
     
     <div class="chapter-container">
@@ -5620,7 +5637,7 @@ graph TD
 <hr>
 <h2>第一部分：鱼菜共生核心优势与局限性对照速查</h2>
 <h3>1.1 核心优势（Benefits of Aquaponic Food Production）</h3>
-<ol>
+<ol start="1">
 <li><strong>水资源极端节约</strong>：仅消耗传统土壤农业用水量的 <strong>$10\%\sim 20\%$</strong>（全闭环循环，水体仅因植物蒸腾与蒸发少量损失）。</li>
 <li><strong>零化学肥料依赖</strong>：鱼类排泄物与未食饲料经细菌高效生物矿化，提供植物所需的绝大部分宏量与微量矿质元素。</li>
 <li><strong>彻底杜绝化学合成农药与除草剂</strong>：水体中游动着对杀虫剂极其敏感的活鱼，倒逼系统全生命周期实施严格的物理防虫与生物防治（IPPM），保障农产品达到超有机安全级。</li>
@@ -5629,7 +5646,7 @@ graph TD
 <li><strong>人体工效学与劳动强度极低</strong>：免去翻耕土地、除草、土壤熏蒸消毒等重体力劳动，架高种植床大幅减轻腰椎疲劳。</li>
 </ol>
 <h3>1.2 潜在局限与工程挑战（Weaknesses & Challenges）</h3>
-<ol>
+<ol start="1">
 <li><strong>初期一次性资本投入较高</strong>：需要购置鱼缸、管阀配件、循环水泵、曝气气泵及温室结构。</li>
 <li><strong>跨学科复合知识门槛</strong>：操作者必须同时理解水产养殖学（鱼病与水质）、水培农艺学（缺素与光温湿）以及环境微生物学（硝化动力学）。</li>
 <li><strong>极高电力连续性依赖</strong>：断电停泵或停气会在数小时内引发鱼群缺氧浮头与硝化细菌活性暴跌，必须配备断电报警与备用发电/光伏系统。</li>
@@ -5757,7 +5774,7 @@ graph TD
  1 │       /      \                  /    \             /─────────────────
  0 └───┬──┴────────┴─────────────┬──┴──────┴───────────┴─────────────► 时间 (天)
       第 0 天                 第 10~15 天           第 25~35 天 (正式进鱼放苗)</code></pre>
-<ol>
+<ol start="1">
 <li><strong>第 1~5 天（点火期）</strong>：向水体加入无毒氨源（如工业氯化铵、纯氨水或鱼饲料发酵液），维持水体 $\text{TAN} \approx 2\sim 3\text{ mg/L}$，水泵气泵全开连续运转；</li>
 <li><strong>第 6~15 天（AOB 增殖期）</strong>：氨氮开始断崖式下降，亚硝酸盐指标急剧飙升至 $5\sim 10\text{ mg/L}$ 以上；</li>
 <li><strong>第 16~28 天（NOB 爆发期）</strong>：亚硝酸盐达到最高峰后开始快速跌落，硝酸盐测试液首次出现鲜红色浓重反应；</li>
@@ -5841,7 +5858,7 @@ graph TD
 <div class="math-display">$$\text{系统所需健康鱼类存塘总重 (Biomass)} = \frac{200\text{ g}}{1.5\%} \approx 13.3\text{ kg}$$</div>
 <p>若单个成鱼规格为 $500\text{ g}$，则 $1000\text{ L}$ 鱼缸内宜长期维持约 <strong>$25\sim 30$ 尾成鱼</strong>（养殖密度约 $13\sim 15\text{ kg/m}^3$，处于家庭鱼菜共生系统低应激、零风险的最佳黄金安全负荷区间）。</p>
 <h3>6.3 鱼类饲喂黄金五准则</h3>
-<ol>
+<ol start="1">
 <li><strong>配合饲料全价性</strong>：必须选用正规大厂浮水性膨化颗粒饲料；杂食性鱼类（罗非鱼、鲤鱼）饲料粗蛋白含量宜在 <strong>$30\%\sim 32\%$</strong>；肉食性鱼类（虹鳟、鲈鱼）粗蛋白宜在 <strong>$40\%\sim 45\%$</strong>。</li>
 <li><strong>30 分钟净料红线</strong>：投喂后 30 分钟内未吃完的残饵，<strong>必须全部用细网捞出并称重剔除</strong>。残饵在水中泡解会在数小时内滋生腐败异养菌，引发氨氮和硫化氢致命暴雷。</li>
 <li><strong>低温与应激断食原则</strong>：水温低于 $15^\circ\text{C}$ 或极端高温超过 $32^\circ\text{C}$，以及水质突变、换水、移箱分拣前后 24 小时内，必须严格全天停食。</li>
@@ -5850,7 +5867,7 @@ graph TD
 </ol>
 <hr>
 <h2>第七部分：成功运营鱼菜共生系统的十大管理戒律</h2>
-<div class="callout callout-important"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span> <strong>核心要点 (Important)</strong></div><div class="callout-body"><p>### 粮农组织（FAO）鱼菜共生系统十大成功金律（Ten Key Guidelines）</p><p>1. <strong>每日巡视，敏锐感知（Observe and monitor the system every day）</strong>：每天早晨用几分钟仔细观察鱼的游姿摄食冲力、植物叶片挺拔度及水流声，绝大多数隐患均可在爆发前被肉眼识别。</p><p>2. <strong>水泵与气泵双重生命线保障（Ensure adequate aeration and water circulation）</strong>：坚持循环不息，确保水流顺畅；配置备用电磁气泵与逆变器电池应急保障。</p><p>3. <strong>死守核心水质参数（Maintain good water quality）</strong>：</p><p>$$\text{pH 6.0~7.0} \quad\Big|\quad \text{DO} \ge 5\text{ mg/L} \quad\Big|\quad \text{TAN} < 1\text{ mg/L} \quad\Big|\quad \text{NO}_2^- < 1\text{ mg/L} \quad\Big|\quad \text{NO}_3^- \text{ 5~150 mg/L}$$</p><p>4. <strong>因地制宜，顺应节气时令（Choose fish and plants according to seasonal climate）</strong>：夏季选养热带罗非鱼配空心菜、罗勒、木耳菜；冬季转养冷水耐寒加州鲈、虹鳟配耐寒生菜、菠菜、甘蓝。</p><p>5. <strong>克制密度，切忌贪多挤压（Do not overcrowd the fish tanks）</strong>：家庭与初级系统养殖密度严控在 <strong>$\le 20\text{ kg} / 1000\text{ L}$</strong> 净水体以内，给水体留出足够的生态容错缓冲空间。</p><p>6. <strong>坚决杜绝过度投喂（Avoid overfeeding, remove uneaten food in 30 min）</strong>：少食多餐，严控投喂量，决不允许残饵在缸底过夜沉积腐烂。</p><p>7. <strong>坚决及时清除固废与遮光防藻（Remove solid wastes, keep tanks clean and shaded）</strong>：定期排空旋流沉淀器与过滤桶底泥；为鱼缸和管道彻底遮阳，剥夺藻类光合能量。</p><p>8. <strong>动态平衡鱼、菌、菜三者体量（Balance the number of plants, fish and biofilter）</strong>：严格依照投饵比率匹配种植面积与生化填料体积，不可随意单边扩大某一环节。</p><p>9. <strong>分期定植与分期捕捞（Stagger harvesting and restocking）</strong>：保证系统全周期恒定吸氮与恒定排氨，杜绝大起大落的“断崖式波动”。</p><p>10. <strong>构筑严密生物安全防线（Do not let pathogens enter the system）</strong>：严禁猫狗宠物靠近水源；外来新苗隔离检疫；采收果蔬时严禁系统回流水喷淋或浸润叶片，保障食品卫生绝对安全。</p></div></div>
+<div class="callout callout-important"><div class="callout-title"><span class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></span> <strong>核心要点 (Important)</strong></div><div class="callout-body"><h3 class="callout-subheading">粮农组织（FAO）鱼菜共生系统十大成功金律（Ten Key Guidelines）</h3><ol class="callout-ol" start="1"><li><strong>每日巡视，敏锐感知（Observe and monitor the system every day）</strong>：每天早晨用几分钟仔细观察鱼的游姿摄食冲力、植物叶片挺拔度及水流声，绝大多数隐患均可在爆发前被肉眼识别。</li><li><strong>水泵与气泵双重生命线保障（Ensure adequate aeration and water circulation）</strong>：坚持循环不息，确保水流顺畅；配置备用电磁气泵与逆变器电池应急保障。</li><li><strong>死守核心水质参数（Maintain good water quality）</strong>：</li></ol><p>$$\text{pH 6.0~7.0} \quad\Big|\quad \text{DO} \ge 5\text{ mg/L} \quad\Big|\quad \text{TAN} < 1\text{ mg/L} \quad\Big|\quad \text{NO}_2^- < 1\text{ mg/L} \quad\Big|\quad \text{NO}_3^- \text{ 5~150 mg/L}$$</p><ol class="callout-ol" start="4"><li><strong>因地制宜，顺应节气时令（Choose fish and plants according to seasonal climate）</strong>：夏季选养热带罗非鱼配空心菜、罗勒、木耳菜；冬季转养冷水耐寒加州鲈、虹鳟配耐寒生菜、菠菜、甘蓝。</li><li><strong>克制密度，切忌贪多挤压（Do not overcrowd the fish tanks）</strong>：家庭与初级系统养殖密度严控在 <strong>$\le 20\text{ kg} / 1000\text{ L}$</strong> 净水体以内，给水体留出足够的生态容错缓冲空间。</li><li><strong>坚决杜绝过度投喂（Avoid overfeeding, remove uneaten food in 30 min）</strong>：少食多餐，严控投喂量，决不允许残饵在缸底过夜沉积腐烂。</li><li><strong>坚决及时清除固废与遮光防藻（Remove solid wastes, keep tanks clean and shaded）</strong>：定期排空旋流沉淀器与过滤桶底泥；为鱼缸和管道彻底遮阳，剥夺藻类光合能量。</li><li><strong>动态平衡鱼、菌、菜三者体量（Balance the number of plants, fish and biofilter）</strong>：严格依照投饵比率匹配种植面积与生化填料体积，不可随意单边扩大某一环节。</li><li><strong>分期定植与分期捕捞（Stagger harvesting and restocking）</strong>：保证系统全周期恒定吸氮与恒定排氨，杜绝大起大落的“断崖式波动”。</li><li><strong>构筑严密生物安全防线（Do not let pathogens enter the system）</strong>：严禁猫狗宠物靠近水源；外来新苗隔离检疫；采收果蔬时严禁系统回流水喷淋或浸润叶片，保障食品卫生绝对安全。</li></ol></div></div>
 <hr>
 <h2>第八部分：农场标准化日常运维检视登记单（SOP 模板）</h2>
 <pre><code class="language-markdown"># 鱼菜共生农场标准化巡检运维登记表 (Farm Operations Logsheet)
