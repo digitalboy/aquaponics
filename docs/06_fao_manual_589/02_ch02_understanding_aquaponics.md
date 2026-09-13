@@ -146,14 +146,35 @@ $$\text{NH}_4^+ + 2\text{O}_2 \rightarrow \text{NO}_3^- + 2\text{H}^+ + \text{H}
 “系统平衡（Balancing）”是鱼菜共生运维中最重要的工程原则。它本质上是**鱼类排泄负荷、微生物生物转化通量与植物养分吸收速率三者之间的化学计量学匹配**。
 
 ```mermaid
-graph TD
-    BalanceScale["⚖️ 动态天平核心模型"]
-    FishBiomass["🐟 鱼类总生物量与日投饲负荷"]
-    BacteriaPower["🦠 生物滤器有效表面积与硝化通量"]
-    PlantArea["🥬 植物生长床有效面积与需肥量"]
+flowchart LR
+    subgraph Left["左盘：需肥与排泄源（负荷端）"]
+        Fish["养殖鱼群总生物量 Biomass<br/>日投饵饲喂负荷 (Feed Rate)"]
+        Waste["排泄代谢废物<br/>非离子氨与总氨氮 TAN"]
+        Fish --> Waste
+    end
 
-    FishBiomass <-->|"产生等量氨氮"| BacteriaPower
-    BacteriaPower <-->|"转化等量硝酸盐"| PlantArea
+    subgraph Pivot["中央支点：生化转化中枢"]
+        Bio["生物滤器有效表面积 SSA<br/>硝化细菌菌膜群落 (AOB / NOB)"]
+        Reaction["两步生化硝化氧化<br/>TAN → NO2- → NO3-"]
+        Bio --> Reaction
+    end
+
+    subgraph Right["右盘：耗肥与净化端（吸收端）"]
+        Plants["水培作物有效种植面积<br/>健康叶菜/果菜吸肥通量"]
+        Clean["同化吸收硝酸盐<br/>深度净化并回流富氧洁净水"]
+        Plants --> Clean
+    end
+
+    Waste ==>|"等量负荷匹配<br/>(40~50 g饲料/m²/天)"| Bio
+    Reaction ==>|"等量养分同化<br/>(维持动态零积聚)"| Plants
+
+    classDef leftBox fill:#f0f9ff,stroke:#0284c7,stroke-width:1.5px,color:#0c4a6e;
+    classDef centerBox fill:#fefce8,stroke:#ca8a04,stroke-width:1.5px,color:#713f12;
+    classDef rightBox fill:#f0fdf4,stroke:#16a34a,stroke-width:1.5px,color:#14532d;
+    
+    class Left leftBox;
+    class Pivot centerBox;
+    class Right rightBox;
 ```
 
 ### 2.4.1 天平模型与失衡场景分析
@@ -216,17 +237,28 @@ graph TD
 建立每周至少一次的标准化试剂滴定化验制度是保障系统长治久安的底线工作：
 
 ```mermaid
-flowchart TD
-    Start[每周常规水质滴定监测] --> TAN{测定氨氮 TAN}
-    TAN -->|TAN > 1.0 mg/L| ActA[⚠️ 报警: 生物过滤不足/投喂过量\n立即减料停喂, 增强曝气]
-    TAN -->|TAN < 0.5 mg/L| NO2{测定亚硝酸盐 NO2-}
+flowchart LR
+    Start([每周水质滴定化验]) --> TAN{"1. 测定总氨氮 (TAN)"}
     
-    NO2 -->|NO2- > 0.5 mg/L| ActB[⚠️ 报警: 亚硝化挂膜未完全/中毒风险\n立即添加氯化钠补充氯离子, 减料]
-    NO2 -->|NO2- < 0.2 mg/L| NO3{测定硝酸盐 NO3-}
+    TAN -->|TAN > 1.0 mg/L| ActA["⚠️ 严重报警: 硝化不足/喂料过量<br/><b>应对:</b> 立即停喂减料，增强全开曝气"]
+    TAN -->|TAN <= 0.5 mg/L| NO2{"2. 测定亚硝酸盐 (NO2-)"}
     
-    NO3 -->|NO3- < 10 mg/L| ActC[💡 提示: 植物养分饥饿脱肥\n适度提升鱼群存塘密度与日喂料量]
-    NO3 -->|10 - 120 mg/L| ActD[✅ 正常: 系统处于极佳黄金平衡状态]
-    NO3 -->|NO3- > 150 mg/L| ActE[⚠️ 提示: 养分过度富集\n适度排换水用于灌溉外部大田作物]
+    NO2 -->|NO2- > 0.5 mg/L| ActB["⚠️ 中毒预警: 亚硝化挂膜未成熟<br/><b>应对:</b> 投盐补充氯离子防褐血，减料"]
+    NO2 -->|NO2- <= 0.2 mg/L| NO3{"3. 测定硝酸盐 (NO3-)"}
+    
+    NO3 -->|NO3- < 10 mg/L| ActC["💡 提示: 植物养分脱肥饥饿<br/><b>应对:</b> 适度增加鱼群存塘量或日投饲量"]
+    NO3 -->|10 - 120 mg/L| ActD["✅ 黄金状态: 硝化与吸收完全平衡<br/><b>应对:</b> 保持当前水肥管理与投喂节奏"]
+    NO3 -->|NO3- > 150 mg/L| ActE["⚠️ 提示: 硝酸盐过度累积<br/><b>应对:</b> 适度排放老水用于大田土壤灌溉"]
+
+    classDef alert fill:#fff1f2,stroke:#f43f5e,stroke-width:1.5px,color:#9f1239;
+    classDef success fill:#f0fdf4,stroke:#22c55e,stroke-width:1.5px,color:#14532d;
+    classDef note fill:#eff6ff,stroke:#3b82f6,stroke-width:1.5px,color:#1e40af;
+    classDef test fill:#f8fafc,stroke:#64748b,stroke-width:1.5px,color:#0f172a;
+    
+    class ActA,ActB alert;
+    class ActD success;
+    class ActC,ActE note;
+    class TAN,NO2,NO3,Start test;
 ```
 
 ---
