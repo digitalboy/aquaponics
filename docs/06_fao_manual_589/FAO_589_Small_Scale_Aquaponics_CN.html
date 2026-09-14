@@ -53,14 +53,25 @@ document.addEventListener("DOMContentLoaded", async function() {
 @page {
     size: A4 portrait;
     margin: 20mm 15mm 20mm 15mm;
-    @bottom-right {
-        content: counter(page);
-    }
     @bottom-left {
         content: "国数（深圳）数字化科技有限公司 编译";
         font-size: 9pt;
         color: #64748b;
     }
+    @bottom-center {
+        content: counter(page);
+        font-size: 10pt;
+        color: #475569;
+    }
+    @bottom-right {
+        content: "";
+    }
+}
+
+@page:first {
+    @bottom-left { content: ""; }
+    @bottom-center { content: ""; }
+    @bottom-right { content: ""; }
 }
 
 *, *:before, *:after {
