@@ -1,0 +1,246 @@
+{
+  "topology_version": "v1.0.0",
+  "facility_id": "GH-GUANGMING-JINGKOU-01",
+  "site_name": "深圳光明科学城迳口鱼菜共生数字化工业化生产基地 (1号棚)",
+  "geo_location": {
+    "province": "广东省",
+    "city": "深圳市",
+    "district": "光明区",
+    "village_or_community": "迳口社区 (迳口古村)",
+    "coordinates": [
+      113.9482,
+      22.7756
+    ],
+    "altitude_meters": 38.5,
+    "climate_zone_description": "南亚热带季风气候，大顶岭森林公园与光明水库环抱山谷微盆地，昼夜温差大，高湿易结露，夏长无霜"
+  },
+  "greenhouse_structure": {
+    "structure_type": "multi_span_film",
+    "total_length_m": 64.0,
+    "total_width_m": 32.0,
+    "shoulder_height_m": 4.5,
+    "ridge_height_m": 8.1,
+    "total_footprint_area_m2": 2048.0,
+    "roof_covering_material": "15丝 PO高抗撕裂防滴消雾农业大棚专用薄膜"
+  },
+  "zones": [
+    {
+      "zone_id": "ZONE-COOL-01",
+      "name": "冷凉温区 (沙拉生菜/西洋菜/高架草莓专区)",
+      "microclimate_type": "cool_compartment",
+      "floor_area_m2": 800.0,
+      "has_evaporative_cooling_pads": true,
+      "has_circulation_fans": true,
+      "external_shading_rate_percent": 75,
+      "has_independent_water_chiller": true,
+      "has_supplemental_lighting": false
+    },
+    {
+      "zone_id": "ZONE-WARM-02",
+      "name": "喜温高光区 (五彩圣女果/荷兰桶吊蔓/夏菜专区)",
+      "microclimate_type": "warm_compartment",
+      "floor_area_m2": 640.0,
+      "has_evaporative_cooling_pads": true,
+      "has_circulation_fans": true,
+      "external_shading_rate_percent": 50,
+      "has_independent_water_chiller": false,
+      "has_supplemental_lighting": true
+    },
+    {
+      "zone_id": "ZONE-RAS-03",
+      "name": "循环水产车间 (加州鲈高密度成鱼与固液分离区)",
+      "microclimate_type": "ras_aquaculture",
+      "floor_area_m2": 400.0,
+      "has_evaporative_cooling_pads": false,
+      "has_circulation_fans": true,
+      "external_shading_rate_percent": 85,
+      "has_independent_water_chiller": false,
+      "has_supplemental_lighting": false
+    },
+    {
+      "zone_id": "ZONE-NURSERY-04",
+      "name": "育苗暗室与幼苗炼苗缓冲舱",
+      "microclimate_type": "nursery_germination",
+      "floor_area_m2": 208.0,
+      "has_evaporative_cooling_pads": true,
+      "has_circulation_fans": true,
+      "external_shading_rate_percent": 75,
+      "has_independent_water_chiller": false,
+      "has_supplemental_lighting": true
+    }
+  ],
+  "hydraulic_loops": [
+    {
+      "loop_id": "LOOP-AQUAPONICS-MAIN",
+      "name": "鱼菜共生双循环主干水路 (深水菜池回流回路)",
+      "loop_type": "coupled_aquaponics_loop",
+      "supply_pipe_material": "PVC-U",
+      "supply_pipe_nominal_dn": 90.0,
+      "return_pipe_nominal_dn": 110.0,
+      "design_flow_rate_m3_per_h": 45.0,
+      "operating_pressure_mpa": 0.25,
+      "bound_unit_ids": [
+        "BED-TARPAULIN-01",
+        "BED-STAINLESS-02",
+        "BED-TARPAULIN-03",
+        "RAS-TANK-01",
+        "RAS-TANK-02"
+      ],
+      "notes": "加州鲈鱼池尾水经微滤沉淀生化后，重力流入水培菜池，由主泵回抽"
+    },
+    {
+      "loop_id": "LOOP-STRAWBERRY-DRIP",
+      "name": "A字架高架草莓专用低浓度水肥一体滴灌回路 (EC 1.0~1.4)",
+      "loop_type": "de_coupled_dosing_loop",
+      "supply_pipe_material": "HDPE/PE",
+      "supply_pipe_nominal_dn": 50.0,
+      "return_pipe_nominal_dn": 63.0,
+      "design_flow_rate_m3_per_h": 6.0,
+      "operating_pressure_mpa": 0.25,
+      "bound_unit_ids": [
+        "RACK-AFRAME-01"
+      ],
+      "notes": "低浓度营养母液与微酸度控制，防止草莓烧心"
+    },
+    {
+      "loop_id": "LOOP-TOMATO-DRIP",
+      "name": "五彩圣女果专用高浓度水肥一体滴灌回路 (EC 2.2~2.8)",
+      "loop_type": "de_coupled_dosing_loop",
+      "supply_pipe_material": "HDPE/PE",
+      "supply_pipe_nominal_dn": 63.0,
+      "return_pipe_nominal_dn": 75.0,
+      "design_flow_rate_m3_per_h": 8.0,
+      "operating_pressure_mpa": 0.3,
+      "bound_unit_ids": [
+        "BKT-TOMATO-01"
+      ],
+      "notes": "高钾高钙水肥母液加药机控制，促进糖分积累"
+    }
+  ],
+  "production_units": [
+    {
+      "unit_type": "ground_tarpaulin_bed",
+      "unit_id": "BED-TARPAULIN-01",
+      "name": "1号刀刮布落地水培菜池 (主打西洋菜/空心菜大宗走量)",
+      "zone_id": "ZONE-COOL-01",
+      "bound_hydraulic_loop_id": "LOOP-AQUAPONICS-MAIN",
+      "length_m": 30.0,
+      "width_m": 1.5,
+      "basin_wall_height_m": 0.45,
+      "operating_water_depth_m": 0.35,
+      "effective_water_volume_m3": 15.75,
+      "tarpaulin_density_g_per_m2": 800.0,
+      "raft_dimension_m": [
+        1.0,
+        0.6
+      ],
+      "raft_holes_per_board": 24,
+      "max_raft_capacity": 50,
+      "total_planting_holes": 1200
+    },
+    {
+      "unit_type": "elevated_stainless_bed",
+      "unit_id": "BED-STAINLESS-02",
+      "name": "2号不锈钢离地水培菜池 (主打四大沙拉生菜/站立免弯腰极净展示)",
+      "zone_id": "ZONE-COOL-01",
+      "bound_hydraulic_loop_id": "LOOP-AQUAPONICS-MAIN",
+      "length_m": 30.0,
+      "width_m": 1.5,
+      "elevated_stand_height_m": 0.85,
+      "basin_depth_m": 0.4,
+      "operating_water_depth_m": 0.35,
+      "effective_water_volume_m3": 15.75,
+      "stainless_grade": "SUS304食品级拉丝不锈钢",
+      "raft_dimension_m": [
+        1.0,
+        0.6
+      ],
+      "raft_holes_per_board": 24,
+      "max_raft_capacity": 50,
+      "total_planting_holes": 1200
+    },
+    {
+      "unit_type": "ground_tarpaulin_bed",
+      "unit_id": "BED-TARPAULIN-03",
+      "name": "3号刀刮布落地水培菜池 (主打广东菜心/大叶菠菜/茼蒿/油麦菜)",
+      "zone_id": "ZONE-COOL-01",
+      "bound_hydraulic_loop_id": "LOOP-AQUAPONICS-MAIN",
+      "length_m": 30.0,
+      "width_m": 1.5,
+      "basin_wall_height_m": 0.45,
+      "operating_water_depth_m": 0.35,
+      "effective_water_volume_m3": 15.75,
+      "tarpaulin_density_g_per_m2": 800.0,
+      "raft_dimension_m": [
+        1.0,
+        0.6
+      ],
+      "raft_holes_per_board": 36,
+      "max_raft_capacity": 50,
+      "total_planting_holes": 1800
+    },
+    {
+      "unit_type": "a_frame_substrate_rack",
+      "unit_id": "RACK-AFRAME-01",
+      "name": "A字架立体基质栽培架 (三角形双侧斜面6层/高架草莓与香草专区)",
+      "zone_id": "ZONE-COOL-01",
+      "bound_hydraulic_loop_id": "LOOP-STRAWBERRY-DRIP",
+      "rack_length_m": 25.0,
+      "bottom_width_m": 1.4,
+      "total_height_m": 1.7,
+      "slope_angle_degrees": 60.0,
+      "total_trough_tiers": 6,
+      "trough_width_m": 0.22,
+      "trough_depth_m": 0.18,
+      "medium_type": "coco_coir_perlite",
+      "dripper_spacing_cm": 20.0,
+      "dripper_flow_rate_l_per_h": 2.0,
+      "total_linear_meters": 150.0,
+      "max_plant_capacity": 750
+    },
+    {
+      "unit_type": "dutch_bucket",
+      "unit_id": "BKT-TOMATO-01",
+      "name": "五彩圣女果与果瓜荷兰桶吊蔓区",
+      "zone_id": "ZONE-WARM-02",
+      "bound_hydraulic_loop_id": "LOOP-TOMATO-DRIP",
+      "bucket_volume_liters": 11.0,
+      "medium_type": "coco_coir_perlite",
+      "plant_spacing_cm": 45.0,
+      "row_spacing_m": 1.6,
+      "total_buckets_count": 240,
+      "trellising_height_m": 3.2,
+      "max_vine_load_kg_per_linear_m": 35.0
+    },
+    {
+      "unit_type": "ras_tank",
+      "unit_id": "RAS-TANK-01",
+      "name": "1号加州鲈成鱼圆形循环养殖池",
+      "zone_id": "ZONE-RAS-03",
+      "bound_hydraulic_loop_id": "LOOP-AQUAPONICS-MAIN",
+      "shape": "circular",
+      "diameter_or_length_m": 5.0,
+      "water_depth_m": 1.4,
+      "effective_water_volume_m3": 27.5,
+      "conical_bottom_slope_degrees": 30.0,
+      "target_species": "加州鲈 (Micropterus salmoides)",
+      "max_biomass_density_kg_per_m3": 45.0,
+      "turnover_rate_times_per_hour": 1.5
+    },
+    {
+      "unit_type": "ras_tank",
+      "unit_id": "RAS-TANK-02",
+      "name": "2号加州鲈成鱼圆形循环养殖池",
+      "zone_id": "ZONE-RAS-03",
+      "bound_hydraulic_loop_id": "LOOP-AQUAPONICS-MAIN",
+      "shape": "circular",
+      "diameter_or_length_m": 5.0,
+      "water_depth_m": 1.4,
+      "effective_water_volume_m3": 27.5,
+      "conical_bottom_slope_degrees": 30.0,
+      "target_species": "加州鲈 (Micropterus salmoides)",
+      "max_biomass_density_kg_per_m3": 45.0,
+      "turnover_rate_times_per_hour": 1.5
+    }
+  ]
+}

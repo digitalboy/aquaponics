@@ -1,0 +1,79 @@
+{
+  "plan_id": "PLAN-2026Q4-GUANGMING-01",
+  "facility_id": "GH-GUANGMING-JINGKOU-01",
+  "plan_title": "2026年第四季度光明迳口冷凉黄金季排产计划",
+  "time_horizon": "2026-Q4",
+  "created_at": "2026-09-23T20:30:00.000Z",
+  "updated_at": "2026-09-23T20:45:00.000Z",
+  "notes": "顺应深圳光明秋冬春冷凉山谷气候，全负荷启动高溢价西洋菜、不锈钢站立奶油生菜、菜心与A字架立体高架草莓",
+  "assignments": [
+    {
+      "assignment_id": "SCH-ASN-20261015-001",
+      "target_unit_id": "BED-TARPAULIN-01",
+      "crop_id": "crop_watercress",
+      "batch_lot_number": "LOT-20261015-WC01",
+      "start_seeding_date": "2026-10-05T08:00:00.000Z",
+      "start_transplanting_date": "2026-10-15T08:00:00.000Z",
+      "expected_harvest_date": "2026-11-12T08:00:00.000Z",
+      "target_plant_quantity": 1200,
+      "allocated_raft_count": 50,
+      "supervisor_id": "USER-GROWER-01",
+      "status": "confirmed",
+      "notes": "1号刀刮布落地菜池首期西洋菜，深水浮板定植，大水体恒温，面向广府家庭煲汤净菜直供"
+    },
+    {
+      "assignment_id": "SCH-ASN-20261015-002",
+      "target_unit_id": "BED-STAINLESS-02",
+      "crop_id": "crop_butterhead_lettuce",
+      "batch_lot_number": "LOT-20261015-BH01",
+      "start_seeding_date": "2026-10-01T08:00:00.000Z",
+      "start_transplanting_date": "2026-10-15T08:00:00.000Z",
+      "expected_harvest_date": "2026-11-16T08:00:00.000Z",
+      "target_plant_quantity": 1200,
+      "allocated_raft_count": 50,
+      "supervisor_id": "USER-GROWER-01",
+      "status": "confirmed",
+      "notes": "2号不锈钢离地菜池波士顿奶油生菜，离地0.85米站立免弯腰操作，供应深圳高端会员沙拉轻食"
+    },
+    {
+      "assignment_id": "SCH-ASN-20261015-003",
+      "target_unit_id": "BED-TARPAULIN-03",
+      "crop_id": "crop_choy_sum",
+      "batch_lot_number": "LOT-20261015-CS01",
+      "start_seeding_date": "2026-10-05T08:00:00.000Z",
+      "start_transplanting_date": "2026-10-15T08:00:00.000Z",
+      "expected_harvest_date": "2026-11-10T08:00:00.000Z",
+      "target_plant_quantity": 1800,
+      "allocated_raft_count": 50,
+      "supervisor_id": "USER-GROWER-02",
+      "status": "confirmed",
+      "notes": "3号刀刮布落地菜池广东四九油青菜心，26天短周期走量明星"
+    },
+    {
+      "assignment_id": "SCH-ASN-20261001-004",
+      "target_unit_id": "RACK-AFRAME-01",
+      "crop_id": "crop_strawberry_elevated",
+      "batch_lot_number": "LOT-20261001-SB01",
+      "start_seeding_date": "2026-08-15T08:00:00.000Z",
+      "start_transplanting_date": "2026-10-01T08:00:00.000Z",
+      "expected_harvest_date": "2026-12-30T08:00:00.000Z",
+      "target_plant_quantity": 700,
+      "supervisor_id": "USER-GROWER-03",
+      "status": "transplanted",
+      "notes": "A字架立体基质栽培架，双侧斜面6层，果实自然悬挂外侧不沾土，供光明科学城亲子采摘与元旦跨年礼盒"
+    },
+    {
+      "assignment_id": "SCH-ASN-20261001-005",
+      "target_unit_id": "BKT-TOMATO-01",
+      "crop_id": "crop_cherry_tomato_red",
+      "batch_lot_number": "LOT-20261001-TM01",
+      "start_seeding_date": "2026-09-01T08:00:00.000Z",
+      "start_transplanting_date": "2026-10-01T08:00:00.000Z",
+      "expected_harvest_date": "2026-12-15T08:00:00.000Z",
+      "target_plant_quantity": 240,
+      "supervisor_id": "USER-GROWER-03",
+      "status": "transplanted",
+      "notes": "荷兰桶千禧红小番茄吊蔓栽培，独立高浓度水肥滴灌回路"
+    }
+  ]
+}

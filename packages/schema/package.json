@@ -21,6 +21,18 @@
     "./common": {
       "types": "./src/common/index.ts",
       "import": "./src/common/index.ts"
+    },
+    "./agronomy": {
+      "types": "./src/agronomy/index.ts",
+      "import": "./src/agronomy/index.ts"
+    },
+    "./facility": {
+      "types": "./src/facility/index.ts",
+      "import": "./src/facility/index.ts"
+    },
+    "./schedule": {
+      "types": "./src/schedule/index.ts",
+      "import": "./src/schedule/index.ts"
     }
   },
   "scripts": {

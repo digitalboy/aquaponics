@@ -1,0 +1,1153 @@
+{
+  "catalog_version": "v1.0.0",
+  "updated_at": "2026-09-23T12:50:37.000Z",
+  "crops": [
+    {
+      "crop_id": "crop_watercress",
+      "common_name": "西洋菜 (豆瓣菜)",
+      "botanical_name": "Nasturtium officinale",
+      "variety_name": "广府大叶西洋菜",
+      "category": "aquatic_herb",
+      "seasonality": "cool_season",
+      "supported_systems": [
+        "ground_tarpaulin_bed",
+        "elevated_stainless_bed",
+        "dwc_raceway",
+        "nft_gully"
+      ],
+      "harvest_mode": "continuous_cut",
+      "temperature": {
+        "day_temp_c": [
+          18.0,
+          22.0
+        ],
+        "night_temp_c": [
+          12.0,
+          16.0
+        ],
+        "water_temp_c": [
+          16.0,
+          20.0
+        ],
+        "critical_high_temp_c": 25.0,
+        "critical_low_temp_c": 8.0
+      },
+      "fertigation": {
+        "optimal_ec_ms_cm": [
+          1.4,
+          1.8
+        ],
+        "optimal_ph": [
+          6.2,
+          6.8
+        ],
+        "min_dissolved_oxygen_mg_l": 6.5,
+        "tipburn_sensitivity": "low",
+        "ammonia_tolerance": "high"
+      },
+      "lighting": {
+        "optimal_dli_mol_m2_day": [
+          14.0,
+          18.0
+        ],
+        "photoperiod_hours": [
+          12.0,
+          14.0
+        ],
+        "light_saturation_point_lux": 35000
+      },
+      "nursery_cycle_days": 10,
+      "growth_cycle_days": 28,
+      "recommended_plant_spacing_cm": 15.0,
+      "target_plant_density_per_m2": 36.0,
+      "expected_yield_kg_per_m2_cycle": 4.5,
+      "incompatible_crop_ids": [
+        "crop_watermelon",
+        "crop_cucumber_dutch"
+      ],
+      "notes": "半水生草本，深水跑道白根茂盛，广府煲汤刚需，免洗生食0虫卵"
+    },
+    {
+      "crop_id": "crop_butterhead_lettuce",
+      "common_name": "奶油生菜 (波士顿/黄油生菜)",
+      "botanical_name": "Lactuca sativa var. capitata",
+      "variety_name": "萨拉诺瓦绿奶油 (Salanova Green Butter)",
+      "category": "lettuce",
+      "seasonality": "cool_season",
+      "supported_systems": [
+        "ground_tarpaulin_bed",
+        "elevated_stainless_bed",
+        "dwc_raceway",
+        "nft_gully",
+        "a_frame_substrate_rack"
+      ],
+      "harvest_mode": "single_cut_head",
+      "temperature": {
+        "day_temp_c": [
+          19.0,
+          22.0
+        ],
+        "night_temp_c": [
+          13.0,
+          16.0
+        ],
+        "water_temp_c": [
+          16.0,
+          20.0
+        ],
+        "critical_high_temp_c": 24.0,
+        "critical_low_temp_c": 5.0
+      },
+      "fertigation": {
+        "optimal_ec_ms_cm": [
+          1.2,
+          1.6
+        ],
+        "optimal_ph": [
+          5.8,
+          6.5
+        ],
+        "min_dissolved_oxygen_mg_l": 6.8,
+        "tipburn_sensitivity": "high",
+        "ammonia_tolerance": "low"
+      },
+      "lighting": {
+        "optimal_dli_mol_m2_day": [
+          14.0,
+          17.0
+        ],
+        "photoperiod_hours": [
+          12.0,
+          14.0
+        ],
+        "light_saturation_point_lux": 32000
+      },
+      "nursery_cycle_days": 14,
+      "growth_cycle_days": 32,
+      "recommended_plant_spacing_cm": 20.0,
+      "target_plant_density_per_m2": 24.0,
+      "expected_yield_kg_per_m2_cycle": 3.8,
+      "incompatible_crop_ids": [
+        "crop_water_spinach",
+        "crop_watermelon"
+      ],
+      "notes": "沙拉四大金刚之一，叶肉丝滑柔嫩，清甜多汁，采收前48h降温促糖"
+    },
+    {
+      "crop_id": "crop_red_oakleaf_lettuce",
+      "common_name": "红橡叶生菜 (红沙拉/红罗莎)",
+      "botanical_name": "Lactuca sativa var. crispa",
+      "variety_name": "萨拉诺瓦红橡 (Salanova Red Oakleaf)",
+      "category": "lettuce",
+      "seasonality": "cool_season",
+      "supported_systems": [
+        "ground_tarpaulin_bed",
+        "elevated_stainless_bed",
+        "dwc_raceway",
+        "nft_gully",
+        "a_frame_substrate_rack"
+      ],
+      "harvest_mode": "single_cut_head",
+      "temperature": {
+        "day_temp_c": [
+          18.0,
+          22.0
+        ],
+        "night_temp_c": [
+          12.0,
+          15.0
+        ],
+        "water_temp_c": [
+          16.0,
+          20.0
+        ],
+        "critical_high_temp_c": 24.0,
+        "critical_low_temp_c": 5.0
+      },
+      "fertigation": {
+        "optimal_ec_ms_cm": [
+          1.2,
+          1.5
+        ],
+        "optimal_ph": [
+          5.8,
+          6.4
+        ],
+        "min_dissolved_oxygen_mg_l": 6.5,
+        "tipburn_sensitivity": "medium",
+        "ammonia_tolerance": "low"
+      },
+      "lighting": {
+        "optimal_dli_mol_m2_day": [
+          15.0,
+          18.0
+        ],
+        "photoperiod_hours": [
+          12.0,
+          14.0
+        ],
+        "light_saturation_point_lux": 35000
+      },
+      "nursery_cycle_days": 14,
+      "growth_cycle_days": 30,
+      "recommended_plant_spacing_cm": 20.0,
+      "target_plant_density_per_m2": 24.0,
+      "expected_yield_kg_per_m2_cycle": 3.2,
+      "incompatible_crop_ids": [
+        "crop_water_spinach",
+        "crop_watermelon"
+      ],
+      "notes": "沙拉颜值担当，富含花青素，强光与昼夜温差可促进红艳着色"
+    },
+    {
+      "crop_id": "crop_green_oakleaf_lettuce",
+      "common_name": "绿橡叶生菜 (绿珊瑚/散叶沙拉)",
+      "botanical_name": "Lactuca sativa var. crispa",
+      "variety_name": "萨拉诺瓦绿橡 (Salanova Green Oakleaf)",
+      "category": "lettuce",
+      "seasonality": "cool_season",
+      "supported_systems": [
+        "ground_tarpaulin_bed",
+        "elevated_stainless_bed",
+        "dwc_raceway",
+        "nft_gully",
+        "a_frame_substrate_rack"
+      ],
+      "harvest_mode": "single_cut_head",
+      "temperature": {
+        "day_temp_c": [
+          19.0,
+          23.0
+        ],
+        "night_temp_c": [
+          13.0,
+          16.0
+        ],
+        "water_temp_c": [
+          17.0,
+          20.0
+        ],
+        "critical_high_temp_c": 25.0,
+        "critical_low_temp_c": 6.0
+      },
+      "fertigation": {
+        "optimal_ec_ms_cm": [
+          1.3,
+          1.6
+        ],
+        "optimal_ph": [
+          5.8,
+          6.5
+        ],
+        "min_dissolved_oxygen_mg_l": 6.5,
+        "tipburn_sensitivity": "medium",
+        "ammonia_tolerance": "low"
+      },
+      "lighting": {
+        "optimal_dli_mol_m2_day": [
+          14.0,
+          17.0
+        ],
+        "photoperiod_hours": [
+          12.0,
+          14.0
+        ],
+        "light_saturation_point_lux": 32000
+      },
+      "nursery_cycle_days": 14,
+      "growth_cycle_days": 28,
+      "recommended_plant_spacing_cm": 20.0,
+      "target_plant_density_per_m2": 24.0,
+      "expected_yield_kg_per_m2_cycle": 3.5,
+      "incompatible_crop_ids": [
+        "crop_water_spinach"
+      ],
+      "notes": "沙拉蓬松度骨架，翠绿如橡叶，吸汁力极强"
+    },
+    {
+      "crop_id": "crop_romaine_lettuce",
+      "common_name": "罗马生菜 (凯撒生菜/长叶生菜)",
+      "botanical_name": "Lactuca sativa var. longifolia",
+      "variety_name": "直立绿罗马 (Verte Maraichere)",
+      "category": "lettuce",
+      "seasonality": "cool_season",
+      "supported_systems": [
+        "ground_tarpaulin_bed",
+        "elevated_stainless_bed",
+        "dwc_raceway",
+        "nft_gully",
+        "a_frame_substrate_rack"
+      ],
+      "harvest_mode": "single_cut_head",
+      "temperature": {
+        "day_temp_c": [
+          18.0,
+          22.0
+        ],
+        "night_temp_c": [
+          12.0,
+          15.0
+        ],
+        "water_temp_c": [
+          16.0,
+          19.0
+        ],
+        "critical_high_temp_c": 24.0,
+        "critical_low_temp_c": 5.0
+      },
+      "fertigation": {
+        "optimal_ec_ms_cm": [
+          1.4,
+          1.8
+        ],
+        "optimal_ph": [
+          6.0,
+          6.6
+        ],
+        "min_dissolved_oxygen_mg_l": 6.8,
+        "tipburn_sensitivity": "severe",
+        "ammonia_tolerance": "low"
+      },
+      "lighting": {
+        "optimal_dli_mol_m2_day": [
+          15.0,
+          18.0
+        ],
+        "photoperiod_hours": [
+          12.0,
+          14.0
+        ],
+        "light_saturation_point_lux": 36000
+      },
+      "nursery_cycle_days": 14,
+      "growth_cycle_days": 35,
+      "recommended_plant_spacing_cm": 22.0,
+      "target_plant_density_per_m2": 20.0,
+      "expected_yield_kg_per_m2_cycle": 4.2,
+      "incompatible_crop_ids": [
+        "crop_water_spinach",
+        "crop_watermelon"
+      ],
+      "notes": "凯撒沙拉灵魂，叶柄爽脆多汁，对钙极为敏感，必须强化跑道垂直对流"
+    },
+    {
+      "crop_id": "crop_sabah_snake_grass",
+      "common_name": "忧遁草 (优盾草/鳄嘴花/青箭草/沙巴蛇草)",
+      "botanical_name": "Clinacanthus nutans",
+      "variety_name": "华南大叶优盾草 (特选扦插苗)",
+      "category": "medicinal_herb",
+      "seasonality": "neutral_flexible",
+      "supported_systems": [
+        "ground_tarpaulin_bed",
+        "elevated_stainless_bed",
+        "dwc_raceway",
+        "nft_gully",
+        "a_frame_substrate_rack"
+      ],
+      "harvest_mode": "continuous_cut",
+      "temperature": {
+        "day_temp_c": [
+          22.0,
+          28.0
+        ],
+        "night_temp_c": [
+          16.0,
+          20.0
+        ],
+        "water_temp_c": [
+          20.0,
+          25.0
+        ],
+        "critical_high_temp_c": 35.0,
+        "critical_low_temp_c": 10.0
+      },
+      "fertigation": {
+        "optimal_ec_ms_cm": [
+          1.5,
+          2.2
+        ],
+        "optimal_ph": [
+          6.0,
+          7.0
+        ],
+        "min_dissolved_oxygen_mg_l": 5.5,
+        "tipburn_sensitivity": "low",
+        "ammonia_tolerance": "high"
+      },
+      "lighting": {
+        "optimal_dli_mol_m2_day": [
+          12.0,
+          16.0
+        ],
+        "photoperiod_hours": [
+          10.0,
+          12.0
+        ],
+        "light_saturation_point_lux": 30000
+      },
+      "nursery_cycle_days": 20,
+      "growth_cycle_days": 35,
+      "recommended_plant_spacing_cm": 18.0,
+      "target_plant_density_per_m2": 28.0,
+      "expected_yield_kg_per_m2_cycle": 2.8,
+      "incompatible_crop_ids": [],
+      "notes": "岭南及东南亚著名药食同源抗癌降糖名草，富含黄酮类与多酚，水培剪枝扦插生根极快，常年连续采摘嫩梢"
+    },
+    {
+      "crop_id": "crop_xuetongcai",
+      "common_name": "血通菜 (红凤菜/紫背菜/补血菜)",
+      "botanical_name": "Gynura bicolor",
+      "variety_name": "两广红背血通菜",
+      "category": "medicinal_herb",
+      "seasonality": "neutral_flexible",
+      "supported_systems": [
+        "ground_tarpaulin_bed",
+        "elevated_stainless_bed",
+        "dwc_raceway",
+        "nft_gully",
+        "a_frame_substrate_rack"
+      ],
+      "harvest_mode": "continuous_cut",
+      "temperature": {
+        "day_temp_c": [
+          20.0,
+          26.0
+        ],
+        "night_temp_c": [
+          14.0,
+          18.0
+        ],
+        "water_temp_c": [
+          18.0,
+          24.0
+        ],
+        "critical_high_temp_c": 32.0,
+        "critical_low_temp_c": 8.0
+      },
+      "fertigation": {
+        "optimal_ec_ms_cm": [
+          1.4,
+          2.0
+        ],
+        "optimal_ph": [
+          6.0,
+          6.8
+        ],
+        "min_dissolved_oxygen_mg_l": 6.0,
+        "tipburn_sensitivity": "low",
+        "ammonia_tolerance": "medium"
+      },
+      "lighting": {
+        "optimal_dli_mol_m2_day": [
+          12.0,
+          16.0
+        ],
+        "photoperiod_hours": [
+          10.0,
+          12.0
+        ],
+        "light_saturation_point_lux": 30000
+      },
+      "nursery_cycle_days": 15,
+      "growth_cycle_days": 28,
+      "recommended_plant_spacing_cm": 18.0,
+      "target_plant_density_per_m2": 28.0,
+      "expected_yield_kg_per_m2_cycle": 3.2,
+      "incompatible_crop_ids": [],
+      "notes": "两广著名药食同源中草药蔬菜，叶背深紫红色富含花青素与有机铁，民间称补血通脉，水培连续剪嫩梢采收，抗病抗虫力极强"
+    },
+    {
+      "crop_id": "crop_gynura_divaricata",
+      "common_name": "片仔癀草 (白背三七/降压草/富贵菜)",
+      "botanical_name": "Gynura divaricata",
+      "variety_name": "紫背/绿面白背三七",
+      "category": "medicinal_herb",
+      "seasonality": "neutral_flexible",
+      "supported_systems": [
+        "ground_tarpaulin_bed",
+        "elevated_stainless_bed",
+        "dwc_raceway",
+        "nft_gully",
+        "a_frame_substrate_rack"
+      ],
+      "harvest_mode": "continuous_cut",
+      "temperature": {
+        "day_temp_c": [
+          20.0,
+          26.0
+        ],
+        "night_temp_c": [
+          15.0,
+          18.0
+        ],
+        "water_temp_c": [
+          18.0,
+          24.0
+        ],
+        "critical_high_temp_c": 32.0,
+        "critical_low_temp_c": 8.0
+      },
+      "fertigation": {
+        "optimal_ec_ms_cm": [
+          1.4,
+          2.0
+        ],
+        "optimal_ph": [
+          6.0,
+          6.8
+        ],
+        "min_dissolved_oxygen_mg_l": 6.0,
+        "tipburn_sensitivity": "low",
+        "ammonia_tolerance": "medium"
+      },
+      "lighting": {
+        "optimal_dli_mol_m2_day": [
+          12.0,
+          15.0
+        ],
+        "photoperiod_hours": [
+          10.0,
+          12.0
+        ],
+        "light_saturation_point_lux": 28000
+      },
+      "nursery_cycle_days": 18,
+      "growth_cycle_days": 30,
+      "recommended_plant_spacing_cm": 20.0,
+      "target_plant_density_per_m2": 24.0,
+      "expected_yield_kg_per_m2_cycle": 3.0,
+      "incompatible_crop_ids": [],
+      "notes": "民间神仙草，清热解毒养生药膳专用，水培病虫害极少"
+    },
+    {
+      "crop_id": "crop_choy_sum",
+      "common_name": "广东菜心 (油青菜心)",
+      "botanical_name": "Brassica rapa var. parachinensis",
+      "variety_name": "四九油青菜心 (特选)",
+      "category": "brassica_greens",
+      "seasonality": "cool_season",
+      "supported_systems": [
+        "ground_tarpaulin_bed",
+        "elevated_stainless_bed",
+        "dwc_raceway",
+        "nft_gully"
+      ],
+      "harvest_mode": "single_cut_head",
+      "temperature": {
+        "day_temp_c": [
+          18.0,
+          24.0
+        ],
+        "night_temp_c": [
+          12.0,
+          16.0
+        ],
+        "water_temp_c": [
+          18.0,
+          22.0
+        ],
+        "critical_high_temp_c": 28.0,
+        "critical_low_temp_c": 6.0
+      },
+      "fertigation": {
+        "optimal_ec_ms_cm": [
+          1.5,
+          2.0
+        ],
+        "optimal_ph": [
+          6.0,
+          6.8
+        ],
+        "min_dissolved_oxygen_mg_l": 6.5,
+        "tipburn_sensitivity": "medium",
+        "ammonia_tolerance": "medium"
+      },
+      "lighting": {
+        "optimal_dli_mol_m2_day": [
+          14.0,
+          18.0
+        ],
+        "photoperiod_hours": [
+          11.0,
+          13.0
+        ],
+        "light_saturation_point_lux": 35000
+      },
+      "nursery_cycle_days": 10,
+      "growth_cycle_days": 26,
+      "recommended_plant_spacing_cm": 15.0,
+      "target_plant_density_per_m2": 36.0,
+      "expected_yield_kg_per_m2_cycle": 3.6,
+      "incompatible_crop_ids": [],
+      "notes": "广东家庭刚需餐桌顶流，水培60目防虫网杜绝菜青虫，做到0农残免洗"
+    },
+    {
+      "crop_id": "crop_spinach",
+      "common_name": "大叶菠菜 (水培甜菠菜)",
+      "botanical_name": "Spinacia oleracea",
+      "variety_name": "日本大叶耐寒菠菜",
+      "category": "leafy_greens",
+      "seasonality": "cool_season",
+      "supported_systems": [
+        "ground_tarpaulin_bed",
+        "elevated_stainless_bed",
+        "dwc_raceway",
+        "nft_gully"
+      ],
+      "harvest_mode": "single_cut_head",
+      "temperature": {
+        "day_temp_c": [
+          16.0,
+          20.0
+        ],
+        "night_temp_c": [
+          10.0,
+          14.0
+        ],
+        "water_temp_c": [
+          15.0,
+          18.0
+        ],
+        "critical_high_temp_c": 23.0,
+        "critical_low_temp_c": 3.0
+      },
+      "fertigation": {
+        "optimal_ec_ms_cm": [
+          1.4,
+          1.8
+        ],
+        "optimal_ph": [
+          6.2,
+          7.0
+        ],
+        "min_dissolved_oxygen_mg_l": 7.0,
+        "tipburn_sensitivity": "low",
+        "ammonia_tolerance": "low"
+      },
+      "lighting": {
+        "optimal_dli_mol_m2_day": [
+          12.0,
+          16.0
+        ],
+        "photoperiod_hours": [
+          10.0,
+          12.0
+        ],
+        "light_saturation_point_lux": 30000
+      },
+      "nursery_cycle_days": 12,
+      "growth_cycle_days": 30,
+      "recommended_plant_spacing_cm": 15.0,
+      "target_plant_density_per_m2": 36.0,
+      "expected_yield_kg_per_m2_cycle": 3.0,
+      "incompatible_crop_ids": [
+        "crop_water_spinach"
+      ],
+      "notes": "极怕高温与水温过高，冬春专属；水培根白无泥沙，叶酸极其丰富"
+    },
+    {
+      "crop_id": "crop_garland_chrysanthemum",
+      "common_name": "茼蒿菜 (花叶茼蒿/菊花菜)",
+      "botanical_name": "Glebionis coronaria",
+      "variety_name": "细叶芳香茼蒿",
+      "category": "leafy_greens",
+      "seasonality": "cool_season",
+      "supported_systems": [
+        "ground_tarpaulin_bed",
+        "elevated_stainless_bed",
+        "dwc_raceway",
+        "nft_gully"
+      ],
+      "harvest_mode": "single_cut_head",
+      "temperature": {
+        "day_temp_c": [
+          17.0,
+          22.0
+        ],
+        "night_temp_c": [
+          10.0,
+          15.0
+        ],
+        "water_temp_c": [
+          16.0,
+          20.0
+        ],
+        "critical_high_temp_c": 25.0,
+        "critical_low_temp_c": 4.0
+      },
+      "fertigation": {
+        "optimal_ec_ms_cm": [
+          1.4,
+          1.9
+        ],
+        "optimal_ph": [
+          6.0,
+          6.8
+        ],
+        "min_dissolved_oxygen_mg_l": 6.5,
+        "tipburn_sensitivity": "low",
+        "ammonia_tolerance": "medium"
+      },
+      "lighting": {
+        "optimal_dli_mol_m2_day": [
+          13.0,
+          16.0
+        ],
+        "photoperiod_hours": [
+          10.0,
+          12.0
+        ],
+        "light_saturation_point_lux": 32000
+      },
+      "nursery_cycle_days": 10,
+      "growth_cycle_days": 25,
+      "recommended_plant_spacing_cm": 15.0,
+      "target_plant_density_per_m2": 36.0,
+      "expected_yield_kg_per_m2_cycle": 3.2,
+      "incompatible_crop_ids": [],
+      "notes": "火锅打边炉王牌，自身带芳香精油天然抗虫，生长极快25天起批"
+    },
+    {
+      "crop_id": "crop_youmaicai",
+      "common_name": "油麦菜 (牛俐油麦菜)",
+      "botanical_name": "Lactuca sativa var. longifoliaf. crispa",
+      "variety_name": "特选四季香油麦菜",
+      "category": "leafy_greens",
+      "seasonality": "cool_season",
+      "supported_systems": [
+        "ground_tarpaulin_bed",
+        "elevated_stainless_bed",
+        "dwc_raceway",
+        "nft_gully"
+      ],
+      "harvest_mode": "single_cut_head",
+      "temperature": {
+        "day_temp_c": [
+          18.0,
+          23.0
+        ],
+        "night_temp_c": [
+          12.0,
+          16.0
+        ],
+        "water_temp_c": [
+          17.0,
+          21.0
+        ],
+        "critical_high_temp_c": 26.0,
+        "critical_low_temp_c": 5.0
+      },
+      "fertigation": {
+        "optimal_ec_ms_cm": [
+          1.4,
+          1.8
+        ],
+        "optimal_ph": [
+          6.0,
+          6.6
+        ],
+        "min_dissolved_oxygen_mg_l": 6.5,
+        "tipburn_sensitivity": "medium",
+        "ammonia_tolerance": "medium"
+      },
+      "lighting": {
+        "optimal_dli_mol_m2_day": [
+          14.0,
+          18.0
+        ],
+        "photoperiod_hours": [
+          12.0,
+          14.0
+        ],
+        "light_saturation_point_lux": 35000
+      },
+      "nursery_cycle_days": 12,
+      "growth_cycle_days": 28,
+      "recommended_plant_spacing_cm": 18.0,
+      "target_plant_density_per_m2": 28.0,
+      "expected_yield_kg_per_m2_cycle": 3.6,
+      "incompatible_crop_ids": [
+        "crop_water_spinach"
+      ],
+      "notes": "菊科莴苣属，脆甜少渣，耐水培性能优异"
+    },
+    {
+      "crop_id": "crop_kale_curly",
+      "common_name": "羽衣甘蓝 (科西嘉深绿卷叶)",
+      "botanical_name": "Brassica oleracea var. sabellica",
+      "variety_name": "科西嘉卷叶 (Corsica Curly)",
+      "category": "brassica_greens",
+      "seasonality": "cool_season",
+      "supported_systems": [
+        "ground_tarpaulin_bed",
+        "elevated_stainless_bed",
+        "dwc_raceway",
+        "nft_gully"
+      ],
+      "harvest_mode": "leaf_stripping",
+      "temperature": {
+        "day_temp_c": [
+          17.0,
+          22.0
+        ],
+        "night_temp_c": [
+          10.0,
+          15.0
+        ],
+        "water_temp_c": [
+          16.0,
+          20.0
+        ],
+        "critical_high_temp_c": 26.0,
+        "critical_low_temp_c": 0.0
+      },
+      "fertigation": {
+        "optimal_ec_ms_cm": [
+          1.6,
+          2.2
+        ],
+        "optimal_ph": [
+          6.0,
+          6.8
+        ],
+        "min_dissolved_oxygen_mg_l": 6.5,
+        "tipburn_sensitivity": "low",
+        "ammonia_tolerance": "medium"
+      },
+      "lighting": {
+        "optimal_dli_mol_m2_day": [
+          15.0,
+          20.0
+        ],
+        "photoperiod_hours": [
+          12.0,
+          14.0
+        ],
+        "light_saturation_point_lux": 40000
+      },
+      "nursery_cycle_days": 18,
+      "growth_cycle_days": 40,
+      "recommended_plant_spacing_cm": 25.0,
+      "target_plant_density_per_m2": 16.0,
+      "expected_yield_kg_per_m2_cycle": 5.0,
+      "incompatible_crop_ids": [],
+      "notes": "超级减脂食物，中产青汁与烤脆片首选，剥叶连续采收可维持90天"
+    },
+    {
+      "crop_id": "crop_cherry_tomato_red",
+      "common_name": "多彩圣女果 (红宝石千禧)",
+      "botanical_name": "Solanum lycopersicum var. cerasiforme",
+      "variety_name": "千禧粉红 / 红太阳",
+      "category": "solanaceous_fruit",
+      "seasonality": "neutral_flexible",
+      "supported_systems": [
+        "dutch_bucket",
+        "substrate_trough"
+      ],
+      "harvest_mode": "fruit_picking",
+      "temperature": {
+        "day_temp_c": [
+          22.0,
+          26.0
+        ],
+        "night_temp_c": [
+          15.0,
+          18.0
+        ],
+        "water_temp_c": [
+          18.0,
+          22.0
+        ],
+        "critical_high_temp_c": 32.0,
+        "critical_low_temp_c": 10.0
+      },
+      "fertigation": {
+        "optimal_ec_ms_cm": [
+          2.2,
+          2.8
+        ],
+        "optimal_ph": [
+          5.8,
+          6.4
+        ],
+        "min_dissolved_oxygen_mg_l": 6.0,
+        "tipburn_sensitivity": "high",
+        "ammonia_tolerance": "low"
+      },
+      "lighting": {
+        "optimal_dli_mol_m2_day": [
+          20.0,
+          28.0
+        ],
+        "photoperiod_hours": [
+          14.0,
+          16.0
+        ],
+        "light_saturation_point_lux": 60000
+      },
+      "nursery_cycle_days": 30,
+      "growth_cycle_days": 75,
+      "recommended_plant_spacing_cm": 45.0,
+      "target_plant_density_per_m2": 3.0,
+      "expected_yield_kg_per_m2_cycle": 12.0,
+      "incompatible_crop_ids": [
+        "crop_butterhead_lettuce",
+        "crop_romaine_lettuce"
+      ],
+      "notes": "荷兰桶椰糠基质滴灌高架吊蔓，糖度9~10°Brix，爆汁无渣，坪效极高"
+    },
+    {
+      "crop_id": "crop_cherry_tomato_yellow",
+      "common_name": "多彩圣女果 (黄珍珠黄金蜜)",
+      "botanical_name": "Solanum lycopersicum var. cerasiforme",
+      "variety_name": "黄金蜜 / 黄晶珍珠",
+      "category": "solanaceous_fruit",
+      "seasonality": "neutral_flexible",
+      "supported_systems": [
+        "dutch_bucket",
+        "substrate_trough"
+      ],
+      "harvest_mode": "fruit_picking",
+      "temperature": {
+        "day_temp_c": [
+          22.0,
+          26.0
+        ],
+        "night_temp_c": [
+          15.0,
+          18.0
+        ],
+        "water_temp_c": [
+          18.0,
+          22.0
+        ],
+        "critical_high_temp_c": 32.0,
+        "critical_low_temp_c": 10.0
+      },
+      "fertigation": {
+        "optimal_ec_ms_cm": [
+          2.0,
+          2.6
+        ],
+        "optimal_ph": [
+          5.8,
+          6.4
+        ],
+        "min_dissolved_oxygen_mg_l": 6.0,
+        "tipburn_sensitivity": "high",
+        "ammonia_tolerance": "low"
+      },
+      "lighting": {
+        "optimal_dli_mol_m2_day": [
+          20.0,
+          26.0
+        ],
+        "photoperiod_hours": [
+          14.0,
+          16.0
+        ],
+        "light_saturation_point_lux": 55000
+      },
+      "nursery_cycle_days": 30,
+      "growth_cycle_days": 72,
+      "recommended_plant_spacing_cm": 45.0,
+      "target_plant_density_per_m2": 3.0,
+      "expected_yield_kg_per_m2_cycle": 10.5,
+      "incompatible_crop_ids": [
+        "crop_butterhead_lettuce"
+      ],
+      "notes": "五彩圣女果黄色系，极低酸度纯甜口感，果实金黄晶莹"
+    },
+    {
+      "crop_id": "crop_cherry_tomato_black",
+      "common_name": "多彩圣女果 (黑珍珠巧克力小番茄)",
+      "botanical_name": "Solanum lycopersicum var. cerasiforme",
+      "variety_name": "黑珍珠 / 巧克力夏娃",
+      "category": "solanaceous_fruit",
+      "seasonality": "neutral_flexible",
+      "supported_systems": [
+        "dutch_bucket",
+        "substrate_trough"
+      ],
+      "harvest_mode": "fruit_picking",
+      "temperature": {
+        "day_temp_c": [
+          22.0,
+          27.0
+        ],
+        "night_temp_c": [
+          14.0,
+          17.0
+        ],
+        "water_temp_c": [
+          18.0,
+          22.0
+        ],
+        "critical_high_temp_c": 32.0,
+        "critical_low_temp_c": 10.0
+      },
+      "fertigation": {
+        "optimal_ec_ms_cm": [
+          2.2,
+          2.8
+        ],
+        "optimal_ph": [
+          5.8,
+          6.4
+        ],
+        "min_dissolved_oxygen_mg_l": 6.0,
+        "tipburn_sensitivity": "medium",
+        "ammonia_tolerance": "low"
+      },
+      "lighting": {
+        "optimal_dli_mol_m2_day": [
+          22.0,
+          30.0
+        ],
+        "photoperiod_hours": [
+          14.0,
+          16.0
+        ],
+        "light_saturation_point_lux": 65000
+      },
+      "nursery_cycle_days": 30,
+      "growth_cycle_days": 78,
+      "recommended_plant_spacing_cm": 45.0,
+      "target_plant_density_per_m2": 3.0,
+      "expected_yield_kg_per_m2_cycle": 9.5,
+      "incompatible_crop_ids": [
+        "crop_butterhead_lettuce"
+      ],
+      "notes": "五彩黑色系，高花青素微黑紫红色，带特有复合木本香气"
+    },
+    {
+      "crop_id": "crop_strawberry_elevated",
+      "common_name": "高架草莓 (红颜/隋珠)",
+      "botanical_name": "Fragaria × ananassa",
+      "variety_name": "日本红颜 (Tochiotome) / 隋珠",
+      "category": "berry_fruit",
+      "seasonality": "cool_season",
+      "supported_systems": [
+        "a_frame_substrate_rack",
+        "substrate_trough"
+      ],
+      "harvest_mode": "fruit_picking",
+      "temperature": {
+        "day_temp_c": [
+          20.0,
+          24.0
+        ],
+        "night_temp_c": [
+          8.0,
+          12.0
+        ],
+        "water_temp_c": [
+          16.0,
+          19.0
+        ],
+        "critical_high_temp_c": 28.0,
+        "critical_low_temp_c": 5.0
+      },
+      "fertigation": {
+        "optimal_ec_ms_cm": [
+          1.0,
+          1.4
+        ],
+        "optimal_ph": [
+          5.8,
+          6.2
+        ],
+        "min_dissolved_oxygen_mg_l": 6.5,
+        "tipburn_sensitivity": "high",
+        "ammonia_tolerance": "low"
+      },
+      "lighting": {
+        "optimal_dli_mol_m2_day": [
+          15.0,
+          20.0
+        ],
+        "photoperiod_hours": [
+          12.0,
+          14.0
+        ],
+        "light_saturation_point_lux": 45000
+      },
+      "nursery_cycle_days": 45,
+      "growth_cycle_days": 90,
+      "recommended_plant_spacing_cm": 20.0,
+      "target_plant_density_per_m2": 10.0,
+      "expected_yield_kg_per_m2_cycle": 3.5,
+      "incompatible_crop_ids": [
+        "crop_watermelon",
+        "crop_cucumber_dutch"
+      ],
+      "notes": "1.2米离地高架椰糠基质栽培，高光低肥，滴箭精准水肥，观光采摘顶流"
+    },
+    {
+      "crop_id": "crop_water_spinach",
+      "common_name": "空心菜 (水蕹菜/泰国白骨空心菜)",
+      "botanical_name": "Ipomoea aquatica",
+      "variety_name": "泰国竹叶白骨水蕹菜",
+      "category": "warm_summer_greens",
+      "seasonality": "warm_season",
+      "supported_systems": [
+        "ground_tarpaulin_bed",
+        "elevated_stainless_bed",
+        "dwc_raceway",
+        "nft_gully"
+      ],
+      "harvest_mode": "continuous_cut",
+      "temperature": {
+        "day_temp_c": [
+          28.0,
+          34.0
+        ],
+        "night_temp_c": [
+          20.0,
+          25.0
+        ],
+        "water_temp_c": [
+          24.0,
+          29.0
+        ],
+        "critical_high_temp_c": 40.0,
+        "critical_low_temp_c": 15.0
+      },
+      "fertigation": {
+        "optimal_ec_ms_cm": [
+          1.8,
+          2.5
+        ],
+        "optimal_ph": [
+          6.2,
+          7.2
+        ],
+        "min_dissolved_oxygen_mg_l": 5.0,
+        "tipburn_sensitivity": "low",
+        "ammonia_tolerance": "high"
+      },
+      "lighting": {
+        "optimal_dli_mol_m2_day": [
+          22.0,
+          32.0
+        ],
+        "photoperiod_hours": [
+          14.0,
+          16.0
+        ],
+        "light_saturation_point_lux": 70000
+      },
+      "nursery_cycle_days": 8,
+      "growth_cycle_days": 20,
+      "recommended_plant_spacing_cm": 15.0,
+      "target_plant_density_per_m2": 36.0,
+      "expected_yield_kg_per_m2_cycle": 6.5,
+      "incompatible_crop_ids": [
+        "crop_butterhead_lettuce",
+        "crop_romaine_lettuce",
+        "crop_spinach"
+      ],
+      "notes": "光明盛夏霸主，深水跑道强力吸收鱼池硝酸盐，20天一茬高周转"
+    }
+  ]
+}
