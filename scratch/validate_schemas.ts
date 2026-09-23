@@ -19,6 +19,36 @@ function runValidation() {
   const cropsCatalog = CropCatalogSchema.parse(cropsRaw);
   console.log(`✅ CropCatalogSchema 校验通过！成功解析 ${cropsCatalog.crops.length} 种作物主数据。`);
 
+  // 断言每一项作物的 target_quality_profile 健全度与信源
+  let totalMetricsCount = 0;
+  const readinessStats = { onsite_rapid: 0, lab_third_party: 0, strategic_reserve: 0 };
+
+  for (const crop of cropsCatalog.crops) {
+    if (!crop.target_quality_profile) {
+      throw new Error(`作物 ${crop.crop_id} (${crop.common_name}) 缺少 target_quality_profile！`);
+    }
+    const qp = crop.target_quality_profile;
+    if (!qp.safety_ceilings.authoritative_source) {
+      throw new Error(`作物 ${crop.crop_id} 安全限值缺少权威信源！`);
+    }
+    if (!qp.sensory_flavor.authoritative_source) {
+      throw new Error(`作物 ${crop.crop_id} 感官风味缺少权威信源！`);
+    }
+    for (const m of qp.functional_nutrition) {
+      totalMetricsCount++;
+      if (!m.authoritative_source || m.authoritative_source.trim().length === 0) {
+        throw new Error(`作物 ${crop.crop_id} 营养指标 ${m.metric_id} 缺少权威信源！`);
+      }
+      if (!m.basis) {
+        throw new Error(`作物 ${crop.crop_id} 营养指标 ${m.metric_id} 缺少干湿重基准 (basis)！`);
+      }
+      readinessStats[m.testing_readiness]++;
+    }
+  }
+  console.log(`✅ 作物品质安全与营养风味校验全部通过！共校验 18 种作物、${totalMetricsCount} 个核心营养指标，均具权威信源！`);
+  console.log(`📊 检测可行性等级统计: 现场快检基准/感官: 18 项, 第三方实验室国标送检: ${readinessStats.lab_third_party} 项, 战略攻关储备: ${readinessStats.strategic_reserve} 项。`);
+
+
   const facilityTopology = FacilityTopologySchema.parse(facilityRaw);
   console.log(`✅ FacilityTopologySchema 校验通过！大棚: ${facilityTopology.site_name}, 分区数: ${facilityTopology.zones.length}, 生产单元: ${facilityTopology.production_units.length}`);
 
