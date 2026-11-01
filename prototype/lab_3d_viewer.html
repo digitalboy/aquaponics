@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AP-QC-LAB 品控检验室 3D 工程数字孪生模型 (BOM 05 实景交互)</title>
+  <style>
+    :root {
+      --bg-panel: rgba(18, 24, 38, 0.90);
+      --border-panel: rgba(255, 255, 255, 0.12);
+      --accent-color: #38bdf8;
+      --accent-hover: #0284c7;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --card-bg: rgba(30, 41, 59, 0.95);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #0f172a;
+      color: var(--text-main);
+    }
+    #canvas-container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    /* 顶部导航状态条 */
+    .top-bar {
+      position: absolute;
+      top: 16px;
+      left: 20px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-panel);
+      padding: 10px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--border-panel);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(12px);
+    }
+    .badge {
+      background: rgba(56, 189, 248, 0.18);
+      color: var(--accent-color);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    .top-title {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .sub-title {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* 右侧工程控制抽屉 */
+    .control-panel {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      width: 320px;
+      max-height: calc(100vh - 32px);
+      z-index: 10;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-panel);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+    }
+    .control-panel::-webkit-scrollbar {
+      width: 4px;
+    }
+    .control-panel::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+    }
+    .panel-section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--accent-color);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    /* 预设视角按钮组 */
+    .view-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .btn-view {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-view:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--accent-color);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    .btn-view.active {
+      background: var(--accent-hover);
+      border-color: var(--accent-color);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+    }
+
+    /* 图层显隐开关 */
+    .layer-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .layer-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 8px;
+      font-size: 12px;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+    .layer-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    .layer-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toggle-switch {
+      position: relative;
+      width: 36px;
+      height: 20px;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.2);
+      transition: .3s;
+      border-radius: 20px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: var(--accent-color);
+    }
+    input:checked + .slider:before {
+      transform: translateX(16px);
+    }
+
+    /* 剖切/爆炸滑块 */
+    .slider-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 6px 0;
+    }
+    .slider-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .range-input {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.2);
+      outline: none;
+      accent-color: var(--accent-color);
+      cursor: pointer;
+    }
+
+    /* 左下角 BIM/BOM 构件属性审查卡 */
+    .inspector-card {
+      position: absolute;
+      bottom: 24px;
+      left: 20px;
+      width: 360px;
+      z-index: 10;
+      background: var(--card-bg);
+      border: 1px solid var(--border-panel);
+      border-radius: 14px;
+      padding: 16px 18px;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(16px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      border-left: 4px solid var(--accent-color);
+    }
+    .inspector-card.empty {
+      opacity: 0.85;
+    }
+    .inspector-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .inspector-code {
+      font-size: 10px;
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--accent-color);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    .inspector-body {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #cbd5e1;
+    }
+    .param-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+    }
+    .param-label {
+      color: var(--text-muted);
+    }
+    .param-val {
+      font-weight: 500;
+      color: #f8fafc;
+      text-align: right;
+    }
+    .param-val.highlight {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+    .spec-hint {
+      background: rgba(0, 0, 0, 0.25);
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    /* 底部操作提示 */
+    .bottom-hint {
+      position: absolute;
+      bottom: 24px;
+      right: 20px;
+      z-index: 5;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      color: var(--text-muted);
+      pointer-events: none;
+      backdrop-filter: blur(8px);
+    }
+
+    /* 3D 浮动文字标签 */
+    .annotation-label {
+      position: absolute;
+      z-index: 2;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--accent-color);
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      pointer-events: none;
+      white-space: nowrap;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      transition: opacity 0.2s;
+    }
+  </style>
+
+  <!-- 引入 Three.js 与 OrbitControls -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+  <!-- 3D WebGL Canvas 容器 -->
+  <div id="canvas-container"></div>
+
+  <!-- 顶部标题栏 -->
+  <div class="top-bar">
+    <span class="badge">BOM-05 DIGITAL TWIN</span>
+    <div>
+      <div class="top-title">检验室硬装、环氧防水木作与机电 3D 数字孪生</div>
+      <div class="sub-title">5.0m × 8.0m × 高3.5m 建筑体量 | 双室隔离 | 40㎡ 顶层阁楼 | 全屋冲洗格栅</div>
+    </div>
+  </div>
+
+  <!-- 右侧交互控制抽屉 -->
+  <div class="control-panel">
+    <!-- 视角预设 -->
+    <div>
+      <div class="panel-section-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+        工程视角预设 (Views)
+      </div>
+      <div class="view-grid">
+        <button class="btn-view active" onclick="switchView('iso')">🌐 整体轴测</button>
+        <button class="btn-view" onclick="switchView('bird')">🦅 全景鸟瞰</button>
+        <button class="btn-view" onclick="switchView('safety')">🚪 5米端门&农残室</button>
+        <button class="btn-view" onclick="switchView('flavor')">🍓 风味品质室</button>
+        <button class="btn-view" onclick="switchView('loft')">🏢 顶层阁楼</button>
+        <button class="btn-view" onclick="switchView('front')">📐 8m长边全景视窗</button>
+      </div>
+    </div>
+
+    <!-- 构件图层显隐 -->
+    <div>
+      <div class="panel-section-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        BOM 系统图层显隐 (Layers)
+      </div>
+      <div class="layer-list">
+        <div class="layer-item">
+          <span class="layer-label">🏢 顶层阁楼地板与护栏</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="layer-loft" checked onchange="toggleLayer('loft', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="layer-item">
+          <span class="layer-label">🪟 1.69m 中部大棚膜窗</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="layer-membrane" checked onchange="toggleLayer('membrane', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="layer-item">
+          <span class="layer-label">🪵 欧松板木作护墙(环氧防水)</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="layer-osb" checked onchange="toggleLayer('osb', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="layer-item">
+          <span class="layer-label">🔩 120大方管主骨架与主梁</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="layer-steel" checked onchange="toggleLayer('steel', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="layer-item">
+          <span class="layer-label">🚰 PP冲洗格栅与U型地槽</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="layer-floor" checked onchange="toggleLayer('floor', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="layer-item">
+          <span class="layer-label">🧪 化验操作台面与洗眼水槽</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="layer-furniture" checked onchange="toggleLayer('furniture', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="layer-item">
+          <span class="layer-label">❄️ 2匹空调与强排风机系统</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="layer-hvac" checked onchange="toggleLayer('hvac', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 空间剖切透视 -->
+    <div>
+      <div class="panel-section-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+        立面透视剖切 (Cutaway)
+      </div>
+      <div class="slider-container">
+        <div class="slider-row">
+          <span>外立面透明度</span>
+          <span id="transparency-val">不透明 (0%)</span>
+        </div>
+        <input type="range" class="range-input" min="0" max="90" value="0" id="wall-opacity-slider" oninput="adjustWallOpacity(this.value)">
+      </div>
+    </div>
+
+    <!-- 空间与总造价快报 -->
+    <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
+      <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">工程结算预算总额 (实核定额版)</div>
+      <div style="font-size: 20px; font-weight: 700; color: #38bdf8;">¥ 20,514.00 <span style="font-size: 12px; color: #94a3b8; font-weight: 400;">(约2.05万元)</span></div>
+      <div style="font-size: 11px; color: #94a3b8; margin-top: 6px; display: flex; justify-content: space-between;">
+        <span>物料辅材: ¥17,964</span>
+        <span>定额人工: ¥2,550 (8.5工日)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 左下角构件属性审查卡 (点击任意 3D 构件弹出) -->
+  <div class="inspector-card" id="inspector-card">
+    <div class="inspector-title">
+      <span id="insp-name">120×120 热浸锌大方管立柱</span>
+      <span class="inspector-code" id="insp-code">BOM-5.1.1</span>
+    </div>
+    <div class="inspector-body">
+      <div class="param-row">
+        <span class="param-label">规格型号 / 材质</span>
+        <span class="param-val" id="insp-spec">120×120×3.0 mm (国标热镀锌)</span>
+      </div>
+      <div class="param-row">
+        <span class="param-label">核算单价 / 数量</span>
+        <span class="param-val highlight" id="insp-price">¥ 280.00 / 根 × 7 根</span>
+      </div>
+      <div class="param-row">
+        <span class="param-label">分项工程归属</span>
+        <span class="param-val" id="insp-cat">5.1 钢构方管骨架体系</span>
+      </div>
+      <div class="spec-hint" id="insp-hint">
+        💡 关键工艺：全线对齐温室大棚 120 大立柱，底部焊 200×200×8mm 底板打膨胀螺栓牢固拉结。
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部操作提示 -->
+  <div class="bottom-hint">
+    🖱️ 鼠标左键：360°旋转 | 右键：平移 | 滚轮：缩放 | 单击任意构件：查看 BOM 详规
+  </div>
+
+  <script>
+    // --- 1. Three.js 场景基建初始化 ---
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0c1322);
+    scene.fog = new THREE.FogExp2(0x0c1322, 0.025);
+
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(-11, 8.5, 12);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1;
+    container.appendChild(renderer.domElement);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+    controls.maxPolarAngle = Math.PI / 2 + 0.05; // 允许略微下俯
+    controls.minDistance = 3;
+    controls.maxDistance = 35;
+    controls.target.set(0, 1.75, 0);
+
+    // --- 2. 灯光体系 (自然日光 + 实验室高显色净化照明) ---
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
+    scene.add(ambientLight);
+
+    const sunLight = new THREE.DirectionalLight(0xfff5e6, 1.2);
+    sunLight.position.set(12, 18, 10);
+    sunLight.castShadow = true;
+    sunLight.shadow.mapSize.width = 2048;
+    sunLight.shadow.mapSize.height = 2048;
+    sunLight.shadow.camera.near = 0.5;
+    sunLight.shadow.camera.far = 40;
+    const d = 10;
+    sunLight.shadow.camera.left = -d;
+    sunLight.shadow.camera.right = d;
+    sunLight.shadow.camera.top = d;
+    sunLight.shadow.camera.bottom = -d;
+    sunLight.shadow.bias = -0.0005;
+    scene.add(sunLight);
+
+    // 室内补光灯 (模拟 4 组 40W 净化防潮荧光灯盘)
+    const interiorLight1 = new THREE.PointLight(0xe0f2fe, 0.9, 8);
+    interiorLight1.position.set(-1.8, 3.1, 0);
+    scene.add(interiorLight1);
+
+    const interiorLight2 = new THREE.PointLight(0xe0f2fe, 0.9, 8);
+    interiorLight2.position.set(2.0, 3.1, 0);
+    scene.add(interiorLight2);
+
+    // 辅助地面网格基底
+    const gridHelper = new THREE.GridHelper(30, 30, 0x1e293b, 0x0f172a);
+    gridHelper.position.y = -0.02;
+    scene.add(gridHelper);
+
+    // --- 3. 构件图层组管理 ---
+    const layerGroups = {
+      steel: new THREE.Group(),
+      osb: new THREE.Group(),
+      membrane: new THREE.Group(),
+      loft: new THREE.Group(),
+      floor: new THREE.Group(),
+      furniture: new THREE.Group(),
+      hvac: new THREE.Group()
+    };
+    Object.values(layerGroups).forEach(grp => scene.add(grp));
+
+    const interactiveObjects = [];
+
+    // --- 4. 材质库 (工程纯色工业质感) ---
+    const materials = {
+      // 120 热浸锌大方管 & 主梁 (银灰金属微反光)
+      galvanizedSteel: new THREE.MeshStandardMaterial({
+        color: 0x8a9ea7,
+        metalness: 0.75,
+        roughness: 0.35
+      }),
+      // 50 次梁与龙骨
+      subSteel: new THREE.MeshStandardMaterial({
+        color: 0x71828a,
+        metalness: 0.65,
+        roughness: 0.4
+      }),
+      // 双层 9mm 欧松板 (环氧树脂深层封闭+高光耐水涂层质感)
+      osbEpoxy: new THREE.MeshStandardMaterial({
+        color: 0xc99355,
+        roughness: 0.45,
+        metalness: 0.1
+      }),
+      // 阁楼 15mm 欧松板承重地板
+      loftFloorDeck: new THREE.MeshStandardMaterial({
+        color: 0xb58045,
+        roughness: 0.6,
+        metalness: 0.05
+      }),
+      // 1.69m 中部大棚 PO 膜 (半透高光淡蓝)
+      greenhouseMembrane: new THREE.MeshPhysicalMaterial({
+        color: 0xbae6fd,
+        transparent: true,
+        opacity: 0.35,
+        roughness: 0.15,
+        transmission: 0.85,
+        thickness: 0.5,
+        reflectivity: 0.6
+      }),
+      // 改性 PP 洗车房拼接格栅 (耐压深灰蓝)
+      ppFloorGrid: new THREE.MeshStandardMaterial({
+        color: 0x1e293b,
+        roughness: 0.7,
+        metalness: 0.15
+      }),
+      // U 型成品排水槽 (带镀锌冲孔盖板)
+      drainChannel: new THREE.MeshStandardMaterial({
+        color: 0x94a3b8,
+        metalness: 0.8,
+        roughness: 0.3
+      }),
+      // 实验室边台操作台面 (浅灰理化板)
+      labBenchTop: new THREE.MeshStandardMaterial({
+        color: 0xf1f5f9,
+        roughness: 0.3,
+        metalness: 0.1
+      }),
+      // 实验台柜体 (深碳灰耐腐蚀钢柜)
+      labBenchCabinet: new THREE.MeshStandardMaterial({
+        color: 0x334155,
+        roughness: 0.5,
+        metalness: 0.2
+      }),
+      // PP 耐酸水槽 (深灰耐化学塑料)
+      ppSink: new THREE.MeshStandardMaterial({
+        color: 0x475569,
+        roughness: 0.4,
+        metalness: 0.1
+      }),
+      // 紧急冲淋洗眼器 (警示明黄)
+      eyeWash: new THREE.MeshStandardMaterial({
+        color: 0xfacc15,
+        metalness: 0.6,
+        roughness: 0.3
+      }),
+      // 2匹变频冷暖挂机空调 (珍珠白)
+      acUnit: new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        roughness: 0.2,
+        metalness: 0.05
+      }),
+      // 工业排气扇 (纯铜/防腐深灰外壳)
+      exhaustFan: new THREE.MeshStandardMaterial({
+        color: 0x1f2937,
+        metalness: 0.7,
+        roughness: 0.4
+      }),
+      // PVC 透明防虫软门帘 (淡黄半透)
+      pvcCurtain: new THREE.MeshStandardMaterial({
+        color: 0xfef08a,
+        transparent: true,
+        opacity: 0.55,
+        roughness: 0.2
+      })
+    };
+
+    // 辅助构件数据绑定封装
+    function tagObject(mesh, bomCode, name, spec, price, cat, hint) {
+      mesh.userData = { bomCode, name, spec, price, cat, hint };
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      interactiveObjects.push(mesh);
+      return mesh;
+    }
+
+    // --- 5. 几何模型构建 (以中心对齐：宽 8m 为 X [-4, +4]，进深 5m 为 Z [-2.5, +2.5]，高 3.5m 为 Y [0, 3.5]) ---
+    const LAB_W = 8.0;   // 总宽 (X 方向)
+    const LAB_D = 5.0;   // 总深 (Z 方向)
+    const LAB_H = 3.5;   // 净高 (Y 方向)
+    const SPLIT_X = 0.5; // 中隔墙位置 (左侧安全室宽 4.5m，右侧风味室宽 3.5m，因此分割线在 -4 + 4.5 = +0.5m)
+
+    // ========== 5.1 钢结构骨架体系 (BOM 5.1) ==========
+    const colGeo = new THREE.BoxGeometry(0.12, LAB_H, 0.12);
+    // 7~8 根 120×120 大立柱：四角外柱 (4) + 中隔端柱与中柱 (2) + 5米端门立柱 (1~2)
+    const colPositions = [
+      { x: -4.0, z: -2.5, name: '西北角主立柱 (120×120)' },
+      { x:  4.0, z: -2.5, name: '东北角主立柱 (120×120)' },
+      { x: -4.0, z:  2.5, name: '西南角主立柱 (120×120)' },
+      { x:  4.0, z:  2.5, name: '东南角主立柱 (120×120)' },
+      { x: SPLIT_X, z: -2.5, name: '后墙中隔对齐大立柱 (120×120)' },
+      { x: SPLIT_X, z:  2.5, name: '前墙中隔对齐大立柱 (120×120)' },
+      { x: -4.0, z:  0.5, name: '5米端门入口门框立柱 (120×120)' },
+      { x: SPLIT_X, z: 0.5, name: '中室隔离门框立柱 (120×120)' }
+    ];
+
+    colPositions.forEach(p => {
+      const col = new THREE.Mesh(colGeo, materials.galvanizedSteel);
+      col.position.set(p.x, LAB_H / 2, p.z);
+      tagObject(col, 'BOM-5.1.1', p.name, '120×120×3.0 mm 热浸锌方管', '¥ 280.00/根', '5.1 钢结构热浸锌骨架', '与大棚主跨立柱 100% 模数齐平，承重 100~150 kg/㎡ 阁楼荷载');
+      layerGroups.steel.add(col);
+
+      // 柱脚 200×200×8mm 基础法兰底板
+      const basePlate = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.015, 0.2), materials.galvanizedSteel);
+      basePlate.position.set(p.x, 0.008, p.z);
+      layerGroups.steel.add(basePlate);
+    });
+
+    // 阁楼 5 根 100×50 矩管主梁 (跨度 5m，沿 Z 轴布置，支撑阁楼)
+    const mainBeamGeo = new THREE.BoxGeometry(0.05, 0.10, LAB_D);
+    const beamXList = [-4.0, -1.8, SPLIT_X, 2.3, 4.0];
+    beamXList.forEach((bx, idx) => {
+      const beam = new THREE.Mesh(mainBeamGeo, materials.galvanizedSteel);
+      beam.position.set(bx, LAB_H - 0.05, 0);
+      tagObject(beam, 'BOM-5.1.2', `阁楼 5m 跨度主承重梁 #${idx+1}`, '100×50×2.5 mm 热镀锌矩管', '¥ 160.00/根', '5.1 钢结构热浸锌骨架', '跨度 5m 立放焊接，挠度控制在 L/400，稳固承载');
+      layerGroups.steel.add(beam);
+    });
+
+    // 阁楼 50×50 次梁密肋支撑 (横向穿插，间距 0.6m)
+    const subRafterGeo = new THREE.BoxGeometry(LAB_W, 0.05, 0.05);
+    for (let z = -2.2; z <= 2.2; z += 0.6) {
+      const rafter = new THREE.Mesh(subRafterGeo, materials.subSteel);
+      rafter.position.set(0, LAB_H - 0.125, z);
+      tagObject(rafter, 'BOM-5.1.3', '阁楼 50×50 次梁密肋', '50×50×2.0 mm 热镀锌方管', '¥ 68.00/根', '5.1 钢结构热浸锌骨架', '0.6m 密集排布支撑 15mm 欧松板地板，走人完全不踩空');
+      layerGroups.steel.add(rafter);
+    }
+
+    // 标高 2.89m 上腰梁与 1.20m 下腰梁 (50×50)
+    function createWaistBeams(heightY, label, bomCode) {
+      // 外围 4 边
+      const bFront = new THREE.Mesh(new THREE.BoxGeometry(LAB_W, 0.05, 0.05), materials.subSteel);
+      bFront.position.set(0, heightY, 2.5);
+      const bBack = new THREE.Mesh(new THREE.BoxGeometry(LAB_W, 0.05, 0.05), materials.subSteel);
+      bBack.position.set(0, heightY, -2.5);
+      const bLeft = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.05, LAB_D), materials.subSteel);
+      bLeft.position.set(-4.0, heightY, 0);
+      const bRight = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.05, LAB_D), materials.subSteel);
+      bRight.position.set(4.0, heightY, 0);
+      // 中隔断腰梁
+      const bMid = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.05, LAB_D), materials.subSteel);
+      bMid.position.set(SPLIT_X, heightY, 0);
+
+      [bFront, bBack, bLeft, bRight, bMid].forEach(m => {
+        tagObject(m, bomCode, label, '50×50×2.0 mm 热镀锌方管', '¥ 68.00/根', '5.1 钢结构热浸锌骨架', '固定双层欧松板螺丝与大棚膜卡槽拉簧');
+        layerGroups.steel.add(m);
+      });
+    }
+    createWaistBeams(1.20, '标高 1.20m 下腰梁 (护墙收口)', 'BOM-5.1.5');
+    createWaistBeams(2.89, '标高 2.89m 上腰梁 (挂板受力龙骨)', 'BOM-5.1.4');
+
+
+    // ========== 5.2 欧松板木作与工业环氧防水体系 (BOM 5.2) ==========
+    // 下部 0~1.2m 双层 9mm 欧松板护墙 (里外夹心 50 方管，总厚 68mm)
+    function createWallOSB(w, h, d, x, y, z, tagText) {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), materials.osbEpoxy);
+      mesh.position.set(x, y, z);
+      tagObject(mesh, 'BOM-5.2.2', tagText, '9mm+9mm 双层错缝欧松板 (环氧防水封闭)', '¥ 48.00/张', '5.2 欧松板与环氧防水', '内外拼缝错开 1.22m，高渗透环氧底漆渗透固化，外施聚氨酯耐刮耐水面漆');
+      layerGroups.osb.add(mesh);
+      return mesh;
+    }
+
+    // 1. 后墙 (Z = -2.5): 8m 连续长墙
+    createWallOSB(LAB_W, 1.2, 0.068, 0, 0.6, -2.5, '下部 1.2m 后防护墙 (双层错缝夹心)');
+    // 2. 右侧山墙 (X = +4.0): 5m 连续山墙 (风味室外侧)
+    createWallOSB(0.068, 1.2, LAB_D, 4.0, 0.6, 0, '下部 1.2m 右山墙 (风味室侧外护墙)');
+    // 3. 前迎客面 (Z = +2.5): 8m 完整连续大景观展示面 (无门，纯粹大视野)
+    createWallOSB(LAB_W, 1.2, 0.068, 0, 0.6, 2.5, '前长边 8m 迎客下护墙 (连续大视野景观面)');
+
+    // 4. 左侧 5 米山墙 (X = -4.0m) —— 【核心纠偏：总出入口大门所在边】
+    // 5m 山墙留出 Z = 0.5 ~ 1.7m (宽 1.2m, 高 2.2m) 的主出入口大门洞
+    createWallOSB(0.068, 1.2, 3.0, -4.0, 0.6, -1.0, '5米入户山墙下护墙 (后段 3m 封闭段)');
+    createWallOSB(0.068, 1.2, 0.8, -4.0, 0.6, 2.1, '5米入户山墙下护墙 (前角 0.8m 收口段)');
+
+    // 5. 1.2m × 1.2m 入口缓冲区 L 型隔断墙 (Buffer Airlock)
+    // 隔断 1：从 X = -4.0 到 X = -2.8 (沿 X 方向，深 1.2m)
+    createWallOSB(1.2, 2.2, 0.068, -3.4, 1.1, 0.5, '1.2m×1.2m 缓冲区横向阻隔墙 (防风防尘风淋过渡)');
+    // 隔断 2：从 Z = 0.5 到 Z = 1.7 (沿 Z 方向，内部门套立柱)
+    createWallOSB(0.068, 2.2, 0.4, -2.8, 1.1, 0.7, '缓冲区内门框隔断');
+
+    // 6. 中隔断下护墙 (X = SPLIT_X = 0.5m，双室物理隔离)
+    // 同样在 Z = 0.5 ~ 1.7m 留出 1.2m 宽中门通道，与 5 米端门动线完美对齐直通！
+    createWallOSB(0.068, 1.2, 3.0, SPLIT_X, 0.6, -1.0, '中室下部 1.2m 隔离护墙 (后段 3m 物理密封)');
+    createWallOSB(0.068, 1.2, 0.8, SPLIT_X, 0.6, 2.1, '中室下部 1.2m 隔离护墙 (前角 0.8m)');
+
+    // 顶部 2.89m ~ 3.5m (高 0.61m, Y 中心在 3.195m) 双层 9mm 欧松板上圈梁挂板
+    function createHeaderOSB(w, h, d, x, y, z, tagText) {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), materials.osbEpoxy);
+      mesh.position.set(x, y, z);
+      tagObject(mesh, 'BOM-5.2.3', tagText, '9mm 双层错缝对半剖切上圈梁 (61cm高)', '¥ 48.00/张', '5.2 欧松板木作', '18mm 实木握钉基座，提供空调内机与排气扇吊挂锚固力');
+      layerGroups.osb.add(mesh);
+      return mesh;
+    }
+    createHeaderOSB(LAB_W, 0.61, 0.068, 0, 3.195, -2.5, '顶部 61cm 后墙上挂板 (嵌装双换气扇)');
+    createHeaderOSB(LAB_W, 0.61, 0.068, 0, 3.195, 2.5, '顶部 61cm 前迎客面上圈梁');
+    createHeaderOSB(0.068, 0.61, LAB_D, -4.0, 3.195, 0, '顶部 61cm 5米入户山墙上圈梁');
+    createHeaderOSB(0.068, 0.61, LAB_D, 4.0, 3.195, 0, '顶部 61cm 右侧山墙上圈梁');
+    createHeaderOSB(0.068, 0.61, LAB_D, SPLIT_X, 3.195, 0, '中隔断顶部 61cm 上挂板 (锚固2匹变频空调)');
+
+
+    // ========== 5.3 中部 1.69m 超宽高透大棚膜窗 (BOM 5.3) ==========
+    // 标高 1.20m ~ 2.89m (高 1.69m, Y 中心在 2.045m)
+    function createMembraneWindow(w, h, d, x, y, z, tagText) {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), materials.greenhouseMembrane);
+      mesh.position.set(x, y, z);
+      tagObject(mesh, 'BOM-5.3.1', tagText, '15丝 PO 超宽高透大棚膜 (1.69m采光视窗)', '¥ 210.00/卷', '5.3 采光膜窗系统', '卡槽拉紧如落地玻璃窗，采光通透度高，抗老化防尘防雾滴');
+      layerGroups.membrane.add(mesh);
+      return mesh;
+    }
+    // 后膜窗 (8m 全长)
+    createMembraneWindow(LAB_W, 1.69, 0.01, 0, 2.045, -2.5, '后立面 1.69m 超宽大棚膜采光窗');
+    // 前迎客面膜窗 (8m 全长无立柱遮挡超广角大落地窗！)
+    createMembraneWindow(LAB_W, 1.69, 0.01, 0, 2.045, 2.5, '前长边 8m 迎客超宽全景大视野落地膜窗');
+    // 右侧山面膜窗 (5m 全长)
+    createMembraneWindow(0.01, 1.69, LAB_D, 4.0, 2.045, 0, '右山面 1.69m 高透大棚膜采光窗');
+    // 左侧 5 米入户山面膜窗 (在门洞两侧采光)
+    createMembraneWindow(0.01, 1.69, 3.0, -4.0, 2.045, -1.0, '5米入户山面采光窗 (后段)');
+    createMembraneWindow(0.01, 1.69, 0.8, -4.0, 2.045, 2.1, '5米入户山面采光窗 (前角)');
+    // 中间隔断透视膜窗 (让两个房间通透对视)
+    createMembraneWindow(0.01, 1.69, 3.0, SPLIT_X, 2.045, -1.0, '中室隔离 1.69m 透明观摩视窗');
+
+
+    // ========== 5.4 顶层 40㎡ 储物阁楼与安全护栏 (BOM 5.1 & 5.2) ==========
+    // 15mm 欧松板地板 (铺在 Y = 3.5m 上)
+    const loftDeck = new THREE.Mesh(new THREE.BoxGeometry(LAB_W, 0.015, LAB_D), materials.loftFloorDeck);
+    loftDeck.position.set(0, LAB_H + 0.008, 0);
+    tagObject(loftDeck, 'BOM-5.2.1', '顶层 40㎡ 欧松板储物阁楼地板', '15 mm OSB/3 级防潮高强欧松板', '¥ 85.00/张 × 15张', '5.2 欧松板木作体系', '错缝满铺，4.8×50mm 沉头自攻钻尾丝锁死于方管，承重 100~150 kg/㎡');
+    layerGroups.loft.add(loftDeck);
+
+    // 阁楼四周 1.0m 高安全金属护栏
+    const railMat = materials.galvanizedSteel;
+    function createRailing(x1, z1, x2, z2) {
+      const len = Math.hypot(x2 - x1, z2 - z1);
+      const angle = Math.atan2(x2 - x1, z2 - z1);
+      // 上横杆
+      const topBar = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, len), railMat);
+      topBar.rotation.x = Math.PI / 2;
+      topBar.rotation.z = -angle;
+      topBar.position.set((x1 + x2)/2, LAB_H + 1.0, (z1 + z2)/2);
+      layerGroups.loft.add(topBar);
+
+      // 中横杆
+      const midBar = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, len), railMat);
+      midBar.rotation.x = Math.PI / 2;
+      midBar.rotation.z = -angle;
+      midBar.position.set((x1 + x2)/2, LAB_H + 0.5, (z1 + z2)/2);
+      layerGroups.loft.add(midBar);
+
+      // 立柱 (每隔 2m 一根)
+      const postsCount = Math.max(2, Math.round(len / 1.8));
+      for (let i = 0; i <= postsCount; i++) {
+        const t = i / postsCount;
+        const post = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 1.0), railMat);
+        post.position.set(x1 + (x2 - x1)*t, LAB_H + 0.5, z1 + (z2 - z1)*t);
+        layerGroups.loft.add(post);
+      }
+    }
+    // 阁楼三面全封闭护栏，前侧留 1.2m 检修上下梯口
+    createRailing(-4.0, -2.5, 4.0, -2.5); // 后护栏
+    createRailing(-4.0, -2.5, -4.0, 2.5); // 左护栏
+    createRailing(4.0, -2.5, 4.0, 2.5);   // 右护栏
+    createRailing(-4.0, 2.5, 2.0, 2.5);   // 前护栏 (右侧留口)
+
+
+    // ========== 5.5 全屋冲洗地面与 U 型地槽 (BOM 5.10) ==========
+    // 40㎡ 改性 PP 洗车房镂空拼接格栅 (400×400×18mm，高回弹防滑)
+    const floorTileGeo = new THREE.BoxGeometry(LAB_W, 0.018, LAB_D);
+    const floorMesh = new THREE.Mesh(floorTileGeo, materials.ppFloorGrid);
+    floorMesh.position.set(0, 0.009, 0);
+    tagObject(floorMesh, 'BOM-5.10.1', '全屋 40㎡ 改性 PP 镂空拼接格栅地面', '400×400×18 mm (洗车房高抗冲PP)', '¥ 4.20/块 × 250块', '5.10 冲洗地面与排水', '表面镂空自锁卡扣，耐车轮重压与酸碱试剂，水流毫秒级下渗，表面永无积水');
+    layerGroups.floor.add(floorMesh);
+
+    // 纵向埋入透水砖的 2 条嵌入式 U 型树脂排水槽 (宽 0.14m，深 0.10m，各长 5m 直通后明沟)
+    // 槽 1: 安全室内 (X = -2.0m)
+    // 槽 2: 风味室内 (X = 2.2m)
+    [-2.0, 2.2].forEach((dx, i) => {
+      const channel = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.022, LAB_D + 0.4), materials.drainChannel);
+      channel.position.set(dx, 0.011, 0.2); // 略微凸出后墙 20cm 示意直穿大明沟
+      tagObject(channel, 'BOM-5.10.3', `嵌入式成品 U 型树脂排水槽 #${i+1}`, '外宽140×内宽100×深100 mm (带镀锌冲孔盖板)', '¥ 65.00/米 × 10米', '5.10 冲洗地面与排水', '抠开透水砖 1% 找坡埋设，末端以 PVC 75 直穿棚外大明沟');
+      layerGroups.floor.add(channel);
+    });
+
+    // 入口缓冲间及双室门帘 PVC 软门帘 (BOM 5.4) —— 【严格落位于 5 米山墙端门与中门对齐动线】
+    // 门帘 1: 5米入户山墙正门 (X = -4.0m, Z = 1.1m, 净宽 1.1m, 高 2.2m)
+    const curtain1 = new THREE.Mesh(new THREE.BoxGeometry(0.02, 2.2, 1.1), materials.pvcCurtain);
+    curtain1.position.set(-4.0, 1.1, 1.1);
+    tagObject(curtain1, 'BOM-5.4.1', '5米端门：加厚磁吸防虫 PVC 软门帘 1号', '加厚 2.0mm 重叠/磁吸防虫 (净宽1.1m×高2.2m)', '¥ 130.00/套', '5.4 双通道软门帘', '位于 5 米山墙主入口，保障推车与大件化验仪器平推进出，防虫防尘');
+    layerGroups.furniture.add(curtain1);
+
+    // 门帘 2: 双室中隔门 (X = SPLIT_X = 0.5m, Z = 1.1m, 净宽 1.1m, 高 2.2m)
+    const curtain2 = new THREE.Mesh(new THREE.BoxGeometry(0.02, 2.2, 1.1), materials.pvcCurtain);
+    curtain2.position.set(SPLIT_X, 1.1, 1.1);
+    tagObject(curtain2, 'BOM-5.4.2', '双室中隔 PVC 防风软门帘 2号', '加厚 2.0mm 重叠式 (净宽1.1m×高2.2m)', '¥ 130.00/套', '5.4 双通道软门帘', '与 5 米端门走道轴线对齐，阻隔农残酸雾，防止风味室冷气逃逸');
+    layerGroups.furniture.add(curtain2);
+
+
+    // ========== 5.6 实验台面与水槽洗眼器 (空间 1 农残室 & 空间 2 风味室布局) ==========
+    // 空间 1 (农残水质室: X = -4.0 ~ +0.5m)
+    // 1. 沿后墙布置蔬菜样品前处理实验长台 (宽 0.75m, 长 2.8m, 高 0.85m，面朝后窗，让出前部 2m 进出主走道)
+    const prepBench = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.85, 0.75), materials.labBenchCabinet);
+    prepBench.position.set(-1.8, 0.85/2 + 0.018, -2.1);
+    const prepTop = new THREE.Mesh(new THREE.BoxGeometry(2.85, 0.04, 0.8), materials.labBenchTop);
+    prepTop.position.set(-1.8, 0.85 + 0.018 + 0.02, -2.1);
+    tagObject(prepBench, 'LAB-BENCH-01', '蔬菜样品前处理与农残快检实验台', '2800×750×850 mm 实心理化板台面 (沿后墙布置)', '¥ 1,800.00/套', '化验室操作台面', '配置农残速测仪反应区、样品粉碎捣碎与移液前处理');
+    layerGroups.furniture.add(prepBench);
+    layerGroups.furniture.add(prepTop);
+
+    // 2. PP 耐酸水槽 550×450 + 紧急冲淋洗眼器 (BOM 5.7，沿后墙角布设，就近排水槽与外沟)
+    const sinkMesh = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.45, 0.55), materials.ppSink);
+    sinkMesh.position.set(-3.5, 0.85/2 + 0.018, -2.1);
+    tagObject(sinkMesh, 'BOM-5.7.1', '加厚 PP 耐酸一体化化验水槽', '550×450×310 mm (耐强酸强碱耐有机溶剂)', '¥ 65.00/套', '5.7 给排水与PP水槽', '耐农残检测试剂与消解废液冲刷，落水斗耐腐耐酸');
+    layerGroups.furniture.add(sinkMesh);
+
+    // 洗眼器台式喷头
+    const eyeWashMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.35), materials.eyeWash);
+    eyeWashMesh.position.set(-3.5, 0.85 + 0.018 + 0.2, -2.1);
+    tagObject(eyeWashMesh, 'BOM-5.7.3', '台式双联紧急洗眼器', '全铜加厚环氧喷涂 (带防尘盖+脚踏水阀)', '¥ 95.00/台', '5.7 给排水系统', '符合职业卫生安全规范，强酸飞溅一秒快速冲洗眼睛');
+    layerGroups.furniture.add(eyeWashMesh);
+
+    // 空间 2 (风味品质与营养研发室: X = +0.5 ~ +4.0m)
+    // 3. 沿后墙布置精密仪器分析台 (长 2.8m, 宽 0.75m)
+    const flavorBench = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.85, 0.75), materials.labBenchCabinet);
+    flavorBench.position.set(2.4, 0.85/2 + 0.018, -2.1);
+    const flavorTop = new THREE.Mesh(new THREE.BoxGeometry(2.85, 0.04, 0.8), materials.labBenchTop);
+    flavorTop.position.set(2.4, 0.85 + 0.018 + 0.02, -2.1);
+    tagObject(flavorBench, 'LAB-BENCH-02', '风味糖酸比与营养品质测定工作台', '2800×750×850 mm 大理石防震台面 (沿后墙布置)', '¥ 1,950.00/套', '化验室操作台面', '安置数显高精糖酸比仪、十万分之一电子天平、分光光度计');
+    layerGroups.furniture.add(flavorBench);
+    layerGroups.furniture.add(flavorTop);
+
+
+    // ========== 5.7 暖通与电气机电系统 (BOM 5.8 & 5.9) ==========
+    // 1. 2匹变频冷暖空调壁挂机 (BOM 5.8: KFR-50GW, 挂在中隔断顶部 61cm 双层板上，面朝风味室与全室)
+    const acMesh = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.32, 0.98), materials.acUnit);
+    acMesh.position.set(SPLIT_X + 0.16, 3.15, 0.5);
+    tagObject(acMesh, 'BOM-5.8.1', '华凌/美的 2匹新一级变频冷暖空调', 'KFR-50GW/N8HA1Ⅲ (大排量变频双排铜管)', '¥ 2,299.00/台', '5.8 化验室恒温空调', '稳固打孔锚固于 61cm 双层欧松板，全天候精准控温 20~22℃ 保护高精度仪器');
+    layerGroups.hvac.add(acMesh);
+
+    // 2. 换气扇 1 号：强排酸雾风机 (BOM 5.9.1: 12寸纯铜工业百叶风机，嵌在农残室后墙 61cm 双层板处)
+    const fan1 = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.15, 24), materials.exhaustFan);
+    fan1.rotation.x = Math.PI / 2;
+    fan1.position.set(-2.0, 3.15, -2.5);
+    tagObject(fan1, 'BOM-5.9.1', '换气扇 1 号：12寸强排酸雾风机', '纯铜防腐电机 (排风量 800 m³/h)', '¥ 130.00/台', '5.9 定向排风系统', '一键强排农残检测酸性挥发雾气，自动关闭百叶防风沙倒灌');
+    layerGroups.hvac.add(fan1);
+
+    // 3. 换气扇 2 号：低噪双向新风换气扇 (BOM 5.9.2: 10寸带滤网，嵌在风味室后墙 61cm 双层板处)
+    const fan2 = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.15, 24), materials.exhaustFan);
+    fan2.rotation.x = Math.PI / 2;
+    fan2.position.set(2.2, 3.15, -2.5);
+    tagObject(fan2, 'BOM-5.9.2', '换气扇 2 号：10寸低噪双向新风扇', '低噪双向可逆带防尘初效滤网', '¥ 110.00/台', '5.9 定向换气系统', '维持风味室微正压新风置换，滤截温室浮尘，维持室内纯净');
+    layerGroups.hvac.add(fan2);
+
+    // 4. 吊装净化荧光灯盘 (4 组 1.2m 40W 吊挂于顶梁下)
+    const lightFixtureMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    [
+      { x: -2.0, z: -1.2 },
+      { x: -2.0, z:  1.2 },
+      { x:  2.2, z: -1.2 },
+      { x:  2.2, z:  1.2 }
+    ].forEach((pos, idx) => {
+      const fixture = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.05, 1.2), lightFixtureMat);
+      fixture.position.set(pos.x, 3.38, pos.z);
+      tagObject(fixture, 'BOM-5.6.1', `1.2m 40W 净化防潮双管灯盘 #${idx+1}`, '洁净室防尘防潮双管 LED (照度 ≥ 500 Lux)', '¥ 55.00/套', '5.6 精密化验照明', '吊装于梁下，全室无阴影照射，保障农残比色与滴定观察精度');
+      layerGroups.hvac.add(fixture);
+    });
+
+
+    // --- 6. 3D 尺寸工程标注引线 (Dimension Lines) ---
+    const dimGroup = new THREE.Group();
+    scene.add(dimGroup);
+
+    function createDimLine(p1, p2, color = 0x38bdf8) {
+      const geom = new THREE.BufferGeometry().setFromPoints([p1, p2]);
+      const mat = new THREE.LineBasicMaterial({ color, linewidth: 2 });
+      return new THREE.Line(geom, mat);
+    }
+    // 宽 8.0m 标注
+    dimGroup.add(createDimLine(new THREE.Vector3(-4.0, 0.05, 2.9), new THREE.Vector3(4.0, 0.05, 2.9)));
+    // 深 5.0m 标注
+    dimGroup.add(createDimLine(new THREE.Vector3(4.4, 0.05, -2.5), new THREE.Vector3(4.4, 0.05, 2.5)));
+    // 高 3.5m 标注
+    dimGroup.add(createDimLine(new THREE.Vector3(-4.3, 0, 2.5), new THREE.Vector3(-4.3, 3.5, 2.5)));
+
+
+    // --- 7. 交互逻辑：光线投射拾取 (Raycaster) ---
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    const inspCard = document.getElementById('inspector-card');
+    const inspName = document.getElementById('insp-name');
+    const inspCode = document.getElementById('insp-code');
+    const inspSpec = document.getElementById('insp-spec');
+    const inspPrice = document.getElementById('insp-price');
+    const inspCat = document.getElementById('insp-cat');
+    const inspHint = document.getElementById('insp-hint');
+
+    let selectedObject = null;
+    let originalColor = null;
+
+    window.addEventListener('click', onPointerClick);
+
+    function onPointerClick(e) {
+      // 避免点击 UI 按钮时触发 3D 拾取
+      if (e.target.closest('.control-panel') || e.target.closest('.top-bar') || e.target.closest('.inspector-card')) return;
+
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(interactiveObjects, true);
+
+      if (intersects.length > 0) {
+        const hit = intersects[0].object;
+        selectObject(hit);
+      }
+    }
+
+    function selectObject(obj) {
+      if (selectedObject && selectedObject.material && originalColor) {
+        selectedObject.material.color.setHex(originalColor);
+      }
+
+      selectedObject = obj;
+      if (obj.material && obj.material.color) {
+        originalColor = obj.material.color.getHex();
+        obj.material.color.setHex(0x38bdf8); // 选中高亮湖蓝色
+      }
+
+      const d = obj.userData;
+      if (d && d.bomCode) {
+        inspName.innerText = d.name;
+        inspCode.innerText = d.bomCode;
+        inspSpec.innerText = d.spec;
+        inspPrice.innerText = d.price;
+        inspCat.innerText = d.cat;
+        inspHint.innerText = `💡 ${d.hint}`;
+        inspCard.classList.remove('empty');
+      }
+    }
+
+
+    // --- 8. 视角切换与平滑相机插值 ---
+    const viewPresets = {
+      iso: { pos: [-11, 8.5, 12], target: [0, 1.75, 0] },
+      bird: { pos: [0.2, 16.5, 0.1], target: [0, 0, 0] },
+      safety: { pos: [-8.5, 2.2, 1.1], target: [-1.8, 1.5, 0] },
+      flavor: { pos: [0.8, 2.0, 2.2], target: [2.4, 1.5, -0.5] },
+      loft: { pos: [-5.5, 7.5, -4.5], target: [0, 3.5, 0] },
+      front: { pos: [0, 2.0, 12], target: [0, 1.75, 0] }
+    };
+
+    let targetCamPos = null;
+    let targetControlsTarget = null;
+
+    function switchView(viewKey) {
+      document.querySelectorAll('.btn-view').forEach(b => b.classList.remove('active'));
+      const activeBtn = Array.from(document.querySelectorAll('.btn-view')).find(b => b.getAttribute('onclick').includes(viewKey));
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const vp = viewPresets[viewKey];
+      if (!vp) return;
+      targetCamPos = new THREE.Vector3(...vp.pos);
+      targetControlsTarget = new THREE.Vector3(...vp.target);
+    }
+
+    // --- 9. 图层显隐控制 ---
+    function toggleLayer(layerKey, isVisible) {
+      if (layerGroups[layerKey]) {
+        layerGroups[layerKey].visible = isVisible;
+      }
+    }
+
+    // --- 10. 立面透明度剖切调节 ---
+    function adjustWallOpacity(val) {
+      const opacity = 1.0 - (val / 100);
+      document.getElementById('transparency-val').innerText = val > 0 ? `半透 (${val}%)` : `不透明 (0%)`;
+
+      materials.osbEpoxy.transparent = val > 0;
+      materials.osbEpoxy.opacity = Math.max(0.12, opacity);
+      materials.osbEpoxy.needsUpdate = true;
+    }
+
+
+    // --- 11. 窗口响应与渲染主循环 ---
+    window.addEventListener('resize', onWindowResize);
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // 相机平滑过渡移动 (Lerp)
+      if (targetCamPos && targetControlsTarget) {
+        camera.position.lerp(targetCamPos, 0.08);
+        controls.target.lerp(targetControlsTarget, 0.08);
+        if (camera.position.distanceTo(targetCamPos) < 0.05) {
+          targetCamPos = null;
+          targetControlsTarget = null;
+        }
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
+
