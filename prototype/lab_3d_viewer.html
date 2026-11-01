@@ -452,9 +452,9 @@
     <!-- 空间与总造价快报 -->
     <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
       <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">工程结算预算总额 (实核定额版)</div>
-      <div style="font-size: 20px; font-weight: 700; color: #38bdf8;">¥ 20,514.00 <span style="font-size: 12px; color: #94a3b8; font-weight: 400;">(约2.05万元)</span></div>
+      <div style="font-size: 20px; font-weight: 700; color: #38bdf8;">¥ 21,778.00 <span style="font-size: 12px; color: #94a3b8; font-weight: 400;">(约2.18万元)</span></div>
       <div style="font-size: 11px; color: #94a3b8; margin-top: 6px; display: flex; justify-content: space-between;">
-        <span>物料辅材: ¥17,964</span>
+        <span>物料辅材: ¥19,228</span>
         <span>定额人工: ¥2,550 (8.5工日)</span>
       </div>
     </div>
@@ -812,10 +812,10 @@
 
 
     // ========== 5.4 顶层 40㎡ 储物阁楼与安全护栏 (BOM 5.1 & 5.2) ==========
-    // 15mm 欧松板地板 (铺在 Y = 3.5m 上)
-    const loftDeck = new THREE.Mesh(new THREE.BoxGeometry(LAB_W, 0.015, LAB_D), materials.loftFloorDeck);
-    loftDeck.position.set(0, LAB_H + 0.008, 0);
-    tagObject(loftDeck, 'BOM-5.2.1', '顶层 40㎡ 欧松板储物阁楼地板', '15 mm OSB/3 级防潮高强欧松板', '¥ 85.00/张 × 15张', '5.2 欧松板木作体系', '错缝满铺，4.8×50mm 沉头自攻钻尾丝锁死于方管，承重 100~150 kg/㎡');
+    // 双层 9mm 欧松板高强地板 (总厚 18mm，上下错缝叠合，铺在 Y = 3.5m 上)
+    const loftDeck = new THREE.Mesh(new THREE.BoxGeometry(LAB_W, 0.018, LAB_D), materials.loftFloorDeck);
+    loftDeck.position.set(0, LAB_H + 0.009, 0);
+    tagObject(loftDeck, 'BOM-5.2.1', '顶层 40㎡ 欧松板储物阁楼地板 (双层9mm错缝重载)', '9 mm OSB/3 级防潮欧松板 × 30张 (上下错缝叠合，总厚18mm)', '¥ 48.00/张 × 30张 = ¥ 1,440.00', '5.2 欧松板木作 (全场统一9mm)', '全场木板单一9mm规格整包托盘直发。上下层接缝错开 1.22m，彻底消除直通拼缝，承重提升至 150~200 kg/㎡ 且踩踏完全不弹响');
     layerGroups.loft.add(loftDeck);
 
     // 阁楼四周 1.0m 高安全金属护栏
@@ -920,11 +920,18 @@
 
 
     // ========== 5.7 暖通与电气机电系统 (BOM 5.8 & 5.9) ==========
-    // 1. 2匹变频冷暖空调壁挂机 (BOM 5.8: KFR-50GW, 挂在中隔断顶部 61cm 双层板上，面朝风味室与全室)
-    const acMesh = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.32, 0.98), materials.acUnit);
-    acMesh.position.set(SPLIT_X + 0.16, 3.15, 0.5);
-    tagObject(acMesh, 'BOM-5.8.1', '华凌/美的 2匹新一级变频冷暖空调', 'KFR-50GW/N8HA1Ⅲ (大排量变频双排铜管)', '¥ 2,299.00/台', '5.8 化验室恒温空调', '稳固打孔锚固于 61cm 双层欧松板，全天候精准控温 20~22℃ 保护高精度仪器');
-    layerGroups.hvac.add(acMesh);
+    // 1. 双室独立 1.5 匹变频空调系统 (BOM 5.8: 双机热工解耦一步到位)
+    // 空调 2 号：风味品质室 (17.5㎡) 大 1.5 匹新一级恒温变频 (华凌神机 N8HE1Pro，挂于中隔顶部 61cm 双层板朝向风味室)
+    const acMesh2 = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.30, 0.90), materials.acUnit);
+    acMesh2.position.set(SPLIT_X + 0.15, 3.15, -0.8);
+    tagObject(acMesh2, 'BOM-5.8.1', '空调 2 号：风味室大1.5匹新一级变频', '华凌/美的 KFR-35GW/N8HE1Pro (电子膨胀阀恒温20℃)', '¥ 1,799.00/台', '5.8 化验室恒温空调', '在 17.5㎡ 密闭室内冷量极其充裕(200W/㎡)，超低频平稳运行，全天候精准恒温 20~22℃ 保护天平与折光仪');
+    layerGroups.hvac.add(acMesh2);
+
+    // 空调 1 号：农残安全室 (22.5㎡) 1.5 匹新一级高效变频 (挂于中隔顶部 61cm 双层板朝向农残室)
+    const acMesh1 = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.30, 0.90), materials.acUnit);
+    acMesh1.position.set(SPLIT_X - 0.15, 3.15, -0.8);
+    tagObject(acMesh1, 'BOM-5.8.2', '空调 1 号：农残室1.5匹新一级高效变频', '华凌/小米 KFR-35GW (高效变频冷暖挂机)', '¥ 1,599.00/台', '5.8 化验室空调系统', '工人入室洗菜粉碎前处理时按需开启，强劲降温防暑，独立温控不受 800m³/h 强排风机抽风影响');
+    layerGroups.hvac.add(acMesh1);
 
     // 2. 换气扇 1 号：强排酸雾风机 (BOM 5.9.1: 12寸纯铜工业百叶风机，嵌在农残室后墙 61cm 双层板处)
     const fan1 = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.15, 24), materials.exhaustFan);
