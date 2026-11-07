@@ -68,7 +68,7 @@
 ## 3. PLC 本地保命逻辑（安全底线）
 
 > [!IMPORTANT]
-> 绝对不允许将生物的命交托给云端网络。如果云端服务器或边缘网关死机，本地 PLC（一期：汇川 Easy320 PLC，架构详见 [02_MVP物理与物联拓扑.md](../03_system_architecture/02_MVP物理与物联拓扑.md)）必须无条件执行硬闭环保护：
+> 绝对不允许将生物的命交托给云端网络。如果云端服务器或边缘网关死机，本地 PLC（一期：汇川 Easy320 PLC，架构详见 [02_MVP物理与物联拓扑.md](../../03_system_architecture/02_MVP物理与物联拓扑.md)）必须无条件执行硬闭环保护：
 
 ```mermaid
 flowchart TD
