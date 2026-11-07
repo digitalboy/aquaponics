@@ -519,9 +519,9 @@ sequenceDiagram
 ## 🔗 相关设计与系统架构规范
 
 * **01号车间全要素标准 JSON 实例数据**：👉 [workshop_01_aquaculture_hydroponics_phase1.json](./topologies/workshop_01_aquaculture_hydroponics_phase1.json)
-* **全厂强电动力配电与电气工程规划规范**：👉 [06_全厂强电动力配电与电气工程规划规范.md](../02_requirements_and_plans/06_全厂强电动力配电与电气工程规划规范.md)
-* **现场弱电智能化与工控网络规划施工规范**：👉 [05_现场弱电线缆选型与布线施工规范.md](../02_requirements_and_plans/05_现场弱电线缆选型与布线施工规范.md)
-* **第一期数据采集与自动控制硬件采购 BOM 与工程施工清单**：👉 [04_第一期数据采集与自动控制硬件采购BOM与工程施工清单.md](../02_requirements_and_plans/04_第一期数据采集与自动控制硬件采购BOM与工程施工清单.md)
+* **全厂强电动力配电与电气工程规划规范**：👉 [02_全厂强电动力配电与电气工程规划规范.md](../02_requirements_and_plans/03_engineering_specs/02_全厂强电动力配电与电气工程规划规范.md)
+* **现场弱电智能化与工控网络规划施工规范**：👉 [01_现场弱电线缆选型与布线施工规范.md](../02_requirements_and_plans/03_engineering_specs/01_现场弱电线缆选型与布线施工规范.md)
+* **第一期总工程预算与采购总台账**：👉 [00_第一期总工程预算与采购总台账.md](../02_requirements_and_plans/02_procurement_and_boms/00_第一期总工程预算与采购总台账.md)
 * **接口与数据契约规范 (严格 ISO 8601 UTC)**：👉 [03_接口与数据契约规范.md](./03_接口与数据契约规范.md)
 * **农业数字孪生与多尺度仿真体系规范**：👉 [06_农业数字孪生与多尺度仿真体系规范.md](./06_农业数字孪生与多尺度仿真体系规范.md)
 * **能耗优化子系统总体设计 (MPC 峰谷套利)**：👉 [03_energy_optimization/README.md](../04_subsystems/03_energy_optimization/README.md)

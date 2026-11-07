@@ -136,6 +136,6 @@ flowchart TD
 * **品质控制与实验室抽检 (硝酸盐/农残/糖度)**：👉 [07_quality_assurance_lab/README.md](../07_quality_assurance_lab/README.md)
 * **驻厂检验室建设预算规划与投资测算表 (设备与装修)**：👉 [02_驻厂检验室建设预算规划与投资测算表(设备与装修).md](../07_quality_assurance_lab/02_驻厂检验室建设预算规划与投资测算表(设备与装修).md)
 * **全球主要国家与地区农业食品安全标准比对规范**：👉 [01_全球主要国家与地区农业食品安全标准比对规范.md](../07_quality_assurance_lab/01_全球主要国家与地区农业食品安全标准比对规范.md)
-* **现场弱电布线与快拆施工**：👉 [05_现场弱电线缆选型与布线施工规范.md](../../02_requirements_and_plans/05_现场弱电线缆选型与布线施工规范.md)
+* **现场弱电布线与快拆施工**：👉 [01_现场弱电线缆选型与布线施工规范.md](../../02_requirements_and_plans/03_engineering_specs/01_现场弱电线缆选型与布线施工规范.md)
 * **供应链与商贸协同子系统 (以销定产与选品)**：👉 [05_supply_chain_and_commerce/README.md](../05_supply_chain_and_commerce/README.md)
 * **品牌溯源与一物一码可信大盘**：👉 [06_brand_traceability_crm/README.md](../06_brand_traceability_crm/README.md)

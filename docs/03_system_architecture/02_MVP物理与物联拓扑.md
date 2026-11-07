@@ -80,7 +80,7 @@ flowchart TD
   1. 资产身份标识：`base_id`、`zone_id`、`device_id`。
   2. 物理采集时间：**严格遵循 ISO 8601 的 UTC 毫秒级时间戳**（如 `2026-07-12T16:56:18.000Z`）。
   3. **流体时空对齐标签**（依据《[03_接口与数据契约规范.md](./03_接口与数据契约规范.md)》，附加由流速算出的 `water_origin_timestamp` 和 `lag_seconds`）。
-* **进入数据湖：** 最终，网关将带有高价值时空标签的 JSON 数据加密上传至 Cloudflare Workers，写入 Cloudflare D1 边缘数据库；告警视频切片则写入 Cloudflare R2 对象存储，将云端数据库与流量开支死锁在 **0 元/月**（详见 [03_分期实施计划书.md](../02_requirements_and_plans/03_分期实施计划书.md)）！
+* **进入数据湖：** 最终，网关将带有高价值时空标签的 JSON 数据加密上传至 Cloudflare Workers，写入 Cloudflare D1 边缘数据库；告警视频切片则写入 Cloudflare R2 对象存储，将云端数据库与流量开支死锁在 **0 元/月**（详见 [03_分期实施计划书.md](../02_requirements_and_plans/01_requirements/03_分期实施计划书.md)）！
 
 ---
 
@@ -93,6 +93,6 @@ flowchart TD
 * **水产保命与生物识别**：👉 [01_aquaculture/README.md](../04_subsystems/01_aquaculture/README.md) & [04_YOLO11活体生物数据集构建规范.md](./04_YOLO11活体生物数据集构建规范.md)
 * **水培立体微气候与温控策略**：👉 [02_大空间温室立体微气候感知与温控策略规范.md](../04_subsystems/02_hydroponics/02_大空间温室立体微气候感知与温控策略规范.md)
 * **设施与物联网资产编码规范**：👉 [05_设施与物联网资产编码规范.md](./05_设施与物联网资产编码规范.md)
-* **现场线缆选型、两级编码与布线施工**：👉 [05_现场弱电线缆选型与布线施工规范.md](../02_requirements_and_plans/05_现场弱电线缆选型与布线施工规范.md)
-* **第一期数据采集与自动控制硬件采购 BOM 与工程施工清单**：👉 [04_第一期数据采集与自动控制硬件采购BOM与工程施工清单.md](../02_requirements_and_plans/04_第一期数据采集与自动控制硬件采购BOM与工程施工清单.md)
-* **实施步骤与采购预算明细**：👉 [03_分期实施计划书.md](../02_requirements_and_plans/03_分期实施计划书.md)
+* **现场线缆选型、两级编码与布线施工**：👉 [01_现场弱电线缆选型与布线施工规范.md](../02_requirements_and_plans/03_engineering_specs/01_现场弱电线缆选型与布线施工规范.md)
+* **第一期总工程预算与采购总台账**：👉 [00_第一期总工程预算与采购总台账.md](../02_requirements_and_plans/02_procurement_and_boms/00_第一期总工程预算与采购总台账.md)
+* **实施步骤与采购预算明细**：👉 [03_分期实施计划书.md](../02_requirements_and_plans/01_requirements/03_分期实施计划书.md)

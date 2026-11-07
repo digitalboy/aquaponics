@@ -118,9 +118,9 @@ $$\text{Subject to: } T_{\text{min}} \le T_{\text{water}}(t+k) \le T_{\text{max}
 ## 🔗 相关设计与规范链接
 
 * **养殖水动力与全厂运行能耗估算模型 (非正式草案)**：👉 [01_养殖水动力与全厂运行能耗估算模型(非正式草案).md](./01_养殖水动力与全厂运行能耗估算模型(非正式草案).md)
-* **第一期数据采集与自动控制硬件采购 BOM 与工程施工清单**：👉 [04_第一期数据采集与自动控制硬件采购BOM与工程施工清单.md](../../02_requirements_and_plans/04_第一期数据采集与自动控制硬件采购BOM与工程施工清单.md)
+* **第一期总工程预算与采购总台账**：👉 [00_第一期总工程预算与采购总台账.md](../../02_requirements_and_plans/02_procurement_and_boms/00_第一期总工程预算与采购总台账.md)
 * **农艺机理与学术知识支持子系统 (FvCB 光效递减曲线)**：👉 [08_agronomy_knowledge_rnd/README.md](../08_agronomy_knowledge_rnd/README.md)
 * **立体微气候感知与温控策略**：👉 [02_大空间温室立体微气候感知与温控策略规范.md](../02_hydroponics/02_大空间温室立体微气候感知与温控策略规范.md)
 * **水产养殖水温安全边界**：👉 [01_aquaculture/README.md](../01_aquaculture/README.md)
 * **接口数据契约与时序对齐**：👉 [03_接口与数据契约规范.md](../../03_system_architecture/03_接口与数据契约规范.md)
-* **三期实施路线与投资预算**：👉 [03_分期实施计划书.md](../../02_requirements_and_plans/03_分期实施计划书.md)
+* **三期实施路线与投资预算**：👉 [03_分期实施计划书.md](../../02_requirements_and_plans/01_requirements/03_分期实施计划书.md)
