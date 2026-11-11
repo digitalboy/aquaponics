@@ -216,15 +216,15 @@
 
 | 序号 | 线号 / 类型与长度 | 起点设备端口 (FROM) | 终点设备端口 (TO) | 传输协议与速率 | 工程配置说明 (与 01/09 规范 100% 对齐) |
 | :---: | :--- | :--- | :--- | :---: | :--- |
-| **NET-PLC-P12** | 0.5米 Cat6 STP 屏蔽跳线 | 汇川 PLC `Easy320` 网口 | `TL-SG2016MP` **`Port 12`** | 100 Mbps (Modbus-TCP) | PLC 工业网络口 (Port 502)，固定 IP **`192.168.1.10`** |
-| **NET-IPC-P13** | 0.5米 Cat6 STP 屏蔽跳线 | 倍控 `N100` 工控机 `ETH1` | `TL-SG2016MP` **`Port 13`** | 1000 Mbps 全双工 | 边缘工控机主网口，固定 IP **`192.168.1.50`** |
-| **NET-NVR-P14** | 0.5米 Cat6 STP 屏蔽跳线 | 海康 `DS-7816N-Q2` NVR 网口 | `TL-SG2016MP` **`Port 14`** | 1000 Mbps 全双工 | 利旧海康 16路 NVR 主网口，固定 IP **`192.168.1.100`** |
-| **NET-GW-P15** | 1.0米 Cat6 STP 屏蔽跳线 | 工业双网关路由器 LAN 口 | `TL-SG2016MP` **`Port 15`** | 1000 Mbps 全双工 | 厂区出口路由网关，固定 IP **`192.168.1.1`** |
-| **NET-EDGE01-P09** | 外部 Cat6 STP (40m) | 进水调理池 `AP-EDGE-01` | `TL-SG2016MP` **`Port 09`** | 100 Mbps (Modbus-TCP) | 经左侧竖槽进入，`GL20=.11` / `USR=.13` |
-| **NET-EDGE02-P10** | 外部 Cat6 STP (20m) | 出水调理池 `AP-EDGE-02` | `TL-SG2016MP` **`Port 10`** | 100 Mbps (Modbus-TCP) | 经左侧竖槽进入，`GL20=.12` / `USR=.14` |
-| **NET-EDGE03-P11** | 外部 Cat6 STP (30m) | 8米立柱箱 `AP-EDGE-03` | `TL-SG2016MP` **`Port 11`** | 100 Mbps (Modbus-TCP) | 经左侧竖槽进入，`GL20=.15` / `USR=.16` |
-| **NET-CAM01~10** | 外部 Cat5e STP (8路直连) | 现场 8 台 PoE 枪机 (`CAM-FISH-01~04`、`HYDRO-01~02`、`CTRL-01`、`OUTDOOR-01`) | `TL-SG2016MP` **`Port 01~08`** | 100 Mbps (PoE+) | 详细线号及前端打标规则详见 👉 [09 号规范](./09_全厂视频监控PoE网络布线与交换机端口线号施工规范.md) |
-| **NET-BR01-P16** | 外部 Cat5e/Cat6 STP 级联线 | 远端利旧分支 `SW-BRANCH-01`（海康 `DS-XS06-P` `Uplink 5`，`Extend=OFF`） | `TL-SG2016MP` **`Port 16`** | 100 Mbps 级联干线 | 分流承接远端 `CAM-HYDRO-03/04` 与检验室/二期扩展口 |
+| **NET-PLC-P12** | 0.5米 Cat6 STP 屏蔽跳线 | 汇川 PLC `Easy320` 网口 | `GPS424 V3` **`Port 12`** | 100 Mbps (Modbus-TCP) | PLC 工业网络口 (Port 502)，固定 IP **`192.168.1.10`** |
+| **NET-IPC-P13** | 0.5米 Cat6 STP 屏蔽跳线 | 倍控 `N100` 工控机 `ETH1` | `GPS424 V3` **`Port 13`** | 1000 Mbps 全双工 | 边缘工控机主网口，固定 IP **`192.168.1.50`** |
+| **NET-NVR-P14** | 0.5米 Cat6 STP 屏蔽跳线 | 海康 `DS-7816N-Q2` NVR 网口 | `GPS424 V3` **`Port 14`** | 1000 Mbps 全双工 | 利旧海康 16路 NVR 主网口，固定 IP **`192.168.1.100`** |
+| **NET-GW-P15** | 1.0米 Cat6 STP 屏蔽跳线 | 工业双网关路由器 LAN 口 | `GPS424 V3` **`Port 15`** | 1000 Mbps 全双工 | 厂区出口路由网关，固定 IP **`192.168.1.1`** |
+| **NET-EDGE01-P09** | 外部 Cat6 STP (40m) | 进水调理池 `AP-EDGE-01` | `GPS424 V3` **`Port 09`** | 1000 Mbps (Modbus-TCP) | 经左侧竖槽进入，`GL20=.11` / `USR=.13` |
+| **NET-EDGE02-P10** | 外部 Cat6 STP (20m) | 出水调理池 `AP-EDGE-02` | `GPS424 V3` **`Port 10`** | 1000 Mbps (Modbus-TCP) | 经左侧竖槽进入，`GL20=.12` / `USR=.14` |
+| **NET-EDGE03-P11** | 外部 Cat6 STP (30m) | 8米立柱箱 `AP-EDGE-03` | `GPS424 V3` **`Port 11`** | 1000 Mbps (Modbus-TCP) | 经左侧竖槽进入，`GL20=.15` / `USR=.16` |
+| **NET-CAM01~18** | 外部 Cat5e STP (8+8路直连) | 一期 8 台枪机 (`Port 01~08`) + 二/三期扩展 8 台枪机 (`Port 17~24`) | `GPS424 V3` **`Port 01~08 / 17~24`** | 100/1000 Mbps (PoE+) | 交换机拨码置 `D` 档；详细线号及打标规则详见 👉 [09 号规范](./09_全厂视频监控PoE网络布线与交换机端口线号施工规范.md) |
+| **NET-BR01-P16** | 外部 Cat5e/Cat6 STP 级联线 | 远端利旧分支 `SW-BRANCH-01`（或 `Uplink G1~G2` 检验室千兆干线） | `GPS424 V3` **`Port 16 / G1~G2`** | 1000 Mbps 级联干线 | 可选级联 `DS-XS06-P`（`Extend=OFF`）及检验室 e-COA 终端（`Uplink G1`） |
 
 ---
 
