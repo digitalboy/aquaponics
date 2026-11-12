@@ -221,8 +221,8 @@ def audit_ledger(bom_totals: dict[str, float]) -> List[str]:
             if vals:
                 sub_sum += vals[0]
 
-    # Verify A区 + B区 == ¥133,962.40 and child BOM totals match
-    for label in ("A区合计", "B区合计", "C区合计"):
+    # Verify A区 + B区 == ¥133,938.40 and child BOM totals match
+    for label in ("A区合计", "B区合计", "C区合计", "D区合计"):
         if label not in zone_totals:
             errors.append(f"Ledger missing summary row: {label}")
 
@@ -230,9 +230,13 @@ def audit_ledger(bom_totals: dict[str, float]) -> List[str]:
         combined = zone_totals["A区合计"] + zone_totals["B区合计"]
         if f"{combined:,.2f}" not in text:
             errors.append(f"Ledger missing or mismatched A+B total: expected ¥ {combined:,.2f}")
+        if "D区合计" in zone_totals:
+            combined_abd = combined + zone_totals["D区合计"]
+            if f"{combined_abd:,.2f}" not in text:
+                errors.append(f"Ledger missing or mismatched A+B+D total: expected ¥ {combined_abd:,.2f}")
 
-    # Cross-check single-phase BOMs (01, 04, 05, 06, 07, 08, 09, 10)
-    single_phase_codes = ["BOM-01", "BOM-04", "BOM-05", "BOM-06", "BOM-07", "BOM-08", "BOM-09", "BOM-10"]
+    # Cross-check single-phase BOMs (01, 04, 05, 06, 07, 08, 09, 10, 11, 12)
+    single_phase_codes = ["BOM-01", "BOM-04", "BOM-05", "BOM-06", "BOM-07", "BOM-08", "BOM-09", "BOM-10", "BOM-11", "BOM-12"]
     for code in single_phase_codes:
         bom_prefix = code.replace("-", "_")
         actual = next((v for k, v in bom_totals.items() if k.startswith(bom_prefix)), None)
