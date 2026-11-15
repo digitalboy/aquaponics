@@ -44,10 +44,10 @@ flowchart TD
         SW -- "Port 15 (跳线)" --> GW
     end
 
-    subgraph EDGE_BOX["现场 3 座边缘控制箱 (非PoE · 千兆接入)"]
-        E1["AP-EDGE-01 进水调理池<br>Port 09 · .11/.13"]
-        E2["AP-EDGE-02 出水调理池<br>Port 10 · .12/.14"]
-        E3["AP-EDGE-03 8米主立柱<br>Port 11 · .15/.16"]
+    subgraph EDGE_BOX["现场 3 座边缘控制箱 (千兆接入)"]
+        E1["AP-EDGE-01 进水调理池 (非PoE)<br>Port 09 · .11/.13"]
+        E2["AP-EDGE-02 出水调理池 (非PoE)<br>Port 10 · .12/.14"]
+        E3["AP-EDGE-03 8米主立柱 (PoE+ 802.3at供24V)<br>Port 11 · .15/.16"]
     end
 
     subgraph FIELD_CAM_DIRECT["直连主柜监控区 (Port 01~08 + 17~24)"]
@@ -90,7 +90,7 @@ flowchart TD
 | **Port 08** | **`NET-CAM08-P08`** | **`CAM-LAB-01`** | `192.168.1.108` | **检验室** | *未来安装* (预留) | 5×8m 驻厂品控检验室室内全景与检测留样合规溯源 (NVR Ch08) |
 | **Port 09** | **`NET-EDGE01-P09`** | **`AP-EDGE-01`** | `192.168.1.11 / .13`| 进水调理池边缘控制箱 (40m) | Cat6 STP 屏蔽线 | 汇川 GL20 耦合器 + 有人串口网关 (Modbus-TCP) |
 | **Port 10** | **`NET-EDGE02-P10`** | **`AP-EDGE-02`** | `192.168.1.12 / .14`| 出水调理池边缘控制箱 (20m) | Cat6 STP 屏蔽线 | 汇川 GL20 耦合器 + 有人串口网关 (Modbus-TCP) |
-| **Port 11** | **`NET-EDGE03-P11`** | **`AP-EDGE-03`** | `192.168.1.15 / .16`| 温室 8 米主立柱边缘箱 (30m) | Cat6 STP 屏蔽线 | 3 层 SHT35 + NDIR CO2 + 风机 IO (Modbus-TCP) |
+| **Port 11** | **`NET-EDGE03-P11`** | **`AP-EDGE-03`** | `192.168.1.15 / .16`| 温室 8 米主立柱边缘箱 (30m) | Cat6 STP 屏蔽线 | **一期启用 `PoE+ (802.3at)` 供电 + 千兆数据**：经箱内 PoE+ 转 24V 隔离分离器直供立柱感知（~10W，免拉强电） |
 | **Port 12** | **`NET-PLC-P12`** | **`PLC-CPU-01`** | `192.168.1.10` | 主控制柜 DIN 导轨 1 | 0.5m Cat6 跳线 | 汇川 Easy320-0808TN 主机工业网络口 |
 | **Port 13** | **`NET-IPC-P13`** | **`IPC-EDGE-01`** | `192.168.1.50` | 主控制柜 DIN 导轨 1 | 0.5m Cat6 跳线 | 倍控 N100 工控机 `ETH1` (5s 宽表/5fps 切片传 R2/云同步) |
 | **Port 14** | **`NET-NVR-P14`** | **`NVR-HIK-01`** | `192.168.1.100` | 主控制柜第一层托盘 | 0.5m Cat6 跳线 | **海康 `DS-7816N-Q2` 16路 NVR 主网口** (2×4TB 酷鹰盘，24h 循环录像) |
