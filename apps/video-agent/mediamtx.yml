@@ -1,0 +1,46 @@
+# MediaMTX 本地 RTSP 单次复用配置 (倍控 N100)
+# 仅允许 MediaMTX 直连海康枪机子码流 (102)，sourceOnDemand=yes 确保空闲时不消耗局域网带宽
+
+logLevel: info
+rtspAddress: :8554
+protocols: [tcp]
+
+# 按需启用 WebRTC (后续低延迟直连预留)
+webrtc: yes
+webrtcAddress: :8889
+
+paths:
+  CAM-GATE-IN-01:
+    source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.1.101:554/Streaming/Channels/102
+    sourceOnDemand: yes
+    sourceOnDemandCloseAfter: 15s
+
+  CAM-GATE-OUT-01:
+    source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.1.102:554/Streaming/Channels/102
+    sourceOnDemand: yes
+    sourceOnDemandCloseAfter: 15s
+
+  CAM-BACK-IN-01:
+    source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.1.103:554/Streaming/Channels/102
+    sourceOnDemand: yes
+    sourceOnDemandCloseAfter: 15s
+
+  CAM-FISH-PAN-01:
+    source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.1.104:554/Streaming/Channels/102
+    sourceOnDemand: yes
+    sourceOnDemandCloseAfter: 15s
+
+  CAM-FISH-P5-01:
+    source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.1.105:554/Streaming/Channels/102
+    sourceOnDemand: yes
+    sourceOnDemandCloseAfter: 15s
+
+  CAM-HYDRO-PAN-01:
+    source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.1.106:554/Streaming/Channels/102
+    sourceOnDemand: yes
+    sourceOnDemandCloseAfter: 15s
+
+  CAM-EQUIP-IN-01:
+    source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.1.107:554/Streaming/Channels/102
+    sourceOnDemand: yes
+    sourceOnDemandCloseAfter: 15s

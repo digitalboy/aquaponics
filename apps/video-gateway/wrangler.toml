@@ -1,0 +1,24 @@
+name = "aquaponics-video-gateway"
+main = "src/index.ts"
+compatibility_date = "2024-11-01"
+
+[vars]
+DEFAULT_SITE_ID = "guangming-01"
+WAKE_TTL_SEC = "180"
+TOKEN_TTL_SEC = "600"
+ALLOWED_ORIGINS = "*"
+
+[[d1_databases]]
+binding = "VIDEO_DB"
+database_name = "aquaponics-video-db"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+[[r2_buckets]]
+binding = "VIDEO_R2"
+bucket_name = "aquaponics-video-media"
+
+# 生产环境请通过 wrangler secret put 注入以下敏感密钥：
+# - AGENT_SECRET: 边缘倍控 N100 心跳与上传 HMAC-SHA256 密钥
+# - SIGNING_SECRET: 对外短时效播放 Token HMAC-SHA256 密钥
+# - INTERNAL_API_KEY: 内部业务系统（大屏/告警服务）调用鉴权密钥

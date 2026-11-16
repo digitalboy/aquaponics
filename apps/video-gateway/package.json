@@ -1,0 +1,21 @@
+{
+  "name": "@aquaponics/video-gateway",
+  "version": "1.0.0",
+  "private": true,
+  "description": "全厂视频监控与流媒体独立微服务网关 (Cloudflare Workers + D1 + R2)",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "check": "tsc --noEmit",
+    "db:migrate:local": "wrangler d1 migrations apply aquaponics-video-db --local",
+    "db:migrate:remote": "wrangler d1 migrations apply aquaponics-video-db --remote"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@aquaponics/tsconfig": "workspace:*",
+    "@cloudflare/workers-types": "^4.20241127.0",
+    "typescript": "^5.4.5",
+    "wrangler": "^3.91.0"
+  }
+}

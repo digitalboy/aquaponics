@@ -1,0 +1,16 @@
+[Unit]
+Description=Aquaponics Edge Video Agent (MediaMTX + FFmpeg tmpfs)
+After=network-online.target mediamtx.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=aquaponics
+WorkingDirectory=/opt/aquaponics/apps/video-agent
+EnvironmentFile=/opt/aquaponics/apps/video-agent/.env
+ExecStart=/opt/aquaponics/apps/video-agent/.venv/bin/video-agent
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
