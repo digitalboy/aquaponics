@@ -2,7 +2,7 @@
 name = "aquaponics-video-agent"
 version = "1.0.0"
 description = "倍控 N100 边缘视频采集、tmpfs 内存盘切片与 4G 按需唤醒推流守护服务"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 dependencies = [
   "httpx>=0.27.0",
 ]
