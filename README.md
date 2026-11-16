@@ -73,5 +73,6 @@ docs/
     ├── 05_supply_chain_and_commerce/                  # 📊 05. 供应链与商贸协同 (产供销一体化/四维选品/30天ATP/APS以销定产/COGS业财对冲)
     ├── 06_brand_traceability_crm/                     # 💼 06. 品牌溯源、客户运营与舆情感知 (一物一码/B2B门户/DTC会员360°/社媒舆情AI中枢)
     ├── 07_quality_assurance_lab/                      # 🔬 07. 品质控制与实验室 (IQC/IPQC/OQC/全球食品安全规范/e-COA)
-    └── 08_agronomy_knowledge_rnd/                     # 🧑‍🔬 08. 农艺机理与学术知识 (Crop Ontology/12座试验舱/蒸腾机理)
+    ├── 08_agronomy_knowledge_rnd/                     # 🧑‍🔬 08. 农艺机理与学术知识 (Crop Ontology/12座试验舱/蒸腾机理)
+    └── 09_video_streaming_service/                    # 📹 09. 视频监控与流媒体微服务 (MediaMTX/FFmpeg内存切片/4G按需唤醒/多系统嵌入API)
 ```

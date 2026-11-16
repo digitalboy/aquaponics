@@ -66,9 +66,12 @@ docs/
     │   ├── README.md                                  # IQC/IPQC/OQC三道防线、仪器台账与 e-COA 防伪存证
     │   └── 01_全球主要国家与地区农业食品安全标准比对规范.md # 🌍 欧盟EU/日本肯定列表/中国GB/美国FDA/德瑞私标全景对比与工厂内控SOP
     │
-│   └── 08_agronomy_knowledge_rnd/                     # 🧑‍🔬 08. 农艺机理与学术知识支持子系统
-│       ├── README.md                                  # Crop Ontology本体、FvCB光合模型、12座试验舱配方R&D与GraphRAG
-│       └── 01_温室作物蒸腾量估算与感知算法规范.md     # 🍃 Stanghellini 蒸腾模型、红外叶温感知与 Jarvis 气孔模型
+│   ├── 08_agronomy_knowledge_rnd/                     # 🧑‍🔬 08. 农艺机理与学术知识支持子系统
+│   │   ├── README.md                                  # Crop Ontology本体、FvCB光合模型、12座试验舱配方R&D与GraphRAG
+│   │   └── 01_温室作物蒸腾量估算与感知算法规范.md     # 🍃 Stanghellini 蒸腾模型、红外叶温感知与 Jarvis 气孔模型
+│   │
+│   └── 09_video_streaming_service/                    # 📹 09. 视频监控与流媒体微服务子系统
+│       └── README.md                                  # MediaMTX+FFmpeg内存切片、4G按需省流、多系统嵌入网关API与权限分级
 │
 └── 05_brand_and_marketing/                            # 💼 05. 品牌战略、感性工程与营销实战知识库
     ├── README.md                                      # 品牌体系全景图、双轴法则与模块导读
@@ -131,6 +134,7 @@ docs/
   - 细节规范：[01_全球主要国家与地区农业食品安全标准比对规范.md](./04_subsystems/07_quality_assurance_lab/01_全球主要国家与地区农业食品安全标准比对规范.md)
 * **🧑‍🔬 08. 农艺机理与学术支持**：[04_subsystems/08_agronomy_knowledge_rnd/README.md](./04_subsystems/08_agronomy_knowledge_rnd/README.md)（Crop Ontology本体、FvCB光合与Stanghellini模型、12座试验舱配方R&D与GraphRAG）
   - 细节规范：[01_温室作物蒸腾量估算与感知算法规范.md](./04_subsystems/08_agronomy_knowledge_rnd/01_温室作物蒸腾量估算与感知算法规范.md)
+* **📹 09. 视频监控与流媒体微服务**：[04_subsystems/09_video_streaming_service/README.md](./04_subsystems/09_video_streaming_service/README.md)（边缘 MediaMTX/FFmpeg 内存切片、4G 按需省流模式、多系统统一嵌入 API 与权限分级）
 
 ### 5. 品牌战略与感性营销工程 (Brand Strategy & Emotional Engineering)
 * 研读 [05_brand_and_marketing/README.md](./05_brand_and_marketing/README.md) 掌握品牌认知双轴定位法则（理性确定性底座 $\times$ 感性情绪共鸣力）与知识库全景。
