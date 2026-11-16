@@ -193,15 +193,15 @@
 
 | 序号 | 线号 / 类型与长度 | 起点设备端口 (FROM) | 终点设备端口 (TO) | 传输协议与速率 | 工程配置说明 (与 01/09 规范 100% 对齐) |
 | :---: | :--- | :--- | :--- | :---: | :--- |
-| **NET-PLC-P12** | 0.5米 Cat6 STP 屏蔽跳线 | 汇川 PLC `Easy320` 网口 | `GPS424 V3` **`Port 12`** | 100 Mbps (Modbus-TCP) | PLC 工业网络口 (Port 502)，固定 IP **`192.168.1.10`** |
+| **NET-PLC-P12** | 0.5米 Cat6 STP 屏蔽跳线 | 汇川 PLC `Easy320` **`ETH1`** | `GPS424 V3` **`Port 12`** | 100 Mbps (Modbus-TCP) | PLC 工业网络口 (Port 502)，固定 IP **`192.168.1.10`**；**`ETH2` 悬空作本地直连调试备用口**（Easy320 内部支持双网口网络交换功能，**严禁 `ETH1` 与 `ETH2` 同时插进交换机以防网络环路风暴**） |
 | **NET-IPC-P13** | 0.5米 Cat6 STP 屏蔽跳线 | 倍控 `N100` 工控机 `ETH1` | `GPS424 V3` **`Port 13`** | 1000 Mbps 全双工 | 边缘工控机主网口，固定 IP **`192.168.1.50`** |
-| **NET-NVR-P14** | 0.5米 Cat6 STP 屏蔽跳线 | 海康 `DS-7816N-Q2` NVR 网口 | `GPS424 V3` **`Port 14`** | 1000 Mbps 全双工 | 利旧海康 16路 NVR 主网口，固定 IP **`192.168.1.100`** |
+| **NET-NVR-G01** | 0.5米 Cat6 STP 屏蔽跳线 | 海康 `DS-7816N-Q2` NVR 网口 | `GPS424 V3` **`Uplink G1`** | 1000 Mbps 全双工 | 利旧海康 16路 NVR 主网口（纯千兆非 PoE 上行口，固定 IP **`192.168.1.100`**） |
 | **NET-GW-P15** | 1.0米 Cat6 STP 屏蔽跳线 | 工业双网关路由器 LAN 口 | `GPS424 V3` **`Port 15`** | 1000 Mbps 全双工 | 厂区出口路由网关，固定 IP **`192.168.1.1`** |
 | **NET-EDGE01-P09** | 外部 Cat6 STP (40m) | 进水调理池 `AP-EDGE-01` | `GPS424 V3` **`Port 09`** | 1000 Mbps (`Modbus-TCP + PoE+ 802.3at`) | 经左侧竖槽进入，`GL20=.11` / `USR=.13`；**由 `Port 09` 提供 PoE+ 经箱内隔离分离器转 24V 供电（~10W，共享中央 UPS）** |
 | **NET-EDGE02-P10** | 外部 Cat6 STP (20m) | 出水调理池 `AP-EDGE-02` | `GPS424 V3` **`Port 10`** | 1000 Mbps (`Modbus-TCP + PoE+ 802.3at`) | 经左侧竖槽进入，`GL20=.12` / `USR=.14`；**由 `Port 10` 提供 PoE+ 经箱内隔离分离器转 24V 供电（~10W，共享中央 UPS）** |
 | **NET-EDGE03-P11** | 外部 Cat6 STP (30m) | 8米立柱箱 `AP-EDGE-03` | `GPS424 V3` **`Port 11`** | 1000 Mbps (`Modbus-TCP + PoE+ 802.3at`) | 经左侧竖槽进入，`GL20=.15` / `USR=.16`；**一期同时由 `Port 11` 提供 PoE+ 经箱内隔离分离器转 24V 供全箱感知（~10W）** |
 | **NET-CAM01~18** | 外部 Cat5e STP (8+8路直连) | 一期 8 台枪机 (`Port 01~08`) + 二/三期扩展 8 台枪机 (`Port 17~24`) | `GPS424 V3` **`Port 01~08 / 17~24`** | 100/1000 Mbps (PoE+) | 交换机拨码置 `D` 档；详细线号及打标规则详见 👉 [09 号规范](./09_全厂视频监控PoE网络布线与交换机端口线号施工规范.md) |
-| **NET-BR01-P16** | 外部 Cat5e/Cat6 STP 级联线 | 远端利旧分支 `SW-BRANCH-01`（或 `Uplink G1~G2` 检验室千兆干线） | `GPS424 V3` **`Port 16 / G1~G2`** | 1000 Mbps 级联干线 | 可选级联 `DS-XS06-P`（`Extend=OFF`）及检验室 e-COA 终端（`Uplink G1`） |
+| **NET-BR01-P16** | 外部 Cat5e/Cat6 STP 级联线 | 远端利旧分支 `SW-BRANCH-01`（或 `Port 14 / Uplink G2` 检验室/包装车间干线） | `GPS424 V3` **`Port 14 / 16 / Uplink G2`** | 1000 Mbps 级联干线 | 可选级联 `DS-XS06-P`（`Extend=OFF`）、检验室 e-COA 终端（`Port 14`）及包装车间干线（`Uplink G2`） |
 
 ---
 
