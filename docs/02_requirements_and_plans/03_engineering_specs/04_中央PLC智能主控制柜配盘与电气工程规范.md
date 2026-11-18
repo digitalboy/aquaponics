@@ -62,16 +62,16 @@ flowchart TD
         direction TB
         Fans["🌀 柜顶：2 台 150×150mm SIYOUFAN 轴流排风扇 (SY15050HBL2, 220VAC/38W/200CFM 强力抽风)"]
         
-        subgraph TopLayer ["【上层】网络视频与边缘计算区 (高温耐受层)"]
-            TopNet["• 倍控 N100 工业嵌入式主机 (9-36V宽压/8G+128G)<br>• 深桑科 GPS424 V3 24口全千兆 PoE+ 交换机 (24GE+2GE+2SFP, 360W, 放置顶部承重托板)<br>• 海康 DS-7816N-Q2 16路 NVR + 已有 2×4TB 酷鹰监控盘 (利旧)<br>• 顶部右上侧短 DIN 导轨 + 3×CZ-35 五孔插座（专供交换机、NVR 及 1 位备用）<br>• 水平固定在 250~300mm 深度承重钢构托板上"]
+        subgraph TopLayer ["【最上层】双层独立隔板与顶部电源区 (网络视频层)"]
+            TopNet["• 上层隔板：海康 DS-7816N-Q2 16路 NVR + 2×4TB 酷鹰监控盘 (利旧)<br>• 下层隔板：深桑科 GPS424 V3 24口全千兆 PoE+ 交换机 (24GE+2GE+2SFP, 360W)<br>• 顶部右上侧短 DIN 导轨 + 3×CZ-35 五孔插座（专供交换机、NVR 及 1 位备用）"]
         end
         
-        subgraph MidLayer ["【中层】PLC 实时逻辑控制中枢区 (核心保命层)"]
-            MidPLC["• 汇川 Easy320-0808TN 主机 (24VDC)<br>• 汇川 GL20-0808ETN 扩展模块 (16DI/16DO 闭环)<br>• 中盛科技 8口全光电隔离 RS-485 集线器 (ZS-RS485-HUB-8-I)<br>• 35mm 加厚镀彩导轨安装，左右留 3cm 散热间隙"]
+        subgraph MidLayer ["【导轨 1】PLC 逻辑控制与边缘计算区"]
+            MidPLC["• 汇川 Easy320-0808TN 主机 + GL20-0808ETN 扩展模块<br>• 中盛科技 8口全光电隔离 RS-485 集线器 (ZS-RS485-HUB-8-I)<br>• 倍控 N100 工业嵌入式主机 (9-36V宽压/8G+128G)"]
         end
         
-        subgraph BottomLayer ["【下层】电源转换、中性线汇流、浪涌抑制与隔离输出区"]
-            BottomElec["• 正泰 NXBLE-32 2P C16A (30mA ≤0.1s 漏保总进线)<br>• 明纬 XDR-120E-24 超薄导轨电源 (24VDC/5A/30mm宽，导轨2)<br>• 正泰 NXU-IIG 2P 40kA/275V 工业级电源浪涌保护器 (SPD)<br>• 10 组 SAKSI 4N LD 带灯熔断端子 (24VDC红灯/配1A保险丝)<br>• 16 套正泰 6mm 超薄带灯中间继电器 (ZTP-J6A 底座/无源干触点矩阵)<br>• 导轨3：UK2.5B 纯铜接线端子排 + 3×UKK80 (80A) 中性线分线盒 (1用2备) + 纯铜 PE 接地汇流排<br>• 导轨4：2×CZ-35 导轨式五孔检修插座 (右侧) + 左侧预留扩展/可选 NDR-75-12 位"]
+        subgraph BottomLayer ["【导轨 2~4】配电保护、端子汇流与路由插座区"]
+            BottomElec["• 导轨 2：16套 6mm 超薄继电器矩阵 + 明纬 XDR-120E-24 + 5×正泰1P微断 + 2P SPD + 2P 漏保总开关 (最右)<br>• 导轨 3：灰/蓝/灰 UK2.5B 接线端子排 + 3×UKK80 (80A) 分线盒 (1用2备) + 纯铜 PE 汇流排<br>• 导轨 4（最下面）：1 台工业无线路由器（2 根吸盘式天线引出机柜外吸附） + 右侧 2×CZ-35 导轨式五孔插座"]
         end
         
         Intake["❄️ 柜门下方左右两侧：双百叶进风口 (配 IP54 可拆洗防尘过滤棉)"]

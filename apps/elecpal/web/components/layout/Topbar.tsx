@@ -99,6 +99,10 @@ export const Topbar: React.FC<TopbarProps> = ({
               <Radio className="size-3 text-indigo-400" />
               ELEC-03 485网络图
             </TabsTrigger>
+            <TabsTrigger value="4" className="h-6.5 text-xs px-2.5 whitespace-nowrap">
+              <Zap className="size-3 text-sky-400" />
+              ELEC-04 物理配盘施工
+            </TabsTrigger>
           </TabsList>
         </Tabs>
       </div>

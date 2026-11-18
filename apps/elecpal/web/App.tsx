@@ -15,6 +15,7 @@ import { Topbar } from './components/layout/Topbar';
 import { ToolSidebar, SidebarTab } from './components/layout/ToolSidebar';
 import { StatusBar } from './components/layout/StatusBar';
 import { CadViewport } from './components/cad/CadViewport';
+import { CabinetWorkbench } from './components/cabinet/CabinetWorkbench';
 
 export function App() {
   // 核心工程状态
@@ -211,15 +212,19 @@ export function App() {
           onExportBOM={handleExportBOM}
         />
 
-        <CadViewport
-          topology={topology}
-          activeSheet={activeSheet}
-          theme={theme}
-          zoom={zoom}
-          pan={pan}
-          onZoomChange={setZoom}
-          onPanChange={setPan}
-        />
+        {activeSheet === 4 ? (
+          <CabinetWorkbench theme={theme} />
+        ) : (
+          <CadViewport
+            topology={topology}
+            activeSheet={activeSheet}
+            theme={theme}
+            zoom={zoom}
+            pan={pan}
+            onZoomChange={setZoom}
+            onPanChange={setPan}
+          />
+        )}
       </div>
 
       {/* 3. 底部工控状态栏 (国家制图规范/供电制式/D1状态/缩放比) */}
