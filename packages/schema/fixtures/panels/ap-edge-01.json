@@ -1,0 +1,231 @@
+{
+  "schema_version": "3.0.0",
+  "panel_id": "AP-EDGE-01",
+  "name": "进水调理池边缘控制箱",
+  "function_aspect": "=WATER_QUALITY_IN",
+  "physical_location": "进鱼池前调理池旁 (折线距中控室约 40m)",
+  "updated_at": "2026-11-18T14:25:00.000Z",
+  "enclosure": {
+    "width_mm": 400,
+    "height_mm": 500,
+    "depth_mm": 200,
+    "base_plinth_mm": 0,
+    "ip_rating": "IP65",
+    "material": "cold_rolled_steel",
+    "cooling_type": "natural_convection",
+    "max_heat_dissipation_w": 25,
+    "rated_voltage_ue_v": 24,
+    "rated_current_ina_a": 3,
+    "rated_diversity_factor": 0.8
+  },
+  "safety_boundary": {
+    "has_ac_power": false,
+    "has_dc_or_poe": true,
+    "pe_grounding_max_ohm": 1.0,
+    "pe_wire_min_mm2": 2.5,
+    "dry_contact_isolation_only": true,
+    "notes": [
+      "一期采用中央柜 Port 09 PoE+ (802.3at) 集中供电，免搭接 220V 强电",
+      "冷轧全金属外壳须用 >=2.5mm2 黄绿线接至就近主 PE 排 (<=1.0 Ohm)",
+      "二期接入电动球阀/加药泵时，执行器本体取外部 220V，仅由箱内 8 路继电器输出无源干触点"
+    ]
+  },
+  "cutouts": [
+    {
+      "gland_size": "PG13.5",
+      "diameter_mm": 20.5,
+      "quantity": 5,
+      "position": "bottom_plate",
+      "purpose": "pH、EC、PT1000 水温、氨氮探头 RVSP 屏蔽线及 Cat6 屏蔽网线进线"
+    },
+    {
+      "gland_size": "PG16",
+      "diameter_mm": 22.5,
+      "quantity": 2,
+      "position": "bottom_plate",
+      "purpose": "二期 AC220V 动力电源及执行器控制线预留"
+    },
+    {
+      "gland_size": "PG21",
+      "diameter_mm": 28.3,
+      "quantity": 1,
+      "position": "bottom_plate",
+      "purpose": "多芯控制扩容预留"
+    }
+  ],
+  "non_rail_zones": [
+    {
+      "zone_id": "PLATE-TOP",
+      "mount_type": "plate_screw",
+      "location_label": "镀锌底板上方螺丝固定区 (无导轨卡扣器件)",
+      "items": [
+        {
+          "component_ref": "-A1",
+          "iec_class": "A",
+          "function_aspect": "=POE_POWER",
+          "name": "千兆 PoE 转 24VDC 隔离分离器",
+          "model": "企鸥通讯 PS2403BG (802.3at/bt -> 24VDC/3A)",
+          "mount_type": "plate_screw",
+          "width_mm": 106,
+          "clearance_mm": 15,
+          "supply_type": "PoE_802_3at",
+          "rated_power_w": 2,
+          "heat_dissipation_w": 2,
+          "install_notes": [
+            "铁壳无导轨卡扣，须用螺丝固定在镀锌底板上",
+            "接传感器前必须用万用表实测输出端子 24V 正负极性"
+          ]
+        }
+      ]
+    }
+  ],
+  "din_rails": [
+    {
+      "rail_id": "R1",
+      "location_label": "导轨 1 (工业总线耦合与串口网关)",
+      "usable_width_mm": 320,
+      "items": [
+        {
+          "component_ref": "-A2",
+          "iec_class": "A",
+          "function_aspect": "=IO_BUS",
+          "name": "Modbus-TCP 总线耦合器",
+          "model": "汇川 GL20-RTU-MOD",
+          "mount_type": "din_rail",
+          "width_mm": 35,
+          "clearance_mm": 10,
+          "supply_type": "24VDC",
+          "rated_power_w": 2.5,
+          "heat_dissipation_w": 2.5
+        },
+        {
+          "component_ref": "-A3",
+          "iec_class": "A",
+          "function_aspect": "=IO_BUS",
+          "name": "8DI/8DO 数字量扩展切片",
+          "model": "汇川 GL20-0808ETN",
+          "mount_type": "din_rail",
+          "width_mm": 12,
+          "clearance_mm": 0,
+          "supply_type": "24VDC",
+          "rated_power_w": 1.5,
+          "heat_dissipation_w": 1.5
+        },
+        {
+          "component_ref": "-A4",
+          "iec_class": "A",
+          "function_aspect": "=RS485_GW",
+          "name": "工业导轨串口服务器",
+          "model": "有人 USR-DR302",
+          "mount_type": "din_rail",
+          "width_mm": 22,
+          "clearance_mm": 10,
+          "supply_type": "24VDC",
+          "rated_power_w": 1.5,
+          "heat_dissipation_w": 1.5
+        }
+      ]
+    },
+    {
+      "rail_id": "R2",
+      "location_label": "导轨 2 (熔断端子与 8 路无源干触点继电器)",
+      "usable_width_mm": 320,
+      "items": [
+        {
+          "component_ref": "-F1..F6",
+          "iec_class": "F",
+          "function_aspect": "=DC_PROTECT",
+          "name": "6只带红灯熔断保护端子",
+          "model": "魏德米勒 SAKSI 4N LD (1A快熔)",
+          "mount_type": "din_rail",
+          "width_mm": 48,
+          "clearance_mm": 5,
+          "supply_type": "24VDC",
+          "is_fuse_terminal": true
+        },
+        {
+          "component_ref": "-K1..K8",
+          "iec_class": "K",
+          "function_aspect": "=DO_RELAY",
+          "name": "8路超薄中间继电器",
+          "model": "6mm 超薄继电器 (250VAC/6A 无源干触点)",
+          "mount_type": "din_rail",
+          "width_mm": 48,
+          "clearance_mm": 5,
+          "supply_type": "24VDC",
+          "rated_power_w": 0,
+          "heat_dissipation_w": 0,
+          "install_notes": [
+            "一期纯感知阶段保持继电器线圈不吸合，避免超载 PoE+ 预算"
+          ]
+        }
+      ]
+    }
+  ],
+  "poe_splitters": [
+    {
+      "component_ref": "-A1",
+      "model": "企鸥 PS2403BG",
+      "input_poe_standard": "802.3at",
+      "output_voltage_v": 24,
+      "max_output_w": 24,
+      "downlink_load_w": 10.5
+    }
+  ],
+  "network_nodes": [
+    {
+      "node_id": "EDGE01-GL20",
+      "component_ref": "-A2",
+      "kind": "modbus_tcp_coupler",
+      "name": "进水调理池 GL20-RTU-MOD",
+      "ip_address": "192.168.1.11",
+      "tcp_port": 502,
+      "power_w": 4.0
+    },
+    {
+      "node_id": "EDGE01-USR",
+      "component_ref": "-A4",
+      "kind": "serial_server",
+      "name": "进水调理池 USR-DR302",
+      "ip_address": "192.168.1.13",
+      "tcp_port": 502,
+      "power_w": 1.5,
+      "modbus_slaves": [
+        { "slave_id": 1, "sensor_name": "双盐桥 pH 传感器", "fuse_terminal_ref": "-F1", "power_w": 1.0 },
+        { "slave_id": 2, "sensor_name": "四电极宽量程 EC 传感器", "fuse_terminal_ref": "-F2", "power_w": 1.0 },
+        { "slave_id": 3, "sensor_name": "PT1000 316L 铠装水温探头", "fuse_terminal_ref": "-F3", "power_w": 0.5 },
+        { "slave_id": 4, "sensor_name": "塞恩在线氨氮三合一 ISE 探头", "fuse_terminal_ref": "-F4", "power_w": 2.5 }
+      ]
+    }
+  ],
+  "wiring_connections": [
+    {
+      "wire_id": "W-E01-POE",
+      "cable_tag": "NET-EDGE01-P09",
+      "cable_type": "Cat6_STP",
+      "wire_spec": "Cat6 STP (40m)",
+      "color_code": "rj45",
+      "signal_desc": "PoE+ 802.3at 供电 + 千兆数据上联主柜",
+      "from": { "cabinet_or_zone": "AP-CTRL", "component_ref": "-A1", "terminal_or_port": "Port 09" },
+      "to": { "cabinet_or_zone": "AP-EDGE-01", "component_ref": "-A1", "terminal_or_port": "PoE IN" },
+      "length_m": 40
+    },
+    {
+      "wire_id": "W-E01-ETH",
+      "cable_tag": "EDGE01-LAN-01",
+      "cable_type": "Cat6_STP",
+      "wire_spec": "0.3m 屏蔽短跳线",
+      "color_code": "rj45",
+      "signal_desc": "PS2403BG 数据口直连 GL20",
+      "from": { "cabinet_or_zone": "AP-EDGE-01", "component_ref": "-A1", "terminal_or_port": "DATA OUT" },
+      "to": { "cabinet_or_zone": "AP-EDGE-01", "component_ref": "-A2", "terminal_or_port": "RJ45-1" },
+      "length_m": 0.3
+    }
+  ],
+  "acceptance_checklist": [
+    "上电接传感器前，用万用表实测 PS2403BG 输出端子 24V 正负极性",
+    "箱壳已用 >=2.5mm2 黄绿线可靠接地 (<=1.0 Ohm)",
+    "4 支水质探头全部经过 SAKSI 4N LD 1A 熔断端子供电",
+    "箱内放置干燥剂并锁紧底部全部 PG13.5 IP68 葛兰头"
+  ]
+}
