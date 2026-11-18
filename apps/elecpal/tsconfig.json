@@ -15,16 +15,15 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["web/*"],
+      "@/*": ["./web/*"],
       "@aquaponics/schema": ["../../packages/schema/src/index.ts"],
       "@aquaponics/schema/*": ["../../packages/schema/src/*"],
-      "@core/*": ["src/core/*"],
-      "@renderers/*": ["src/renderers/*"],
-      "@services/*": ["src/services/*"],
-      "@config/*": ["src/config/*"],
-      "@ai/*": ["src/ai/*"]
+      "@core/*": ["./src/core/*"],
+      "@renderers/*": ["./src/renderers/*"],
+      "@services/*": ["./src/services/*"],
+      "@config/*": ["./src/config/*"],
+      "@ai/*": ["./src/ai/*"]
     }
   },
   "include": ["src/**/*", "web/**/*"]
