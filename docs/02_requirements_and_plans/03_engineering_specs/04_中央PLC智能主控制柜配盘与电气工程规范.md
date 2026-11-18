@@ -66,8 +66,8 @@ flowchart TD
             TopNet["• 上层隔板：海康 DS-7816N-Q2 16路 NVR + 2×4TB 酷鹰监控盘 (利旧)<br>• 下层隔板：深桑科 GPS424 V3 24口全千兆 PoE+ 交换机 (24GE+2GE+2SFP, 360W)<br>• 顶部右上侧短 DIN 导轨 + 3×CZ-35 五孔插座（专供交换机、NVR 及 1 位备用）"]
         end
         
-        subgraph MidLayer ["【导轨 1】PLC 逻辑控制与边缘计算区"]
-            MidPLC["• 汇川 Easy320-0808TN 主机 + GL20-0808ETN 扩展模块<br>• 中盛科技 8口全光电隔离 RS-485 集线器 (ZS-RS485-HUB-8-I)<br>• 倍控 N100 工业嵌入式主机 (9-36V宽压/8G+128G)"]
+        subgraph MidLayer ["【导轨 1】PLC 逻辑控制与边缘计算区 (从左至右)"]
+            MidPLC["• 左：汇川 Easy320-0808TN 主机 + GL20-0808ETN 扩展模块<br>• 中：中盛科技 8口全光电隔离 RS-485 集线器 (ZS-RS485-HUB-8-I)<br>• 右：倍控 N100 工业嵌入式主机 (9-36V宽压/8G+128G)"]
         end
         
         subgraph BottomLayer ["【导轨 2~4】配电保护、端子汇流与路由插座区"]

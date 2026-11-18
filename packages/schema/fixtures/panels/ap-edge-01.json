@@ -201,12 +201,12 @@
   "wiring_connections": [
     {
       "wire_id": "W-E01-POE",
-      "cable_tag": "NET-EDGE01-P09",
+      "cable_tag": "NET-EDGE01-P21",
       "cable_type": "Cat6_STP",
       "wire_spec": "Cat6 STP (40m)",
       "color_code": "rj45",
       "signal_desc": "PoE+ 802.3at 供电 + 千兆数据上联主柜",
-      "from": { "cabinet_or_zone": "AP-CTRL", "component_ref": "-A1", "terminal_or_port": "Port 09" },
+      "from": { "cabinet_or_zone": "AP-CTRL", "component_ref": "-A1", "terminal_or_port": "Port 21" },
       "to": { "cabinet_or_zone": "AP-EDGE-01", "component_ref": "-A1", "terminal_or_port": "PoE IN" },
       "length_m": 40
     },
