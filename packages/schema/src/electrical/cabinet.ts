@@ -121,6 +121,8 @@ export const PanelAssemblySchema = z
     function_aspect: z.string().min(1), // 如 "=CENTRAL_CTRL", "=WATER_QUALITY"
     physical_location: z.string().min(1),
     updated_at: IsoUtcDateTimeSchema,
+    /** 关联的工程规范源文档路径 (双向交叉引用) */
+    source_specs: z.array(z.string()).optional().default([]),
     enclosure: CabinetEnclosureSchema,
     safety_boundary: SafetyBoundarySchema,
     cutouts: z.array(GlandCutoutSchema).optional().default([]),

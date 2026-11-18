@@ -5,6 +5,10 @@
   "function_aspect": "=WATER_QUALITY_IN",
   "physical_location": "进鱼池前调理池旁 (折线距中控室约 40m)",
   "updated_at": "2026-11-18T14:25:00.000Z",
+  "source_specs": [
+    "docs/02_requirements_and_plans/03_engineering_specs/05_水质调理区边缘控制箱与原位水质感知工程规范.md",
+    "docs/02_requirements_and_plans/03_engineering_specs/09_全厂视频监控PoE网络布线与交换机端口线号施工规范.md"
+  ],
   "enclosure": {
     "width_mm": 400,
     "height_mm": 500,

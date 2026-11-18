@@ -5,6 +5,10 @@
   "function_aspect": "=CLIMATE_3D",
   "physical_location": "温室大棚 8 米承重主立柱底部 (标高 1.2m 壁挂，距中控室约 30m)",
   "updated_at": "2026-11-18T14:25:00.000Z",
+  "source_specs": [
+    "docs/02_requirements_and_plans/03_engineering_specs/06_温室立柱微气候边缘控制箱与立体气象感知工程规范.md",
+    "docs/02_requirements_and_plans/03_engineering_specs/09_全厂视频监控PoE网络布线与交换机端口线号施工规范.md"
+  ],
   "enclosure": {
     "width_mm": 400,
     "height_mm": 500,

@@ -8,8 +8,9 @@
 > - 核心采购台账 👉 [00_第一期总工程预算与采购总台账.md](../02_procurement_and_boms/00_第一期总工程预算与采购总台账.md)  
 > - 前端摄像枪机清单 👉 [BOM_10_全厂视频监控前端摄像机采购清单.md](../02_procurement_and_boms/boms/BOM_10_全厂视频监控前端摄像机采购清单.md)  
 > - 交换机与录像机清单 👉 [BOM_01_控制中枢与动力配电采购清单.md](../02_procurement_and_boms/boms/BOM_01_控制中枢与动力配电采购清单.md)  
-> - 柜内配盘工程规范 👉 [04_中央PLC智能主控制柜配盘与电气工程规范.md](./04_中央PLC智能主控制柜配盘与电气工程规范.md)  
-> - 全厂弱电网络规范 👉 [01_现场弱电线缆选型与布线施工规范.md](./01_现场弱电线缆选型与布线施工规范.md)
+> - 柜内配盘工程规范 👉 [04_中央PLC智能主控制柜配盘与电气工程规范.md](./04_中央PLC智能主控制柜配盘与电气工程规范.md) · [08_中央PLC智能主控制柜盘内接线表与导线选型施工手册.md](./08_中央PLC智能主控制柜盘内接线表与导线选型施工手册.md)  
+> - 全厂弱电网络规范 👉 [01_现场弱电线缆选型与布线施工规范.md](./01_现场弱电线缆选型与布线施工规范.md)  
+> - **数字化配盘同步锚点 (SSOT)**：修改交换机端口或对称线号后，须同步更新 👉 [ap-ctrl.json](../../../packages/schema/fixtures/panels/ap-ctrl.json) · [ap-edge-01.json](../../../packages/schema/fixtures/panels/ap-edge-01.json) · [ap-edge-03.json](../../../packages/schema/fixtures/panels/ap-edge-03.json)。
 
 ---
 

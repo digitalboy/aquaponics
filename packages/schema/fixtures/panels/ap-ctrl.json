@@ -5,6 +5,11 @@
   "function_aspect": "=CENTRAL_CTRL",
   "physical_location": "右侧 72m 主大棚与中控室交界处立柱旁",
   "updated_at": "2026-11-18T14:40:00.000Z",
+  "source_specs": [
+    "docs/02_requirements_and_plans/03_engineering_specs/04_中央PLC智能主控制柜配盘与电气工程规范.md",
+    "docs/02_requirements_and_plans/03_engineering_specs/08_中央PLC智能主控制柜盘内接线表与导线选型施工手册.md",
+    "docs/02_requirements_and_plans/03_engineering_specs/09_全厂视频监控PoE网络布线与交换机端口线号施工规范.md"
+  ],
   "enclosure": {
     "width_mm": 600,
     "height_mm": 1200,
