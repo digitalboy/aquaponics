@@ -359,3 +359,10 @@ export type Cable = z.infer<typeof CableSchema>;
 export type PlcController = z.infer<typeof PlcIoMappingSchema>;
 export type PlcExpansionModule = z.infer<typeof PlcExpansionModuleSchema>;
 export type InterPlcLink = z.infer<typeof InterPlcLinkSchema>;
+
+// ============================================================================
+// 5. 物理配盘、开源元器件规格与 PoE+ 边缘智能化契约 (IEC 81346 / 61439 / 14763-2)
+// ============================================================================
+export * from './catalog';
+export * from './weak-edge';
+export * from './cabinet';
