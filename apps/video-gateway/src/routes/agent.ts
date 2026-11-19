@@ -1,3 +1,4 @@
+import { handlePersonDetectionAlert } from "../alerts";
 import { sha256Hex, verifyAgentRequest } from "../crypto";
 import { type CameraRow, type Env, isStrictIsoUtc, jsonResponse, nowIsoUtc } from "../types";
 
@@ -196,6 +197,57 @@ export async function handleAgentRoutes(
 
     if (stmts.length > 0) await env.VIDEO_DB.batch(stmts);
     return jsonResponse({ ok: true, ingested: stmts.length }, 200, env.ALLOWED_ORIGINS);
+  }
+
+  if (pathname === "/api/internal/agent/person-alert" && request.method === "POST") {
+    const body = JSON.parse(rawBody as string) as {
+      event_id: string;
+      cam_id: string;
+      r2_key: string;
+      detected_at: string;
+      person_count: number;
+      max_confidence: number;
+      schedule_note?: string;
+    };
+    if (!body.event_id || !body.cam_id || !body.r2_key || !isStrictIsoUtc(body.detected_at)) {
+      return jsonResponse({ error: "Invalid person-alert payload" }, 400, env.ALLOWED_ORIGINS);
+    }
+
+    await env.VIDEO_DB.prepare(
+      `INSERT OR IGNORE INTO video_events
+       (event_id, site_id, cam_id, source_type, trigger_at, start_at, end_at, r2_key, status, created_at, updated_at)
+       VALUES (?, ?, ?, 'night_person_ai', ?, ?, ?, ?, 'ready', ?, ?)`,
+    )
+      .bind(
+        body.event_id,
+        auth.siteId,
+        body.cam_id,
+        body.detected_at,
+        body.detected_at,
+        body.detected_at,
+        body.r2_key,
+        now,
+        now,
+      )
+      .run();
+
+    const camRow = await env.VIDEO_DB.prepare("SELECT name FROM cameras WHERE cam_id = ?1 AND site_id = ?2")
+      .bind(body.cam_id, auth.siteId)
+      .first<{ name: string }>();
+
+    const channels = await handlePersonDetectionAlert(env, {
+      eventId: body.event_id,
+      siteId: auth.siteId,
+      camId: body.cam_id,
+      camName: camRow?.name ?? body.cam_id,
+      r2Key: body.r2_key,
+      detectedAtUtc: body.detected_at,
+      personCount: Math.max(1, Number(body.person_count || 1)),
+      maxConfidence: Number(body.max_confidence || 0),
+      scheduleNote: body.schedule_note,
+    });
+
+    return jsonResponse({ ok: true, event_id: body.event_id, channels }, 200, env.ALLOWED_ORIGINS);
   }
 
   return jsonResponse({ error: "Not Found" }, 404, env.ALLOWED_ORIGINS);

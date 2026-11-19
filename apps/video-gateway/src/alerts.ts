@@ -745,3 +745,83 @@ export async function runPeriodicFeishuDigest(
     channel,
   };
 }
+
+export interface PersonAlertFrame {
+  label: string;
+  r2Key: string;
+  capturedAtUtc: string;
+}
+
+export interface PersonAlertInput {
+  eventId: string;
+  siteId: string;
+  camId: string;
+  camName: string;
+  r2Key: string;
+  detectedAtUtc: string;
+  personCount: number;
+  maxConfidence: number;
+  scheduleNote?: string;
+  frames?: PersonAlertFrame[];
+}
+
+/**
+ * 处理边缘 N100 上报的夜间人形检测事件：
+ * - 飞书群 Webhook：从 R2 取带红框现场图（支持 1~3 张优选连拍）上传飞书，发红色高优带图告警卡片
+ * - 邮件告警：发送纯文字告警邮件至 ALERT_EMAIL_TO（不含图片）
+ */
+export async function handlePersonDetectionAlert(
+  env: Env,
+  input: PersonAlertInput,
+): Promise<ChannelResult[]> {
+  const images: AlertImageItem[] = [];
+  const appId = env.FEISHU_APP_ID?.trim();
+  const appSecret = env.FEISHU_APP_SECRET?.trim();
+  const frameList: PersonAlertFrame[] =
+    input.frames && input.frames.length > 0
+      ? input.frames.slice(0, 3)
+      : [{ label: `${input.camName} · 现场抓拍`, r2Key: input.r2Key, capturedAtUtc: input.detectedAtUtc }];
+
+  if (appId && appSecret && env.FEISHU_WEBHOOK_URL?.trim()) {
+    try {
+      const token = await fetchFeishuTenantToken(appId, appSecret);
+      for (let i = 0; i < frameList.length; i += 1) {
+        const frame = frameList[i]!;
+        const obj = await env.VIDEO_R2.get(frame.r2Key);
+        if (!obj) continue;
+        const bytes = await obj.arrayBuffer();
+        const imageKey = await uploadImageToFeishu(token, bytes, `${input.eventId}-${i + 1}.jpg`);
+        images.push({
+          label: `${input.camName} · ${frame.label}`,
+          imageKey,
+          capturedAtUtc: frame.capturedAtUtc,
+        });
+      }
+    } catch {
+      // 图片上传失败时不阻塞文字告警和邮件通知
+    }
+  }
+
+  const confidencePct = `${Math.round(input.maxConfidence * 100)}%`;
+  const basePayload: AlertPayload = {
+    alertKey: `person_alert:${input.eventId}`,
+    siteId: input.siteId,
+    camId: input.camId,
+    camName: input.camName,
+    severity: "critical",
+    title: `🚨 夜间人员闯入告警：${input.camName}`,
+    summary: `夜间布防期间在「${input.camName}」画面中检测到 ${input.personCount} 名人员（最高置信度 ${confidencePct}）。`,
+    occurredAtUtc: input.detectedAtUtc,
+    details: [
+      { label: "检测人数", value: `${input.personCount} 人` },
+      { label: "最高置信度", value: confidencePct },
+      ...(input.scheduleNote ? [{ label: "布防时段", value: input.scheduleNote }] : []),
+    ],
+  };
+
+  return Promise.all([
+    sendFeishuAlert(env, { ...basePayload, images }),
+    sendEmailAlert(env, basePayload),
+    sendGenericWebhook(env, basePayload),
+  ]);
+}

@@ -1,13 +1,17 @@
 import asyncio
+from datetime import datetime, timezone
 import json
 import logging
 from pathlib import Path
+import time
 from urllib.parse import quote
 
 import httpx
 
 from .config import AgentConfig
 from .ffmpeg_runner import FFmpegRunner
+from .person_detector import PersonDetector, draw_person_boxes
+from .sun_schedule import is_night_guard_window
 from .utils import (
     atomic_spool_file,
     build_agent_headers,
@@ -219,6 +223,115 @@ class VideoAgent:
                         logger.warning("HLS upload error (%s): %s", ts_file.name, exc)
             await asyncio.sleep(2.0)
 
+    async def night_person_guard_loop(self, client: httpx.AsyncClient) -> None:
+        """日落后至日出前本地 AI 轻量人形巡检：仅在夜间布防，检测到人后画红框传 R2 并触发云端实时报警。"""
+        if not self.cfg.night_ai_enabled:
+            logger.info("Night AI person guard is disabled by config.")
+            return
+        if not self.cfg.night_ai_model_path.exists():
+            logger.warning("Night AI model not found at %s; guard loop disabled.", self.cfg.night_ai_model_path)
+            return
+
+        detector = PersonDetector(
+            model_path=self.cfg.night_ai_model_path,
+            conf_threshold=self.cfg.night_ai_conf_threshold,
+        )
+        logger.info(
+            "Night AI person guard initialized (lat=%.3f, lon=%.3f, model=%s)",
+            self.cfg.site_lat,
+            self.cfg.site_lon,
+            self.cfg.night_ai_model_path,
+        )
+
+        hit_streaks: dict[str, int] = {}
+        last_alert_mono: dict[str, float] = {}
+        last_guard_state: bool | None = None
+
+        while True:
+            is_night, schedule_note = is_night_guard_window(
+                datetime.now(timezone.utc),
+                lat=self.cfg.site_lat,
+                lon=self.cfg.site_lon,
+                margin_minutes=self.cfg.night_sun_margin_min,
+            )
+            if is_night != last_guard_state:
+                logger.info("Night AI guard state changed: %s (%s)", "ARMED" if is_night else "DISARMED", schedule_note)
+                last_guard_state = is_night
+                if not is_night:
+                    hit_streaks.clear()
+
+            if not is_night:
+                await asyncio.sleep(60.0)
+                continue
+
+            for cam_id in self.cfg.active_cameras:
+                if self.desired_modes.get(cam_id, "snapshot") == "disabled":
+                    continue
+                try:
+                    snap = await self.runner.capture_snapshot(cam_id)
+                    if not snap:
+                        continue
+                    ram_file, ts_iso = snap
+                    raw_bytes = ram_file.read_bytes()
+                    ram_file.unlink(missing_ok=True)
+
+                    boxes = await asyncio.to_thread(detector.detect_bytes, raw_bytes)
+                    if not boxes:
+                        hit_streaks[cam_id] = 0
+                        continue
+
+                    hit_streaks[cam_id] = hit_streaks.get(cam_id, 0) + 1
+                    max_conf = max(b.confidence for b in boxes)
+                    confirmed = (
+                        hit_streaks[cam_id] >= self.cfg.night_ai_confirm_frames
+                        or max_conf >= 0.72
+                    )
+                    if not confirmed:
+                        continue
+
+                    now_mono = time.monotonic()
+                    prev_alert = last_alert_mono.get(cam_id, 0.0)
+                    if prev_alert > 0 and (now_mono - prev_alert) < self.cfg.night_ai_cooldown_sec:
+                        continue
+
+                    annotated = await asyncio.to_thread(draw_person_boxes, raw_bytes, boxes)
+                    event_id = f"EVT-PERSON-{int(time.time())}-{cam_id}"
+                    date_path = ts_iso[:10].replace("-", "/")
+                    r2_key = f"events/{self.cfg.site_id}/{cam_id}/{date_path}/{event_id}.jpg"
+                    upload_path = f"/api/internal/agent/upload/{quote(r2_key, safe='/')}"
+                    up_res = await self._signed_request(client, "PUT", upload_path, annotated, content_type="image/jpeg")
+                    if up_res.status_code != 200:
+                        logger.warning("Night AI alert R2 upload failed (%s): %s", up_res.status_code, up_res.text)
+                        continue
+
+                    alert_body = json.dumps(
+                        {
+                            "event_id": event_id,
+                            "cam_id": cam_id,
+                            "r2_key": r2_key,
+                            "detected_at": ts_iso,
+                            "person_count": len(boxes),
+                            "max_confidence": round(max_conf, 4),
+                            "schedule_note": schedule_note,
+                        }
+                    ).encode("utf-8")
+                    alert_res = await self._signed_request(client, "POST", "/api/internal/agent/person-alert", alert_body)
+                    if alert_res.status_code == 200:
+                        last_alert_mono[cam_id] = now_mono
+                        hit_streaks[cam_id] = 0
+                        logger.warning(
+                            "Night AI person alert sent: cam=%s count=%d max_conf=%.2f",
+                            cam_id,
+                            len(boxes),
+                            max_conf,
+                        )
+                    else:
+                        logger.warning("Night AI person-alert API failed (%s): %s", alert_res.status_code, alert_res.text)
+                except Exception as exc:
+                    logger.warning("Night AI guard error (%s): %s", cam_id, exc)
+
+            await asyncio.sleep(self.cfg.night_ai_interval_sec)
+
     async def serve(self) -> None:
         self.cfg.hls_ram_dir.mkdir(parents=True, exist_ok=True)
         self.cfg.snapshot_spool_dir.mkdir(parents=True, exist_ok=True)
@@ -228,6 +341,7 @@ class VideoAgent:
                 self.snapshot_loop(client),
                 self.snapshot_upload_loop(client),
                 self.hls_upload_loop(client),
+                self.night_person_guard_loop(client),
             )
 
 

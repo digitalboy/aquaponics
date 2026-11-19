@@ -20,6 +20,15 @@ class AgentConfig:
     heartbeat_idle_sec: int
     heartbeat_active_sec: int
     active_cameras: list[str]
+    night_ai_enabled: bool
+    site_lat: float
+    site_lon: float
+    night_sun_margin_min: int
+    night_ai_interval_sec: int
+    night_ai_conf_threshold: float
+    night_ai_confirm_frames: int
+    night_ai_cooldown_sec: int
+    night_ai_model_path: Path
 
     @classmethod
     def from_env(cls) -> "AgentConfig":
@@ -41,4 +50,13 @@ class AgentConfig:
             heartbeat_idle_sec=int(os.getenv("HEARTBEAT_IDLE_SEC", "10")),
             heartbeat_active_sec=int(os.getenv("HEARTBEAT_ACTIVE_SEC", "3")),
             active_cameras=[c.strip() for c in raw_cams.split(",") if c.strip()],
+            night_ai_enabled=os.getenv("NIGHT_AI_ENABLED", "true").lower() in ("1", "true", "yes"),
+            site_lat=float(os.getenv("SITE_LAT", "22.765")),
+            site_lon=float(os.getenv("SITE_LON", "113.972")),
+            night_sun_margin_min=int(os.getenv("NIGHT_SUN_MARGIN_MIN", "15")),
+            night_ai_interval_sec=int(os.getenv("NIGHT_AI_INTERVAL_SEC", "4")),
+            night_ai_conf_threshold=float(os.getenv("NIGHT_AI_CONF_THRESHOLD", "0.50")),
+            night_ai_confirm_frames=int(os.getenv("NIGHT_AI_CONFIRM_FRAMES", "2")),
+            night_ai_cooldown_sec=int(os.getenv("NIGHT_AI_COOLDOWN_SEC", "300")),
+            night_ai_model_path=Path(os.getenv("NIGHT_AI_MODEL_PATH", "/opt/aquaponics/models/yolov8n.onnx")),
         )
