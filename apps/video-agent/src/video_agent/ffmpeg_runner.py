@@ -90,7 +90,7 @@ class FFmpegRunner:
             "-hls_list_size",
             "6",
             "-hls_flags",
-            "delete_segments+append_list",
+            "delete_segments+append_list+temp_file",
             "-strftime",
             "1",
             "-hls_segment_filename",

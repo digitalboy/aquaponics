@@ -1,4 +1,5 @@
 import { signPlaybackToken, verifyPlaybackToken } from "../crypto";
+import { renderMonitorHtml } from "../monitorHtml";
 import { type CameraRow, type Env, isStrictIsoUtc, jsonResponse, nowIsoUtc } from "../types";
 
 function getCallerRole(request: Request, env: Env): "internal" | "public" {
@@ -23,6 +24,13 @@ export async function handlePublicRoutes(
   url: URL,
 ): Promise<Response> {
   const pathname = url.pathname;
+  if ((pathname === "/monitor" || pathname === "/") && request.method === "GET") {
+    return new Response(renderMonitorHtml(), {
+      status: 200,
+      headers: { "Content-Type": "text/html; charset=utf-8" },
+    });
+  }
+
   const role = getCallerRole(request, env);
   const siteId = url.searchParams.get("site_id") || env.DEFAULT_SITE_ID || "guangming-01";
   const signingSecret = env.SIGNING_SECRET || "dev-insecure-signing-secret";
@@ -199,17 +207,18 @@ export async function handlePublicRoutes(
         .run();
 
       const { results: segs } = await env.VIDEO_DB.prepare(
-        "SELECT r2_key, duration_sec FROM hls_segments WHERE site_id = ? AND cam_id = ? ORDER BY start_at DESC LIMIT 6",
+        "SELECT id, r2_key, duration_sec FROM hls_segments WHERE site_id = ? AND cam_id = ? ORDER BY start_at DESC LIMIT 6",
       )
         .bind(payload.site_id, payload.cam_id)
-        .all<{ r2_key: string; duration_sec: number }>();
+        .all<{ id: number; r2_key: string; duration_sec: number }>();
 
       const ordered = segs.reverse();
+      const firstSeq = ordered[0]?.id ?? 1;
       const lines = [
         "#EXTM3U",
         "#EXT-X-VERSION:3",
-        "#EXT-X-TARGETDURATION:30",
-        `#EXT-X-MEDIA-SEQUENCE:${Date.now()}`,
+        "#EXT-X-TARGETDURATION:10",
+        `#EXT-X-MEDIA-SEQUENCE:${firstSeq}`,
       ];
       for (const seg of ordered) {
         lines.push(`#EXTINF:${seg.duration_sec.toFixed(3)},`);
