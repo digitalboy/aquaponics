@@ -75,12 +75,19 @@ export function AquaponicsVideoPlayer({
         if (cancelled) return;
         if (data.snapshots.length === 0) {
           if (!lastCapturedRef.current) {
-            setErrorMsg("暂无快照数据");
+            setErrorMsg("等待刷新...");
             setStatus("error");
           }
           return;
         }
-        const latest = data.snapshots[0];
+        const latest = data.snapshots.find((s) => s.size_bytes >= 8192);
+        if (!latest) {
+          if (!lastCapturedRef.current) {
+            setErrorMsg("等待刷新...");
+            setStatus("error");
+          }
+          return;
+        }
         if (latest.captured_at !== lastCapturedRef.current) {
           // 预加载新图片后再切换，避免页面闪烁
           const pre = new Image();
@@ -166,7 +173,7 @@ export function AquaponicsVideoPlayer({
         .getSnapshots(camId, { refresh: true })
         .then((data) => {
           if (cancelled) return;
-          const latest = data.snapshots[0];
+          const latest = data.snapshots.find((s) => s.size_bytes >= 8192);
           if (!latest || latest.captured_at === lastCapturedRef.current) return;
           const pre = new Image();
           pre.onload = () => {
@@ -290,9 +297,8 @@ export function AquaponicsVideoPlayer({
 
       {status === "error" && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-zinc-950/85 p-4 text-center text-xs">
-          <VideoOff className="h-5 w-5 text-red-400" />
-          <span className="font-medium text-red-400">通道不可用：{errorMsg}</span>
-          <span className="text-zinc-400">{camId}</span>
+          <VideoOff className="h-5 w-5 text-zinc-400" />
+          <span className="font-medium text-zinc-200">{errorMsg || "等待刷新..."}</span>
         </div>
       )}
 

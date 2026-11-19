@@ -17,18 +17,22 @@ class FFmpegRunner:
         return proc is not None and proc.returncode is None
 
     async def capture_snapshot(self, cam_id: str) -> tuple[Path, str] | None:
-        """从本地 MediaMTX 抓取 1 帧 720p JPG 到内存盘。"""
+        """从本地 MediaMTX 抓取 1 帧完整关键帧 JPG 到内存盘（过滤 <8KB 灰屏废图）。"""
         out_dir = self.ram_dir / "snapshots" / cam_id
         out_dir.mkdir(parents=True, exist_ok=True)
         ts = utc_now_iso()
         safe_ts = ts.replace(":", "-")
         out_file = out_dir / f"{safe_ts}.jpg"
 
+        # 【经验教训备注】MediaMTX sourceOnDemand 刚拉起 H.265 流时首帧可能是未带参考帧的 P 帧，
+        # 会解码出 ~2KB 纯灰废图；必须加 -skip_frame nokey 仅解码完整 I 帧，并校验文件大小 >= 8KB。
         cmd = [
             "ffmpeg",
             "-y",
             "-rtsp_transport",
             "tcp",
+            "-skip_frame",
+            "nokey",
             "-i",
             f"{self.rtsp_base}/{cam_id}",
             "-an",
@@ -50,6 +54,9 @@ class FFmpegRunner:
             return None
 
         if proc.returncode != 0 or not out_file.exists():
+            return None
+        if out_file.stat().st_size < 8192:
+            out_file.unlink(missing_ok=True)
             return None
         return out_file, ts
 

@@ -173,8 +173,9 @@ export async function handlePublicRoutes(
       return jsonResponse({ error: "start and end must be strict ISO 8601 UTC" }, 400, env.ALLOWED_ORIGINS);
     }
 
+    // 过滤 <8KB 的灰屏无效帧（如 RTSP 首帧未等来完整 I 帧导致的 2KB 灰图）
     const { results } = await env.VIDEO_DB.prepare(
-      "SELECT r2_key, captured_at, size_bytes, width, height FROM snapshots WHERE site_id = ? AND cam_id = ? AND captured_at BETWEEN ? AND ? ORDER BY captured_at DESC LIMIT 100",
+      "SELECT r2_key, captured_at, size_bytes, width, height FROM snapshots WHERE site_id = ? AND cam_id = ? AND size_bytes >= 8192 AND captured_at BETWEEN ? AND ? ORDER BY captured_at DESC LIMIT 100",
     )
       .bind(siteId, camId, start, end)
       .all<{ r2_key: string; captured_at: string; size_bytes: number; width: number; height: number }>();
