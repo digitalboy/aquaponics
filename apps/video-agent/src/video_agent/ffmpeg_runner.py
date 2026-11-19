@@ -56,7 +56,7 @@ class FFmpegRunner:
         return out_file, ts
 
     async def start_live_hls(self, cam_id: str, segment_sec: int = 4) -> None:
-        """启动按需 HLS 切片进程（零重编码 -c:v copy，强制 -an）。"""
+        """启动按需 HLS 切片进程（将海康 H.265 子码流转为浏览器兼容 H.264 5fps，强制 -an）。"""
         if self.is_live_active(cam_id):
             return
 
@@ -74,7 +74,15 @@ class FFmpegRunner:
             f"{self.rtsp_base}/{cam_id}",
             "-an",
             "-c:v",
-            "copy",
+            "libx264",
+            "-preset",
+            "ultrafast",
+            "-tune",
+            "zerolatency",
+            "-r",
+            "5",
+            "-g",
+            "10",
             "-f",
             "hls",
             "-hls_time",

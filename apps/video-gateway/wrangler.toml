@@ -2,6 +2,10 @@ name = "aquaponics-video-gateway"
 main = "src/index.ts"
 compatibility_date = "2024-11-01"
 
+routes = [
+  { pattern = "video-gw.guoshu.dev", custom_domain = true }
+]
+
 [vars]
 DEFAULT_SITE_ID = "guangming-01"
 WAKE_TTL_SEC = "180"
@@ -11,7 +15,7 @@ ALLOWED_ORIGINS = "*"
 [[d1_databases]]
 binding = "VIDEO_DB"
 database_name = "aquaponics-video-db"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "872bd8e2-012e-4922-bc43-8b48314e87f2"
 migrations_dir = "migrations"
 
 [[r2_buckets]]
