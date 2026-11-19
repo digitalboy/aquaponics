@@ -11,6 +11,19 @@ DEFAULT_SITE_ID = "guangming-01"
 WAKE_TTL_SEC = "180"
 TOKEN_TTL_SEC = "600"
 ALLOWED_ORIGINS = "*"
+ALERT_EMAIL_TO = "digitalboyzone@gmail.com"
+ALERT_EMAIL_FROM = "video-alert@guoshu.dev"
+HEARTBEAT_TIMEOUT_SEC = "300"
+SNAPSHOT_STALE_SEC = "1500"
+ALERT_COOLDOWN_SEC = "1800"
+DIGEST_INTERVAL_SEC = "1800"
+
+[triggers]
+crons = ["*/2 * * * *"]
+
+[[send_email]]
+name = "EMAIL"
+destination_address = "digitalboyzone@gmail.com"
 
 [[d1_databases]]
 binding = "VIDEO_DB"

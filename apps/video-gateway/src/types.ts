@@ -1,3 +1,20 @@
+export interface SendEmailAddress {
+  email: string;
+  name: string;
+}
+
+export interface SendEmailMessage {
+  from: string | SendEmailAddress;
+  to?: string | SendEmailAddress | (string | SendEmailAddress)[];
+  subject: string;
+  html?: string;
+  text?: string;
+}
+
+export interface SendEmailBinding {
+  send(message: SendEmailMessage): Promise<{ messageId: string }>;
+}
+
 export interface Env {
   VIDEO_DB: D1Database;
   VIDEO_R2: R2Bucket;
@@ -8,6 +25,18 @@ export interface Env {
   AGENT_SECRET?: string;
   SIGNING_SECRET?: string;
   INTERNAL_API_KEY?: string;
+  EMAIL?: SendEmailBinding;
+  ALERT_EMAIL_TO?: string;
+  ALERT_EMAIL_FROM?: string;
+  FEISHU_WEBHOOK_URL?: string;
+  FEISHU_WEBHOOK_SECRET?: string;
+  FEISHU_APP_ID?: string;
+  FEISHU_APP_SECRET?: string;
+  ALERT_WEBHOOK_URL?: string;
+  HEARTBEAT_TIMEOUT_SEC?: string;
+  SNAPSHOT_STALE_SEC?: string;
+  ALERT_COOLDOWN_SEC?: string;
+  DIGEST_INTERVAL_SEC?: string;
 }
 
 export type CameraVisibility = "internal_ops" | "public_trace";
