@@ -208,6 +208,7 @@ export async function handleAgentRoutes(
       person_count: number;
       max_confidence: number;
       schedule_note?: string;
+      frames?: Array<{ label: string; r2_key: string; captured_at: string }>;
     };
     if (!body.event_id || !body.cam_id || !body.r2_key || !isStrictIsoUtc(body.detected_at)) {
       return jsonResponse({ error: "Invalid person-alert payload" }, 400, env.ALLOWED_ORIGINS);
@@ -235,6 +236,16 @@ export async function handleAgentRoutes(
       .bind(body.cam_id, auth.siteId)
       .first<{ name: string }>();
 
+    const frames = Array.isArray(body.frames)
+      ? body.frames
+          .filter((f) => f && f.r2_key && isStrictIsoUtc(f.captured_at))
+          .map((f) => ({
+            label: f.label || "现场抓拍",
+            r2Key: f.r2_key,
+            capturedAtUtc: f.captured_at,
+          }))
+      : undefined;
+
     const channels = await handlePersonDetectionAlert(env, {
       eventId: body.event_id,
       siteId: auth.siteId,
@@ -245,6 +256,7 @@ export async function handleAgentRoutes(
       personCount: Math.max(1, Number(body.person_count || 1)),
       maxConfidence: Number(body.max_confidence || 0),
       scheduleNote: body.schedule_note,
+      frames,
     });
 
     return jsonResponse({ ok: true, event_id: body.event_id, channels }, 200, env.ALLOWED_ORIGINS);

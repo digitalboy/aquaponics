@@ -294,25 +294,69 @@ class VideoAgent:
                     if prev_alert > 0 and (now_mono - prev_alert) < self.cfg.night_ai_cooldown_sec:
                         continue
 
-                    annotated = await asyncio.to_thread(draw_person_boxes, raw_bytes, boxes)
+                    # 本地连抓 6 帧（间隔 1 秒，内存盘零 SSD 擦写），优选 3 张：初现 + 最佳全身 + 去向
+                    burst: list[tuple[bytes, str, list]] = [(raw_bytes, ts_iso, boxes)]
+                    for _ in range(5):
+                        await asyncio.sleep(1.0)
+                        next_snap = await self.runner.capture_snapshot(cam_id)
+                        if not next_snap:
+                            continue
+                        next_file, next_ts = next_snap
+                        next_bytes = next_file.read_bytes()
+                        next_file.unlink(missing_ok=True)
+                        next_boxes = await asyncio.to_thread(detector.detect_bytes, next_bytes)
+                        burst.append((next_bytes, next_ts, next_boxes))
+
+                    def _frame_score(frame_boxes: list) -> float:
+                        return sum((b.x2 - b.x1) * (b.y2 - b.y1) * b.confidence for b in frame_boxes)
+
+                    best_idx = max(range(len(burst)), key=lambda idx: _frame_score(burst[idx][2]))
+                    last_idx = len(burst) - 1
+                    chosen_indices: list[tuple[int, str]] = [
+                        (0, "① 初现/最佳全身" if best_idx == 0 else "① 初现画面"),
+                    ]
+                    if best_idx not in (0, last_idx):
+                        chosen_indices.append((best_idx, "② 最佳全身特写"))
+                    if last_idx != 0:
+                        last_label = "③ 去向画面" if len(chosen_indices) == 2 else "② 最佳/去向画面" if best_idx == last_idx else "② 去向画面"
+                        chosen_indices.append((last_idx, last_label))
+
                     event_id = f"EVT-PERSON-{int(time.time())}-{cam_id}"
                     date_path = ts_iso[:10].replace("-", "/")
-                    r2_key = f"events/{self.cfg.site_id}/{cam_id}/{date_path}/{event_id}.jpg"
-                    upload_path = f"/api/internal/agent/upload/{quote(r2_key, safe='/')}"
-                    up_res = await self._signed_request(client, "PUT", upload_path, annotated, content_type="image/jpeg")
-                    if up_res.status_code != 200:
-                        logger.warning("Night AI alert R2 upload failed (%s): %s", up_res.status_code, up_res.text)
+                    uploaded_frames: list[dict[str, str]] = []
+                    primary_r2_key = ""
+
+                    for seq, (idx, label) in enumerate(chosen_indices, start=1):
+                        f_bytes, f_ts, f_boxes = burst[idx]
+                        out_bytes = (
+                            await asyncio.to_thread(draw_person_boxes, f_bytes, f_boxes)
+                            if f_boxes
+                            else f_bytes
+                        )
+                        f_key = f"events/{self.cfg.site_id}/{cam_id}/{date_path}/{event_id}-{seq}.jpg"
+                        up_path = f"/api/internal/agent/upload/{quote(f_key, safe='/')}"
+                        up_res = await self._signed_request(client, "PUT", up_path, out_bytes, content_type="image/jpeg")
+                        if up_res.status_code == 200:
+                            uploaded_frames.append({"label": label, "r2_key": f_key, "captured_at": f_ts})
+                            if idx == best_idx or not primary_r2_key:
+                                primary_r2_key = f_key
+
+                    if not uploaded_frames or not primary_r2_key:
+                        logger.warning("Night AI alert R2 upload failed for all frames (%s)", cam_id)
                         continue
 
+                    best_boxes = burst[best_idx][2] or boxes
+                    best_max_conf = max((b.confidence for b in best_boxes), default=max_conf)
                     alert_body = json.dumps(
                         {
                             "event_id": event_id,
                             "cam_id": cam_id,
-                            "r2_key": r2_key,
-                            "detected_at": ts_iso,
-                            "person_count": len(boxes),
-                            "max_confidence": round(max_conf, 4),
+                            "r2_key": primary_r2_key,
+                            "detected_at": burst[best_idx][1],
+                            "person_count": len(best_boxes),
+                            "max_confidence": round(best_max_conf, 4),
                             "schedule_note": schedule_note,
+                            "frames": uploaded_frames,
                         }
                     ).encode("utf-8")
                     alert_res = await self._signed_request(client, "POST", "/api/internal/agent/person-alert", alert_body)
@@ -320,10 +364,11 @@ class VideoAgent:
                         last_alert_mono[cam_id] = now_mono
                         hit_streaks[cam_id] = 0
                         logger.warning(
-                            "Night AI person alert sent: cam=%s count=%d max_conf=%.2f",
+                            "Night AI person alert sent: cam=%s frames=%d count=%d max_conf=%.2f",
                             cam_id,
-                            len(boxes),
-                            max_conf,
+                            len(uploaded_frames),
+                            len(best_boxes),
+                            best_max_conf,
                         )
                     else:
                         logger.warning("Night AI person-alert API failed (%s): %s", alert_res.status_code, alert_res.text)
