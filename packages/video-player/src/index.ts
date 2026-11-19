@@ -3,3 +3,5 @@ export {
   type AquaponicsVideoPlayerProps,
   type VideoPlayerMode,
 } from "./AquaponicsVideoPlayer";
+export { CameraMonitorGrid, type CameraMonitorGridProps } from "./CameraMonitorGrid";
+export * from "./sdk/client";

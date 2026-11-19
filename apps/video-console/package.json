@@ -1,0 +1,29 @@
+{
+  "name": "@aquaponics/video-console",
+  "version": "1.0.0",
+  "private": true,
+  "description": "数字化农业工厂 · 视频监控与追溯控制台 (React + Tailwind CSS v4 + shadcn/ui)",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@aquaponics/video-player": "workspace:*",
+    "lucide-react": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@aquaponics/tsconfig": "workspace:*",
+    "@tailwindcss/vite": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@vitejs/plugin-react": "latest",
+    "tailwindcss": "latest",
+    "typescript": "latest",
+    "vite": "latest"
+  }
+}

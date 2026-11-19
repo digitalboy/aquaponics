@@ -1,5 +1,5 @@
 {
-  "extends": "@aquaponics/tsconfig/base.json",
+  "extends": "../../packages/tsconfig/base.json",
   "compilerOptions": {
     "jsx": "react-jsx",
     "noEmit": true

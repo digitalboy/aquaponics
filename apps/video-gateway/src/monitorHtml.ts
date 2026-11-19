@@ -16,7 +16,12 @@ export function renderMonitorHtml(): string {
         <h1 class="text-base font-semibold tracking-tight">数字化农业工厂 · 视频监控台</h1>
         <p class="text-xs text-zinc-400">Cloudflare Workers + R2 + 倍控 N100 (4G 按需唤醒 / 省流快照)</p>
       </div>
-      <div class="flex items-center gap-2">
+      <div class="flex flex-wrap items-center gap-2">
+        <select id="refreshInterval" class="rounded-md border border-zinc-700 bg-zinc-950 px-2 py-1.5 text-xs text-zinc-200 focus:border-emerald-500 focus:outline-none">
+          <option value="15" selected>快照 15秒自动刷新</option>
+          <option value="30">快照 30秒自动刷新</option>
+          <option value="0">关闭自动刷新</option>
+        </select>
         <input id="apiKey" type="password" placeholder="输入 INTERNAL_API_KEY (看内部安防机位)"
           class="w-64 rounded-md border border-zinc-700 bg-zinc-950 px-2.5 py-1.5 text-xs text-zinc-100 placeholder:text-zinc-500 focus:border-emerald-500 focus:outline-none" />
         <button id="saveKeyBtn"
@@ -32,12 +37,23 @@ export function renderMonitorHtml(): string {
 
   <script>
     const keyInput = document.getElementById("apiKey");
+    const refreshSelect = document.getElementById("refreshInterval");
     const saveBtn = document.getElementById("saveKeyBtn");
     const statusBar = document.getElementById("statusBar");
     const grid = document.getElementById("grid");
 
     keyInput.value = localStorage.getItem("aquaponics_video_key") || "";
     const activePlayers = new Map();
+    const snapshotRefreshers = new Set();
+    const ringUpdaters = new Set();
+    let autoRefreshTimer = null;
+    let remainingSec = 15;
+
+    function formatLocalTime(isoUtc) {
+      if (!isoUtc) return "";
+      const d = new Date(isoUtc);
+      return Number.isNaN(d.getTime()) ? isoUtc : d.toLocaleString("zh-CN", { hour12: false });
+    }
 
     function getHeaders() {
       const k = keyInput.value.trim();
@@ -47,6 +63,8 @@ export function renderMonitorHtml(): string {
     async function loadCameras() {
       statusBar.textContent = "正在查询机位...";
       grid.innerHTML = "";
+      snapshotRefreshers.clear();
+      ringUpdaters.clear();
       for (const cleanup of activePlayers.values()) cleanup();
       activePlayers.clear();
 
@@ -76,12 +94,19 @@ export function renderMonitorHtml(): string {
           </div>
           <div class="flex items-center gap-1.5">
             <button data-mode="snapshot" class="btn-snap rounded bg-zinc-800 px-2.5 py-1 text-xs hover:bg-zinc-700">最新快照</button>
-            <button data-mode="live" class="btn-live rounded bg-emerald-700 px-2.5 py-1 text-xs text-white hover:bg-emerald-600">4G按需直播</button>
+            <!-- 后端 on-demand 按需直播逻辑完整保留；一期纯 4G 省流阶段前端暂不渲染“4G按需直播”入口，待需要时取消隐藏即可 -->
           </div>
         </div>
         <div class="relative aspect-video bg-black">
           <img class="snap-img h-full w-full object-cover" alt="\${cam.name}" />
           <video class="live-vid hidden h-full w-full object-cover" controls autoplay muted playsinline></video>
+          <div class="ring-badge pointer-events-none absolute left-2.5 bottom-2.5 flex items-center gap-1.5 rounded-full bg-black/70 px-2 py-1 text-[11px] text-zinc-200 backdrop-blur-sm">
+            <svg class="h-4 w-4 -rotate-90" viewBox="0 0 20 20">
+              <circle cx="10" cy="10" r="7" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2.5" />
+              <circle class="ring-arc transition-all duration-700" cx="10" cy="10" r="7" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="43.98" stroke-dashoffset="0" />
+            </svg>
+            <span class="ring-sec tabular-nums">15s</span>
+          </div>
           <div class="overlay absolute inset-0 flex items-center justify-center bg-black/65 text-xs text-zinc-200">点击“最新快照”或“4G按需直播”</div>
         </div>
         <div class="meta flex items-center justify-between px-3 py-1.5 text-[11px] text-zinc-400">
@@ -94,7 +119,24 @@ export function renderMonitorHtml(): string {
       const img = card.querySelector(".snap-img");
       const vid = card.querySelector(".live-vid");
       const overlay = card.querySelector(".overlay");
+      const ringBadge = card.querySelector(".ring-badge");
+      const ringArc = card.querySelector(".ring-arc");
+      const ringSec = card.querySelector(".ring-sec");
       const tsEl = card.querySelector(".ts");
+      let lastCapturedAt = "";
+      let cardMode = "snapshot";
+
+      ringUpdaters.add((rem, total) => {
+        if (cardMode !== "snapshot" || total <= 0) {
+          ringBadge.classList.add("hidden");
+          return;
+        }
+        ringBadge.classList.remove("hidden");
+        const circumference = 43.98;
+        const offset = circumference * (1 - Math.max(0, rem) / total);
+        ringArc.setAttribute("stroke-dashoffset", offset.toFixed(2));
+        ringSec.textContent = rem <= 0 ? "刷新中" : rem + "s";
+      });
 
       function stopCurrent() {
         const prev = activePlayers.get(cam.cam_id);
@@ -102,25 +144,47 @@ export function renderMonitorHtml(): string {
         activePlayers.delete(cam.cam_id);
       }
 
-      async function showSnapshot() {
-        stopCurrent();
-        vid.classList.add("hidden");
-        img.classList.remove("hidden");
-        overlay.classList.remove("hidden");
-        overlay.textContent = "加载最新快照...";
-        const res = await fetch("/api/v1/snapshots/" + encodeURIComponent(cam.cam_id), { headers: getHeaders() });
+      async function showSnapshot(silent = false) {
+        if (!silent) {
+          stopCurrent();
+          cardMode = "snapshot";
+          vid.classList.add("hidden");
+          img.classList.remove("hidden");
+          if (!lastCapturedAt) {
+            overlay.classList.remove("hidden");
+            overlay.textContent = "加载最新快照...";
+          }
+        }
+        const res = await fetch("/api/v1/snapshots/" + encodeURIComponent(cam.cam_id) + "?refresh=1", { headers: getHeaders() });
         const data = await res.json();
         if (!res.ok || !data.snapshots?.length) {
-          overlay.textContent = data.error || "暂无快照";
+          if (!lastCapturedAt) overlay.textContent = data.error || "暂无快照";
           return;
         }
-        img.src = data.snapshots[0].url;
-        tsEl.textContent = data.snapshots[0].captured_at;
-        overlay.classList.add("hidden");
+        const latest = data.snapshots[0];
+        if (latest.captured_at !== lastCapturedAt) {
+          const pre = new Image();
+          pre.onload = () => {
+            img.src = latest.url;
+            lastCapturedAt = latest.captured_at;
+            tsEl.textContent = formatLocalTime(latest.captured_at) + " (" + Math.round(latest.size_bytes / 1024) + " KB)";
+            tsEl.title = latest.captured_at;
+            overlay.classList.add("hidden");
+          };
+          pre.src = latest.url;
+        } else {
+          overlay.classList.add("hidden");
+        }
       }
+
+      snapshotRefreshers.add(() => {
+        if (cardMode === "snapshot" && !document.hidden) showSnapshot(true);
+      });
 
       async function showLive() {
         stopCurrent();
+        cardMode = "live";
+        ringBadge.classList.add("hidden");
         let cancelled = false;
         let timer = null;
         let hls = null;
@@ -150,7 +214,7 @@ export function renderMonitorHtml(): string {
             return;
           }
           overlay.classList.add("hidden");
-          tsEl.textContent = "LIVE · " + new Date().toISOString();
+          tsEl.textContent = "LIVE · " + formatLocalTime(new Date().toISOString());
           if (Hls.isSupported()) {
             hls = new Hls({ lowLatencyMode: true });
             hls.loadSource(data.playback_url);
@@ -162,15 +226,42 @@ export function renderMonitorHtml(): string {
         poll();
       }
 
-      card.querySelector(".btn-snap").addEventListener("click", showSnapshot);
-      card.querySelector(".btn-live").addEventListener("click", showLive);
+      // 后端按需直播接口 (/api/v1/streams/:camId/live) 保留完整可用；前端暂不暴露直播触发入口
+      card.querySelector(".btn-snap").addEventListener("click", () => showSnapshot(false));
       showSnapshot();
     }
 
+    function resetAutoRefresh() {
+      if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+      const sec = Number(refreshSelect.value || "0");
+      const notifyRings = (rem) => {
+        for (const fn of ringUpdaters) fn(rem, sec);
+      };
+      if (sec <= 0) {
+        notifyRings(0);
+        return;
+      }
+      remainingSec = sec;
+      notifyRings(remainingSec);
+      autoRefreshTimer = setInterval(() => {
+        if (document.hidden) return;
+        remainingSec -= 1;
+        if (remainingSec <= 0) {
+          notifyRings(0);
+          for (const fn of snapshotRefreshers) fn();
+          remainingSec = sec;
+        } else {
+          notifyRings(remainingSec);
+        }
+      }, 1000);
+    }
+
+    refreshSelect.addEventListener("change", resetAutoRefresh);
     saveBtn.addEventListener("click", () => {
       localStorage.setItem("aquaponics_video_key", keyInput.value.trim());
       loadCameras();
     });
+    resetAutoRefresh();
     loadCameras();
   </script>
 </body>

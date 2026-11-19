@@ -174,6 +174,29 @@ export async function handlePublicRoutes(
       .bind(siteId, camId, start, end)
       .all<{ r2_key: string; captured_at: string; size_bytes: number; width: number; height: number }>();
 
+    // 若前端浏览携带 refresh=1，则按 12 秒防抖下发一次 capture_now 指令，实现“看时 15s 刷新、不看不费流量”
+    if (url.searchParams.get("refresh") === "1") {
+      const debounceCutoff = new Date(Date.now() - 12_000).toISOString();
+      const latestCaptured = results[0]?.captured_at || "";
+      if (latestCaptured < debounceCutoff) {
+        const recentCmd = await env.VIDEO_DB.prepare(
+          "SELECT cmd_id FROM agent_commands WHERE site_id = ? AND cam_id = ? AND action = 'capture_now' AND created_at >= ? LIMIT 1",
+        )
+          .bind(siteId, camId, debounceCutoff)
+          .first();
+        if (!recentCmd) {
+          const now = nowIsoUtc();
+          const cmdId = `CMD-CAP-${Date.now()}-${camId}`;
+          const expires = new Date(Date.now() + 30_000).toISOString();
+          await env.VIDEO_DB.prepare(
+            "INSERT OR IGNORE INTO agent_commands (cmd_id, site_id, cam_id, action, payload_json, status, expires_at, created_at) VALUES (?, ?, ?, 'capture_now', '{}', 'pending', ?, ?)",
+          )
+            .bind(cmdId, siteId, camId, expires, now)
+            .run();
+        }
+      }
+    }
+
     const exp = Math.floor(Date.now() / 1000) + tokenTtlSec;
     const token = await signPlaybackToken({ cam_id: camId, site_id: siteId, scope: "snapshot", exp }, signingSecret);
 

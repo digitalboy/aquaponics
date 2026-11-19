@@ -1,27 +1,32 @@
 {
   "name": "@aquaponics/video-player",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
-  "description": "多系统可嵌入视频监控与延时快照播放器组件 (HLS.js + Tailwind v4)",
+  "description": "全厂视频监控 SDK 与 shadcn/Tailwind v4 可嵌入组件库",
   "type": "module",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./sdk": "./src/sdk/client.ts"
   },
   "scripts": {
     "check": "tsc --noEmit"
   },
   "dependencies": {
-    "hls.js": "^1.7.4"
+    "class-variance-authority": "latest",
+    "clsx": "latest",
+    "hls.js": "latest",
+    "lucide-react": "latest",
+    "tailwind-merge": "latest"
   },
   "peerDependencies": {
-    "react": "^18.0.0 || ^19.0.0"
+    "react": "^19.0.0"
   },
   "devDependencies": {
     "@aquaponics/tsconfig": "workspace:*",
-    "@types/react": "^19.3.0",
-    "react": "^19.3.1",
-    "typescript": "^7.0.2"
+    "@types/react": "latest",
+    "react": "latest",
+    "typescript": "latest"
   }
 }

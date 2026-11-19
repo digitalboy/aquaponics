@@ -34,10 +34,8 @@ class FFmpegRunner:
             "-an",
             "-frames:v",
             "1",
-            "-vf",
-            "scale=1280:-2",
             "-q:v",
-            "4",
+            "6",
             str(out_file),
         ]
         proc = await asyncio.create_subprocess_exec(
