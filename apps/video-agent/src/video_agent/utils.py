@@ -9,6 +9,14 @@ def utc_now_iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
 
 
+def filename_to_iso_utc(stem: str) -> str:
+    """将安全文件名 (2026-11-19T11-35-37.385Z) 还原为严格 ISO 8601 UTC，确保断网补传保留真实拍摄时刻。"""
+    if "T" not in stem:
+        return utc_now_iso()
+    date_part, time_part = stem.split("T", 1)
+    return f"{date_part}T{time_part.replace('-', ':')}"
+
+
 def build_agent_headers(
     secret: str,
     site_id: str,

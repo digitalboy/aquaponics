@@ -8,7 +8,13 @@ import httpx
 
 from .config import AgentConfig
 from .ffmpeg_runner import FFmpegRunner
-from .utils import build_agent_headers, enforce_ram_watermark, get_dir_used_bytes, utc_now_iso
+from .utils import (
+    build_agent_headers,
+    enforce_ram_watermark,
+    filename_to_iso_utc,
+    get_dir_used_bytes,
+    utc_now_iso,
+)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("video-agent")
@@ -133,19 +139,15 @@ class VideoAgent:
             await asyncio.sleep(self.cfg.heartbeat_active_sec if any_live else self.cfg.heartbeat_idle_sec)
 
     async def snapshot_loop(self, client: httpx.AsyncClient) -> None:
+        """定时抓拍循环：仅负责抓拍落入内存盘缓冲队列；即使断网也持续保留，交由上传循环补传。"""
         while True:
             for cam_id in self.cfg.active_cameras:
                 if self.desired_modes.get(cam_id, "snapshot") == "disabled":
                     continue
                 try:
-                    snap = await self.runner.capture_snapshot(cam_id)
-                    if snap:
-                        f, ts = snap
-                        date_path = ts[:10].replace("-", "/")
-                        r2_key = f"snapshots/{self.cfg.site_id}/{cam_id}/{date_path}/{ts.replace(':', '-')}.jpg"
-                        await self._upload_and_ingest(client, f, r2_key, "snapshot", cam_id, ts)
+                    await self.runner.capture_snapshot(cam_id)
                 except Exception as exc:
-                    logger.warning("Snapshot loop error (%s): %s", cam_id, exc)
+                    logger.warning("Snapshot capture error (%s): %s", cam_id, exc)
 
             removed = enforce_ram_watermark(
                 self.cfg.hls_ram_dir, self.cfg.ram_limit_mb, self.cfg.ram_high_water_ratio
@@ -153,6 +155,40 @@ class VideoAgent:
             if removed:
                 logger.warning("RAM disk watermark hit; evicted %d oldest files", removed)
             await asyncio.sleep(self.cfg.snapshot_interval_sec)
+
+    async def snapshot_upload_loop(self, client: httpx.AsyncClient) -> None:
+        """断网自愈补传循环：按拍摄时间从旧到新扫描本地缓存快照，联网后匀速平滑补传至 R2/D1。"""
+        backoff_sec = 5.0
+        snap_root = self.cfg.hls_ram_dir / "snapshots"
+        while True:
+            uploaded_any = False
+            failed = False
+            if snap_root.exists():
+                pending_files = sorted(snap_root.rglob("*.jpg"), key=lambda p: p.name)
+                for jpg_file in pending_files:
+                    cam_id = jpg_file.parent.name
+                    ts_iso = filename_to_iso_utc(jpg_file.stem)
+                    date_path = ts_iso[:10].replace("-", "/")
+                    r2_key = f"snapshots/{self.cfg.site_id}/{cam_id}/{date_path}/{jpg_file.name}"
+                    try:
+                        ok = await self._upload_and_ingest(client, jpg_file, r2_key, "snapshot", cam_id, ts_iso)
+                        if not ok:
+                            failed = True
+                            break
+                        uploaded_any = True
+                        backoff_sec = 5.0
+                        # 补传限速 0.2s/张，防止断网数天后恢复时瞬间打满 4G 上行带宽
+                        await asyncio.sleep(0.2)
+                    except Exception as exc:
+                        logger.warning("Snapshot upload error (%s): %s", jpg_file.name, exc)
+                        failed = True
+                        break
+
+            if failed:
+                await asyncio.sleep(backoff_sec)
+                backoff_sec = min(backoff_sec * 2, 60.0)
+            else:
+                await asyncio.sleep(2.0 if uploaded_any else 5.0)
 
     async def hls_upload_loop(self, client: httpx.AsyncClient) -> None:
         """扫描内存盘中已写完的 .ts 分片并异步上传至 R2。"""
@@ -180,6 +216,7 @@ class VideoAgent:
             await asyncio.gather(
                 self.heartbeat_loop(client),
                 self.snapshot_loop(client),
+                self.snapshot_upload_loop(client),
                 self.hls_upload_loop(client),
             )
 
