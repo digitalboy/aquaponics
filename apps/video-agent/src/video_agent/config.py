@@ -13,6 +13,8 @@ class AgentConfig:
     hls_ram_dir: Path
     ram_limit_mb: int
     ram_high_water_ratio: float
+    snapshot_spool_dir: Path
+    snapshot_spool_limit_mb: int
     mediamtx_rtsp_base: str
     snapshot_interval_sec: int
     heartbeat_idle_sec: int
@@ -32,6 +34,8 @@ class AgentConfig:
             hls_ram_dir=Path(os.getenv("HLS_RAM_DIR", "/mnt/hls_ram")),
             ram_limit_mb=int(os.getenv("RAM_LIMIT_MB", "512")),
             ram_high_water_ratio=float(os.getenv("RAM_HIGH_WATER_RATIO", "0.80")),
+            snapshot_spool_dir=Path(os.getenv("SNAPSHOT_SPOOL_DIR", "/var/spool/aquaponics/snapshots")),
+            snapshot_spool_limit_mb=int(os.getenv("SNAPSHOT_SPOOL_LIMIT_MB", "1024")),
             mediamtx_rtsp_base=os.getenv("MEDIAMTX_RTSP_BASE", "rtsp://127.0.0.1:8554").rstrip("/"),
             snapshot_interval_sec=int(os.getenv("SNAPSHOT_INTERVAL_SEC", "600")),
             heartbeat_idle_sec=int(os.getenv("HEARTBEAT_IDLE_SEC", "10")),

@@ -9,7 +9,9 @@ import httpx
 from .config import AgentConfig
 from .ffmpeg_runner import FFmpegRunner
 from .utils import (
+    atomic_spool_file,
     build_agent_headers,
+    enforce_dir_quota,
     enforce_ram_watermark,
     filename_to_iso_utc,
     get_dir_used_bytes,
@@ -139,27 +141,34 @@ class VideoAgent:
             await asyncio.sleep(self.cfg.heartbeat_active_sec if any_live else self.cfg.heartbeat_idle_sec)
 
     async def snapshot_loop(self, client: httpx.AsyncClient) -> None:
-        """定时抓拍循环：仅负责抓拍落入内存盘缓冲队列；即使断网也持续保留，交由上传循环补传。"""
+        """定时抓拍循环：在 tmpfs 内存盘完成抓拍与 >=8KB 质检，再原子落入 SSD 持久队列，抗断网且抗断电重启。"""
         while True:
             for cam_id in self.cfg.active_cameras:
                 if self.desired_modes.get(cam_id, "snapshot") == "disabled":
                     continue
                 try:
-                    await self.runner.capture_snapshot(cam_id)
+                    snap = await self.runner.capture_snapshot(cam_id)
+                    if snap:
+                        ram_file, _ = snap
+                        dest = self.cfg.snapshot_spool_dir / cam_id / ram_file.name
+                        atomic_spool_file(ram_file, dest)
                 except Exception as exc:
                     logger.warning("Snapshot capture error (%s): %s", cam_id, exc)
 
-            removed = enforce_ram_watermark(
+            removed_ram = enforce_ram_watermark(
                 self.cfg.hls_ram_dir, self.cfg.ram_limit_mb, self.cfg.ram_high_water_ratio
             )
-            if removed:
-                logger.warning("RAM disk watermark hit; evicted %d oldest files", removed)
+            removed_spool = enforce_dir_quota(
+                self.cfg.snapshot_spool_dir, self.cfg.snapshot_spool_limit_mb * 1024 * 1024
+            )
+            if removed_ram or removed_spool:
+                logger.warning("Quota guard evicted ram=%d spool=%d oldest files", removed_ram, removed_spool)
             await asyncio.sleep(self.cfg.snapshot_interval_sec)
 
     async def snapshot_upload_loop(self, client: httpx.AsyncClient) -> None:
-        """断网自愈补传循环：按拍摄时间从旧到新扫描本地缓存快照，联网后匀速平滑补传至 R2/D1。"""
+        """断网自愈补传循环：按拍摄时间从旧到新扫描 SSD 持久队列，联网后匀速平滑补传至 R2/D1。"""
         backoff_sec = 5.0
-        snap_root = self.cfg.hls_ram_dir / "snapshots"
+        snap_root = self.cfg.snapshot_spool_dir
         while True:
             uploaded_any = False
             failed = False
@@ -212,6 +221,7 @@ class VideoAgent:
 
     async def serve(self) -> None:
         self.cfg.hls_ram_dir.mkdir(parents=True, exist_ok=True)
+        self.cfg.snapshot_spool_dir.mkdir(parents=True, exist_ok=True)
         async with httpx.AsyncClient(timeout=20.0) as client:
             await asyncio.gather(
                 self.heartbeat_loop(client),
