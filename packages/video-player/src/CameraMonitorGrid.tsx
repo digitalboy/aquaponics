@@ -86,7 +86,7 @@ export function CameraMonitorGrid({
             <CardHeader>
               <div className="flex items-center gap-2">
                 <CardTitle>{cam.name}</CardTitle>
-                <Badge variant="outline">{cam.cam_id}</Badge>
+                <Badge variant="outline">现场实景</Badge>
               </div>
               <div className="flex items-center gap-1.5">
                 <Button
@@ -98,7 +98,7 @@ export function CameraMonitorGrid({
                   }}
                 >
                   <RefreshCw className="h-3 w-3" />
-                  最新快照
+                  刷新画面
                 </Button>
                 {/* 后端 on-demand 直播能力已就绪；一期仅在 allowLive=true 时渲染该按钮 */}
                 {allowLive && (
@@ -107,7 +107,7 @@ export function CameraMonitorGrid({
                     variant={isLive ? "default" : "outline"}
                     onClick={() => setLiveSet((prev) => ({ ...prev, [cam.cam_id]: !isLive }))}
                   >
-                    {isLive ? "切回快照" : "4G按需直播"}
+                    {isLive ? "切回快照" : "实时视频"}
                   </Button>
                 )}
               </div>
@@ -122,12 +122,6 @@ export function CameraMonitorGrid({
                 autoRefreshSec={autoRefreshSec}
                 refreshNonce={refreshMap[cam.cam_id] ?? 0}
               />
-              <div className="flex items-center justify-between border-t border-border px-4 py-1.5 text-[11px] text-muted-foreground">
-                <span>
-                  权限: {cam.visibility} · 通道: {cam.stream_mode}
-                </span>
-                <span>{role === "internal" ? "内部运维视图" : "公开溯源视图"}</span>
-              </div>
             </CardContent>
           </Card>
         );

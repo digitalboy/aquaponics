@@ -36,10 +36,12 @@ export async function handlePublicRoutes(
   const signingSecret = env.SIGNING_SECRET || "dev-insecure-signing-secret";
   const tokenTtlSec = Number(env.TOKEN_TTL_SEC || "600");
 
-  // 1. 机位目录查询 (强制执行 internal_ops 与 public_trace 隔离)
+  // 1. 机位目录查询
+  // 【一期免鉴权说明】当前调试/演示阶段暂不强制拦截 internal_ops 机位，任何人打开网页即可查看已启用机位；
+  // 未来正式面向 C 端开放公网溯源时，恢复下方 `role === "public" ? "public_trace" : requestedVis` 过滤即可。
   if (pathname === "/api/v1/cameras" && request.method === "GET") {
     const requestedVis = url.searchParams.get("visibility");
-    const effectiveVis = role === "public" ? "public_trace" : requestedVis;
+    const effectiveVis = requestedVis;
 
     const query = effectiveVis
       ? env.VIDEO_DB.prepare(
@@ -64,9 +66,10 @@ export async function handlePublicRoutes(
       .first<CameraRow>();
 
     if (!cam) return jsonResponse({ error: "Camera not found" }, 404, env.ALLOWED_ORIGINS);
-    if (role === "public" && cam.visibility !== "public_trace") {
-      return jsonResponse({ error: "Forbidden: internal_ops camera" }, 403, env.ALLOWED_ORIGINS);
-    }
+    // 【一期免鉴权说明】正式上线 C 端权限隔离时取消下方注释：
+    // if (role === "public" && cam.visibility !== "public_trace") {
+    //   return jsonResponse({ error: "Forbidden: internal_ops camera" }, 403, env.ALLOWED_ORIGINS);
+    // }
     if (cam.stream_mode === "disabled") {
       return jsonResponse({ error: "Camera stream is disabled" }, 409, env.ALLOWED_ORIGINS);
     }
@@ -133,9 +136,10 @@ export async function handlePublicRoutes(
       .bind(camId, siteId)
       .first<Pick<CameraRow, "visibility">>();
     if (!cam) return jsonResponse({ error: "Camera not found" }, 404, env.ALLOWED_ORIGINS);
-    if (role === "public" && cam.visibility !== "public_trace") {
-      return jsonResponse({ error: "Forbidden: internal_ops camera" }, 403, env.ALLOWED_ORIGINS);
-    }
+    // 【一期免鉴权说明】正式上线 C 端权限隔离时恢复此校验：
+    // if (role === "public" && cam.visibility !== "public_trace") {
+    //   return jsonResponse({ error: "Forbidden: internal_ops camera" }, 403, env.ALLOWED_ORIGINS);
+    // }
 
     const exp = Math.floor(Date.now() / 1000) + tokenTtlSec;
     const token = await signPlaybackToken({ cam_id: camId, site_id: siteId, scope: "playback", exp }, signingSecret);
@@ -158,9 +162,10 @@ export async function handlePublicRoutes(
       .bind(camId, siteId)
       .first<Pick<CameraRow, "visibility">>();
     if (!cam) return jsonResponse({ error: "Camera not found" }, 404, env.ALLOWED_ORIGINS);
-    if (role === "public" && cam.visibility !== "public_trace") {
-      return jsonResponse({ error: "Forbidden: internal_ops camera" }, 403, env.ALLOWED_ORIGINS);
-    }
+    // 【一期免鉴权说明】正式上线 C 端权限隔离时恢复此校验：
+    // if (role === "public" && cam.visibility !== "public_trace") {
+    //   return jsonResponse({ error: "Forbidden: internal_ops camera" }, 403, env.ALLOWED_ORIGINS);
+    // }
 
     const start = url.searchParams.get("start") || "1970-01-01T00:00:00.000Z";
     const end = url.searchParams.get("end") || nowIsoUtc();
