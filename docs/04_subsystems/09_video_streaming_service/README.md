@@ -156,7 +156,12 @@ Content-Type: application/json
 2. **核心服务进程（`systemd` + Docker Compose 托管）**：
    - `mediamtx`：统一拉取海康枪机子码流（`rtsp://admin:<pwd>@192.168.1.10x:554/Streaming/Channels/102`），本地暴露复用流并按需支持 WebRTC；
    - `video-agent`（Python 3 + `FFmpeg` + `boto3`）：执行 `snapshot` / `on-demand` / `continuous-hls` 调度、`-an` 去音轨、R2 上传（带断网指数退避重传与本地内存盘淘汰清理）、以及向云端网关上报心跳。
-3. **时钟基准**：全机强制启用 `chrony` 同步并锁定 `UTC` 时区，保证无宽带或断网重启时由主板 RTC 电池维持正确时间戳。
+3. **时钟基准与全厂统一授时**：全机强制启用 `chrony` 同步并锁定 `UTC` 时区，保证无宽带或断网重启时由主板 RTC 电池维持正确时间戳。
+
+> [!IMPORTANT]
+> **【经验教训备注：海康 NVR 与摄像头局域网统一授时（防 OSD 水印与传感器时间错位）】**  
+> 现场海康 NVR（`192.168.0.201`）与枪机（`192.168.0.x`）处于 `192.168.0.x` 网段，无法经 `192.168.1.1` 路由器直连公网 NTP（实测未同步前设备快了约 1 分 25 秒）。  
+> 统一解法：在倍控 N100 的 `/etc/chrony/chrony.conf` 开启局域网授时服务（`allow 192.168.0.0/22`、`allow 192.168.1.0/24`、`local stratum 10`，上游同步 `ntp.aliyun.com`）；**后续每新增接入海康摄像头或 NVR，必须执行 [sync_hikvision_ntp.sh](../../../apps/video-agent/scripts/sync_hikvision_ntp.sh) 将其 NTP 服务器指向 N100 (`192.168.0.50:123`)**，确保 OSD 水印、NVR 录像与云端 UTC 时间严格一致。
 
 ---
 

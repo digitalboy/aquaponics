@@ -13,10 +13,15 @@
    echo "tmpfs /mnt/hls_ram tmpfs defaults,noatime,nosuid,nodev,size=512M 0 0" | sudo tee -a /etc/fstab
    sudo mount -a
    ```
-2. 锁定系统 UTC 时钟与 `chrony` 校时：
+2. 锁定系统 UTC 时钟与 `chrony` 局域网授时中心（供 NVR/摄像头/PLC 对时）：
    ```bash
    sudo timedatectl set-timezone UTC
    sudo apt update && sudo apt install -y ffmpeg chrony python3-venv
+   ```
+   在 `/etc/chrony/chrony.conf` 追加阿里云 NTP 上游与局域网授时放行（`allow 192.168.0.0/22`、`allow 192.168.1.0/24`、`local stratum 10`）。  
+   **每次新装海康摄像头或 NVR 后**，运行一键授时脚本指向 `192.168.0.50`：
+   ```bash
+   HIK_PASS='你的密码' ./scripts/sync_hikvision_ntp.sh 192.168.0.201 192.168.0.214 192.168.0.217
    ```
 3. 安装并启动 `MediaMTX`（配合同目录 `mediamtx.yml`），随后安装本服务：
    ```bash
