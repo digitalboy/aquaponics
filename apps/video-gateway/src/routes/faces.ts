@@ -233,26 +233,95 @@ export async function handleInternalFacesRoutes(
   }
 
   if (url.pathname === "/api/internal/events/night-ai" && request.method === "GET") {
-    const limit = Math.min(Math.max(Number(url.searchParams.get("limit") || "50"), 1), 100);
-    const { results } = await env.VIDEO_DB.prepare(
-      `SELECT e.event_id, e.site_id, e.cam_id, COALESCE(c.name, e.cam_id) AS cam_name,
-              e.trigger_at, e.r2_key, e.meta_json
-       FROM video_events e
-       LEFT JOIN cameras c ON c.cam_id = e.cam_id
-       WHERE e.site_id = ?1 AND e.source_type = 'night_person_ai'
-       ORDER BY e.trigger_at DESC
-       LIMIT ?2`,
-    )
-      .bind(siteId, limit)
-      .all<{
-        event_id: string;
-        site_id: string;
-        cam_id: string;
-        cam_name: string;
-        trigger_at: string;
-        r2_key: string | null;
-        meta_json: string | null;
-      }>();
+    const limit = Math.min(Math.max(Number(url.searchParams.get("limit") || "100"), 1), 200);
+    const dateParam = url.searchParams.get("date") ?? "";
+    const monthParam = url.searchParams.get("month") ?? "";
+
+    const cstDateRangeUtc = (yyyyMmDd: string): [string, string] | null => {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(yyyyMmDd)) return null;
+      const startMs = Date.parse(`${yyyyMmDd}T00:00:00.000+08:00`);
+      const endMs = Date.parse(`${yyyyMmDd}T23:59:59.999+08:00`);
+      if (Number.isNaN(startMs) || Number.isNaN(endMs)) return null;
+      return [new Date(startMs).toISOString(), new Date(endMs).toISOString()];
+    };
+
+    const cstMonthRangeUtc = (yyyyMm: string): [string, string] | null => {
+      if (!/^\d{4}-\d{2}$/.test(yyyyMm)) return null;
+      const [y, m] = yyyyMm.split("-").map(Number);
+      const lastDay = new Date(y!, m!, 0).getDate();
+      const startMs = Date.parse(`${yyyyMm}-01T00:00:00.000+08:00`);
+      const endMs = Date.parse(`${yyyyMm}-${String(lastDay).padStart(2, "0")}T23:59:59.999+08:00`);
+      if (Number.isNaN(startMs) || Number.isNaN(endMs)) return null;
+      return [new Date(startMs).toISOString(), new Date(endMs).toISOString()];
+    };
+
+    const toCstDateStr = (isoUtc: string): string => {
+      const ms = Date.parse(isoUtc);
+      if (Number.isNaN(ms)) return isoUtc.slice(0, 10);
+      const cst = new Date(ms + 8 * 3600 * 1000);
+      return cst.toISOString().slice(0, 10);
+    };
+
+    const dateRange = dateParam ? cstDateRangeUtc(dateParam) : null;
+    const eventsSql = dateRange
+      ? `SELECT e.event_id, e.site_id, e.cam_id, COALESCE(c.name, e.cam_id) AS cam_name,
+                e.trigger_at, e.r2_key, e.meta_json
+         FROM video_events e
+         LEFT JOIN cameras c ON c.cam_id = e.cam_id
+         WHERE e.site_id = ?1 AND e.source_type = 'night_person_ai'
+           AND e.trigger_at >= ?2 AND e.trigger_at <= ?3
+         ORDER BY e.trigger_at DESC
+         LIMIT ?4`
+      : `SELECT e.event_id, e.site_id, e.cam_id, COALESCE(c.name, e.cam_id) AS cam_name,
+                e.trigger_at, e.r2_key, e.meta_json
+         FROM video_events e
+         LEFT JOIN cameras c ON c.cam_id = e.cam_id
+         WHERE e.site_id = ?1 AND e.source_type = 'night_person_ai'
+         ORDER BY e.trigger_at DESC
+         LIMIT ?2`;
+
+    const eventsStmt = dateRange
+      ? env.VIDEO_DB.prepare(eventsSql).bind(siteId, dateRange[0], dateRange[1], limit)
+      : env.VIDEO_DB.prepare(eventsSql).bind(siteId, limit);
+
+    const { results } = await eventsStmt.all<{
+      event_id: string;
+      site_id: string;
+      cam_id: string;
+      cam_name: string;
+      trigger_at: string;
+      r2_key: string | null;
+      meta_json: string | null;
+    }>();
+
+    const dailySummary: Record<string, { total: number; known: number; unknown: number }> = {};
+    const targetMonth = monthParam || toCstDateStr(nowIsoUtc()).slice(0, 7);
+    const monthRange = cstMonthRangeUtc(targetMonth);
+    if (monthRange) {
+      const { results: monthRows } = await env.VIDEO_DB.prepare(
+        `SELECT trigger_at, meta_json
+         FROM video_events
+         WHERE site_id = ?1 AND source_type = 'night_person_ai'
+           AND trigger_at >= ?2 AND trigger_at <= ?3`,
+      )
+        .bind(siteId, monthRange[0], monthRange[1])
+        .all<{ trigger_at: string; meta_json: string | null }>();
+
+      for (const r of monthRows ?? []) {
+        const day = toCstDateStr(r.trigger_at);
+        if (!dailySummary[day]) dailySummary[day] = { total: 0, known: 0, unknown: 0 };
+        dailySummary[day]!.total += 1;
+        let isKnown = false;
+        try {
+          const meta = r.meta_json ? (JSON.parse(r.meta_json) as { recognized_names?: string[] }) : {};
+          isKnown = Array.isArray(meta.recognized_names) && meta.recognized_names.length > 0;
+        } catch {
+          isKnown = false;
+        }
+        if (isKnown) dailySummary[day]!.known += 1;
+        else dailySummary[day]!.unknown += 1;
+      }
+    }
 
     const events = (results ?? []).map((row) => {
       let meta: Record<string, unknown> = {};
@@ -275,7 +344,11 @@ export async function handleInternalFacesRoutes(
       };
     });
 
-    return jsonResponse({ site_id: siteId, events }, 200, env.ALLOWED_ORIGINS);
+    return jsonResponse(
+      { site_id: siteId, month: targetMonth, date: dateParam || null, daily_summary: dailySummary, events },
+      200,
+      env.ALLOWED_ORIGINS,
+    );
   }
 
   if (url.pathname === "/api/internal/faces/upsert" && request.method === "POST") {

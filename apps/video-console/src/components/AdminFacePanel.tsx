@@ -13,6 +13,7 @@ import {
   Users,
   X,
 } from "lucide-react";
+import { type DailySummaryItem, NightAiCalendar } from "./NightAiCalendar";
 
 interface FaceSample {
   sample_id: string;
@@ -108,6 +109,12 @@ export function AdminFacePanel({
   const [tab, setTab] = useState<"events" | "staff">("events");
   const [staff, setStaff] = useState<StaffItem[]>([]);
   const [events, setEvents] = useState<NightAiEvent[]>([]);
+  const [calendarMonth, setCalendarMonth] = useState<string>(() => {
+    const cst = new Date(Date.now() + 8 * 3600 * 1000);
+    return cst.toISOString().slice(0, 7);
+  });
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [dailySummary, setDailySummary] = useState<Record<string, DailySummaryItem>>({});
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -134,9 +141,11 @@ export function AdminFacePanel({
     setErrorMsg("");
     try {
       const headers = { Authorization: `Bearer ${token}` };
+      const eventsQuery = new URLSearchParams({ limit: "100", month: calendarMonth });
+      if (selectedDate) eventsQuery.set("date", selectedDate);
       const [facesRes, eventsRes, meRes] = await Promise.all([
         fetch(`${gatewayUrl}/api/internal/faces`, { headers }),
-        fetch(`${gatewayUrl}/api/internal/events/night-ai?limit=50`, { headers }),
+        fetch(`${gatewayUrl}/api/internal/events/night-ai?${eventsQuery.toString()}`, { headers }),
         fetch(`${gatewayUrl}/api/internal/admin/me`, { headers }),
       ]);
 
@@ -158,15 +167,19 @@ export function AdminFacePanel({
         setStaff(data.staff ?? []);
       }
       if (eventsRes.ok) {
-        const data = (await eventsRes.json()) as { events: NightAiEvent[] };
+        const data = (await eventsRes.json()) as {
+          events: NightAiEvent[];
+          daily_summary?: Record<string, DailySummaryItem>;
+        };
         setEvents(data.events ?? []);
+        if (data.daily_summary) setDailySummary(data.daily_summary);
       }
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : "加载管理数据失败");
     } finally {
       setLoading(false);
     }
-  }, [gatewayUrl, token]);
+  }, [gatewayUrl, token, calendarMonth, selectedDate]);
 
   useEffect(() => {
     if (token) void fetchAll();
@@ -413,73 +426,103 @@ export function AdminFacePanel({
       )}
 
       {tab === "events" ? (
-        <div className="grid gap-3 md:grid-cols-2">
-          {events.length === 0 ? (
-            <div className="col-span-full rounded-xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
-              暂无夜间 AI 识别记录
-            </div>
-          ) : (
-            events.map((ev) => {
-              const isKnown = ev.recognized_names.length > 0;
-              const thumbKey = ev.frames[0]?.r2_key || ev.r2_key;
-              return (
-                <div
-                  key={ev.event_id}
-                  className="flex gap-3 rounded-xl border border-border bg-card p-3 transition hover:border-primary/40"
-                >
-                  {thumbKey ? (
-                    <button
-                      type="button"
-                      onClick={() => setPreviewEvent(ev)}
-                      className="h-24 w-36 shrink-0 overflow-hidden rounded-lg border border-border bg-black"
-                    >
-                      <img
-                        src={mediaUrl(thumbKey)}
-                        alt={ev.cam_name}
-                        className="h-full w-full object-cover"
-                      />
-                    </button>
-                  ) : (
-                    <div className="flex h-24 w-36 shrink-0 items-center justify-center rounded-lg border border-border bg-muted text-xs text-muted-foreground">
-                      无图
-                    </div>
-                  )}
+        <div className="grid gap-4 lg:grid-cols-[340px_1fr] lg:items-start">
+          <NightAiCalendar
+            month={calendarMonth}
+            selectedDate={selectedDate}
+            dailySummary={dailySummary}
+            onMonthChange={(m) => {
+              setCalendarMonth(m);
+              setSelectedDate(null);
+            }}
+            onSelectDate={(d) => setSelectedDate(d)}
+          />
 
-                  <div className="flex min-w-0 flex-1 flex-col justify-between">
-                    <div>
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        {isKnown ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs font-medium text-emerald-400">
-                            <UserCheck className="h-3 w-3" />
-                            熟人：{ev.recognized_names.join("、")}
-                            {ev.face_similarity ? ` (${Math.round(ev.face_similarity * 100)}%)` : ""}
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-red-500/15 px-2 py-0.5 text-xs font-medium text-red-400">
-                            <ShieldAlert className="h-3 w-3" />
-                            未知人员 ({ev.person_count}人)
-                          </span>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>
+                {selectedDate ? `${selectedDate} 识别记录 (${events.length})` : `最近识别记录 (${events.length})`}
+              </span>
+              {selectedDate && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedDate(null)}
+                  className="text-primary hover:underline"
+                >
+                  显示全部日期
+                </button>
+              )}
+            </div>
+
+            <div className="grid gap-3 md:grid-cols-2">
+              {events.length === 0 ? (
+                <div className="col-span-full rounded-xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+                  {selectedDate ? `${selectedDate} 当天暂无识别记录` : "暂无夜间 AI 识别记录"}
+                </div>
+              ) : (
+                events.map((ev) => {
+                  const isKnown = ev.recognized_names.length > 0;
+                  const thumbKey = ev.frames[0]?.r2_key || ev.r2_key;
+                  return (
+                    <div
+                      key={ev.event_id}
+                      className="flex gap-3 rounded-xl border border-border bg-card p-3 transition hover:border-primary/40"
+                    >
+                      {thumbKey ? (
+                        <button
+                          type="button"
+                          onClick={() => setPreviewEvent(ev)}
+                          className="h-24 w-36 shrink-0 overflow-hidden rounded-lg border border-border bg-black"
+                        >
+                          <img
+                            src={mediaUrl(thumbKey)}
+                            alt={ev.cam_name}
+                            className="h-full w-full object-cover"
+                          />
+                        </button>
+                      ) : (
+                        <div className="flex h-24 w-36 shrink-0 items-center justify-center rounded-lg border border-border bg-muted text-xs text-muted-foreground">
+                          无图
+                        </div>
+                      )}
+
+                      <div className="flex min-w-0 flex-1 flex-col justify-between">
+                        <div>
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            {isKnown ? (
+                              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs font-medium text-emerald-400">
+                                <UserCheck className="h-3 w-3" />
+                                熟人：{ev.recognized_names.join("、")}
+                                {ev.face_similarity ? ` (${Math.round(ev.face_similarity * 100)}%)` : ""}
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 rounded-full bg-red-500/15 px-2 py-0.5 text-xs font-medium text-red-400">
+                                <ShieldAlert className="h-3 w-3" />
+                                未知人员 ({ev.person_count}人)
+                              </span>
+                            )}
+                          </div>
+                          <p className="mt-1.5 text-xs font-medium text-foreground">{ev.cam_name}</p>
+                          <p className="mt-0.5 text-xs text-muted-foreground">
+                            {formatLocalTime(ev.trigger_at)}
+                          </p>
+                        </div>
+                        {ev.frames.length > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => setPreviewEvent(ev)}
+                            className="self-start text-xs text-primary hover:underline"
+                          >
+                            查看 {ev.frames.length} 张现场连拍 →
+                          </button>
                         )}
                       </div>
-                      <p className="mt-1.5 text-xs font-medium text-foreground">{ev.cam_name}</p>
-                      <p className="mt-0.5 text-xs text-muted-foreground">
-                        {formatLocalTime(ev.trigger_at)}
-                      </p>
                     </div>
-                    {ev.frames.length > 0 && (
-                      <button
-                        type="button"
-                        onClick={() => setPreviewEvent(ev)}
-                        className="self-start text-xs text-primary hover:underline"
-                      >
-                        查看 {ev.frames.length} 张现场连拍 →
-                      </button>
-                    )}
-                  </div>
-                </div>
-              );
-            })
-          )}
+                  );
+                })
+              )}
+            </div>
+          </div>
         </div>
       ) : (
         <div className="space-y-4">
