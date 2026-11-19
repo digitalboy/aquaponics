@@ -148,26 +148,29 @@ export function AquaponicsVideoPlayer({
     };
   }, [client, camId, mode, playbackStart, playbackEnd, refreshNonce]);
 
-  // 快照模式：每秒更新左下角旋转倒计时，归零且页面处于前台时才请求刷新
+  // 快照模式：每秒更新左下角旋转倒计时，归零且处于前台时抓拍；切回前台/获得焦点时立即刷新并重置周期
   useEffect(() => {
     if (mode !== "snapshot" || autoRefreshSec <= 0) {
       setRemainingSec(0);
       return;
     }
 
+    let cancelled = false;
     let rem = autoRefreshSec;
+    let lastResumeAt = 0;
+    let followUpTimer: number | undefined;
     setRemainingSec(rem);
 
-    const timer = window.setInterval(() => {
-      if (document.hidden) return;
-      rem -= 1;
-      if (rem <= 0) {
-        setRemainingSec(0);
-        void client.getSnapshots(camId, { refresh: true }).then((data) => {
+    function pullLatest() {
+      void client
+        .getSnapshots(camId, { refresh: true })
+        .then((data) => {
+          if (cancelled) return;
           const latest = data.snapshots[0];
           if (!latest || latest.captured_at === lastCapturedRef.current) return;
           const pre = new Image();
           pre.onload = () => {
+            if (cancelled) return;
             lastCapturedRef.current = latest.captured_at;
             setSnapshotUrl(latest.url);
             setCapturedAt(latest.captured_at);
@@ -175,14 +178,50 @@ export function AquaponicsVideoPlayer({
             setStatus("ready");
           };
           pre.src = latest.url;
-        }).catch(() => undefined);
+        })
+        .catch(() => undefined);
+    }
+
+    function onResume() {
+      if (document.hidden) return;
+      const now = Date.now();
+      // 防止 visibilitychange 与 focus 在同一毫秒重复触发
+      if (now - lastResumeAt < 3000) return;
+      lastResumeAt = now;
+
+      setRemainingSec(0);
+      pullLatest();
+      // 工控机空闲心跳 5s，6s 后顺带回捞一次刚抓拍上传的新图
+      if (followUpTimer !== undefined) window.clearTimeout(followUpTimer);
+      followUpTimer = window.setTimeout(() => {
+        if (!cancelled && !document.hidden) pullLatest();
+      }, 6000);
+      rem = autoRefreshSec;
+      setRemainingSec(rem);
+    }
+
+    const timer = window.setInterval(() => {
+      if (document.hidden) return;
+      rem -= 1;
+      if (rem <= 0) {
+        setRemainingSec(0);
+        pullLatest();
         rem = autoRefreshSec;
       } else {
         setRemainingSec(rem);
       }
     }, 1000);
 
-    return () => window.clearInterval(timer);
+    document.addEventListener("visibilitychange", onResume);
+    window.addEventListener("focus", onResume);
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+      if (followUpTimer !== undefined) window.clearTimeout(followUpTimer);
+      document.removeEventListener("visibilitychange", onResume);
+      window.removeEventListener("focus", onResume);
+    };
   }, [client, camId, mode, autoRefreshSec]);
 
   useEffect(() => {
