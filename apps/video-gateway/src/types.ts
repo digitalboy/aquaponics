@@ -25,6 +25,8 @@ export interface Env {
   AGENT_SECRET?: string;
   SIGNING_SECRET?: string;
   INTERNAL_API_KEY?: string;
+  ADMIN_PASSWORD?: string;
+  ADMIN_FEISHU_OPEN_IDS?: string;
   EMAIL?: SendEmailBinding;
   ALERT_EMAIL_TO?: string;
   ALERT_EMAIL_FROM?: string;

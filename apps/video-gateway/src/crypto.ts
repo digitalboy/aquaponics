@@ -80,34 +80,29 @@ export async function verifyAgentRequest(
   return { ok: true, siteId };
 }
 
-/** 签发短时效播放 Token */
-export async function signPlaybackToken(
-  payload: PlaybackTokenPayload,
-  secret: string,
-): Promise<string> {
+async function signJsonToken(payload: object, secret: string): Promise<string> {
   const bodyB64 = toBase64Url(encoder.encode(JSON.stringify(payload)));
   const key = await importHmacKey(secret);
   const sig = await crypto.subtle.sign("HMAC", key, encoder.encode(bodyB64));
   return `${bodyB64}.${toBase64Url(new Uint8Array(sig))}`;
 }
 
-/** 验证短时效播放 Token 并返回载荷 */
-export async function verifyPlaybackToken(
+async function verifyJsonToken<T extends { exp: number }>(
   token: string,
   secret: string,
-): Promise<PlaybackTokenPayload | null> {
+): Promise<T | null> {
   const parts = token.split(".");
   if (parts.length !== 2) return null;
   const [bodyB64, sigB64] = parts;
 
   const key = await importHmacKey(secret);
   const expectedSig = toBase64Url(
-    new Uint8Array(await crypto.subtle.sign("HMAC", key, encoder.encode(bodyB64))),
+    new Uint8Array(await crypto.subtle.sign("HMAC", key, encoder.encode(bodyB64!))),
   );
-  if (!constantTimeEqual(expectedSig, sigB64)) return null;
+  if (!constantTimeEqual(expectedSig, sigB64!)) return null;
 
   try {
-    const parsed = JSON.parse(new TextDecoder().decode(fromBase64Url(bodyB64))) as PlaybackTokenPayload;
+    const parsed = JSON.parse(new TextDecoder().decode(fromBase64Url(bodyB64!))) as T;
     if (typeof parsed.exp !== "number" || Date.now() / 1000 > parsed.exp) {
       return null;
     }
@@ -115,4 +110,59 @@ export async function verifyPlaybackToken(
   } catch {
     return null;
   }
+}
+
+/** 签发短时效播放 Token */
+export async function signPlaybackToken(
+  payload: PlaybackTokenPayload,
+  secret: string,
+): Promise<string> {
+  return signJsonToken(payload, secret);
+}
+
+/** 验证短时效播放 Token 并返回载荷 */
+export async function verifyPlaybackToken(
+  token: string,
+  secret: string,
+): Promise<PlaybackTokenPayload | null> {
+  return verifyJsonToken<PlaybackTokenPayload>(token, secret);
+}
+
+export interface AdminTokenPayload {
+  scope: "admin";
+  exp: number;
+  name?: string;
+  open_id?: string;
+  avatar_url?: string;
+}
+
+/** 签发管理后台会话 Token (默认 30 天) */
+export async function signAdminToken(
+  secret: string,
+  ttlSec = 30 * 86400,
+  user?: { open_id: string; name: string; avatar_url?: string },
+): Promise<string> {
+  return signJsonToken(
+    {
+      scope: "admin",
+      exp: Math.floor(Date.now() / 1000) + ttlSec,
+      ...(user ? { open_id: user.open_id, name: user.name, avatar_url: user.avatar_url } : {}),
+    },
+    secret,
+  );
+}
+
+/** 校验管理后台会话 Token */
+export async function verifyAdminToken(token: string, secret: string): Promise<boolean> {
+  const payload = await verifyJsonToken<AdminTokenPayload>(token, secret);
+  return payload !== null && payload.scope === "admin";
+}
+
+/** 解析管理后台会话 Token 载荷 */
+export async function decodeAdminToken(
+  token: string,
+  secret: string,
+): Promise<AdminTokenPayload | null> {
+  const payload = await verifyJsonToken<AdminTokenPayload>(token, secret);
+  return payload !== null && payload.scope === "admin" ? payload : null;
 }

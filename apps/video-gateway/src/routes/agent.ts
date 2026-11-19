@@ -1,6 +1,7 @@
 import { handlePersonDetectionAlert } from "../alerts";
 import { sha256Hex, verifyAgentRequest } from "../crypto";
 import { type CameraRow, type Env, isStrictIsoUtc, jsonResponse, nowIsoUtc } from "../types";
+import { exportSiteFacesGallery, getSiteFacesVersion } from "./faces";
 
 interface HeartbeatBody {
   agent_version?: string;
@@ -101,9 +102,12 @@ export async function handleAgentRoutes(
     const desiredModes: Record<string, string> = {};
     for (const r of modeRows) desiredModes[r.cam_id] = r.stream_mode;
 
+    const facesVersion = await getSiteFacesVersion(env.VIDEO_DB, auth.siteId);
+
     return jsonResponse(
       {
         server_time: now,
+        faces_version: facesVersion,
         commands: commands.map((c) => ({
           cmd_id: c.cmd_id,
           cam_id: c.cam_id,
@@ -116,6 +120,61 @@ export async function handleAgentRoutes(
       200,
       env.ALLOWED_ORIGINS,
     );
+  }
+
+  if (pathname.startsWith("/api/internal/agent/download/") && request.method === "GET") {
+    const r2Key = decodeURIComponent(pathname.slice("/api/internal/agent/download/".length));
+    if (!r2Key || r2Key.includes("..")) {
+      return jsonResponse({ error: "Invalid R2 key" }, 400, env.ALLOWED_ORIGINS);
+    }
+    const obj = await env.VIDEO_R2.get(r2Key);
+    if (!obj) {
+      return jsonResponse({ error: "Object not found" }, 404, env.ALLOWED_ORIGINS);
+    }
+    return new Response(obj.body, {
+      status: 200,
+      headers: {
+        "Content-Type": obj.httpMetadata?.contentType || "application/octet-stream",
+        "Cache-Control": "no-store",
+      },
+    });
+  }
+
+  if (pathname === "/api/internal/agent/faces" && request.method === "GET") {
+    const gallery = await exportSiteFacesGallery(env.VIDEO_DB, auth.siteId);
+    return jsonResponse(gallery, 200, env.ALLOWED_ORIGINS);
+  }
+
+  if (pathname === "/api/internal/agent/faces/sample-result" && request.method === "POST") {
+    const body = JSON.parse(rawBody as string) as {
+      sample_id: string;
+      person_id: string;
+      status: "ready" | "failed";
+      embedding?: number[];
+      error_message?: string;
+    };
+    if (!body.sample_id || !body.person_id) {
+      return jsonResponse({ error: "sample_id and person_id are required" }, 400, env.ALLOWED_ORIGINS);
+    }
+    if (body.status === "ready" && Array.isArray(body.embedding) && body.embedding.length > 0) {
+      await env.VIDEO_DB.batch([
+        env.VIDEO_DB.prepare(
+          `UPDATE staff_face_samples SET status = 'ready', embedding_json = ?1, error_message = NULL
+           WHERE sample_id = ?2 AND site_id = ?3`,
+        ).bind(JSON.stringify(body.embedding), body.sample_id, auth.siteId),
+        env.VIDEO_DB.prepare(
+          `UPDATE staff_faces SET updated_at = ?1 WHERE person_id = ?2 AND site_id = ?3`,
+        ).bind(now, body.person_id, auth.siteId),
+      ]);
+    } else {
+      await env.VIDEO_DB.prepare(
+        `UPDATE staff_face_samples SET status = 'failed', error_message = ?1
+         WHERE sample_id = ?2 AND site_id = ?3`,
+      )
+        .bind(body.error_message || "未检测到清晰人脸", body.sample_id, auth.siteId)
+        .run();
+    }
+    return jsonResponse({ ok: true, sample_id: body.sample_id }, 200, env.ALLOWED_ORIGINS);
   }
 
   const ackMatch = pathname.match(/^\/api\/internal\/agent\/commands\/([^/]+)\/ack$/);
@@ -209,15 +268,25 @@ export async function handleAgentRoutes(
       max_confidence: number;
       schedule_note?: string;
       frames?: Array<{ label: string; r2_key: string; captured_at: string }>;
+      recognized_names?: string[];
+      face_similarity?: number;
     };
     if (!body.event_id || !body.cam_id || !body.r2_key || !isStrictIsoUtc(body.detected_at)) {
       return jsonResponse({ error: "Invalid person-alert payload" }, 400, env.ALLOWED_ORIGINS);
     }
 
+    const metaJson = JSON.stringify({
+      person_count: Math.max(1, Number(body.person_count || 1)),
+      max_confidence: Number(body.max_confidence || 0),
+      recognized_names: Array.isArray(body.recognized_names) ? body.recognized_names : [],
+      face_similarity: typeof body.face_similarity === "number" ? body.face_similarity : null,
+      frames: Array.isArray(body.frames) ? body.frames : [],
+    });
+
     await env.VIDEO_DB.prepare(
       `INSERT OR IGNORE INTO video_events
-       (event_id, site_id, cam_id, source_type, trigger_at, start_at, end_at, r2_key, status, created_at, updated_at)
-       VALUES (?, ?, ?, 'night_person_ai', ?, ?, ?, ?, 'ready', ?, ?)`,
+       (event_id, site_id, cam_id, source_type, trigger_at, start_at, end_at, r2_key, status, meta_json, created_at, updated_at)
+       VALUES (?, ?, ?, 'night_person_ai', ?, ?, ?, ?, 'ready', ?, ?, ?)`,
     )
       .bind(
         body.event_id,
@@ -227,6 +296,7 @@ export async function handleAgentRoutes(
         body.detected_at,
         body.detected_at,
         body.r2_key,
+        metaJson,
         now,
         now,
       )
@@ -257,6 +327,8 @@ export async function handleAgentRoutes(
       maxConfidence: Number(body.max_confidence || 0),
       scheduleNote: body.schedule_note,
       frames,
+      recognizedNames: Array.isArray(body.recognized_names) ? body.recognized_names : undefined,
+      faceSimilarity: typeof body.face_similarity === "number" ? body.face_similarity : undefined,
     });
 
     return jsonResponse({ ok: true, event_id: body.event_id, channels }, 200, env.ALLOWED_ORIGINS);

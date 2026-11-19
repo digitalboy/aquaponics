@@ -763,12 +763,14 @@ export interface PersonAlertInput {
   maxConfidence: number;
   scheduleNote?: string;
   frames?: PersonAlertFrame[];
+  recognizedNames?: string[];
+  faceSimilarity?: number;
 }
 
 /**
  * 处理边缘 N100 上报的夜间人形检测事件：
- * - 飞书群 Webhook：从 R2 取带红框现场图（支持 1~3 张优选连拍）上传飞书，发红色高优带图告警卡片
- * - 邮件告警：发送纯文字告警邮件至 ALERT_EMAIL_TO（不含图片）
+ * - 若匹配到本地人脸底库（如“张扬”）：飞书推送蓝色熟人识别卡片（直接标出姓名），不发警告邮件
+ * - 若未匹配到已知人脸：飞书推送红色未知人员告警卡片 + 发送告警邮件
  */
 export async function handlePersonDetectionAlert(
   env: Env,
@@ -803,21 +805,49 @@ export async function handlePersonDetectionAlert(
   }
 
   const confidencePct = `${Math.round(input.maxConfidence * 100)}%`;
-  const basePayload: AlertPayload = {
-    alertKey: `person_alert:${input.eventId}`,
-    siteId: input.siteId,
-    camId: input.camId,
-    camName: input.camName,
-    severity: "critical",
-    title: `🚨 夜间人员闯入告警：${input.camName}`,
-    summary: `夜间布防期间在「${input.camName}」画面中检测到 ${input.personCount} 名人员（最高置信度 ${confidencePct}）。`,
-    occurredAtUtc: input.detectedAtUtc,
-    details: [
-      { label: "检测人数", value: `${input.personCount} 人` },
-      { label: "最高置信度", value: confidencePct },
-      ...(input.scheduleNote ? [{ label: "布防时段", value: input.scheduleNote }] : []),
-    ],
-  };
+  const knownNames = (input.recognizedNames ?? []).filter((n) => n.trim().length > 0);
+  const isKnown = knownNames.length > 0;
+  const simPct = input.faceSimilarity ? `${Math.round(input.faceSimilarity * 100)}%` : undefined;
+
+  const basePayload: AlertPayload = isKnown
+    ? {
+        alertKey: `person_alert:${input.eventId}`,
+        siteId: input.siteId,
+        camId: input.camId,
+        camName: input.camName,
+        severity: "info",
+        title: `👋 夜间识别到熟人：${knownNames.join("、")}（${input.camName}）`,
+        summary: `夜间在「${input.camName}」画面中识别到已登记人员：**${knownNames.join("、")}**${simPct ? `（人脸相似度 ${simPct}）` : ""}。`,
+        occurredAtUtc: input.detectedAtUtc,
+        details: [
+          { label: "识别身份", value: knownNames.join("、") },
+          ...(simPct ? [{ label: "人脸相似度", value: simPct }] : []),
+          { label: "人体置信度", value: confidencePct },
+          ...(input.scheduleNote ? [{ label: "布防时段", value: input.scheduleNote }] : []),
+        ],
+      }
+    : {
+        alertKey: `person_alert:${input.eventId}`,
+        siteId: input.siteId,
+        camId: input.camId,
+        camName: input.camName,
+        severity: "critical",
+        title: `🚨 夜间未知人员告警：${input.camName}`,
+        summary: `夜间布防期间在「${input.camName}」画面中检测到 ${input.personCount} 名未知人员（最高置信度 ${confidencePct}）。`,
+        occurredAtUtc: input.detectedAtUtc,
+        details: [
+          { label: "检测人数", value: `${input.personCount} 人` },
+          { label: "最高置信度", value: confidencePct },
+          ...(input.scheduleNote ? [{ label: "布防时段", value: input.scheduleNote }] : []),
+        ],
+      };
+
+  if (isKnown) {
+    return Promise.all([
+      sendFeishuAlert(env, { ...basePayload, images }),
+      sendGenericWebhook(env, basePayload),
+    ]);
+  }
 
   return Promise.all([
     sendFeishuAlert(env, { ...basePayload, images }),

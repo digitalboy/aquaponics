@@ -9,6 +9,7 @@ from urllib.parse import quote
 import httpx
 
 from .config import AgentConfig
+from .face_recognizer import FaceRecognizer
 from .ffmpeg_runner import FFmpegRunner
 from .person_detector import PersonDetector, draw_person_boxes
 from .sun_schedule import is_night_guard_window
@@ -34,6 +35,43 @@ class VideoAgent:
         self.runner = FFmpegRunner(cfg.mediamtx_rtsp_base, cfg.hls_ram_dir)
         self.desired_modes: dict[str, str] = {c: "snapshot" for c in cfg.active_cameras}
         self._uploaded_hls: set[Path] = set()
+        self._faces_version: str = ""
+        self.face_rec: FaceRecognizer | None = self._init_face_recognizer()
+
+    def _init_face_recognizer(self) -> FaceRecognizer | None:
+        if not (self.cfg.face_det_model_path.exists() and self.cfg.face_rec_model_path.exists()):
+            return None
+        try:
+            rec = FaceRecognizer(
+                det_model_path=self.cfg.face_det_model_path,
+                rec_model_path=self.cfg.face_rec_model_path,
+                gallery_path=self.cfg.face_gallery_path,
+                cos_threshold=self.cfg.face_cos_threshold,
+            )
+            logger.info(
+                "Face recognizer ready (%d local vectors)",
+                sum(len(v) for v in rec.gallery.values()),
+            )
+            return rec
+        except Exception as exc:
+            logger.warning("Face recognizer init failed: %s", exc)
+            return None
+
+    async def _sync_faces_if_needed(self, client: httpx.AsyncClient, cloud_version: str | None) -> None:
+        if not self.face_rec or not cloud_version or cloud_version == self._faces_version:
+            return
+        res = await self._signed_request(client, "GET", "/api/internal/agent/faces", b"")
+        if res.status_code != 200:
+            logger.warning("Face gallery sync failed (%s): %s", res.status_code, res.text)
+            return
+        payload = res.json()
+        faces = payload.get("faces")
+        if isinstance(faces, dict) and len(faces) > 0:
+            count = await asyncio.to_thread(self.face_rec.update_gallery_dict, faces)
+            self._faces_version = str(payload.get("faces_version") or cloud_version)
+            logger.info("Synced face gallery from cloud: %d vectors (version=%s)", count, self._faces_version)
+        elif isinstance(faces, dict):
+            self._faces_version = str(payload.get("faces_version") or cloud_version)
 
     async def _signed_request(
         self,
@@ -106,9 +144,59 @@ class VideoAgent:
                     ok = await self._upload_and_ingest(client, f, r2_key, "snapshot", cam_id, ts)
                 else:
                     ok = False
+            elif action == "extract_face":
+                ok = await self._handle_extract_face(client, payload)
 
             ack_body = json.dumps({"status": "completed" if ok else "failed"}).encode("utf-8")
             await self._signed_request(client, "POST", f"/api/internal/agent/commands/{cmd_id}/ack", ack_body)
+
+    async def _handle_extract_face(self, client: httpx.AsyncClient, payload: dict) -> bool:
+        sample_id = str(payload.get("sample_id") or "")
+        person_id = str(payload.get("person_id") or "")
+        r2_key = str(payload.get("r2_key") or "")
+        if not sample_id or not person_id or not r2_key or not self.face_rec:
+            return False
+
+        dl_path = f"/api/internal/agent/download/{quote(r2_key, safe='/')}"
+        dl_res = await self._signed_request(client, "GET", dl_path, b"")
+        if dl_res.status_code != 200:
+            err_body = json.dumps(
+                {
+                    "sample_id": sample_id,
+                    "person_id": person_id,
+                    "status": "failed",
+                    "error_message": f"下载样本失败 ({dl_res.status_code})",
+                }
+            ).encode("utf-8")
+            await self._signed_request(client, "POST", "/api/internal/agent/faces/sample-result", err_body)
+            return False
+
+        feat = await asyncio.to_thread(self.face_rec.extract_largest_feature, dl_res.content)
+        if feat is None:
+            err_body = json.dumps(
+                {
+                    "sample_id": sample_id,
+                    "person_id": person_id,
+                    "status": "failed",
+                    "error_message": "未检测到清晰人脸，请换一张正面清晰照",
+                }
+            ).encode("utf-8")
+            await self._signed_request(client, "POST", "/api/internal/agent/faces/sample-result", err_body)
+            return False
+
+        ok_body = json.dumps(
+            {
+                "sample_id": sample_id,
+                "person_id": person_id,
+                "status": "ready",
+                "embedding": feat.flatten().tolist(),
+            }
+        ).encode("utf-8")
+        res = await self._signed_request(client, "POST", "/api/internal/agent/faces/sample-result", ok_body)
+        if res.status_code == 200:
+            self._faces_version = ""  # 强制下次心跳刷新本地底库
+            return True
+        return False
 
     async def heartbeat_loop(self, client: httpx.AsyncClient) -> None:
         while True:
@@ -138,6 +226,7 @@ class VideoAgent:
                 if res.status_code == 200:
                     data = res.json()
                     self.desired_modes.update(data.get("desired_modes", {}))
+                    await self._sync_faces_if_needed(client, data.get("faces_version"))
                     await self._handle_commands(client, data.get("commands", []))
             except Exception as exc:
                 logger.warning("Heartbeat error: %s", exc)
@@ -236,6 +325,8 @@ class VideoAgent:
             model_path=self.cfg.night_ai_model_path,
             conf_threshold=self.cfg.night_ai_conf_threshold,
         )
+        face_rec = self.face_rec
+
         logger.info(
             "Night AI person guard initialized (lat=%.3f, lon=%.3f, model=%s)",
             self.cfg.site_lat,
@@ -347,6 +438,31 @@ class VideoAgent:
 
                     best_boxes = burst[best_idx][2] or boxes
                     best_max_conf = max((b.confidence for b in best_boxes), default=max_conf)
+
+                    recognized_names: list[str] = []
+                    best_face_sim = 0.0
+                    if face_rec is not None:
+                        try:
+                            hd_snap = await self.runner.capture_snapshot(f"{cam_id}-HD")
+                            hd_bytes: bytes | None = None
+                            if hd_snap:
+                                hd_file, _ = hd_snap
+                                hd_bytes = hd_file.read_bytes()
+                                hd_file.unlink(missing_ok=True)
+                            probe_list = [hd_bytes] if hd_bytes else []
+                            probe_list.extend(burst[idx][0] for idx, _ in chosen_indices)
+                            for probe in probe_list:
+                                matches = await asyncio.to_thread(face_rec.identify_bytes, probe)
+                                for m in matches:
+                                    if m.name and m.name not in recognized_names:
+                                        recognized_names.append(m.name)
+                                    if m.name and m.similarity > best_face_sim:
+                                        best_face_sim = m.similarity
+                                if recognized_names:
+                                    break
+                        except Exception as exc:
+                            logger.warning("Face recognition error (%s): %s", cam_id, exc)
+
                     alert_body = json.dumps(
                         {
                             "event_id": event_id,
@@ -357,6 +473,8 @@ class VideoAgent:
                             "max_confidence": round(best_max_conf, 4),
                             "schedule_note": schedule_note,
                             "frames": uploaded_frames,
+                            "recognized_names": recognized_names,
+                            "face_similarity": round(best_face_sim, 4) if best_face_sim > 0 else None,
                         }
                     ).encode("utf-8")
                     alert_res = await self._signed_request(client, "POST", "/api/internal/agent/person-alert", alert_body)
