@@ -1,6 +1,7 @@
 import { RefreshCw } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { AquaponicsVideoPlayer } from "./AquaponicsVideoPlayer";
+import { SnapshotTimelapseDialog } from "./components/SnapshotTimelapseDialog";
 import { Badge } from "./components/ui/badge";
 import { Button } from "./components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
@@ -32,6 +33,7 @@ export function CameraMonitorGrid({
   const [error, setError] = useState<string>("");
   const [refreshMap, setRefreshMap] = useState<Record<string, number>>({});
   const [liveSet, setLiveSet] = useState<Record<string, boolean>>({});
+  const [dialogCam, setDialogCam] = useState<CameraInfo | null>(null);
 
   const client = useMemo(
     () => new VideoGatewayClient({ gatewayUrl, siteId, authToken }),
@@ -78,54 +80,71 @@ export function CameraMonitorGrid({
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-      {cameras.map((cam) => {
-        const isLive = allowLive && Boolean(liveSet[cam.cam_id]);
-        return (
-          <Card key={cam.cam_id}>
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <CardTitle>{cam.name}</CardTitle>
-                <Badge variant="outline">现场实景</Badge>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  onClick={() => {
-                    setLiveSet((prev) => ({ ...prev, [cam.cam_id]: false }));
-                    setRefreshMap((prev) => ({ ...prev, [cam.cam_id]: (prev[cam.cam_id] ?? 0) + 1 }));
-                  }}
-                >
-                  <RefreshCw className="h-3 w-3" />
-                  刷新画面
-                </Button>
-                {/* 后端 on-demand 直播能力已就绪；一期仅在 allowLive=true 时渲染该按钮 */}
-                {allowLive && (
+    <>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {cameras.map((cam) => {
+          const isLive = allowLive && Boolean(liveSet[cam.cam_id]);
+          return (
+            <Card key={cam.cam_id}>
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <CardTitle>{cam.name}</CardTitle>
+                  <Badge variant="outline">现场实景</Badge>
+                </div>
+                <div className="flex items-center gap-1.5">
                   <Button
                     size="sm"
-                    variant={isLive ? "default" : "outline"}
-                    onClick={() => setLiveSet((prev) => ({ ...prev, [cam.cam_id]: !isLive }))}
+                    variant="secondary"
+                    onClick={() => {
+                      setLiveSet((prev) => ({ ...prev, [cam.cam_id]: false }));
+                      setRefreshMap((prev) => ({ ...prev, [cam.cam_id]: (prev[cam.cam_id] ?? 0) + 1 }));
+                    }}
                   >
-                    {isLive ? "切回快照" : "实时视频"}
+                    <RefreshCw className="h-3 w-3" />
+                    刷新画面
                   </Button>
-                )}
-              </div>
-            </CardHeader>
-            <CardContent>
-              <AquaponicsVideoPlayer
-                gatewayUrl={gatewayUrl}
-                camId={cam.cam_id}
-                siteId={siteId}
-                authToken={authToken}
-                mode={isLive ? "live" : "snapshot"}
-                autoRefreshSec={autoRefreshSec}
-                refreshNonce={refreshMap[cam.cam_id] ?? 0}
-              />
-            </CardContent>
-          </Card>
-        );
-      })}
-    </div>
+                  {/* 后端 on-demand 直播能力已就绪；一期仅在 allowLive=true 时渲染该按钮 */}
+                  {allowLive && (
+                    <Button
+                      size="sm"
+                      variant={isLive ? "default" : "outline"}
+                      onClick={() => setLiveSet((prev) => ({ ...prev, [cam.cam_id]: !isLive }))}
+                    >
+                      {isLive ? "切回快照" : "实时视频"}
+                    </Button>
+                  )}
+                </div>
+              </CardHeader>
+              <CardContent>
+                <AquaponicsVideoPlayer
+                  gatewayUrl={gatewayUrl}
+                  camId={cam.cam_id}
+                  siteId={siteId}
+                  authToken={authToken}
+                  mode={isLive ? "live" : "snapshot"}
+                  autoRefreshSec={autoRefreshSec}
+                  refreshNonce={refreshMap[cam.cam_id] ?? 0}
+                  onClick={() => setDialogCam(cam)}
+                />
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+
+      {dialogCam && (
+        <SnapshotTimelapseDialog
+          open={Boolean(dialogCam)}
+          onOpenChange={(open) => {
+            if (!open) setDialogCam(null);
+          }}
+          gatewayUrl={gatewayUrl}
+          camId={dialogCam.cam_id}
+          camName={dialogCam.name}
+          siteId={siteId}
+          authToken={authToken}
+        />
+      )}
+    </>
   );
 }

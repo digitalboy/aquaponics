@@ -25,6 +25,8 @@ export interface AquaponicsVideoPlayerProps {
   watermark?: string;
   /** 手动刷新触发计数器，外部按钮递增即可立即抓拍刷新 */
   refreshNonce?: number;
+  /** 点击画面区域回调（如打开历史图片时序播放弹窗） */
+  onClick?: () => void;
   className?: string;
 }
 
@@ -44,6 +46,7 @@ export function AquaponicsVideoPlayer({
   playbackEnd,
   watermark,
   refreshNonce = 0,
+  onClick,
   className = "",
 }: AquaponicsVideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -253,8 +256,10 @@ export function AquaponicsVideoPlayer({
 
   return (
     <div
+      onClick={onClick}
       className={cn(
         "relative aspect-video w-full overflow-hidden bg-zinc-950 text-zinc-100",
+        onClick && "cursor-pointer",
         className,
       )}
     >
