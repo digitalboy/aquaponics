@@ -6,7 +6,8 @@
 > **生效时间**：`2026-11-16T07:56:00.000Z` (严格遵循 ISO 8601 UTC)  
 > **关联硬件拓扑 SSOT**：👉 [09_全厂视频监控PoE网络布线与交换机端口线号施工规范.md](../../02_requirements_and_plans/03_engineering_specs/09_全厂视频监控PoE网络布线与交换机端口线号施工规范.md)  
 > **关联中枢与摄像机清单**：👉 [BOM_01_控制中枢与动力配电采购清单.md](../../02_requirements_and_plans/02_procurement_and_boms/boms/BOM_01_控制中枢与动力配电采购清单.md) · [BOM_10_全厂视频监控前端摄像机采购清单.md](../../02_requirements_and_plans/02_procurement_and_boms/boms/BOM_10_全厂视频监控前端摄像机采购清单.md)  
-> **工程落地细则与计划**：👉 [01_数据库表结构与边云控制协议.md](./01_数据库表结构与边云控制协议.md) · [02_视频微服务一期实施计划.md](./02_视频微服务一期实施计划.md)
+> **工程落地细则与计划**：👉 [01_数据库表结构与边云控制协议.md](./01_数据库表结构与边云控制协议.md) · [02_视频微服务一期实施计划.md](./02_视频微服务一期实施计划.md)  
+> **边缘工控机远程运维**：👉 [02_倍控N100工控机远程SSH与Cloudflare隧道运维SOP.md](../../02_requirements_and_plans/04_operations_and_sops/02_倍控N100工控机远程SSH与Cloudflare隧道运维SOP.md)
 
 ---
 

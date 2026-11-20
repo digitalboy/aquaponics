@@ -36,6 +36,7 @@ graph TD
 
     subgraph L4 ["📋 04_operations_and_sops (现场实施与运维 SOP)"]
         SOP1["01_初级农艺师现场作业技能清单与实操SOP.md<br>(大白话实操、影子板、喂鱼看浮头、20项考核)"]
+        SOP2["02_倍控N100工控机远程SSH与Cloudflare隧道运维SOP.md<br>(ssh n100 / n100-lan、隧道保活、核心路径与避坑)"]
     end
 
     L1 -->|范围输入| L2
@@ -90,6 +91,7 @@ graph TD
 | 序号 | 核心文档 | 核心内容与受众 | 链接入口 |
 | :---: | :--- | :--- | :--- |
 | 4.1 | **初级农艺师作业技能与实操SOP** | 面向一线作业工人的大白话实操手册：工具定置影子板防丢、海绵育苗定植规程、慢撒喂鱼看浮头、20项通关考核表 | 👉 [01_初级农艺师现场作业技能清单与实操SOP.md](./04_operations_and_sops/01_初级农艺师现场作业技能清单与实操SOP.md) |
+| 4.2 | **倍控 N100 工控机远程 SSH 与 Cloudflare 隧道运维 SOP** | `ssh n100` / `ssh n100-lan` 双通道接入、Windows/N100 端配置、`cloudflared` Crontab 自愈、核心目录与排障避坑备注 | 👉 [02_倍控N100工控机远程SSH与Cloudflare隧道运维SOP.md](./04_operations_and_sops/02_倍控N100工控机远程SSH与Cloudflare隧道运维SOP.md) |
 
 ---
 

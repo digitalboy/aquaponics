@@ -35,6 +35,8 @@
 
 👉 **[前往阅读：文档库导航总地图 (Documentation Map)](./docs/README.md)**
 
+👉 **[常用运维速查：倍控 N100 工控机远程 SSH 与 Cloudflare 隧道运维 SOP](./docs/02_requirements_and_plans/04_operations_and_sops/02_倍控N100工控机远程SSH与Cloudflare隧道运维SOP.md)**
+
 ```text
 docs/
 ├── README.md                                          # 文档库导航总地图 (总入口)
