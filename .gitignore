@@ -58,5 +58,11 @@ Thumbs.db
 # 8. Agent 与技能配置 (Customizations)
 .agents/
 .agent/
+
+# 9. Python 虚拟环境与构建产物
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
 .agernt/
 skills-lock.json
