@@ -173,3 +173,8 @@ docs/
 > 2. **网关宽表聚合**：全厂 120+ 监测点位必须由边缘网关按 5 秒 JSON 宽表打包上报，严禁单点高频写库，将 Cloudflare D1 数据库开支死锁在 0 元/月（详见 [2026-11_早期分期实施计划书_4.10万底稿.md](./99_archive/2026-11_早期分期实施计划书_4.10万底稿.md)）。
 > 3. **人身与生物安全**：现场部署的 AMR 无人车必须配置超声波防撞与物理碰条；PLC 梯形图的“应急曝气与投喂熔断”硬件逻辑高于一切上层软件与云端 AI 指令（详见 [01_aquaculture/README.md](./04_subsystems/01_aquaculture/README.md) 与 [04_robotics_and_dispatch/README.md](./04_subsystems/04_robotics_and_dispatch/README.md)）。
 
+> 4. **文档高频演进与关联同步纪律 (Living Docs & SSOT)**：本库随现场工程与代码迭代持续高频更新，任何改动必须同步闭环：
+>    - 修改采购单价/数量 $\rightarrow$ 同步更新 [00_第一期总工程预算与采购总台账.md](./02_requirements_and_plans/02_procurement_and_boms/00_第一期总工程预算与采购总台账.md)（禁止在工程规范或索引中硬编码金额）；
+>    - 修改接口、表结构、硬件点位或运维参数 $\rightarrow$ 同步更新对应子系统规范、`README.md` 索引及文档头部 `ISO 8601 UTC` 时间戳；
+>    - 重大方案/架构变更 $\rightarrow$ 旧稿迁入 `docs/99_archive/`，并在 `docs/adr/` 补写决策记录；
+>    - **每次提交前必须执行 `pnpm docs:check`**，确保全库 0 断链、0 孤儿文档、BOM 算术一致。
