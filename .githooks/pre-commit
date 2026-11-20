@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+set -e
+
+# Only trigger docs gate when docs/, README.md, AGENTS.md, or tools/audit_*.py are staged
+CHANGED_DOCS=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '^(docs/|README\.md$|AGENTS\.md$|tools/audit_.*\.py$)' || true)
+
+if [ -n "$CHANGED_DOCS" ]; then
+  echo "[pre-commit] 检测到文档或审计脚本变更，正在执行 docs:check ..."
+  if command -v python >/dev/null 2>&1; then
+    python tools/audit_docs.py
+  elif command -v python3 >/dev/null 2>&1; then
+    python3 tools/audit_docs.py
+  elif command -v py >/dev/null 2>&1; then
+    py -3 tools/audit_docs.py
+  else
+    echo "[pre-commit] 错误：未找到 Python 解释器，无法运行 tools/audit_docs.py" >&2
+    exit 1
+  fi
+fi

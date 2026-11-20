@@ -11,7 +11,8 @@
     "check": "turbo run check",
     "docs:check": "python tools/audit_docs.py",
     "lint": "turbo run lint",
-    "clean": "turbo run clean"
+    "clean": "turbo run clean",
+    "prepare": "git config core.hooksPath .githooks || true"
   },
   "devDependencies": {
     "turbo": "^2.11.12",
