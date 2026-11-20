@@ -16,7 +16,7 @@ ALERT_EMAIL_FROM = "video-alert@guoshu.dev"
 HEARTBEAT_TIMEOUT_SEC = "300"
 SNAPSHOT_STALE_SEC = "1500"
 ALERT_COOLDOWN_SEC = "1800"
-DIGEST_INTERVAL_SEC = "1800"
+DIGEST_INTERVAL_SEC = "3600"
 
 [triggers]
 crons = ["*/2 * * * *"]
