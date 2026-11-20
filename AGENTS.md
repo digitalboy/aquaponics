@@ -9,10 +9,13 @@
 * **归档与决策留痕**：被取代的旧方案必须移入 `docs/99_archive/`（禁止留在活跃目录误导检索）；重大技术选型变更必须在 `docs/adr/` 补充简短 ADR。
 * **命名规范**：`docs/` 下新建活跃 Markdown 文件**禁止**在文件名中使用半角括号 `(` `)` 或空格；**禁止**向 `docs/` 提交手工导出的 `.pdf` 文件。
 
-## 2. 安全红线
+## 2. Cloudflare CLI 工具纪律
+* **优先使用 `cf` CLI**：对已迁移至 `cloudflare.config.ts` 的项目（如 `apps/video-gateway`、`apps/video-console`）以及 DNS/D1/R2/Zones 资源操作，统一使用 `cf` CLI（`cf dev`、`cf build`、`cf deploy`、`cf d1`）；仅在 `cf` 尚不支持的少数操作（如 `npx wrangler tail` 或单条 `npx wrangler secret put`）及尚未迁移的 Pages 项目（`apps/elecpal`）上使用 `wrangler`。
+
+## 3. 安全红线
 * **严禁明文凭据入库**：绝不可将 Cloudflare Tunnel Token（`eyJ...`）、N100 密码、路由器或海康摄像头密码写入任何 Git 跟踪文件。
 
-## 3. 提交前必跑校验
+## 4. 提交前必跑校验
 * 修改任意 `.ts` / `.tsx` 代码后，执行类型检查（`npx tsc --noEmit`）。
 * 修改、移动或新增任意文档后，执行全库文档门禁检查，确保 **0 Errors, 0 Warnings**：
   ```powershell

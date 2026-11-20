@@ -28,8 +28,9 @@ out/
 .env.*
 !.env.example
 
-# 4. Cloudflare (Pages / Workers / Wrangler)
+# 4. Cloudflare (Pages / Workers / Wrangler / cf)
 .wrangler/
+.cloudflare/
 .mf/
 
 # 5. Firebase & 云端调试日志 (Firebase Emulators & Logs)
