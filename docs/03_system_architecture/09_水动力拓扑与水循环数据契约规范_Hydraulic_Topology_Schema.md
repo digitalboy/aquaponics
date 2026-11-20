@@ -1,11 +1,13 @@
 # 连锁数字化农业工厂：09_全厂水动力拓扑与水循环数据契约规范 (Full-Stack Hydraulic & Water Circulation Unified Topology Schema)
 
+> **文档状态**：Active | **最后校准时间**：2026-11-20T13:55:00.000Z (ISO 8601 UTC)
+
 > **核心定位**：本规范是数字化农业工厂在 **多源补水与前置脱毒预处理（自来水脱氯/井水曝气除铁降温）、高密度养殖池水力模型、机械固液分离微滤、MBBR 生化脱氨硝化、水质中继调理脉冲加药、设施水培 DWC 深水跑道槽及变频水动力管网输配** 领域的全要素、厂商中立 (Vendor-Neutral)、机器可读统一数据契约标准。
 > 
 > 本规范确立：**“水力与水质动力学即代码 (Hydraulic-and-WaterQuality-as-Code, HWaC)”原则，以及“标准规范 (Schema) 保持物理抽象与规则校验，具体车间管网参数归入落地实例 (Instance Data)”的工程治理架构。**
 > 
 > * **规范层 (Schema)**：本文档定义纯粹的水力学与生物水质物理属性、TypeScript 强类型、Zod 规则引擎与流量守恒物理断言；
-> * **实例数据层 (Instance Data)**：各个具体车间/基地的真实水力管网拓扑与几何水体数据，统一存放于 [`topologies/`](./topologies/) 资产目录中。
+> * **实例数据层 (Instance Data)**：各个具体车间/基地的真实水力管网拓扑与几何水体数据，统一存放于 [`topologies/`](./topologies) 资产目录中。
 
 ---
 
@@ -306,7 +308,7 @@ export type PlantWideHydraulic = z.infer<typeof PlantWideHydraulicSchema>;
 
 ## 4. 车间多实例数据资产管理规范 (Hydraulic Instances Management)
 
-与电气拓扑规范保持高度一致，所有车间级实际落地的水力管网与水体参数统一存放于 [`topologies/`](./topologies/) 目录下：
+与电气拓扑规范保持高度一致，所有车间级实际落地的水力管网与水体参数统一存放于 [`topologies/`](./topologies) 目录下：
 
 ```text
 docs/03_system_architecture/topologies/
@@ -361,7 +363,7 @@ sequenceDiagram
 ## 🔗 相关设计与系统架构规范
 
 * **01号车间水动力与水循环标准 JSON 实体数据**：👉 [water_circulation_workshop_01.json](./topologies/water_circulation_workshop_01.json)
-* **08_全要素电气与智能化拓扑契约规范**：👉 [08_电气系统图与拓扑数据契约规范(Electrical_Topology_Schema).md](./08_电气系统图与拓扑数据契约规范(Electrical_Topology_Schema).md)
+* **08_全要素电气与智能化拓扑契约规范**：👉 [08_电气系统图与拓扑数据契约规范_Electrical_Topology_Schema.md](./08_电气系统图与拓扑数据契约规范_Electrical_Topology_Schema.md)
 * **01_调节池水力计算与加药自治规范**：👉 [01_调节池水力计算与加药自治规范.md](../04_subsystems/02_hydroponics/01_调节池水力计算与加药自治规范.md)
 * **水产养殖子系统详细设计 (DO 监测与 PLC 0.1s 保命)**：👉 [01_aquaculture/README.md](../04_subsystems/01_aquaculture/README.md)
 * **接口与数据契约规范 (严格 ISO 8601 UTC)**：👉 [03_接口与数据契约规范.md](./03_接口与数据契约规范.md)

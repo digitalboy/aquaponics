@@ -171,9 +171,9 @@ Content-Type: application/json
 为兼顾一期低成本落地与未来正式商业化展示，网络、域名与存储按以下原则演进：
 
 ### 7.1 域名与部署边界
-1. **过渡期与独立域名规划**：
-   - 一期测试与过渡阶段暂借用 `beikee.org` 子域名作为 `video-gateway` 网关入口（禁止在生产或现场设备直连默认 `*.workers.dev`）；
-   - 项目成熟后将在 Cloudflare 注册项目**正式独立域名**并直接切换绑定，边缘端仅替换 `GATEWAY_URL` 即可平滑迁移。
+1. **生产与过渡期域名（已落地）**：
+   - `video-gateway` 与前端控制台已部署至独立域名 `https://video.guoshu.dev`，N100 远程运维隧道域名为 `ssh.guoshu.dev`（禁止在生产或现场设备直连默认 `*.workers.dev`）；
+   - 一期已同步启用夜间 AI 人体检测（`yolo26n.onnx`）与正门员工人脸识别（`YuNet` + `SFace`），边缘端统一通过 `GATEWAY_URL` 接入网关。
 2. **国内正式营销网站对接**：
    - 正式营销网站在国内完成域名注册与 ICP 备案后，通过前端 HTTPS 调用 CF 独立域名的 `public_trace` 直播与溯源 API；
    - 上线前需将 `wrangler.toml` 中的 `ALLOWED_ORIGINS` 从 `"*"` 收紧为国内营销网站与生产大屏的正式域名白名单，并启用短时效签名 Token 与 `Referer` 校验。

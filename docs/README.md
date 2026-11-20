@@ -36,22 +36,28 @@ docs/
 │   ├── 05_设施与物联网资产编码规范.md                 # 🏷️ L1~L6 六级设施编码字典、浮板解耦模型与 SketchUp 契约
 │   ├── 06_农业数字孪生与多尺度仿真体系规范.md         # 🌐 Macro几何/Meso流体微气候/Micro活体 Bio-Twin 与 What-If 推演
 │   ├── 07_AI分层自主决策与闭环控制规范.md             # 🤖 L0~L5 分级、多时间尺度控制闭环、P0~P3 仲裁与安全包络
-│   ├── 08_电气系统图与拓扑数据契约规范(Electrical_Topology_Schema).md # ⚡ 机器可读低压配电系统图、TypeScript+Zod Schema与数字孪生绑定
-│   ├── 09_水动力拓扑与水循环数据契约规范(Hydraulic_Topology_Schema).md # 🌊 全厂水循环拓扑、多源补水预处理、Zod流量守恒与P&ID自动渲染
-│   └── 10_全厂实物资产台账与5S定置管理数据契约规范(Asset_and_5S_Ledger_Schema).md # 📋 五层资产分治、5S影子板形迹管理、飞书Base五大分表Schema与Zod数据契约
+│   ├── 08_电气系统图与拓扑数据契约规范_Electrical_Topology_Schema.md # ⚡ 机器可读低压配电系统图、TypeScript+Zod Schema与数字孪生绑定
+│   ├── 09_水动力拓扑与水循环数据契约规范_Hydraulic_Topology_Schema.md # 🌊 全厂水循环拓扑、多源补水预处理、Zod流量守恒与P&ID自动渲染
+│   ├── 10_全厂实物资产台账与5S定置管理数据契约规范_Asset_and_5S_Ledger_Schema.md # 📋 五层资产分治、5S影子板形迹管理、飞书Base五大分表Schema与Zod数据契约
+│   └── 11_设施物理拓扑与多作物排产数据契约规范_Facility_and_Agronomy_Schema.md # 🌾 大棚物理拓扑、多作物档案与动态排产契约
 │
-├── 04_subsystems/                                     # 📌 04. 八大自治子系统 (专属模块化目录体系)
+├── 04_subsystems/                                     # 📌 04. 九大自治子系统 (专属模块化目录体系)
     ├── 01_aquaculture/                                # 🐟 01. 水产养殖子系统
     │   └── README.md                                  # 荧光 DO 监测 (深圳国数质保3年)、24h在线氨氮反演、PLC 保命与 YOLO11 估重
     │
     ├── 02_hydroponics/                                # 🌱 02. 水培种植子系统
     │   ├── README.md                                  # VPD/PPFD 软反演、调理池脉冲加药与产量预测主设计
     │   ├── 01_调节池水力计算与加药自治规范.md         # 🧪 水力物料守恒、容积与流量计算推导及加药自治
-    │   └── 02_大空间温室立体微气候感知与温控策略规范.md # 🌡️ 8.1米大空间垂直分层测温阵列、室外超声波气象站与三级温控策略
+    │   ├── 02_大空间温室立体微气候感知与温控策略规范.md # 🌡️ 8.1米大空间垂直分层测温阵列、室外超声波气象站与三级温控策略
+    │   ├── 03_水培蔬菜全周期通用标准作业程序_Master_SOP.md
+    │   ├── 04_水培生菜与空心菜品类专向栽培作业指导书_WI.md
+    │   ├── 05_大棚设施与生态环境日常巡检与维护标准规范.md
+    │   ├── 06_过渡期环境与水质飞书多维表格数据模型及人机双轨校准规范.md
+    │   └── sop_kanban/                                # 📋 8 张工位现场目视化看板 (KB-00 ~ KB-07)
     │
     ├── 03_energy_optimization/                        # ⚡ 03. 能耗优化子系统
     │   ├── README.md                                  # 分回路电表感知与 TOU 电价下的 MPC 避峰套利
-    │   └── 01_养殖水动力与全厂运行能耗估算模型(非正式草案).md # 📊 17座鱼池水动力/气泵功率推导、全厂分场景用电与0.65元/度电费测算
+    │   └── 01_养殖水动力与全厂运行能耗估算模型_非正式草案.md # 📊 17座鱼池水动力/气泵功率推导、全厂分场景用电与0.65元/度电费测算
     │
     ├── 04_robotics_and_dispatch/                      # 🤖 04. 智能调度与机器人
     │   └── README.md                                  # RCS 金字塔调度、VDA 5050 与力控具身收割
@@ -64,22 +70,29 @@ docs/
     │
     ├── 07_quality_assurance_lab/                      # 🔬 07. 品质控制与实验室子系统
     │   ├── README.md                                  # IQC/IPQC/OQC三道防线、仪器台账与 e-COA 防伪存证
-    │   └── 01_全球主要国家与地区农业食品安全标准比对规范.md # 🌍 欧盟EU/日本肯定列表/中国GB/美国FDA/德瑞私标全景对比与工厂内控SOP
+    │   ├── 01_全球主要国家与地区农业食品安全标准比对规范.md # 🌍 欧盟EU/日本肯定列表/中国GB/美国FDA/德瑞私标全景对比与工厂内控SOP
+    │   └── 2026-09_早期驻厂检验室投资测算底稿.md # 📜 早期规划底稿（现行采购金额以 02_procurement_and_boms SSOT 为准）
     │
 │   ├── 08_agronomy_knowledge_rnd/                     # 🧑‍🔬 08. 农艺机理与学术知识支持子系统
 │   │   ├── README.md                                  # Crop Ontology本体、FvCB光合模型、12座试验舱配方R&D与GraphRAG
 │   │   └── 01_温室作物蒸腾量估算与感知算法规范.md     # 🍃 Stanghellini 蒸腾模型、红外叶温感知与 Jarvis 气孔模型
 │   │
 │   └── 09_video_streaming_service/                    # 📹 09. 视频监控与流媒体微服务子系统
-│       └── README.md                                  # MediaMTX+FFmpeg内存切片、4G按需省流、多系统嵌入网关API与权限分级
+│       ├── README.md                                  # MediaMTX+FFmpeg内存切片、4G按需省流、多系统嵌入网关API与权限分级
+│       ├── 01_数据库表结构与边云控制协议.md           # Cloudflare D1 表结构与边云控制协议
+│       └── 02_视频微服务一期实施计划.md               # 视频微服务一期工程实施计划与验收标准
 │
-└── 05_brand_and_marketing/                            # 💼 05. 品牌战略、感性工程与营销实战知识库
-    ├── README.md                                      # 品牌体系全景图、双轴法则与模块导读
-    ├── 01_品牌战略与认知系统工程白皮书.md              # 🌟 品牌战略纲领：双轮驱动(Intel Inside)、数据到品牌的工程编译与全链风控防线
-    ├── 02_感性体验与多模态情绪设计规范.md              # 🌸 情绪与体验工程：五感设计(呼吸包装/脆响ASMR)、自律生活方式与生命生态叙事
-    ├── 03_农水产品客户异议与品质答辩手册.md            # 🛡️ 营销防御武器库：13 大尖锐客户与买手异议物理/机理答辩实战
-    ├── 04_跨界品牌工程与消费心智启示录.md              # 💡 跨界启示录：美妆面膜/戴森美学/依云神圣化/Lululemon身体觉知与实操工具箱
-    └── 05_全球标杆农产品品牌工程与溢价启示录.md        # 🏆 同界标杆篇：新西兰佳沛/近大金枪鱼/夕张甜瓜/5J火腿四大神话与落地工具箱
+├── 05_brand_and_marketing/                            # 💼 05. 品牌战略、感性工程与营销实战知识库
+│   ├── README.md                                      # 品牌体系全景图、双轴法则与模块导读
+│   ├── 01_品牌战略与认知系统工程白皮书.md              # 🌟 品牌战略纲领：双轮驱动(Intel Inside)、数据到品牌的工程编译与全链风控防线
+│   ├── 02_感性体验与多模态情绪设计规范.md              # 🌸 情绪与体验工程：五感设计(呼吸包装/脆响ASMR)、自律生活方式与生命生态叙事
+│   ├── 03_农水产品客户异议与品质答辩手册.md            # 🛡️ 营销防御武器库：13 大尖锐客户与买手异议物理/机理答辩实战
+│   ├── 04_跨界品牌工程与消费心智启示录.md              # 💡 跨界启示录：美妆面膜/戴森美学/依云神圣化/Lululemon身体觉知与实操工具箱
+│   └── 05_全球标杆农产品品牌工程与溢价启示录.md        # 🏆 同界标杆篇：新西兰佳沛/近大金枪鱼/夕张甜瓜/5J火腿四大神话与落地工具箱
+│
+├── adr/                                               # 🧭 架构决策记录 (Architecture Decision Records)
+├── references/                                        # 📚 外部参考译著 (如 FAO 589 中文全本)
+└── 99_archive/                                        # 📜 历史归档与已取代底稿 (只读留档，非现行 SSOT)
 ```
 
 ---
@@ -95,18 +108,21 @@ docs/
 ### 2. 需求分析与实施规划 (Requirements & Plans)
 * 查阅 [01_用户故事与需求矩阵.md](./02_requirements_and_plans/01_requirements/01_用户故事与需求矩阵.md) 了解养殖长、种植长、工程电工、销售经理、采购主管、终端消费者及集团高管的核心诉求与 KPI。
 * 参考 [02_全体系调研提纲.md](./02_requirements_and_plans/01_requirements/02_全体系调研提纲.md) 执行基地一线硬件资产与数据断层的实地踏勘。
-* 研读 [03_分期实施计划书.md](./02_requirements_and_plans/01_requirements/03_分期实施计划书.md) 掌握第一期 **¥ 6.62 万元** 高性价比落地路线与 8 周开发进度。
-* 查阅 [00_第一期总工程预算与采购总台账.md](./02_requirements_and_plans/02_procurement_and_boms/00_第一期总工程预算与采购总台账.md) 获取精准 SKU 订货号、小五金辅材包与通电验收 Checklist。
+* 研读 [2026-11_早期分期实施计划书_4.10万底稿.md](./99_archive/2026-11_早期分期实施计划书_4.10万底稿.md) 了解早期三期规划路线（已归档，现行设备选型与实际金额请以总台账 SSOT 为准）。
+* 查阅 [00_第一期总工程预算与采购总台账.md](./02_requirements_and_plans/02_procurement_and_boms/00_第一期总工程预算与采购总台账.md) 获取精准 SKU 订货号、各原子 BOM（含 [BOM_13_正门PoE电磁门禁与人脸联动硬件采购清单.md](./02_requirements_and_plans/02_procurement_and_boms/boms/BOM_13_正门PoE电磁门禁与人脸联动硬件采购清单.md)）及通电验收 Checklist。
 * 查阅 [01_现场弱电线缆选型与布线施工规范.md](./02_requirements_and_plans/03_engineering_specs/01_现场弱电线缆选型与布线施工规范.md) 掌握弱电智能化架构、固定IP字典、485站号字典、UPS断电保命与线缆快拆施工工艺标准。
 * 查阅 [02_全厂强电动力配电与电气工程规划规范.md](./02_requirements_and_plans/03_engineering_specs/02_全厂强电动力配电与电气工程规划规范.md) 掌握 380V/220V 负荷计算、分级动力箱回路、电缆截面载流量、ATS 应急自投及防雷接地规范。
 * 查阅 [03_深圳光明基地双棚跨区大闭环水循环系统工程设计规范.md](./02_requirements_and_plans/03_engineering_specs/03_深圳光明基地双棚跨区大闭环水循环系统工程设计规范.md) 掌握跨区连通双棚的大闭环水力循环管道标高与压力平衡计算。
 * 查阅 [04_中央PLC智能主控制柜配盘与电气工程规范.md](./02_requirements_and_plans/03_engineering_specs/04_中央PLC智能主控制柜配盘与电气工程规范.md) 掌握化验室中央主控制柜钣金、双风道散热、纯铜灰蓝端子、熔断保护及 FAT 验收规范。
 * 查阅 [05_水质调理区边缘控制箱与原位水质感知工程规范.md](./02_requirements_and_plans/03_engineering_specs/05_水质调理区边缘控制箱与原位水质感知工程规范.md) 掌握调理池边缘控制箱、原位浮动浸入式水质感知电极（3秒提拉）与强电近距防干扰红线。
 * 查阅 [06_温室立柱微气候边缘控制箱与立体气象感知工程规范.md](./02_requirements_and_plans/03_engineering_specs/06_温室立柱微气候边缘控制箱与立体气象感知工程规范.md) 掌握大棚 8 米立柱微气候感知箱、3层温湿度逆温层解析、冠层红外 CO2 监测与环流风机动力解耦规范。
-* 查阅 [07_温室大棚移动视觉巡检与蔬菜生长溯源系统设计方案(无人机与悬挂轨道).md](./02_requirements_and_plans/03_engineering_specs/07_温室大棚移动视觉巡检与蔬菜生长溯源系统设计方案(无人机与悬挂轨道).md) 掌握水培长跑道垂直自上向下正射成像技术、室内非GPS定位导航、防下洗气流伤苗掀板试验、无人机回巢充电与棚顶悬挂轨道滑车双路线对比及 ExG 生长溯源流水线。
+* 查阅 [07_温室大棚移动视觉巡检与蔬菜生长溯源系统设计方案_无人机与悬挂轨道.md](./02_requirements_and_plans/03_engineering_specs/07_温室大棚移动视觉巡检与蔬菜生长溯源系统设计方案_无人机与悬挂轨道.md) 掌握水培长跑道垂直自上向下正射成像技术、室内非GPS定位导航、防下洗气流伤苗掀板试验、无人机回巢充电与棚顶悬挂轨道滑车双路线对比及 ExG 生长溯源流水线。
 * 查阅 [08_中央PLC智能主控制柜盘内接线表与导线选型施工手册.md](./02_requirements_and_plans/03_engineering_specs/08_中央PLC智能主控制柜盘内接线表与导线选型施工手册.md) 掌握中央控制柜内部 BVR 导线规格分色、VE/TE 管状冷压端头压接、From-To 点对点接线字典与一期纯感知模式下的无源悬空实操规范。
 * 查阅 [09_全厂视频监控PoE网络布线与交换机端口线号施工规范.md](./02_requirements_and_plans/03_engineering_specs/09_全厂视频监控PoE网络布线与交换机端口线号施工规范.md) 掌握主柜 24 口全千兆 PoE+ 交换机（`GPS424 V3`）物理端口固化映射、三段式线号体系 (`NET-CAM01-P01`)、两端对称覆膜防水打标、Cat5e STP 制作与大棚高空防倒灌 U 型滴水弯工艺 (SSOT)。
+* 查阅 [10_正门PoE电磁门禁控制接线与云边联动技术规范.md](./02_requirements_and_plans/03_engineering_specs/10_正门PoE电磁门禁控制接线与云边联动技术规范.md) 掌握正门 25m PoE 供电分离、NC 物理出门按钮兜底与人脸联动架构。
+* **【全厂 SOP 总入口】** 查阅 [04_operations_and_sops/README.md](./02_requirements_and_plans/04_operations_and_sops/README.md) 统览一线实操、边缘运维与各车间工位标准。
 * **【一线实操红宝书】** 查阅 [01_初级农艺师现场作业技能清单与实操SOP.md](./02_requirements_and_plans/04_operations_and_sops/01_初级农艺师现场作业技能清单与实操SOP.md) 掌握面向初中文化一线员工的大白话实操规范（打扫卫生/影子板防丢/海绵育苗定植/慢撒喂鱼看浮头及20项通关考核打勾清单）。
+* **【边缘工控机远程运维】** 查阅 [02_倍控N100工控机远程SSH与Cloudflare隧道运维SOP.md](./02_requirements_and_plans/04_operations_and_sops/02_倍控N100工控机远程SSH与Cloudflare隧道运维SOP.md) 掌握 `ssh n100` / `ssh n100-lan` 双通道接入、隧道保活与排障避坑备注。
 
 ### 3. 宏观架构与数据底座 (Global Architecture & Data Base)
 * 查阅 [01_系统宏观架构设计.md](./03_system_architecture/01_系统宏观架构设计.md) 建立多基地连锁的云边端协同大局观。
@@ -116,25 +132,28 @@ docs/
 * **【空间与资产底座】** 查阅 [05_设施与物联网资产编码规范.md](./03_system_architecture/05_设施与物联网资产编码规范.md) 掌握 L1~L6 六级设施编码字典、浮板跨池解耦模型与 SketchUp / Three.js 命名契约。
 * **【数字孪生中台】** 查阅 [06_农业数字孪生与多尺度仿真体系规范.md](./03_system_architecture/06_农业数字孪生与多尺度仿真体系规范.md) 掌握 Macro 空间几何、Meso 流体微气候场与 Micro 动植物活体 Bio-Twin 仿真模型与 What-If 推演引擎。
 * **【AI 自主决策中枢】** 查阅 [07_AI分层自主决策与闭环控制规范.md](./03_system_architecture/07_AI分层自主决策与闭环控制规范.md) 掌握 L0~L5 农业自主决策分级标准、0.1s PLC 硬件保命至月度云端排产多时间尺度控制及安全包络仲裁机制。
-* **【电气即代码 (EaC)】** 查阅 [08_电气系统图与拓扑数据契约规范(Electrical_Topology_Schema).md](./03_system_architecture/08_电气系统图与拓扑数据契约规范(Electrical_Topology_Schema).md) 掌握低压配电系统图的 TypeScript + Zod Schema 规则引擎、一期标准 JSON 拓扑与数字孪生动态着色机制。
-* **【水动力即代码 (HWaC)】** 查阅 [09_水动力拓扑与水循环数据契约规范(Hydraulic_Topology_Schema).md](./03_system_architecture/09_水动力拓扑与水循环数据契约规范(Hydraulic_Topology_Schema).md) 掌握多源补水脱毒预处理、17池RAS水循环模型、Zod流量守恒断言、车间独立实例库与 P&ID 自动渲染机制。
-* **【实物资产与 5S 定置中台】** 查阅 [10_全厂实物资产台账与5S定置管理数据契约规范(Asset_and_5S_Ledger_Schema).md](./03_system_architecture/10_全厂实物资产台账与5S定置管理数据契约规范(Asset_and_5S_Ledger_Schema).md) 掌握五层实物资产分治、5S影子板形迹管理、三色生物安全防线、飞书多维表格五大分表 Schema 字典与自动化预警工作流。
+* **【电气即代码 (EaC)】** 查阅 [08_电气系统图与拓扑数据契约规范_Electrical_Topology_Schema.md](./03_system_architecture/08_电气系统图与拓扑数据契约规范_Electrical_Topology_Schema.md) 掌握低压配电系统图的 TypeScript + Zod Schema 规则引擎、一期标准 JSON 拓扑与数字孪生动态着色机制。
+* **【水动力即代码 (HWaC)】** 查阅 [09_水动力拓扑与水循环数据契约规范_Hydraulic_Topology_Schema.md](./03_system_architecture/09_水动力拓扑与水循环数据契约规范_Hydraulic_Topology_Schema.md) 掌握多源补水脱毒预处理、17池RAS水循环模型、Zod流量守恒断言、车间独立实例库与 P&ID 自动渲染机制。
+* **【实物资产与 5S 定置中台】** 查阅 [10_全厂实物资产台账与5S定置管理数据契约规范_Asset_and_5S_Ledger_Schema.md](./03_system_architecture/10_全厂实物资产台账与5S定置管理数据契约规范_Asset_and_5S_Ledger_Schema.md) 掌握五层实物资产分治、5S影子板形迹管理、三色生物安全防线、飞书多维表格五大分表 Schema 字典与自动化预警工作流。
+* **【设施拓扑与多作物排产】** 查阅 [11_设施物理拓扑与多作物排产数据契约规范_Facility_and_Agronomy_Schema.md](./03_system_architecture/11_设施物理拓扑与多作物排产数据契约规范_Facility_and_Agronomy_Schema.md) 掌握大棚物理拓扑、多作物主数据与动态排产调度契约。
 
-### 4. 八大自治子系统详细设计 (Subsystems Detailed Design)
+### 4. 九大自治子系统详细设计 (Subsystems Detailed Design)
 * **🐟 01. 水产养殖子系统**：[04_subsystems/01_aquaculture/README.md](./04_subsystems/01_aquaculture/README.md)（荧光 DO 监测、PLC 0.1s 硬件保命、AI 抢食投喂）
 * **🌱 02. 水培种植子系统**：[04_subsystems/02_hydroponics/README.md](./04_subsystems/02_hydroponics/README.md)（VPD/PPFD 软反演、调理池脉冲加药、立体微气候温控）
   - 细节规范：[01_调节池水力计算与加药自治规范.md](./04_subsystems/02_hydroponics/01_调节池水力计算与加药自治规范.md)
   - 细节规范：[02_大空间温室立体微气候感知与温控策略规范.md](./04_subsystems/02_hydroponics/02_大空间温室立体微气候感知与温控策略规范.md)
+  - 现场标准与看板：[03_水培蔬菜全周期通用标准作业程序_Master_SOP.md](./04_subsystems/02_hydroponics/03_水培蔬菜全周期通用标准作业程序_Master_SOP.md) · [04_水培生菜与空心菜品类专向栽培作业指导书_WI.md](./04_subsystems/02_hydroponics/04_水培生菜与空心菜品类专向栽培作业指导书_WI.md) · [05_大棚设施与生态环境日常巡检与维护标准规范.md](./04_subsystems/02_hydroponics/05_大棚设施与生态环境日常巡检与维护标准规范.md) · [06_过渡期环境与水质飞书多维表格数据模型及人机双轨校准规范.md](./04_subsystems/02_hydroponics/06_过渡期环境与水质飞书多维表格数据模型及人机双轨校准规范.md) · [sop_kanban/](./04_subsystems/02_hydroponics/sop_kanban)
 * **⚡ 03. 能耗优化子系统**：[04_subsystems/03_energy_optimization/README.md](./04_subsystems/03_energy_optimization/README.md)（分回路能耗计量、TOU 下的 MPC 热泵套利）
-  - 细节规范：[01_养殖水动力与全厂运行能耗估算模型(非正式草案).md](./04_subsystems/03_energy_optimization/01_养殖水动力与全厂运行能耗估算模型(非正式草案).md)
+  - 细节规范：[01_养殖水动力与全厂运行能耗估算模型_非正式草案.md](./04_subsystems/03_energy_optimization/01_养殖水动力与全厂运行能耗估算模型_非正式草案.md)
 * **🤖 04. 智能调度与机器人**：[04_subsystems/04_robotics_and_dispatch/README.md](./04_subsystems/04_robotics_and_dispatch/README.md)（RCS 金字塔调度、VDA 5050 与力控具身收割）
 * **📊 05. 供应链与商贸协同**：[04_subsystems/05_supply_chain_and_commerce/README.md](./04_subsystems/05_supply_chain_and_commerce/README.md)（产供销一体化、四维选品、30天ATP、APS以销定产、COGS业财对冲）
 * **💼 06. 品牌溯源、客户运营与舆情感知**：[04_subsystems/06_brand_traceability_crm/README.md](./04_subsystems/06_brand_traceability_crm/README.md)（一物一码区块链溯源、B2B商超门户、B2C会员360°全息与全网社媒舆情AI大盘）
 * **🔬 07. 品质控制与实验室**：[04_subsystems/07_quality_assurance_lab/README.md](./04_subsystems/07_quality_assurance_lab/README.md)（IQC/IPQC/OQC三道防线、普析仪器台账、4°C留样室与e-COA防伪存证）
-  - 细节规范：[01_全球主要国家与地区农业食品安全标准比对规范.md](./04_subsystems/07_quality_assurance_lab/01_全球主要国家与地区农业食品安全标准比对规范.md)
+  - 细节规范：[01_全球主要国家与地区农业食品安全标准比对规范.md](./04_subsystems/07_quality_assurance_lab/01_全球主要国家与地区农业食品安全标准比对规范.md) · [2026-09_早期驻厂检验室投资测算底稿.md](./99_archive/2026-09_早期驻厂检验室投资测算底稿.md)
 * **🧑‍🔬 08. 农艺机理与学术支持**：[04_subsystems/08_agronomy_knowledge_rnd/README.md](./04_subsystems/08_agronomy_knowledge_rnd/README.md)（Crop Ontology本体、FvCB光合与Stanghellini模型、12座试验舱配方R&D与GraphRAG）
   - 细节规范：[01_温室作物蒸腾量估算与感知算法规范.md](./04_subsystems/08_agronomy_knowledge_rnd/01_温室作物蒸腾量估算与感知算法规范.md)
 * **📹 09. 视频监控与流媒体微服务**：[04_subsystems/09_video_streaming_service/README.md](./04_subsystems/09_video_streaming_service/README.md)（边缘 MediaMTX/FFmpeg 内存切片、4G 按需省流模式、多系统统一嵌入 API 与权限分级）
+  - 协议与计划：[01_数据库表结构与边云控制协议.md](./04_subsystems/09_video_streaming_service/01_数据库表结构与边云控制协议.md) · [02_视频微服务一期实施计划.md](./04_subsystems/09_video_streaming_service/02_视频微服务一期实施计划.md)
 
 ### 5. 品牌战略与感性营销工程 (Brand Strategy & Emotional Engineering)
 * 研读 [05_brand_and_marketing/README.md](./05_brand_and_marketing/README.md) 掌握品牌认知双轴定位法则（理性确定性底座 $\times$ 感性情绪共鸣力）与知识库全景。
@@ -151,6 +170,6 @@ docs/
 > [!IMPORTANT]
 > 凡是向系统贡献代码或进行二次设计的开发者，必须遵循以下核心约束：
 > 1. **时钟必须对齐**：所有现场的 PLC、边缘网关与传感器时钟，必须通过 NTP 每小时强制同步，时差超过 $100\,\text{ms}$ 将触发系统熔断并拒收数据（详见 [03_接口与数据契约规范.md](./03_system_architecture/03_接口与数据契约规范.md)）。
-> 2. **网关宽表聚合**：全厂 120+ 监测点位必须由边缘网关按 5 秒 JSON 宽表打包上报，严禁单点高频写库，将 Cloudflare D1 数据库开支死锁在 0 元/月（详见 [03_分期实施计划书.md](./02_requirements_and_plans/01_requirements/03_分期实施计划书.md)）。
+> 2. **网关宽表聚合**：全厂 120+ 监测点位必须由边缘网关按 5 秒 JSON 宽表打包上报，严禁单点高频写库，将 Cloudflare D1 数据库开支死锁在 0 元/月（详见 [2026-11_早期分期实施计划书_4.10万底稿.md](./99_archive/2026-11_早期分期实施计划书_4.10万底稿.md)）。
 > 3. **人身与生物安全**：现场部署的 AMR 无人车必须配置超声波防撞与物理碰条；PLC 梯形图的“应急曝气与投喂熔断”硬件逻辑高于一切上层软件与云端 AI 指令（详见 [01_aquaculture/README.md](./04_subsystems/01_aquaculture/README.md) 与 [04_robotics_and_dispatch/README.md](./04_subsystems/04_robotics_and_dispatch/README.md)）。
 

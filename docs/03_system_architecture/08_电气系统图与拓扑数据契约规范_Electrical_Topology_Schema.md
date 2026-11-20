@@ -1,11 +1,13 @@
 # 连锁数字化农业工厂：08_全要素电气与智能化拓扑数据契约规范 (Full-Stack Electrical & IIoT Unified Topology Schema)
 
+> **文档状态**：Active | **最后校准时间**：2026-11-20T13:55:00.000Z (ISO 8601 UTC)
+
 > **核心定位**：本规范是数字化农业工厂在 **380V/220V 强电动力配电、24V 弱电直流供电与 UPS 保命、工业 PLC 控制器与 I/O 映射、RS-485 现场总线站号字典、工业边缘工控机与 PoE 网络、全场景线材接线工艺及联合防雷接地** 领域的全要素、厂商中立 (Vendor-Neutral)、机器可读统一数据契约标准。
 > 
 > 本规范明确确立：**“电气与智能化即代码 (Full-Stack Infrastructure-as-Code, IaC)”原则，以及“标准规范 (Schema) 保持厂商中立与物理抽象，具体品牌和选型归入车间落地实例 (Instance Data)”的工程治理架构。**
 > 
 > * **规范层 (Schema)**：本文档定义纯粹的物理属性、字段标准、TypeScript 类型、Zod 规则引擎与电气安全物理断言；
-> * **实例数据层 (Instance Data)**：各个具体车间/基地的真实品牌选型与全要素电气拓扑数据，统一以标准 JSON 格式存放于 [`topologies/`](./topologies/) 资产目录中。
+> * **实例数据层 (Instance Data)**：各个具体车间/基地的真实品牌选型与全要素电气拓扑数据，统一以标准 JSON 格式存放于 [`topologies/`](./topologies) 资产目录中。
 
 ---
 
@@ -479,7 +481,7 @@ export type InterPlcLink = z.infer<typeof InterPlcLinkSchema>;
 
 ## 4. 车间多实例数据资产管理规范 (Workshop Instances Management)
 
-为支撑集团多车间、多基地的标准化复制，具体的设备品牌与实际物理参数统一存放于 [`topologies/`](./topologies/) 目录下：
+为支撑集团多车间、多基地的标准化复制，具体的设备品牌与实际物理参数统一存放于 [`topologies/`](./topologies) 目录下：
 
 ```text
 docs/03_system_architecture/topologies/

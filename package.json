@@ -9,6 +9,7 @@
     "build": "turbo run build",
     "build:elecpal": "pnpm --filter @aquaponics/elecpal build",
     "check": "turbo run check",
+    "docs:check": "python tools/audit_docs.py",
     "lint": "turbo run lint",
     "clean": "turbo run clean"
   },

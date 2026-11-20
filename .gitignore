@@ -59,6 +59,9 @@ Thumbs.db
 .agents/
 .agent/
 
+# 9. 文档导出产物 (保持 Markdown 为唯一事实源，禁止手工导出 PDF 膨胀仓库)
+docs/**/*.pdf
+
 # 9. Python 虚拟环境与构建产物
 .venv/
 __pycache__/

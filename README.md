@@ -2,9 +2,9 @@
 > **Aquaponics Smart Factory - Industrial IIoT & Embodied AI Engineering Platform**
 
 [![ISO 8601](https://img.shields.io/badge/Time_Standard-ISO_8601_UTC_ms-blue.svg)](./docs/03_system_architecture/03_接口与数据契约规范.md)
-[![Cloudflare D1 & R2](https://img.shields.io/badge/Cloud_Infra-Cloudflare_Serverless-orange.svg)](./docs/02_requirements_and_plans/03_分期实施计划书.md)
+[![Cloudflare D1 & R2](https://img.shields.io/badge/Cloud_Infra-Cloudflare_Serverless-orange.svg)](./docs/02_requirements_and_plans/2026-11_早期分期实施计划书_4.10万底稿.md)
 [![PLC Control](https://img.shields.io/badge/PLC-Inovance_Easy320-brightgreen.svg)](./docs/03_system_architecture/02_MVP物理与物联拓扑.md)
-[![UI Stack](https://img.shields.io/badge/UI-Shadcn_UI_+_Tailwind_v4-purple.svg)](./docs/02_requirements_and_plans/03_分期实施计划书.md)
+[![UI Stack](https://img.shields.io/badge/UI-Shadcn_UI_+_Tailwind_v4-purple.svg)](./docs/02_requirements_and_plans/2026-11_早期分期实施计划书_4.10万底稿.md)
 
 ---
 
@@ -48,13 +48,12 @@ docs/
 │   ├── 03_多学科术语表.md
 │   └── 04_鱼菜共生数字工业化白皮书.md
 │
-├── 02_requirements_and_plans/                         # 📌 02. 需求分析、调研与实施规划
-│   ├── 01_用户故事与需求矩阵.md
-│   ├── 02_全体系调研提纲.md
-│   ├── 03_分期实施计划书.md                           # (第一期 6.62 万元高性价比落地实施计划，含国数全金属DO/在线氨氮/500米双层桥架/分布式24V电源/TP-Link全家桶/人工)
-│   ├── 04_第一期数据采集与自动控制硬件采购BOM与工程施工清单.md # (第一期采集与自控采购 SKU、五金辅材与施工验收清单)
-│   ├── 05_现场弱电线缆选型与布线施工规范.md           # (弱电智能化架构、固定IP字典、485站号字典、UPS断电保命与快拆施工)
-│   └── 06_全厂强电动力配电与电气工程规划规范.md       # (380V动力负荷计算、分级动力箱矩阵、电缆截面载流量、ATS应急保命与防雷接地)
+├── 02_requirements_and_plans/                         # 📌 02. 需求、商业采购、工程规范与运维 (EPC分层)
+│   ├── README.md                                      # (EPC分层总纲、索引字典与SSOT红线)
+│   ├── 01_requirements/                               # (用户故事 / 调研提纲 / 分期计划书)
+│   ├── 02_procurement_and_boms/                       # (SSOT 唯一价格源：总台账 + boms/BOM_01~13)
+│   ├── 03_engineering_specs/                          # (弱电/强电/水循环/PLC主柜/边缘箱/视频布线/门禁 01~10)
+│   └── 04_operations_and_sops/                        # (初级农艺师实操SOP / N100远程SSH与隧道运维SOP)
 │
 ├── 03_system_architecture/                            # 📌 03. 宏观系统架构与契约
 │   ├── 01_系统宏观架构设计.md
@@ -64,17 +63,24 @@ docs/
 │   ├── 05_设施与物联网资产编码规范.md                 # (L1~L6设施编码字典、浮板解耦模型与SketchUp契约)
 │   ├── 06_农业数字孪生与多尺度仿真体系规范.md         # (Macro几何/Meso流体微气候/Micro活体 Bio-Twin 与 What-If 推演)
 │   ├── 07_AI分层自主决策与闭环控制规范.md             # (L0~L5 分级、多时间尺度闭环、P0~P3 仲裁与安全包络)
-│   ├── 08_电气系统图与拓扑数据契约规范(Electrical_Topology_Schema).md # (机器可读低压配电系统图、TypeScript+Zod Schema与数字孪生绑定)
-│   └── 09_水动力拓扑与水循环数据契约规范(Hydraulic_Topology_Schema).md # (全厂水循环拓扑、多源补水预处理、Zod流量守恒与P&ID自动渲染)
+│   ├── 08_电气系统图与拓扑数据契约规范_Electrical_Topology_Schema.md # (机器可读低压配电系统图、TypeScript+Zod Schema与数字孪生绑定)
+│   ├── 09_水动力拓扑与水循环数据契约规范_Hydraulic_Topology_Schema.md # (全厂水循环拓扑、多源补水预处理、Zod流量守恒与P&ID自动渲染)
+│   ├── 10_全厂实物资产台账与5S定置管理数据契约规范_Asset_and_5S_Ledger_Schema.md # (五层资产分治、5S影子板与飞书Base Schema)
+│   └── 11_设施物理拓扑与多作物排产数据契约规范_Facility_and_Agronomy_Schema.md # (大棚物理拓扑、多作物主数据与排产契约)
 │
-└── 04_subsystems/                                     # 📌 04. 八大自治子系统 (专属模块化目录体系)
-    ├── 01_aquaculture/                                # 🐟 01. 水产养殖子系统 (DO监测/PLC保命/投喂)
-    ├── 02_hydroponics/                                # 🌱 02. 水培种植子系统 (VPD反演/水力调节池/大空间温控)
-    ├── 03_energy_optimization/                        # ⚡ 03. 能耗优化子系统 (分回路计量/TOU电价MPC套利/17座鱼池水动力能耗模型)
-    ├── 04_robotics_and_dispatch/                      # 🤖 04. 智能调度与机器人 (RCS/VDA 5050/具身收割)
-    ├── 05_supply_chain_and_commerce/                  # 📊 05. 供应链与商贸协同 (产供销一体化/四维选品/30天ATP/APS以销定产/COGS业财对冲)
-    ├── 06_brand_traceability_crm/                     # 💼 06. 品牌溯源、客户运营与舆情感知 (一物一码/B2B门户/DTC会员360°/社媒舆情AI中枢)
-    ├── 07_quality_assurance_lab/                      # 🔬 07. 品质控制与实验室 (IQC/IPQC/OQC/全球食品安全规范/e-COA)
-    ├── 08_agronomy_knowledge_rnd/                     # 🧑‍🔬 08. 农艺机理与学术知识 (Crop Ontology/12座试验舱/蒸腾机理)
-    └── 09_video_streaming_service/                    # 📹 09. 视频监控与流媒体微服务 (MediaMTX/FFmpeg内存切片/4G按需唤醒/多系统嵌入API)
+├── 04_subsystems/                                     # 📌 04. 九大自治子系统 (专属模块化目录体系)
+│   ├── 01_aquaculture/                                # 🐟 01. 水产养殖子系统 (DO监测/PLC保命/投喂)
+│   ├── 02_hydroponics/                                # 🌱 02. 水培种植子系统 (VPD反演/水力调节池/大空间温控)
+│   ├── 03_energy_optimization/                        # ⚡ 03. 能耗优化子系统 (分回路计量/TOU电价MPC套利/17座鱼池水动力能耗模型)
+│   ├── 04_robotics_and_dispatch/                      # 🤖 04. 智能调度与机器人 (RCS/VDA 5050/具身收割)
+│   ├── 05_supply_chain_and_commerce/                  # 📊 05. 供应链与商贸协同 (产供销一体化/四维选品/30天ATP/APS以销定产/COGS业财对冲)
+│   ├── 06_brand_traceability_crm/                     # 💼 06. 品牌溯源、客户运营与舆情感知 (一物一码/B2B门户/DTC会员360°/社媒舆情AI中枢)
+│   ├── 07_quality_assurance_lab/                      # 🔬 07. 品质控制与实验室 (IQC/IPQC/OQC/全球食品安全规范/e-COA)
+│   ├── 08_agronomy_knowledge_rnd/                     # 🧑‍🔬 08. 农艺机理与学术知识 (Crop Ontology/12座试验舱/蒸腾机理)
+│   └── 09_video_streaming_service/                    # 📹 09. 视频监控与流媒体微服务 (MediaMTX/FFmpeg内存切片/4G按需唤醒/多系统嵌入API)
+│
+├── 05_brand_and_marketing/                            # 💼 05. 品牌战略、感性工程与营销实战知识库
+├── adr/                                               # 🧭 架构决策记录 (ADR)
+├── references/                                        # 📚 外部参考译著 (FAO 589 等)
+└── 99_archive/                                        # 📜 历史归档与已取代底稿 (只读留档)
 ```
