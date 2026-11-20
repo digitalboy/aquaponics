@@ -62,7 +62,7 @@ class AgentConfig:
             night_ai_conf_threshold=float(os.getenv("NIGHT_AI_CONF_THRESHOLD", "0.50")),
             night_ai_confirm_frames=int(os.getenv("NIGHT_AI_CONFIRM_FRAMES", "2")),
             night_ai_cooldown_sec=int(os.getenv("NIGHT_AI_COOLDOWN_SEC", "300")),
-            night_ai_model_path=Path(os.getenv("NIGHT_AI_MODEL_PATH", "/opt/aquaponics/models/yolov8n.onnx")),
+            night_ai_model_path=Path(os.getenv("NIGHT_AI_MODEL_PATH", "/opt/aquaponics/models/yolo26n.onnx")),
             face_det_model_path=Path(os.getenv("FACE_DET_MODEL_PATH", "/opt/aquaponics/models/face_detection_yunet_2023mar.onnx")),
             face_rec_model_path=Path(os.getenv("FACE_REC_MODEL_PATH", "/opt/aquaponics/models/face_recognition_sface_2021dec.onnx")),
             face_gallery_path=Path(os.getenv("FACE_GALLERY_PATH", "/opt/aquaponics/faces/gallery.json")),

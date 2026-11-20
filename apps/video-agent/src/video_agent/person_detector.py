@@ -45,7 +45,7 @@ def _nms(boxes: np.ndarray, scores: np.ndarray, iou_thres: float = 0.45) -> list
 
 
 class PersonDetector:
-    """加载 yolov8n.onnx 仅识别 COCO class 0 (person)。"""
+    """加载 YOLO ONNX（兼容 YOLO26 端到端 1x300x6 与 YOLOv8/11 1x84x8400）识别 COCO class 0 (person)。"""
 
     def __init__(self, model_path: Path, conf_threshold: float = 0.50, input_size: int = 640) -> None:
         self.model_path = model_path
@@ -61,25 +61,58 @@ class PersonDetector:
         )
         self.input_name = self.session.get_inputs()[0].name
 
-    def detect_bytes(self, jpeg_bytes: bytes) -> list[PersonBox]:
-        with Image.open(BytesIO(jpeg_bytes)) as img:
-            rgb = img.convert("RGB")
-            orig_w, orig_h = rgb.size
-            scale = min(self.input_size / orig_w, self.input_size / orig_h)
-            new_w = int(round(orig_w * scale))
-            new_h = int(round(orig_h * scale))
-            resized = rgb.resize((new_w, new_h), Image.BILINEAR)
+    def _decode_end2end(
+        self,
+        outputs: np.ndarray,
+        scale: float,
+        pad_x: int,
+        pad_y: int,
+        orig_w: int,
+        orig_h: int,
+    ) -> list[PersonBox]:
+        """解析 YOLO26n 端到端无 NMS 输出 (1, 300, 6): [x1, y1, x2, y2, conf, cls]。"""
+        dets = np.squeeze(outputs, axis=0)
+        if dets.ndim != 2 or dets.shape[1] < 6:
+            return []
+        confs = dets[:, 4]
+        classes = dets[:, 5]
+        mask = (classes == 0) & (confs >= self.conf_threshold)
+        if not np.any(mask):
+            return []
 
-            canvas = Image.new("RGB", (self.input_size, self.input_size), (114, 114, 114))
-            pad_x = (self.input_size - new_w) // 2
-            pad_y = (self.input_size - new_h) // 2
-            canvas.paste(resized, (pad_x, pad_y))
+        filtered = dets[mask]
+        x1, y1, x2, y2 = filtered[:, 0], filtered[:, 1], filtered[:, 2], filtered[:, 3]
+        if float(np.max(filtered[:, :4])) <= 2.0:
+            x1 = x1 * self.input_size
+            y1 = y1 * self.input_size
+            x2 = x2 * self.input_size
+            y2 = y2 * self.input_size
 
-        arr = np.asarray(canvas, dtype=np.float32) / 255.0
-        blob = np.transpose(arr, (2, 0, 1))[None, ...]
+        rx1 = np.clip((x1 - pad_x) / scale, 0, orig_w)
+        ry1 = np.clip((y1 - pad_y) / scale, 0, orig_h)
+        rx2 = np.clip((x2 - pad_x) / scale, 0, orig_w)
+        ry2 = np.clip((y2 - pad_y) / scale, 0, orig_h)
+        return [
+            PersonBox(
+                x1=int(rx1[i]),
+                y1=int(ry1[i]),
+                x2=int(rx2[i]),
+                y2=int(ry2[i]),
+                confidence=float(filtered[i, 4]),
+            )
+            for i in range(len(filtered))
+        ]
 
-        outputs = self.session.run(None, {self.input_name: blob})[0]
-        # YOLOv8 输出形状: (1, 84, 8400) -> 转置为 (8400, 84)
+    def _decode_raw_anchors(
+        self,
+        outputs: np.ndarray,
+        scale: float,
+        pad_x: int,
+        pad_y: int,
+        orig_w: int,
+        orig_h: int,
+    ) -> list[PersonBox]:
+        """解析传统 YOLO 输出 (1, 84, 8400) 并执行 NMS。"""
         preds = np.squeeze(outputs, axis=0).T
         class_scores = preds[:, 4:]
         best_classes = np.argmax(class_scores, axis=1)
@@ -124,6 +157,28 @@ class PersonDetector:
             )
             for idx in keep
         ]
+
+    def detect_bytes(self, jpeg_bytes: bytes) -> list[PersonBox]:
+        with Image.open(BytesIO(jpeg_bytes)) as img:
+            rgb = img.convert("RGB")
+            orig_w, orig_h = rgb.size
+            scale = min(self.input_size / orig_w, self.input_size / orig_h)
+            new_w = int(round(orig_w * scale))
+            new_h = int(round(orig_h * scale))
+            resized = rgb.resize((new_w, new_h), Image.BILINEAR)
+
+            canvas = Image.new("RGB", (self.input_size, self.input_size), (114, 114, 114))
+            pad_x = (self.input_size - new_w) // 2
+            pad_y = (self.input_size - new_h) // 2
+            canvas.paste(resized, (pad_x, pad_y))
+
+        arr = np.asarray(canvas, dtype=np.float32) / 255.0
+        blob = np.transpose(arr, (2, 0, 1))[None, ...]
+
+        outputs = self.session.run(None, {self.input_name: blob})[0]
+        if outputs.ndim == 3 and outputs.shape[-1] == 6:
+            return self._decode_end2end(outputs, scale, pad_x, pad_y, orig_w, orig_h)
+        return self._decode_raw_anchors(outputs, scale, pad_x, pad_y, orig_w, orig_h)
 
 
 def draw_person_boxes(jpeg_bytes: bytes, boxes: list[PersonBox]) -> bytes:
