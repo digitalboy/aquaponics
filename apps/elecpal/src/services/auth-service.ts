@@ -57,6 +57,17 @@ export class AuthService {
     return this.currentUser;
   }
 
+  public static async getIdToken(): Promise<string | null> {
+    if (!auth?.currentUser || this.currentUser.isGuest) {
+      return null;
+    }
+    try {
+      return await auth.currentUser.getIdToken();
+    } catch {
+      return null;
+    }
+  }
+
   public static async signInWithGoogle(): Promise<CurrentUser> {
     if (!auth) {
       console.warn('【Auth】Firebase Auth 未连接，保持游客沙盒模式。');

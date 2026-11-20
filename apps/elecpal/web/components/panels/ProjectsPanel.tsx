@@ -1,25 +1,33 @@
 import React from 'react';
-import { Save } from 'lucide-react';
+import { CloudUpload, Save } from 'lucide-react';
 import { TopologyVersionSnapshot } from '@services/project-service';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 
 interface ProjectsPanelProps {
   snapshots: TopologyVersionSnapshot[];
+  onSaveProject: () => void;
   onCommitSnapshot: () => void;
 }
 
 export const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
   snapshots,
+  onSaveProject,
   onCommitSnapshot,
 }) => {
   return (
     <div className="space-y-4 font-cad text-xs">
-      <Button variant="default" size="sm" className="w-full font-bold h-8 text-xs" onClick={onCommitSnapshot}>
-        <Save className="size-3.5 mr-1.5" />
-        保存当前拓扑快照 (Commit)
-      </Button>
+      <div className="space-y-2">
+        <Button variant="outline" size="sm" className="w-full font-bold h-8 text-xs" onClick={onSaveProject}>
+          <CloudUpload className="size-3.5 mr-1.5" />
+          保存当前工程
+        </Button>
+        <Button variant="default" size="sm" className="w-full font-bold h-8 text-xs" onClick={onCommitSnapshot}>
+          <Save className="size-3.5 mr-1.5" />
+          保存当前拓扑快照 (Commit)
+        </Button>
+      </div>
 
       <div className="space-y-2.5">
         <span className="text-xs font-bold text-slate-400 uppercase tracking-wide block">

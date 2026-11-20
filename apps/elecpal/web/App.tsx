@@ -67,9 +67,14 @@ export function App() {
     setErcResult(erc);
     const calc = ElectricalCalculator.calculate(data);
     setCalcReport(calc);
-
-    ProjectService.listSnapshots(data.system_id).then(setSnapshots);
   };
+
+  // 登录态或当前拓扑变更时，按用户隔离的工程 ID 刷新历史快照
+  useEffect(() => {
+    if (!topology) return;
+    const scopedId = ProjectService.getScopedProjectId(topology.system_id, currentUser);
+    ProjectService.listSnapshots(scopedId).then(setSnapshots);
+  }, [topology?.system_id, currentUser.uid, currentUser.isGuest]);
 
   // 视口平移缩放辅助方法
   const handleZoomIn = () => setZoom((z) => Math.min(z * 1.2, 4.0));
@@ -129,20 +134,63 @@ export function App() {
     URL.revokeObjectURL(url);
   };
 
+  // 保存工程主记录
+  const handleSaveProject = async () => {
+    if (!topology) return;
+    const scopedId = ProjectService.getScopedProjectId(topology.system_id, currentUser);
+    const res = await ProjectService.saveProject({
+      projectId: scopedId,
+      projectName: topology.facility_name || topology.workshop_code || '未命名工程',
+      facilityCode: topology.workshop_code || 'WS-01',
+      updatedAt: new Date().toISOString(),
+      activeVersionId: snapshots[0]?.versionId || 'v_latest',
+      activeTopology: topology
+    });
+
+    if (currentUser.isGuest) {
+      alert('工程已保存至本地浏览器沙盒（登录 Google 账号后可同步至 Cloudflare D1 云端）。');
+    } else if (res.cloudSynced) {
+      alert('工程已成功保存并同步至 Cloudflare D1 边缘云！');
+    } else {
+      alert(`工程已保存至本地，但云端 D1 同步失败：${res.error || '未知错误'}`);
+    }
+  };
+
   // 保存版本快照 (Commit)
   const handleCommitSnapshot = async () => {
     if (!topology || !ercResult) return;
     const summary = prompt('请输入本次拓扑修订说明 (Commit Message):', '优化支路配置与电缆截面');
     if (!summary) return;
 
-    const snap = await ProjectService.commitVersionSnapshot(
-      topology.system_id,
+    const scopedId = ProjectService.getScopedProjectId(topology.system_id, currentUser);
+
+    // 提交快照前先确保 D1 中存在主工程记录（避免外键/404）
+    const saveRes = await ProjectService.saveProject({
+      projectId: scopedId,
+      projectName: topology.facility_name || topology.workshop_code || '未命名工程',
+      facilityCode: topology.workshop_code || 'WS-01',
+      updatedAt: new Date().toISOString(),
+      activeVersionId: snapshots[0]?.versionId || 'v_latest',
+      activeTopology: topology
+    });
+
+    const { snapshot, cloudSynced, error } = await ProjectService.commitVersionSnapshot(
+      scopedId,
       summary,
       topology,
       ercResult
     );
-    setSnapshots((prev) => [snap, ...prev]);
-    alert(`版本快照 ${snap.versionTag} 已成功提交至 Cloudflare D1 边缘云！`);
+    setSnapshots((prev) => [snapshot, ...prev]);
+
+    if (currentUser.isGuest) {
+      alert(`版本快照 ${snapshot.versionTag} 已保存至本地沙盒（游客模式不同步云端）。`);
+    } else if (cloudSynced && saveRes.cloudSynced) {
+      alert(`版本快照 ${snapshot.versionTag} 已成功提交至 Cloudflare D1 边缘云！`);
+    } else {
+      alert(
+        `版本快照 ${snapshot.versionTag} 已保存至本地，但云端 D1 同步失败：${error || saveRes.error || '未知错误'}`
+      );
+    }
   };
 
   // 应用 JSON 拓扑热变更
@@ -208,6 +256,7 @@ export function App() {
           jsonText={jsonText}
           onJsonChange={setJsonText}
           onApplyJson={handleApplyJson}
+          onSaveProject={handleSaveProject}
           onCommitSnapshot={handleCommitSnapshot}
           onExportBOM={handleExportBOM}
         />

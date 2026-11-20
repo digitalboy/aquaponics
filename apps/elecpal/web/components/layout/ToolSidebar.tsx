@@ -31,6 +31,7 @@ interface ToolSidebarProps {
   jsonText: string;
   onJsonChange: (val: string) => void;
   onApplyJson: () => void;
+  onSaveProject: () => void;
   onCommitSnapshot: () => void;
   onExportBOM: () => void;
 }
@@ -46,6 +47,7 @@ export const ToolSidebar: React.FC<ToolSidebarProps> = ({
   jsonText,
   onJsonChange,
   onApplyJson,
+  onSaveProject,
   onCommitSnapshot,
   onExportBOM,
 }) => {
@@ -212,7 +214,11 @@ export const ToolSidebar: React.FC<ToolSidebarProps> = ({
             {activeTab === 'bom' && <BOMPanel topology={topology} onExportBOM={onExportBOM} />}
             {activeTab === 'wiring' && <WiringPanel topology={topology} activeSheet={activeSheet} />}
             {activeTab === 'projects' && (
-              <ProjectsPanel snapshots={snapshots} onCommitSnapshot={onCommitSnapshot} />
+              <ProjectsPanel
+                snapshots={snapshots}
+                onSaveProject={onSaveProject}
+                onCommitSnapshot={onCommitSnapshot}
+              />
             )}
             {activeTab === 'json' && (
               <JsonEditorPanel
