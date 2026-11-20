@@ -39,7 +39,7 @@ export const DialogContent = React.forwardRef<
     >
       {children}
       <DialogPrimitive.Close className="absolute top-3.5 right-3.5 cursor-pointer rounded-md p-1 text-muted-foreground opacity-80 transition-opacity hover:bg-accent hover:opacity-100 focus:outline-none">
-        <X className="h-4 w-4" />
+        <X className="size-4" />
         <span className="sr-only">关闭</span>
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
@@ -48,7 +48,7 @@ export const DialogContent = React.forwardRef<
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 export function DialogHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("flex flex-col space-y-1 pr-8 text-left", className)} {...props} />;
+  return <div className={cn("flex flex-col gap-1 pr-8 text-left", className)} {...props} />;
 }
 
 export const DialogTitle = React.forwardRef<

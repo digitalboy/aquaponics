@@ -167,17 +167,22 @@ export async function handlePublicRoutes(
     //   return jsonResponse({ error: "Forbidden: internal_ops camera" }, 403, env.ALLOWED_ORIGINS);
     // }
 
-    const start = url.searchParams.get("start") || "1970-01-01T00:00:00.000Z";
+    const defaultStart = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+    const start = url.searchParams.get("start") || defaultStart;
     const end = url.searchParams.get("end") || nowIsoUtc();
     if (!isStrictIsoUtc(start) || !isStrictIsoUtc(end)) {
       return jsonResponse({ error: "start and end must be strict ISO 8601 UTC" }, 400, env.ALLOWED_ORIGINS);
     }
 
+    const includeEvents = url.searchParams.get("include_events") === "1";
+    const reqLimit = Number(url.searchParams.get("limit") || (includeEvents ? "1000" : "20"));
+    const limit = Math.min(Math.max(Number.isFinite(reqLimit) ? Math.floor(reqLimit) : 100, 1), 1200);
+
     // 过滤 <8KB 的灰屏无效帧（如 RTSP 首帧未等来完整 I 帧导致的 2KB 灰图）
     const { results } = await env.VIDEO_DB.prepare(
-      "SELECT r2_key, captured_at, size_bytes, width, height FROM snapshots WHERE site_id = ? AND cam_id = ? AND size_bytes >= 8192 AND captured_at BETWEEN ? AND ? ORDER BY captured_at DESC LIMIT 100",
+      "SELECT r2_key, captured_at, size_bytes, width, height FROM snapshots WHERE site_id = ? AND cam_id = ? AND size_bytes >= 8192 AND captured_at BETWEEN ? AND ? ORDER BY captured_at DESC LIMIT ?",
     )
-      .bind(siteId, camId, start, end)
+      .bind(siteId, camId, start, end, limit)
       .all<{ r2_key: string; captured_at: string; size_bytes: number; width: number; height: number }>();
 
     // 若前端浏览携带 refresh=1，则按 12 秒防抖下发一次 capture_now 指令，实现“看时 15s 刷新、不看不费流量”
@@ -206,16 +211,88 @@ export async function handlePublicRoutes(
     const exp = Math.floor(Date.now() / 1000) + tokenTtlSec;
     const token = await signPlaybackToken({ cam_id: camId, site_id: siteId, scope: "snapshot", exp }, signingSecret);
 
+    const timeline: Array<{
+      captured_at: string;
+      size_bytes: number;
+      width: number;
+      height: number;
+      source: "snapshot" | "night_person_ai";
+      label?: string;
+      url: string;
+    }> = results.map((s) => ({
+      captured_at: s.captured_at,
+      size_bytes: s.size_bytes,
+      width: s.width,
+      height: s.height,
+      source: "snapshot",
+      url: `${url.origin}/sign/${token}/raw/${s.r2_key}`,
+    }));
+
+    if (includeEvents) {
+      const seenKeys = new Set(results.map((s) => s.r2_key));
+      const { results: evtRows } = await env.VIDEO_DB.prepare(
+        `SELECT trigger_at, r2_key, meta_json
+         FROM video_events
+         WHERE site_id = ?1 AND cam_id = ?2 AND source_type = 'night_person_ai' AND status = 'ready'
+           AND trigger_at BETWEEN ?3 AND ?4
+         ORDER BY trigger_at DESC
+         LIMIT 300`,
+      )
+        .bind(siteId, camId, start, end)
+        .all<{ trigger_at: string; r2_key: string | null; meta_json: string | null }>();
+
+      for (const evt of evtRows ?? []) {
+        let pushed = false;
+        if (evt.meta_json) {
+          try {
+            const meta = JSON.parse(evt.meta_json) as {
+              recognized_names?: string[];
+              frames?: Array<{ label?: string; r2_key?: string; captured_at?: string }>;
+            };
+            const who =
+              Array.isArray(meta.recognized_names) && meta.recognized_names.length > 0
+                ? `AI识别：${meta.recognized_names.join("、")}`
+                : "AI人形检测";
+            if (Array.isArray(meta.frames)) {
+              for (const f of meta.frames) {
+                if (!f?.r2_key || !f?.captured_at || seenKeys.has(f.r2_key)) continue;
+                seenKeys.add(f.r2_key);
+                timeline.push({
+                  captured_at: f.captured_at,
+                  size_bytes: 35000,
+                  width: 640,
+                  height: 360,
+                  source: "night_person_ai",
+                  label: who,
+                  url: `${url.origin}/sign/${token}/raw/${f.r2_key}`,
+                });
+                pushed = true;
+              }
+            }
+          } catch {
+            // 忽略异常 meta_json，走下方 r2_key 兜底
+          }
+        }
+        if (!pushed && evt.r2_key && !seenKeys.has(evt.r2_key)) {
+          seenKeys.add(evt.r2_key);
+          timeline.push({
+            captured_at: evt.trigger_at,
+            size_bytes: 35000,
+            width: 640,
+            height: 360,
+            source: "night_person_ai",
+            label: "AI人形检测",
+            url: `${url.origin}/sign/${token}/raw/${evt.r2_key}`,
+          });
+        }
+      }
+      timeline.sort((a, b) => b.captured_at.localeCompare(a.captured_at));
+    }
+
     return jsonResponse(
       {
         cam_id: camId,
-        snapshots: results.map((s) => ({
-          captured_at: s.captured_at,
-          size_bytes: s.size_bytes,
-          width: s.width,
-          height: s.height,
-          url: `${url.origin}/sign/${token}/raw/${s.r2_key}`,
-        })),
+        snapshots: timeline.slice(0, limit),
       },
       200,
       env.ALLOWED_ORIGINS,

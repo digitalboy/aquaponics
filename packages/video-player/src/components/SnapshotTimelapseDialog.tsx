@@ -1,9 +1,24 @@
+import {
+  Badge,
+  Button,
+  cn,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Slider,
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@aquaponics/ui";
 import { ChevronLeft, ChevronRight, Loader2, Pause, Play, Repeat } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { cn } from "../lib/utils";
 import { formatLocalTime, type SnapshotItem, VideoGatewayClient } from "../sdk/client";
-import { Button } from "./ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
 
 export interface SnapshotTimelapseDialogProps {
   open: boolean;
@@ -35,6 +50,7 @@ export function SnapshotTimelapseDialog({
   const [playing, setPlaying] = useState<boolean>(false);
   const [loop, setLoop] = useState<boolean>(true);
   const [intervalMs, setIntervalMs] = useState<number>(800);
+  const [hoursWindow, setHoursWindow] = useState<12 | 24>(24);
 
   const client = useMemo(
     () => new VideoGatewayClient({ gatewayUrl, siteId, authToken }),
@@ -49,11 +65,13 @@ export function SnapshotTimelapseDialog({
     let cancelled = false;
     setLoading(true);
     setError("");
+    const end = new Date().toISOString();
+    const start = new Date(Date.now() - hoursWindow * 3600 * 1000).toISOString();
     void client
-      .getSnapshots(camId)
+      .getSnapshots(camId, { start, end, includeEvents: true, limit: 1000 })
       .then((res) => {
         if (cancelled) return;
-        // 过滤无效灰图并按采集时间从早到晚排序（时序正序）
+        // 过滤无效灰图并按采集时间从早到晚排序（融合10分钟留档、15秒实况与夜间AI人形抓拍）
         const valid = res.snapshots
           .filter((s) => s.size_bytes >= 8192)
           .sort((a, b) => a.captured_at.localeCompare(b.captured_at));
@@ -72,7 +90,7 @@ export function SnapshotTimelapseDialog({
     return () => {
       cancelled = true;
     };
-  }, [open, client, camId]);
+  }, [open, client, camId, hoursWindow]);
 
   useEffect(() => {
     if (!open || !playing || frames.length <= 1) return;
@@ -92,12 +110,14 @@ export function SnapshotTimelapseDialog({
     return () => window.clearInterval(timer);
   }, [open, playing, frames.length, loop, intervalMs]);
 
-  // 预加载下一帧，保证切换流畅
+  // 预加载后续 2 帧，保证大时间线切换流畅
   useEffect(() => {
     if (!open || frames.length <= 1) return;
-    const nextIdx = (index + 1) % frames.length;
-    const pre = new Image();
-    pre.src = frames[nextIdx].url;
+    for (const offset of [1, 2]) {
+      const preIdx = (index + offset) % frames.length;
+      const pre = new Image();
+      pre.src = frames[preIdx].url;
+    }
   }, [open, index, frames]);
 
   const current = frames[index];
@@ -106,12 +126,29 @@ export function SnapshotTimelapseDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{camName} · 历史画面回看</DialogTitle>
-          <DialogDescription>
-            {frames.length > 0
-              ? `共 ${frames.length} 张实景记录，按时间先后顺序播放`
-              : "查看近期自动留档的现场实景图片"}
-          </DialogDescription>
+          <div className="flex flex-wrap items-center justify-between gap-2 pr-6">
+            <div>
+              <DialogTitle>{camName} · 历史画面回看</DialogTitle>
+              <DialogDescription>
+                {frames.length > 0
+                  ? `最近 ${hoursWindow} 小时共 ${frames.length} 张实景与AI记录，按时间顺序播放`
+                  : `查看最近 ${hoursWindow} 小时自动留档与识别记录`}
+              </DialogDescription>
+            </div>
+            <ToggleGroup
+              type="single"
+              value={String(hoursWindow)}
+              onValueChange={(val) => {
+                if (val === "12" || val === "24") {
+                  setPlaying(false);
+                  setHoursWindow(Number(val) as 12 | 24);
+                }
+              }}
+            >
+              <ToggleGroupItem value="12">最近 12h</ToggleGroupItem>
+              <ToggleGroupItem value="24">最近 24h</ToggleGroupItem>
+            </ToggleGroup>
+          </div>
         </DialogHeader>
 
         <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-border bg-zinc-950">
@@ -135,8 +172,15 @@ export function SnapshotTimelapseDialog({
           {!loading && current && (
             <>
               <img src={current.url} alt={camName} className="h-full w-full object-contain" />
-              <div className="pointer-events-none absolute right-2.5 bottom-2.5 rounded bg-black/70 px-2.5 py-1 text-xs text-zinc-100 backdrop-blur-sm">
-                {formatLocalTime(current.captured_at)} · 第 {index + 1} / {frames.length} 张
+              <div className="pointer-events-none absolute right-2.5 bottom-2.5 flex items-center gap-2 rounded bg-black/15 px-2.5 py-1 text-xs text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.95)]">
+                {current.source === "night_person_ai" && (
+                  <Badge variant="destructive" className="bg-destructive/80 text-destructive-foreground px-1.5 py-0 text-[10px]">
+                    {current.label || "AI人形检测"}
+                  </Badge>
+                )}
+                <span>
+                  {formatLocalTime(current.captured_at)} · 第 {index + 1} / {frames.length} 张
+                </span>
               </div>
             </>
           )}
@@ -144,16 +188,17 @@ export function SnapshotTimelapseDialog({
 
         {frames.length > 0 && (
           <div className="flex flex-col gap-2.5">
-            <input
-              type="range"
+            <Slider
               min={0}
               max={Math.max(0, frames.length - 1)}
-              value={index}
-              onChange={(e) => {
-                setPlaying(false);
-                setIndex(Number(e.target.value));
+              step={1}
+              value={[index]}
+              onValueChange={([val]) => {
+                if (typeof val === "number") {
+                  setPlaying(false);
+                  setIndex(val);
+                }
               }}
-              className="h-1.5 w-full cursor-pointer accent-emerald-500"
             />
 
             <div className="flex flex-wrap items-center justify-between gap-2">
@@ -167,7 +212,7 @@ export function SnapshotTimelapseDialog({
                   }}
                   disabled={index <= 0}
                 >
-                  <ChevronLeft className="h-3.5 w-3.5" />
+                  <ChevronLeft />
                   上一张
                 </Button>
 
@@ -179,7 +224,7 @@ export function SnapshotTimelapseDialog({
                     setPlaying((p) => !p);
                   }}
                 >
-                  {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+                  {playing ? <Pause /> : <Play />}
                   {playing ? "暂停" : "播放"}
                 </Button>
 
@@ -193,20 +238,24 @@ export function SnapshotTimelapseDialog({
                   disabled={index >= frames.length - 1}
                 >
                   下一张
-                  <ChevronRight className="h-3.5 w-3.5" />
+                  <ChevronRight />
                 </Button>
               </div>
 
               <div className="flex items-center gap-2">
-                <select
-                  value={intervalMs}
-                  onChange={(e) => setIntervalMs(Number(e.target.value))}
-                  className="h-7 rounded-md border border-input bg-background px-2 text-xs text-foreground focus:outline-none"
+                <Select
+                  value={String(intervalMs)}
+                  onValueChange={(val) => setIntervalMs(Number(val))}
                 >
-                  <option value={400}>0.4秒 / 张</option>
-                  <option value={800}>0.8秒 / 张</option>
-                  <option value={1500}>1.5秒 / 张</option>
-                </select>
+                  <SelectTrigger className="w-[105px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="400">0.4秒 / 张</SelectItem>
+                    <SelectItem value="800">0.8秒 / 张</SelectItem>
+                    <SelectItem value="1500">1.5秒 / 张</SelectItem>
+                  </SelectContent>
+                </Select>
 
                 <Button
                   size="sm"
@@ -214,7 +263,7 @@ export function SnapshotTimelapseDialog({
                   className={cn(!loop && "text-muted-foreground")}
                   onClick={() => setLoop((v) => !v)}
                 >
-                  <Repeat className="h-3.5 w-3.5" />
+                  <Repeat />
                   {loop ? "循环播放" : "单次播放"}
                 </Button>
               </div>

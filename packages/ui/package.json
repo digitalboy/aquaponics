@@ -1,0 +1,43 @@
+{
+  "name": "@aquaponics/ui",
+  "version": "1.0.0",
+  "private": true,
+  "description": "数字化农业工厂统一 shadcn/ui + Tailwind CSS v4 共享组件库",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@radix-ui/react-alert-dialog": "latest",
+    "@radix-ui/react-avatar": "latest",
+    "@radix-ui/react-dialog": "latest",
+    "@radix-ui/react-label": "latest",
+    "@radix-ui/react-select": "latest",
+    "@radix-ui/react-separator": "latest",
+    "@radix-ui/react-slider": "latest",
+    "@radix-ui/react-tabs": "latest",
+    "@radix-ui/react-toggle": "latest",
+    "@radix-ui/react-toggle-group": "latest",
+    "class-variance-authority": "latest",
+    "clsx": "latest",
+    "lucide-react": "latest",
+    "tailwind-merge": "latest"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@aquaponics/tsconfig": "workspace:*",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "typescript": "latest"
+  }
+}

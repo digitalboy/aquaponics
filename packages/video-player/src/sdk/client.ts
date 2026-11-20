@@ -17,6 +17,8 @@ export interface SnapshotItem {
   size_bytes: number;
   width: number;
   height: number;
+  source?: "snapshot" | "night_person_ai";
+  label?: string;
   url: string;
 }
 
@@ -82,12 +84,14 @@ export class VideoGatewayClient {
 
   async getSnapshots(
     camId: string,
-    opts?: { refresh?: boolean; start?: string; end?: string },
+    opts?: { refresh?: boolean; start?: string; end?: string; includeEvents?: boolean; limit?: number },
   ): Promise<{ cam_id: string; snapshots: SnapshotItem[] }> {
     const params = new URLSearchParams({ site_id: this.siteId });
     if (opts?.refresh) params.set("refresh", "1");
     if (opts?.start) params.set("start", opts.start);
     if (opts?.end) params.set("end", opts.end);
+    if (opts?.includeEvents) params.set("include_events", "1");
+    if (opts?.limit) params.set("limit", String(opts.limit));
 
     const res = await fetch(
       `${this.baseUrl}/api/v1/snapshots/${encodeURIComponent(camId)}?${params.toString()}`,

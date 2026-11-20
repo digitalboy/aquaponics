@@ -2,9 +2,7 @@ import { RefreshCw } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { AquaponicsVideoPlayer } from "./AquaponicsVideoPlayer";
 import { SnapshotTimelapseDialog } from "./components/SnapshotTimelapseDialog";
-import { Badge } from "./components/ui/badge";
-import { Button } from "./components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
+import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from "@aquaponics/ui";
 import { type CameraInfo, VideoGatewayClient } from "./sdk/client";
 
 export interface CameraMonitorGridProps {
@@ -115,7 +113,7 @@ export function CameraMonitorGrid({
                   )}
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-0">
                 <AquaponicsVideoPlayer
                   gatewayUrl={gatewayUrl}
                   camId={cam.cam_id}

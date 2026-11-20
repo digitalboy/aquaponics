@@ -11,6 +11,7 @@
     "check": "tsc --noEmit"
   },
   "dependencies": {
+    "@aquaponics/ui": "workspace:*",
     "@aquaponics/video-player": "workspace:*",
     "lucide-react": "^1.76.0",
     "react": "^19.3.1",

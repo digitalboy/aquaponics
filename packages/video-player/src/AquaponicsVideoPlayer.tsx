@@ -1,7 +1,7 @@
 import Hls from "hls.js";
 import { Loader2, VideoOff } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { cn } from "./lib/utils";
+import { cn } from "@aquaponics/ui";
 import { formatLocalTime, VideoGatewayClient } from "./sdk/client";
 
 export type VideoPlayerMode = "live" | "playback" | "snapshot";
@@ -270,7 +270,7 @@ export function AquaponicsVideoPlayer({
       )}
 
       {mode === "snapshot" && autoRefreshSec > 0 && (
-        <div className="pointer-events-none absolute bottom-2.5 left-2.5 flex items-center gap-1.5 rounded-full bg-black/70 px-2 py-1 text-[11px] text-zinc-200 backdrop-blur-sm">
+        <div className="pointer-events-none absolute bottom-2.5 left-2.5 flex items-center gap-1.5 rounded-full bg-black/15 px-2 py-1 text-[11px] text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.95)]">
           <svg className="h-4 w-4 -rotate-90" viewBox="0 0 20 20" aria-hidden="true">
             <circle cx="10" cy="10" r="7" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="2.5" />
             <circle
@@ -310,7 +310,7 @@ export function AquaponicsVideoPlayer({
       {(watermark || capturedAt) && (
         <div
           title={capturedAt || undefined}
-          className="pointer-events-none absolute right-2.5 bottom-2.5 rounded bg-black/65 px-2 py-0.5 text-[11px] text-zinc-200 backdrop-blur-sm"
+          className="pointer-events-none absolute right-2.5 bottom-2.5 rounded bg-black/15 px-2 py-0.5 text-[11px] text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.95)]"
         >
           {watermark ? `${watermark} · ` : ""}
           {capturedAt ? `${formatLocalTime(capturedAt)}${sizeKb ? ` (${sizeKb} KB)` : ""}` : camId}

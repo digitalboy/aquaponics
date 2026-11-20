@@ -1,7 +1,6 @@
-import { clsx, type ClassValue } from "clsx";
+import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-/** shadcn/ui 标准 Tailwind 类名合并工具 */
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
