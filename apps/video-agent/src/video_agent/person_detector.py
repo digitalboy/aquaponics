@@ -195,3 +195,87 @@ def draw_person_boxes(jpeg_bytes: bytes, boxes: list[PersonBox]) -> bytes:
         out = BytesIO()
         rgb.save(out, format="JPEG", quality=88)
         return out.getvalue()
+
+
+class MotionGateFilter:
+    """
+    基于缓慢更新灰度背景的运动门控过滤器。
+
+    经验教训备注：
+    YOLO 模型对静止近景物体（如斜靠的木板、推车、立柱）也可能给出 70%+ 的 person 误检置信度。
+    仅靠置信度或连续帧数无法消除此类静态误报，必须叠加“框内像素相对背景是否有显著变化”的运动校验。
+    """
+
+    def __init__(
+        self,
+        thumb_size: tuple[int, int] = (320, 180),
+        pixel_diff_threshold: float = 18.0,
+        min_roi_motion_ratio: float = 0.08,
+        global_light_jump_ratio: float = 0.85,
+        bg_alpha: float = 0.05,
+    ) -> None:
+        self.thumb_size = thumb_size
+        self.pixel_diff_threshold = pixel_diff_threshold
+        self.min_roi_motion_ratio = min_roi_motion_ratio
+        self.global_light_jump_ratio = global_light_jump_ratio
+        self.bg_alpha = bg_alpha
+        self._backgrounds: dict[str, np.ndarray] = {}
+
+    def reset(self, cam_id: str | None = None) -> None:
+        if cam_id is None:
+            self._backgrounds.clear()
+        else:
+            self._backgrounds.pop(cam_id, None)
+
+    def _to_gray_thumb(self, jpeg_bytes: bytes) -> tuple[np.ndarray, int, int]:
+        with Image.open(BytesIO(jpeg_bytes)) as img:
+            orig_w, orig_h = img.size
+            gray = img.convert("L").resize(self.thumb_size, Image.BILINEAR)
+            return np.asarray(gray, dtype=np.float32), orig_w, orig_h
+
+    def filter_moving_boxes(
+        self,
+        cam_id: str,
+        jpeg_bytes: bytes,
+        boxes: list[PersonBox],
+    ) -> list[PersonBox]:
+        """过滤掉与背景无显著像素差异的静态误报框，同时维护机位背景基线。"""
+        curr, orig_w, orig_h = self._to_gray_thumb(jpeg_bytes)
+        bg = self._backgrounds.get(cam_id)
+        if bg is None or bg.shape != curr.shape:
+            # 首帧只建立基线，不触发报警，防止把本来就摆在画面里的物体当成新闯入者
+            self._backgrounds[cam_id] = curr
+            return []
+
+        abs_diff = np.abs(curr - bg)
+        global_change = float(np.mean(abs_diff >= self.pixel_diff_threshold))
+
+        # 开关灯或日落/补光灯骤亮导致的全局亮度跳变：刷新基线并跳过当前帧
+        if global_change >= self.global_light_jump_ratio:
+            self._backgrounds[cam_id] = curr
+            return []
+
+        if not boxes:
+            self._backgrounds[cam_id] = (1.0 - self.bg_alpha) * bg + self.bg_alpha * curr
+            return []
+
+        tw, th = self.thumb_size
+        sx = tw / max(orig_w, 1)
+        sy = th / max(orig_h, 1)
+
+        moving: list[PersonBox] = []
+        for box in boxes:
+            x1 = max(0, min(tw - 1, int(box.x1 * sx)))
+            y1 = max(0, min(th - 1, int(box.y1 * sy)))
+            x2 = max(x1 + 1, min(tw, int(box.x2 * sx)))
+            y2 = max(y1 + 1, min(th, int(box.y2 * sy)))
+            roi_diff = abs_diff[y1:y2, x1:x2]
+            motion_ratio = float(np.mean(roi_diff >= self.pixel_diff_threshold))
+            if motion_ratio >= self.min_roi_motion_ratio:
+                moving.append(box)
+
+        if not moving:
+            # 确认是静态背景误报时，缓慢融合进背景以适应光线渐暗
+            self._backgrounds[cam_id] = (1.0 - self.bg_alpha) * bg + self.bg_alpha * curr
+
+        return moving

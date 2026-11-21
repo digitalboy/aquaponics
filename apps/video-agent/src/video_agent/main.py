@@ -11,7 +11,7 @@ import httpx
 from .config import AgentConfig
 from .face_recognizer import FaceRecognizer
 from .ffmpeg_runner import FFmpegRunner
-from .person_detector import PersonDetector, draw_person_boxes
+from .person_detector import MotionGateFilter, PersonDetector, draw_person_boxes
 from .sun_schedule import is_night_guard_window
 from .utils import (
     atomic_spool_file,
@@ -337,6 +337,7 @@ class VideoAgent:
         hit_streaks: dict[str, int] = {}
         last_alert_mono: dict[str, float] = {}
         last_guard_state: bool | None = None
+        motion_gate = MotionGateFilter()
 
         while True:
             is_night, schedule_note = is_night_guard_window(
@@ -350,6 +351,7 @@ class VideoAgent:
                 last_guard_state = is_night
                 if not is_night:
                     hit_streaks.clear()
+                    motion_gate.reset()
 
             if not is_night:
                 await asyncio.sleep(60.0)
@@ -366,7 +368,8 @@ class VideoAgent:
                     raw_bytes = ram_file.read_bytes()
                     ram_file.unlink(missing_ok=True)
 
-                    boxes = await asyncio.to_thread(detector.detect_bytes, raw_bytes)
+                    raw_boxes = await asyncio.to_thread(detector.detect_bytes, raw_bytes)
+                    boxes = motion_gate.filter_moving_boxes(cam_id, raw_bytes, raw_boxes)
                     if not boxes:
                         hit_streaks[cam_id] = 0
                         continue
