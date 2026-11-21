@@ -17,6 +17,8 @@ export interface AlertPayload {
   title: string;
   summary: string;
   occurredAtUtc: string;
+  hideOccurredAt?: boolean;
+  hideImageCaption?: boolean;
   details?: Array<{ label: string; value: string }>;
   images?: AlertImageItem[];
 }
@@ -163,7 +165,7 @@ async function sendFeishuAlert(env: Env, payload: AlertPayload): Promise<Channel
     `**${payload.summary}**`,
     `- **基地**：${payload.siteId}`,
     ...(payload.camName ? [`- **机位**：${payload.camName} (${payload.camId ?? ""})`] : []),
-    `- **时间**：${formatBeijingTime(payload.occurredAtUtc)}`,
+    ...(!payload.hideOccurredAt ? [`- **时间**：${formatBeijingTime(payload.occurredAtUtc)}`] : []),
     ...(payload.details ?? []).map((d) => `- **${d.label}**：${d.value}`),
   ];
 
@@ -173,10 +175,12 @@ async function sendFeishuAlert(env: Env, payload: AlertPayload): Promise<Channel
 
   if (payload.images && payload.images.length > 0) {
     for (const img of payload.images) {
-      elements.push({
-        tag: "markdown",
-        content: `**${img.label}**${img.capturedAtUtc ? ` · 拍摄于 ${formatBeijingTime(img.capturedAtUtc)}` : ""}`,
-      });
+      if (!payload.hideImageCaption) {
+        elements.push({
+          tag: "markdown",
+          content: `**${img.label}**${img.capturedAtUtc ? ` · 拍摄于 ${formatBeijingTime(img.capturedAtUtc)}` : ""}`,
+        });
+      }
       elements.push({
         tag: "img",
         img_key: img.imageKey,
@@ -704,10 +708,6 @@ export async function runPeriodicFeishuDigest(
       imageKey,
       capturedAtUtc: snap.captured_at,
     });
-    statusLines.push({
-      label: cam.name,
-      value: `${cam.online_status === "online" ? "在线" : cam.online_status} · ${Math.round(snap.size_bytes / 1024)} KB`,
-    });
   }
 
   if (images.length === 0) {
@@ -721,6 +721,8 @@ export async function runPeriodicFeishuDigest(
     title: "📸 国数AI农业 · 现场实时画面简报",
     summary: `为您同步 ${images.length} 路监控机位最新实拍画面（每 ${Math.round(digestIntervalSec / 60)} 分钟自动推送）。`,
     occurredAtUtc: nowIso,
+    hideOccurredAt: true,
+    hideImageCaption: true,
     details: statusLines,
     images,
   });
