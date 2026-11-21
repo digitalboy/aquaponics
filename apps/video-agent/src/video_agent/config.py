@@ -33,6 +33,10 @@ class AgentConfig:
     face_rec_model_path: Path
     face_gallery_path: Path
     face_cos_threshold: float
+    hik_user: str
+    hik_pass: str
+    cam_ip_map: dict[str, str]
+    night_stranger_flash_enabled: bool
 
     @classmethod
     def from_env(cls) -> "AgentConfig":
@@ -40,6 +44,16 @@ class AgentConfig:
             "ACTIVE_CAMERAS",
             "CAM-GATE-IN-01,CAM-GATE-OUT-01,CAM-BACK-IN-01,CAM-FISH-PAN-01,CAM-FISH-P5-01,CAM-HYDRO-PAN-01,CAM-EQUIP-IN-01",
         )
+        raw_ip_map = os.getenv(
+            "CAM_IP_MAP",
+            "CAM-GATE-IN-01=192.168.0.214,CAM-GATE-OUT-01=192.168.0.217",
+        )
+        cam_ip_map: dict[str, str] = {}
+        for pair in raw_ip_map.split(","):
+            if "=" in pair:
+                k, v = pair.split("=", 1)
+                if k.strip() and v.strip():
+                    cam_ip_map[k.strip()] = v.strip()
         return cls(
             gateway_url=os.environ["VIDEO_GATEWAY_URL"].rstrip("/"),
             site_id=os.getenv("SITE_ID", "guangming-01"),
@@ -67,4 +81,8 @@ class AgentConfig:
             face_rec_model_path=Path(os.getenv("FACE_REC_MODEL_PATH", "/opt/aquaponics/models/face_recognition_sface_2021dec.onnx")),
             face_gallery_path=Path(os.getenv("FACE_GALLERY_PATH", "/opt/aquaponics/faces/gallery.json")),
             face_cos_threshold=float(os.getenv("FACE_COS_THRESHOLD", "0.363")),
+            hik_user=os.getenv("HIK_USER", "admin"),
+            hik_pass=os.getenv("HIK_PASS", ""),
+            cam_ip_map=cam_ip_map,
+            night_stranger_flash_enabled=os.getenv("NIGHT_STRANGER_FLASH_ENABLED", "true").lower() in ("1", "true", "yes"),
         )

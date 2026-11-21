@@ -11,6 +11,7 @@ import httpx
 from .config import AgentConfig
 from .face_recognizer import FaceRecognizer
 from .ffmpeg_runner import FFmpegRunner
+from .hik_light import flash_stranger_white_light
 from .person_detector import MotionGateFilter, PersonDetector, draw_person_boxes
 from .sun_schedule import is_night_guard_window
 from .utils import (
@@ -491,6 +492,22 @@ class VideoAgent:
                             len(best_boxes),
                             best_max_conf,
                         )
+                        if (
+                            self.cfg.night_stranger_flash_enabled
+                            and not recognized_names
+                            and self.cfg.hik_pass
+                            and cam_id in self.cfg.cam_ip_map
+                        ):
+                            asyncio.create_task(
+                                flash_stranger_white_light(
+                                    cam_id=cam_id,
+                                    cam_ip=self.cfg.cam_ip_map[cam_id],
+                                    user=self.cfg.hik_user,
+                                    password=self.cfg.hik_pass,
+                                    cycles=3,
+                                    interval_sec=1.0,
+                                )
+                            )
                     else:
                         logger.warning("Night AI person-alert API failed (%s): %s", alert_res.status_code, alert_res.text)
                 except Exception as exc:
