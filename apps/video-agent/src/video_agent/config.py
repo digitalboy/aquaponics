@@ -49,7 +49,7 @@ class AgentConfig:
         )
         raw_ip_map = os.getenv(
             "CAM_IP_MAP",
-            "CAM-GATE-IN-01=192.168.0.214,CAM-GATE-OUT-01=192.168.0.217,CAM-BACK-IN-01=192.168.0.205",
+            "CAM-GATE-IN-01=192.168.0.214,CAM-GATE-OUT-01=192.168.0.217,CAM-BACK-IN-01=192.168.0.205,CAM-FISH-PAN-01=192.168.0.215,CAM-SEEDLING-01=192.168.0.216",
         )
         cam_ip_map: dict[str, str] = {}
         for pair in raw_ip_map.split(","):
