@@ -31,12 +31,22 @@ paths:
     sourceOnDemandCloseAfter: 10s
 
   CAM-BACK-IN-01:
-    source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.1.103:554/Streaming/Channels/102
+    source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.0.205:554/Streaming/Channels/102
     sourceOnDemand: yes
     sourceOnDemandCloseAfter: 15s
 
+  CAM-BACK-IN-01-HD:
+    source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.0.205:554/Streaming/Channels/101
+    sourceOnDemand: yes
+    sourceOnDemandCloseAfter: 10s
+
   CAM-FISH-PAN-01:
-    source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.1.104:554/Streaming/Channels/102
+    source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.0.215:554/Streaming/Channels/102
+    sourceOnDemand: yes
+    sourceOnDemandCloseAfter: 15s
+
+  CAM-SEEDLING-01:
+    source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.0.216:554/Streaming/Channels/102
     sourceOnDemand: yes
     sourceOnDemandCloseAfter: 15s
 

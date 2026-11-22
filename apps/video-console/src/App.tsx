@@ -32,7 +32,12 @@ export function App() {
           <div className="flex items-center gap-3">
             <ShieldCheck className="h-6 w-6 shrink-0 text-primary" />
             <div>
-              <h1 className="text-base font-semibold tracking-tight">国数AI农业</h1>
+              <div className="flex items-center gap-2">
+                <h1 className="text-base font-semibold tracking-tight">国数AI农业</h1>
+                <span className="rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
+                  光明 B3
+                </span>
+              </div>
               <p className="text-xs text-muted-foreground">
                 公开透明的生态生产现场，让每一位朋友亲眼见证安心食材的真实生长过程
               </p>
