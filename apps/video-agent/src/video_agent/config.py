@@ -29,6 +29,9 @@ class AgentConfig:
     night_ai_confirm_frames: int
     night_ai_cooldown_sec: int
     night_ai_model_path: Path
+    day_ai_interval_sec: int
+    day_ai_conf_threshold: float
+    day_person_upload_cooldown_sec: int
     face_det_model_path: Path
     face_rec_model_path: Path
     face_gallery_path: Path
@@ -77,6 +80,9 @@ class AgentConfig:
             night_ai_confirm_frames=int(os.getenv("NIGHT_AI_CONFIRM_FRAMES", "2")),
             night_ai_cooldown_sec=int(os.getenv("NIGHT_AI_COOLDOWN_SEC", "300")),
             night_ai_model_path=Path(os.getenv("NIGHT_AI_MODEL_PATH", "/opt/aquaponics/models/yolo26n.onnx")),
+            day_ai_interval_sec=int(os.getenv("DAY_AI_INTERVAL_SEC", "60")),
+            day_ai_conf_threshold=float(os.getenv("DAY_AI_CONF_THRESHOLD", "0.45")),
+            day_person_upload_cooldown_sec=int(os.getenv("DAY_PERSON_UPLOAD_COOLDOWN_SEC", "300")),
             face_det_model_path=Path(os.getenv("FACE_DET_MODEL_PATH", "/opt/aquaponics/models/face_detection_yunet_2023mar.onnx")),
             face_rec_model_path=Path(os.getenv("FACE_REC_MODEL_PATH", "/opt/aquaponics/models/face_recognition_sface_2021dec.onnx")),
             face_gallery_path=Path(os.getenv("FACE_GALLERY_PATH", "/opt/aquaponics/faces/gallery.json")),

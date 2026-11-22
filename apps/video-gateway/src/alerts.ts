@@ -679,35 +679,117 @@ export async function runPeriodicFeishuDigest(
   const images: AlertImageItem[] = [];
   const statusLines: Array<{ label: string; value: string }> = [];
 
-  for (const cam of cameras) {
-    const snap = await env.VIDEO_DB.prepare(
-      `SELECT r2_key, captured_at, size_bytes
-       FROM snapshots
-       WHERE site_id = ?1 AND cam_id = ?2
-       ORDER BY captured_at DESC
-       LIMIT 1`,
-    )
-      .bind(cam.site_id, cam.cam_id)
-      .first<{ r2_key: string; captured_at: string; size_bytes: number }>();
+  // 判断当前是否处于北京时间白天作业窗口（06:30 ~ 18:30）
+  const bjtDate = new Date(nowMs + 8 * 3600 * 1000);
+  const bjtMinutes = bjtDate.getUTCHours() * 60 + bjtDate.getUTCMinutes();
+  const isDaytimeWorkWindow = bjtMinutes >= 390 && bjtMinutes < 1110;
 
-    if (!snap) {
-      statusLines.push({ label: cam.name, value: "暂无快照" });
-      continue;
+  let cardTitle = "📸 国数AI农业 · 现场实时画面简报";
+  let cardSummary = "";
+
+  if (isDaytimeWorkWindow) {
+    // 白天策略：回看过去 65 分钟内检测到人员的快照，每路精选最多 2 张（最早 + 最晚，间隔 >= 5 分钟）
+    const sinceIso = new Date(nowMs - Math.max(digestIntervalSec, 3900) * 1000).toISOString();
+    let activeWorkCams = 0;
+
+    for (const cam of cameras) {
+      const res = await env.VIDEO_DB.prepare(
+        `SELECT r2_key, captured_at, size_bytes, person_count
+         FROM snapshots
+         WHERE site_id = ?1 AND cam_id = ?2 AND captured_at >= ?3 AND person_count > 0
+         ORDER BY captured_at ASC`,
+      )
+        .bind(cam.site_id, cam.cam_id, sinceIso)
+        .all<{ r2_key: string; captured_at: string; size_bytes: number; person_count: number }>();
+
+      const rows = res.results ?? [];
+      if (rows.length === 0) continue;
+
+      const picked = [rows[0]];
+      const lastRow = rows[rows.length - 1];
+      if (rows.length > 1 && Date.parse(lastRow.captured_at) - Date.parse(rows[0].captured_at) >= 5 * 60 * 1000) {
+        picked.push(lastRow);
+      }
+
+      let uploadedForCam = 0;
+      for (const snap of picked) {
+        const r2Obj = await env.VIDEO_R2.get(snap.r2_key);
+        if (!r2Obj) continue;
+        const bytes = await r2Obj.arrayBuffer();
+        const imageKey = await uploadImageToFeishu(tenantToken, bytes, `${cam.cam_id}.jpg`);
+        images.push({
+          label: cam.name,
+          imageKey,
+          capturedAtUtc: snap.captured_at,
+        });
+        uploadedForCam += 1;
+      }
+      if (uploadedForCam > 0) activeWorkCams += 1;
     }
 
-    const r2Obj = await env.VIDEO_R2.get(snap.r2_key);
-    if (!r2Obj) {
-      statusLines.push({ label: cam.name, value: "快照文件缺失" });
-      continue;
-    }
+    if (images.length > 0) {
+      cardTitle = "👷 国数AI农业 · 白天作业简报 (光明 B3)";
+      cardSummary = `过去 1 小时共有 ${activeWorkCams} 路机位记录到现场作业（每路精选最多 2 帧）。`;
+    } else {
+      // 兜底选项 A：若过去 1 小时全厂均未拍到人，仅附 1 张鱼池/在线全景图报平安
+      const fallbackCam = cameras.find((c) => c.cam_id === "CAM-FISH-PAN-01") ?? cameras[0];
+      const snap = await env.VIDEO_DB.prepare(
+        `SELECT r2_key, captured_at, size_bytes
+         FROM snapshots
+         WHERE site_id = ?1 AND cam_id = ?2
+         ORDER BY captured_at DESC
+         LIMIT 1`,
+      )
+        .bind(fallbackCam.site_id, fallbackCam.cam_id)
+        .first<{ r2_key: string; captured_at: string; size_bytes: number }>();
 
-    const bytes = await r2Obj.arrayBuffer();
-    const imageKey = await uploadImageToFeishu(tenantToken, bytes, `${cam.cam_id}.jpg`);
-    images.push({
-      label: cam.name,
-      imageKey,
-      capturedAtUtc: snap.captured_at,
-    });
+      if (snap) {
+        const r2Obj = await env.VIDEO_R2.get(snap.r2_key);
+        if (r2Obj) {
+          const bytes = await r2Obj.arrayBuffer();
+          const imageKey = await uploadImageToFeishu(tenantToken, bytes, `${fallbackCam.cam_id}.jpg`);
+          images.push({
+            label: fallbackCam.name,
+            imageKey,
+            capturedAtUtc: snap.captured_at,
+          });
+        }
+      }
+      cardTitle = "👷 国数AI农业 · 白天作业简报 (光明 B3)";
+      cardSummary = "过去 1 小时各作业区未检测到人员活动，以下为现场最新实景。";
+    }
+  } else {
+    for (const cam of cameras) {
+      const snap = await env.VIDEO_DB.prepare(
+        `SELECT r2_key, captured_at, size_bytes
+         FROM snapshots
+         WHERE site_id = ?1 AND cam_id = ?2
+         ORDER BY captured_at DESC
+         LIMIT 1`,
+      )
+        .bind(cam.site_id, cam.cam_id)
+        .first<{ r2_key: string; captured_at: string; size_bytes: number }>();
+
+      if (!snap) {
+        statusLines.push({ label: cam.name, value: "暂无快照" });
+        continue;
+      }
+
+      const r2Obj = await env.VIDEO_R2.get(snap.r2_key);
+      if (!r2Obj) {
+        statusLines.push({ label: cam.name, value: "快照文件缺失" });
+        continue;
+      }
+
+      const bytes = await r2Obj.arrayBuffer();
+      const imageKey = await uploadImageToFeishu(tenantToken, bytes, `${cam.cam_id}.jpg`);
+      images.push({
+        label: cam.name,
+        imageKey,
+        capturedAtUtc: snap.captured_at,
+      });
+    }
+    cardSummary = `为您同步 ${images.length} 路监控机位最新实拍画面（每 ${Math.round(digestIntervalSec / 60)} 分钟自动推送）。`;
   }
 
   if (images.length === 0) {
@@ -718,8 +800,8 @@ export async function runPeriodicFeishuDigest(
     alertKey: digestKey,
     siteId,
     severity: "resolved",
-    title: "📸 国数AI农业 · 现场实时画面简报",
-    summary: `为您同步 ${images.length} 路监控机位最新实拍画面（每 ${Math.round(digestIntervalSec / 60)} 分钟自动推送）。`,
+    title: cardTitle,
+    summary: cardSummary,
     occurredAtUtc: nowIso,
     hideOccurredAt: true,
     hideImageCaption: true,

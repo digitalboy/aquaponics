@@ -19,6 +19,7 @@ interface IngestItem {
   duration_sec?: number;
   width?: number;
   height?: number;
+  person_count?: number;
   event_id?: string;
 }
 
@@ -217,9 +218,10 @@ export async function handleAgentRoutes(
         );
       }
       if (item.kind === "snapshot") {
+        const personCount = Math.max(0, Math.round(item.person_count ?? 0));
         stmts.push(
           env.VIDEO_DB.prepare(
-            "INSERT OR IGNORE INTO snapshots (site_id, cam_id, r2_key, captured_at, size_bytes, width, height, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT OR IGNORE INTO snapshots (site_id, cam_id, r2_key, captured_at, size_bytes, width, height, person_count, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
           ).bind(
             auth.siteId,
             item.cam_id,
@@ -228,6 +230,7 @@ export async function handleAgentRoutes(
             item.size_bytes,
             item.width ?? 1280,
             item.height ?? 720,
+            personCount,
             now,
           ),
         );

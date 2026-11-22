@@ -95,6 +95,7 @@ class VideoAgent:
         cam_id: str,
         timestamp: str,
         duration_sec: float | None = None,
+        person_count: int | None = None,
     ) -> bool:
         data = local_file.read_bytes()
         upload_path = f"/api/internal/agent/upload/{quote(r2_key, safe='/')}"
@@ -113,6 +114,8 @@ class VideoAgent:
         }
         if duration_sec is not None:
             item["duration_sec"] = duration_sec
+        if person_count is not None:
+            item["person_count"] = person_count
 
         ingest_body = json.dumps({"items": [item]}).encode("utf-8")
         ing = await self._signed_request(client, "POST", "/api/internal/agent/ingest", ingest_body)
@@ -337,6 +340,7 @@ class VideoAgent:
 
         hit_streaks: dict[str, int] = {}
         last_alert_mono: dict[str, float] = {}
+        last_day_person_upload_mono: dict[str, float] = {}
         last_guard_state: bool | None = None
         motion_gate = MotionGateFilter()
 
@@ -355,7 +359,41 @@ class VideoAgent:
                     motion_gate.reset()
 
             if not is_night:
-                await asyncio.sleep(60.0)
+                # 白天作业打标模式：不报警不闪灯、不做静态运动过滤（允许工人静止作业），每路最多 5 分钟上传 1 张清晰有人原图
+                for cam_id in self.cfg.active_cameras:
+                    if self.desired_modes.get(cam_id, "snapshot") == "disabled":
+                        continue
+                    try:
+                        snap = await self.runner.capture_snapshot(cam_id)
+                        if not snap:
+                            continue
+                        ram_file, ts_iso = snap
+                        raw_bytes = ram_file.read_bytes()
+                        raw_boxes = await asyncio.to_thread(detector.detect_bytes, raw_bytes)
+                        day_boxes = [b for b in raw_boxes if b.confidence >= self.cfg.day_ai_conf_threshold]
+                        now_mono = time.monotonic()
+                        prev_day_up = last_day_person_upload_mono.get(cam_id, 0.0)
+                        if day_boxes and (prev_day_up == 0.0 or (now_mono - prev_day_up) >= self.cfg.day_person_upload_cooldown_sec):
+                            r2_key = build_snapshot_r2_key(self.cfg.site_id, cam_id, ts_iso)
+                            ok = await self._upload_and_ingest(
+                                client,
+                                ram_file,
+                                r2_key,
+                                "snapshot",
+                                cam_id,
+                                ts_iso,
+                                person_count=len(day_boxes),
+                            )
+                            if ok:
+                                last_day_person_upload_mono[cam_id] = now_mono
+                                logger.info("Day work snapshot tagged: cam=%s person_count=%d", cam_id, len(day_boxes))
+                            else:
+                                ram_file.unlink(missing_ok=True)
+                        else:
+                            ram_file.unlink(missing_ok=True)
+                    except Exception as exc:
+                        logger.warning("Day AI work scan error (%s): %s", cam_id, exc)
+                await asyncio.sleep(self.cfg.day_ai_interval_sec)
                 continue
 
             for cam_id in self.cfg.active_cameras:
