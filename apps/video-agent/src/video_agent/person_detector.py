@@ -92,16 +92,49 @@ class PersonDetector:
         ry1 = np.clip((y1 - pad_y) / scale, 0, orig_h)
         rx2 = np.clip((x2 - pad_x) / scale, 0, orig_w)
         ry2 = np.clip((y2 - pad_y) / scale, 0, orig_h)
-        return [
-            PersonBox(
-                x1=int(rx1[i]),
-                y1=int(ry1[i]),
-                x2=int(rx2[i]),
-                y2=int(ry2[i]),
-                confidence=float(filtered[i, 4]),
+
+        # 经验教训备注：红外黑白夜视下四足黑狗易同时触发 dog(16)/cat(15) 与 person(0) 两个 query。
+        # 若同一位置存在较高置信度的猫狗框（IoU >= 0.45），优先抑制 person 误报，同时不靠死卡高宽比以免漏报弯腰/蹲姿人员。
+        animal_mask = np.isin(classes, [15, 16]) & (confs >= 0.30)
+        animal_boxes = np.empty((0, 4), dtype=np.float32)
+        animal_confs = np.empty((0,), dtype=np.float32)
+        if np.any(animal_mask):
+            af = dets[animal_mask]
+            ax1, ay1, ax2, ay2 = af[:, 0], af[:, 1], af[:, 2], af[:, 3]
+            if float(np.max(af[:, :4])) <= 2.0:
+                ax1 = ax1 * self.input_size
+                ay1 = ay1 * self.input_size
+                ax2 = ax2 * self.input_size
+                ay2 = ay2 * self.input_size
+            animal_boxes = np.stack(
+                [
+                    np.clip((ax1 - pad_x) / scale, 0, orig_w),
+                    np.clip((ay1 - pad_y) / scale, 0, orig_h),
+                    np.clip((ax2 - pad_x) / scale, 0, orig_w),
+                    np.clip((ay2 - pad_y) / scale, 0, orig_h),
+                ],
+                axis=1,
             )
-            for i in range(len(filtered))
-        ]
+            animal_confs = af[:, 4]
+
+        results: list[PersonBox] = []
+        for i in range(len(filtered)):
+            p_box = (float(rx1[i]), float(ry1[i]), float(rx2[i]), float(ry2[i]))
+            p_conf = float(filtered[i, 4])
+            if len(animal_boxes) > 0:
+                ious = _iou(p_box, animal_boxes)
+                if np.any((ious >= 0.45) & (animal_confs >= max(0.30, p_conf * 0.55))):
+                    continue
+            results.append(
+                PersonBox(
+                    x1=int(p_box[0]),
+                    y1=int(p_box[1]),
+                    x2=int(p_box[2]),
+                    y2=int(p_box[3]),
+                    confidence=p_conf,
+                )
+            )
+        return results
 
     def _decode_raw_anchors(
         self,
