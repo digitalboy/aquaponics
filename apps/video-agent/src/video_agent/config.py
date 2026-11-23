@@ -17,6 +17,17 @@ class AgentConfig:
     snapshot_spool_limit_mb: int
     mediamtx_rtsp_base: str
     snapshot_interval_sec: int
+    # =========================================================================
+    # 【分层高清策略备注（方案 A 现行 vs 方案 B 未来光纤宽带）】
+    # 1. 一期/200G 4G 流量卡阶段（方案 A）：
+    #    - snapshot_use_hd=True：保底归档、白天工人作业简报、夜间 AI 报警优先拉取主码流 (`-HD`, 2560x1440)，
+    #      单张约 200~300KB，5 路全开月消耗仅约 6~9GB，细节极清晰且可远距检出人员。
+    #    - live_use_hd=False：网页每 15 秒实时刷新与按需直播继续走子码流 (768x432)，保证手机端秒开不卡。
+    # 2. 未来拉通光纤宽带后（方案 B）：
+    #    - 只需在 .env 中设置 LIVE_USE_HD=true，即可让 15 秒实时刷新也全量切到主码流高清画面。
+    # =========================================================================
+    snapshot_use_hd: bool
+    live_use_hd: bool
     heartbeat_idle_sec: int
     heartbeat_active_sec: int
     active_cameras: list[str]
@@ -68,6 +79,8 @@ class AgentConfig:
             snapshot_spool_limit_mb=int(os.getenv("SNAPSHOT_SPOOL_LIMIT_MB", "1024")),
             mediamtx_rtsp_base=os.getenv("MEDIAMTX_RTSP_BASE", "rtsp://127.0.0.1:8554").rstrip("/"),
             snapshot_interval_sec=int(os.getenv("SNAPSHOT_INTERVAL_SEC", "600")),
+            snapshot_use_hd=os.getenv("SNAPSHOT_USE_HD", "true").lower() in ("1", "true", "yes"),
+            live_use_hd=os.getenv("LIVE_USE_HD", "false").lower() in ("1", "true", "yes"),
             heartbeat_idle_sec=int(os.getenv("HEARTBEAT_IDLE_SEC", "10")),
             heartbeat_active_sec=int(os.getenv("HEARTBEAT_ACTIVE_SEC", "3")),
             active_cameras=[c.strip() for c in raw_cams.split(",") if c.strip()],

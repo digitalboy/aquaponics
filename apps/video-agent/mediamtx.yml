@@ -45,10 +45,20 @@ paths:
     sourceOnDemand: yes
     sourceOnDemandCloseAfter: 15s
 
+  CAM-FISH-PAN-01-HD:
+    source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.0.215:554/Streaming/Channels/101
+    sourceOnDemand: yes
+    sourceOnDemandCloseAfter: 10s
+
   CAM-SEEDLING-01:
     source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.0.216:554/Streaming/Channels/102
     sourceOnDemand: yes
     sourceOnDemandCloseAfter: 15s
+
+  CAM-SEEDLING-01-HD:
+    source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.0.216:554/Streaming/Channels/101
+    sourceOnDemand: yes
+    sourceOnDemandCloseAfter: 10s
 
   CAM-FISH-P5-01:
     source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.1.105:554/Streaming/Channels/102

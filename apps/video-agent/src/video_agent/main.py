@@ -126,6 +126,18 @@ class VideoAgent:
         local_file.unlink(missing_ok=True)
         return True
 
+    async def _capture_prefer_hd(self, cam_id: str, prefer_hd: bool) -> tuple[Path, str] | None:
+        """
+        优先从 `-HD` 主码流 (2560x1440) 抓帧；若 `-HD` 未配置或超时，自动降级到子码流 (768x432) 保底。
+        注：一期 4G 阶段归档/AI 传 prefer_hd=True，实时网页刷新传 self.cfg.live_use_hd (默认 False)；
+        未来拉通光纤宽带切换方案 B 时，将 .env 中 LIVE_USE_HD 设为 true 即可。
+        """
+        if prefer_hd:
+            hd_snap = await self.runner.capture_snapshot(f"{cam_id}-HD")
+            if hd_snap is not None:
+                return hd_snap
+        return await self.runner.capture_snapshot(cam_id)
+
     async def _handle_commands(self, client: httpx.AsyncClient, commands: list[dict]) -> None:
         for cmd in commands:
             cmd_id = cmd["cmd_id"]
@@ -136,11 +148,13 @@ class VideoAgent:
 
             ok = True
             if action == "wake_live":
-                await self.runner.start_live_hls(cam_id, segment_sec=int(payload.get("segment_sec", 4)))
+                live_stream = f"{cam_id}-HD" if self.cfg.live_use_hd else cam_id
+                await self.runner.start_live_hls(live_stream, segment_sec=int(payload.get("segment_sec", 4)))
             elif action == "sleep_live":
-                await self.runner.stop_live_hls(cam_id)
+                await self.runner.stop_live_hls(f"{cam_id}-HD" if self.cfg.live_use_hd else cam_id)
             elif action == "capture_now":
-                snap = await self.runner.capture_snapshot(cam_id)
+                # 网页 15s 实时刷屏按 live_use_hd 策略走（一期 4G 默认子码流秒开，宽带后可改 LIVE_USE_HD=true）
+                snap = await self._capture_prefer_hd(cam_id, prefer_hd=self.cfg.live_use_hd)
                 if snap:
                     f, ts = snap
                     date_path = ts[:10].replace("-", "/")
@@ -244,7 +258,8 @@ class VideoAgent:
                 if self.desired_modes.get(cam_id, "snapshot") == "disabled":
                     continue
                 try:
-                    snap = await self.runner.capture_snapshot(cam_id)
+                    # 定时保底快照：方案 A 下优先取 -HD 主码流 (2560x1440) 归档与历史回看
+                    snap = await self._capture_prefer_hd(cam_id, prefer_hd=self.cfg.snapshot_use_hd)
                     if snap:
                         ram_file, _ = snap
                         dest = self.cfg.snapshot_spool_dir / cam_id / ram_file.name
@@ -365,7 +380,8 @@ class VideoAgent:
                         continue
                     ram_file: Path | None = None
                     try:
-                        snap = await self.runner.capture_snapshot(cam_id)
+                        # 白天工人作业打标：优先取 -HD 主码流 (2560x1440)，既保证飞书简报极清晰，又大幅提升远景工人检出率
+                        snap = await self._capture_prefer_hd(cam_id, prefer_hd=self.cfg.snapshot_use_hd)
                         if not snap:
                             continue
                         ram_file, ts_iso = snap
@@ -401,7 +417,8 @@ class VideoAgent:
                 if self.desired_modes.get(cam_id, "snapshot") == "disabled":
                     continue
                 try:
-                    snap = await self.runner.capture_snapshot(cam_id)
+                    # 定时保底快照：方案 A 下优先取 -HD 主码流 (2560x1440) 归档与历史回看
+                    snap = await self._capture_prefer_hd(cam_id, prefer_hd=self.cfg.snapshot_use_hd)
                     if not snap:
                         continue
                     ram_file, ts_iso = snap

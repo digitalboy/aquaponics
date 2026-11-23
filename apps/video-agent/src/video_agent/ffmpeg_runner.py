@@ -16,8 +16,13 @@ class FFmpegRunner:
         proc = self._live_procs.get(cam_id)
         return proc is not None and proc.returncode is None
 
-    async def capture_snapshot(self, cam_id: str) -> tuple[Path, str] | None:
-        """从本地 MediaMTX 抓取 1 帧完整关键帧 JPG 到内存盘（过滤 <8KB 灰屏废图）。"""
+    async def capture_snapshot(self, cam_id: str, quality: int = 3) -> tuple[Path, str] | None:
+        """
+        从本地 MediaMTX 抓取 1 帧完整关键帧 JPG 到内存盘（过滤 <8KB 灰屏废图）。
+
+        画质说明：quality=3 (FFmpeg -q:v 1~31，越小越清晰) 兼顾主码流 2560x1440 细节与合理体积；
+        之前 -q:v 6 在子码流下偏糊，已提升至 3。
+        """
         out_dir = self.ram_dir / "snapshots" / cam_id
         out_dir.mkdir(parents=True, exist_ok=True)
         ts = utc_now_iso()
@@ -39,7 +44,7 @@ class FFmpegRunner:
             "-frames:v",
             "1",
             "-q:v",
-            "6",
+            str(quality),
             str(out_file),
         ]
         proc = await asyncio.create_subprocess_exec(
