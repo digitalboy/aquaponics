@@ -363,6 +363,7 @@ class VideoAgent:
                 for cam_id in self.cfg.active_cameras:
                     if self.desired_modes.get(cam_id, "snapshot") == "disabled":
                         continue
+                    ram_file: Path | None = None
                     try:
                         snap = await self.runner.capture_snapshot(cam_id)
                         if not snap:
@@ -374,7 +375,8 @@ class VideoAgent:
                         now_mono = time.monotonic()
                         prev_day_up = last_day_person_upload_mono.get(cam_id, 0.0)
                         if day_boxes and (prev_day_up == 0.0 or (now_mono - prev_day_up) >= self.cfg.day_person_upload_cooldown_sec):
-                            r2_key = build_snapshot_r2_key(self.cfg.site_id, cam_id, ts_iso)
+                            date_path = ts_iso[:10].replace("-", "/")
+                            r2_key = f"snapshots/{self.cfg.site_id}/{cam_id}/{date_path}/{ram_file.name}"
                             ok = await self._upload_and_ingest(
                                 client,
                                 ram_file,
@@ -387,12 +389,11 @@ class VideoAgent:
                             if ok:
                                 last_day_person_upload_mono[cam_id] = now_mono
                                 logger.info("Day work snapshot tagged: cam=%s person_count=%d", cam_id, len(day_boxes))
-                            else:
-                                ram_file.unlink(missing_ok=True)
-                        else:
-                            ram_file.unlink(missing_ok=True)
                     except Exception as exc:
                         logger.warning("Day AI work scan error (%s): %s", cam_id, exc)
+                    finally:
+                        if ram_file is not None:
+                            ram_file.unlink(missing_ok=True)
                 await asyncio.sleep(self.cfg.day_ai_interval_sec)
                 continue
 
