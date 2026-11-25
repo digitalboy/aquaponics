@@ -39,7 +39,8 @@ docs/
 │   ├── 08_电气系统图与拓扑数据契约规范_Electrical_Topology_Schema.md # ⚡ 机器可读低压配电系统图、TypeScript+Zod Schema与数字孪生绑定
 │   ├── 09_水动力拓扑与水循环数据契约规范_Hydraulic_Topology_Schema.md # 🌊 全厂水循环拓扑、多源补水预处理、Zod流量守恒与P&ID自动渲染
 │   ├── 10_全厂实物资产台账与5S定置管理数据契约规范_Asset_and_5S_Ledger_Schema.md # 📋 五层资产分治、5S影子板形迹管理、飞书Base五大分表Schema与Zod数据契约
-│   └── 11_设施物理拓扑与多作物排产数据契约规范_Facility_and_Agronomy_Schema.md # 🌾 大棚物理拓扑、多作物档案与动态排产契约
+│   ├── 11_设施物理拓扑与多作物排产数据契约规范_Facility_and_Agronomy_Schema.md # 🌾 大棚物理拓扑、多作物档案与动态排产契约
+│   └── 12_全厂飞书通知中台与交互卡片数据契约规范_Feishu_Notification_Contract.md # 🔔 飞书自建应用机器人、一应用多群路由、告警分级与电费/传感器推送契约
 │
 ├── 04_subsystems/                                     # 📌 04. 九大自治子系统 (专属模块化目录体系)
     ├── 01_aquaculture/                                # 🐟 01. 水产养殖子系统

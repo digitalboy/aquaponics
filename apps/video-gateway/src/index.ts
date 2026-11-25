@@ -1,4 +1,10 @@
 import { dispatchAlertNotifications, runHealthCheckAndAlert, runPeriodicFeishuDigest } from "./alerts";
+import {
+  type ApprovalReportPeriod,
+  inspectPurchaseApproval,
+  runPurchaseApprovalReport,
+  runScheduledApprovalReports,
+} from "./approvals";
 import { decodeAdminToken, signAdminToken, verifyAdminToken } from "./crypto";
 import { handleAgentRoutes } from "./routes/agent";
 import { handleInternalFacesRoutes } from "./routes/faces";
@@ -223,6 +229,26 @@ export default {
         return jsonResponse({ ok: digest.sent, digest }, digest.sent ? 200 : 500, env.ALLOWED_ORIGINS);
       }
 
+      if (url.pathname === "/api/internal/approvals/inspect" && request.method === "GET") {
+        if (!(await isAuthorizedInternal(request, env, url))) {
+          return jsonResponse({ error: "Unauthorized" }, 401, env.ALLOWED_ORIGINS);
+        }
+        const days = Number(url.searchParams.get("days") ?? "30");
+        const data = await inspectPurchaseApproval(env, Number.isFinite(days) ? days : 30);
+        return jsonResponse({ ok: true, data }, 200, env.ALLOWED_ORIGINS);
+      }
+
+      if (url.pathname === "/api/internal/approvals/report" && request.method === "POST") {
+        if (!(await isAuthorizedInternal(request, env, url))) {
+          return jsonResponse({ error: "Unauthorized" }, 401, env.ALLOWED_ORIGINS);
+        }
+        const rawPeriod = (url.searchParams.get("period") ?? "daily").trim();
+        const period: ApprovalReportPeriod =
+          rawPeriod === "weekly" || rawPeriod === "monthly" ? rawPeriod : "daily";
+        const report = await runPurchaseApprovalReport(env, period, true);
+        return jsonResponse({ ok: report.sent, report }, report.sent ? 200 : 500, env.ALLOWED_ORIGINS);
+      }
+
       if (url.pathname.startsWith("/api/internal/faces") || url.pathname === "/api/internal/events/night-ai") {
         if (!(await isAuthorizedInternal(request, env, url))) {
           return jsonResponse({ error: "Unauthorized" }, 401, env.ALLOWED_ORIGINS);
@@ -245,6 +271,7 @@ export default {
       Promise.all([
         runHealthCheckAndAlert(env),
         runPeriodicFeishuDigest(env),
+        runScheduledApprovalReports(env),
       ]),
     );
   },

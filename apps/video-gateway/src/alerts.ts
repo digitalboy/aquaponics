@@ -111,7 +111,7 @@ function feishuTemplateBySeverity(severity: AlertSeverity): string {
 }
 
 /** 获取飞书自建应用 tenant_access_token */
-async function fetchFeishuTenantToken(appId: string, appSecret: string): Promise<string> {
+export async function fetchFeishuTenantToken(appId: string, appSecret: string): Promise<string> {
   const res = await fetch("https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal", {
     method: "POST",
     headers: { "Content-Type": "application/json; charset=utf-8" },
@@ -158,7 +158,7 @@ function hasFeishuAppTarget(env: Env): boolean {
   return Boolean(env.FEISHU_CHAT_ID?.trim() && env.FEISHU_APP_ID?.trim() && env.FEISHU_APP_SECRET?.trim());
 }
 
-function hasFeishuTarget(env: Env): boolean {
+export function hasFeishuTarget(env: Env): boolean {
   return hasFeishuAppTarget(env) || Boolean(env.FEISHU_WEBHOOK_URL?.trim());
 }
 
@@ -184,7 +184,7 @@ function parseFeishuPostResult(res: Response, text: string): ChannelResult {
  * - 优先走企业自建应用机器人（FEISHU_CHAT_ID + FEISHU_APP_ID + FEISHU_APP_SECRET -> im/v1/messages）
  * - 未配置 FEISHU_CHAT_ID 时兼容回退至旧版自定义群机器人 Webhook（FEISHU_WEBHOOK_URL）
  */
-async function sendFeishuAlert(env: Env, payload: AlertPayload): Promise<ChannelResult> {
+export async function sendFeishuAlert(env: Env, payload: AlertPayload): Promise<ChannelResult> {
   const useAppBot = hasFeishuAppTarget(env);
   const webhookUrl = env.FEISHU_WEBHOOK_URL?.trim();
   if (!useAppBot && !webhookUrl) {
@@ -386,7 +386,7 @@ export async function dispatchAlertNotifications(
   ]);
 }
 
-async function getAlertState(db: D1Database, alertKey: string): Promise<AlertStateRow | null> {
+export async function getAlertState(db: D1Database, alertKey: string): Promise<AlertStateRow | null> {
   return db
     .prepare(
       `SELECT alert_key, status, last_triggered_at, last_notified_at, last_resolved_at, last_message
@@ -396,7 +396,7 @@ async function getAlertState(db: D1Database, alertKey: string): Promise<AlertSta
     .first<AlertStateRow>();
 }
 
-async function upsertAlertState(
+export async function upsertAlertState(
   db: D1Database,
   params: {
     alertKey: string;

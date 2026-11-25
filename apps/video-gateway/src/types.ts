@@ -35,6 +35,7 @@ export interface Env {
   FEISHU_APP_ID?: string;
   FEISHU_APP_SECRET?: string;
   FEISHU_CHAT_ID?: string;
+  FEISHU_PURCHASE_APPROVAL_CODE?: string;
   ALERT_WEBHOOK_URL?: string;
   HEARTBEAT_TIMEOUT_SEC?: string;
   SNAPSHOT_STALE_SEC?: string;
