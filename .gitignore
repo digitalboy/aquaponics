@@ -27,6 +27,9 @@ out/
 .env
 .env.*
 !.env.example
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
 
 # 4. Cloudflare (Pages / Workers / Wrangler / cf)
 .wrangler/
