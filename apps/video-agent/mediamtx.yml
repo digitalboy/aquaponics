@@ -66,9 +66,14 @@ paths:
     sourceOnDemandCloseAfter: 15s
 
   CAM-HYDRO-PAN-01:
-    source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.1.106:554/Streaming/Channels/102
+    source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.0.218:554/Streaming/Channels/102
     sourceOnDemand: yes
     sourceOnDemandCloseAfter: 15s
+
+  CAM-HYDRO-PAN-01-HD:
+    source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.0.218:554/Streaming/Channels/101
+    sourceOnDemand: yes
+    sourceOnDemandCloseAfter: 10s
 
   CAM-EQUIP-IN-01:
     source: rtsp://${HIK_USER}:${HIK_PASS}@192.168.1.107:554/Streaming/Channels/102

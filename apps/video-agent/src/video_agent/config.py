@@ -56,11 +56,11 @@ class AgentConfig:
     def from_env(cls) -> "AgentConfig":
         raw_cams = os.getenv(
             "ACTIVE_CAMERAS",
-            "CAM-GATE-IN-01,CAM-GATE-OUT-01,CAM-BACK-IN-01,CAM-FISH-PAN-01,CAM-FISH-P5-01,CAM-HYDRO-PAN-01,CAM-EQUIP-IN-01",
+            "CAM-GATE-IN-01,CAM-GATE-OUT-01,CAM-BACK-IN-01,CAM-FISH-PAN-01,CAM-SEEDLING-01,CAM-HYDRO-PAN-01",
         )
         raw_ip_map = os.getenv(
             "CAM_IP_MAP",
-            "CAM-GATE-IN-01=192.168.0.214,CAM-GATE-OUT-01=192.168.0.217,CAM-BACK-IN-01=192.168.0.205,CAM-FISH-PAN-01=192.168.0.215,CAM-SEEDLING-01=192.168.0.216",
+            "CAM-GATE-IN-01=192.168.0.214,CAM-GATE-OUT-01=192.168.0.217,CAM-BACK-IN-01=192.168.0.205,CAM-FISH-PAN-01=192.168.0.215,CAM-SEEDLING-01=192.168.0.216,CAM-HYDRO-PAN-01=192.168.0.218",
         )
         cam_ip_map: dict[str, str] = {}
         for pair in raw_ip_map.split(","):
