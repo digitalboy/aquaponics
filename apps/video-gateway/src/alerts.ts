@@ -154,11 +154,46 @@ async function uploadImageToFeishu(
   return data.data.image_key;
 }
 
-/** 发送飞书群自定义机器人交互式卡片 */
+function hasFeishuAppTarget(env: Env): boolean {
+  return Boolean(env.FEISHU_CHAT_ID?.trim() && env.FEISHU_APP_ID?.trim() && env.FEISHU_APP_SECRET?.trim());
+}
+
+function hasFeishuTarget(env: Env): boolean {
+  return hasFeishuAppTarget(env) || Boolean(env.FEISHU_WEBHOOK_URL?.trim());
+}
+
+function parseFeishuPostResult(res: Response, text: string): ChannelResult {
+  if (!res.ok) {
+    return { channel: "feishu", ok: false, detail: `HTTP ${res.status}: ${text}` };
+  }
+  // 飞书接口即使 HTTP 200 也可能返回 {"code": 19024, "msg": "..."}
+  try {
+    const parsed = JSON.parse(text) as { code?: number; msg?: string; StatusCode?: number };
+    const code = parsed.code ?? parsed.StatusCode ?? 0;
+    if (code !== 0) {
+      return { channel: "feishu", ok: false, detail: `Feishu error ${code}: ${parsed.msg ?? text}` };
+    }
+  } catch {
+    // 非 JSON 忽略
+  }
+  return { channel: "feishu", ok: true, detail: "sent" };
+}
+
+/**
+ * 发送飞书交互式卡片：
+ * - 优先走企业自建应用机器人（FEISHU_CHAT_ID + FEISHU_APP_ID + FEISHU_APP_SECRET -> im/v1/messages）
+ * - 未配置 FEISHU_CHAT_ID 时兼容回退至旧版自定义群机器人 Webhook（FEISHU_WEBHOOK_URL）
+ */
 async function sendFeishuAlert(env: Env, payload: AlertPayload): Promise<ChannelResult> {
+  const useAppBot = hasFeishuAppTarget(env);
   const webhookUrl = env.FEISHU_WEBHOOK_URL?.trim();
-  if (!webhookUrl) {
-    return { channel: "feishu", ok: false, skipped: true, detail: "FEISHU_WEBHOOK_URL not configured" };
+  if (!useAppBot && !webhookUrl) {
+    return {
+      channel: "feishu",
+      ok: false,
+      skipped: true,
+      detail: "FEISHU_CHAT_ID (with APP_ID/APP_SECRET) or FEISHU_WEBHOOK_URL not configured",
+    };
   }
 
   const lines = [
@@ -203,45 +238,58 @@ async function sendFeishuAlert(env: Env, payload: AlertPayload): Promise<Channel
     ],
   });
 
-  const body: Record<string, unknown> = {
-    msg_type: "interactive",
-    card: {
-      config: { wide_screen_mode: true },
-      header: {
-        template: feishuTemplateBySeverity(payload.severity),
-        title: { tag: "plain_text", content: payload.title },
-      },
-      elements,
+  const card = {
+    config: { wide_screen_mode: true },
+    header: {
+      template: feishuTemplateBySeverity(payload.severity),
+      title: { tag: "plain_text", content: payload.title },
     },
+    elements,
   };
 
-  if (env.FEISHU_WEBHOOK_SECRET?.trim()) {
-    const timestampSec = String(Math.floor(Date.now() / 1000));
-    body.timestamp = timestampSec;
-    body.sign = await signFeishuWebhook(env.FEISHU_WEBHOOK_SECRET.trim(), timestampSec);
-  }
-
   try {
-    const res = await fetch(webhookUrl, {
+    if (useAppBot) {
+      const token = await fetchFeishuTenantToken(
+        env.FEISHU_APP_ID!.trim(),
+        env.FEISHU_APP_SECRET!.trim(),
+      );
+      const res = await fetch(
+        "https://open.feishu.cn/open-apis/im/v1/messages?receive_id_type=chat_id",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            receive_id: env.FEISHU_CHAT_ID!.trim(),
+            msg_type: "interactive",
+            content: JSON.stringify(card),
+          }),
+        },
+      );
+      const text = await res.text();
+      return parseFeishuPostResult(res, text);
+    }
+
+    const body: Record<string, unknown> = {
+      msg_type: "interactive",
+      card,
+    };
+
+    if (env.FEISHU_WEBHOOK_SECRET?.trim()) {
+      const timestampSec = String(Math.floor(Date.now() / 1000));
+      body.timestamp = timestampSec;
+      body.sign = await signFeishuWebhook(env.FEISHU_WEBHOOK_SECRET.trim(), timestampSec);
+    }
+
+    const res = await fetch(webhookUrl!, {
       method: "POST",
       headers: { "Content-Type": "application/json; charset=utf-8" },
       body: JSON.stringify(body),
     });
     const text = await res.text();
-    if (!res.ok) {
-      return { channel: "feishu", ok: false, detail: `HTTP ${res.status}: ${text}` };
-    }
-    // 飞书接口即使 HTTP 200 也可能返回 {"code": 19024, "msg": "..."}
-    try {
-      const parsed = JSON.parse(text) as { code?: number; msg?: string; StatusCode?: number };
-      const code = parsed.code ?? parsed.StatusCode ?? 0;
-      if (code !== 0) {
-        return { channel: "feishu", ok: false, detail: `Feishu error ${code}: ${parsed.msg ?? text}` };
-      }
-    } catch {
-      // 非 JSON 忽略
-    }
-    return { channel: "feishu", ok: true, detail: "sent" };
+    return parseFeishuPostResult(res, text);
   } catch (err) {
     return { channel: "feishu", ok: false, detail: err instanceof Error ? err.message : String(err) };
   }
@@ -625,20 +673,19 @@ export interface FeishuDigestResult {
 }
 
 /**
- * 每 30 分钟向飞书群 Webhook 发送带实拍图片的监控简报（仅推送飞书，不发邮件）
- * 需配置 FEISHU_WEBHOOK_URL + FEISHU_APP_ID + FEISHU_APP_SECRET
+ * 每 30 分钟向飞书群发送带实拍图片的监控简报（仅推送飞书，不发邮件）
+ * 需配置 FEISHU_APP_ID + FEISHU_APP_SECRET，以及 FEISHU_CHAT_ID 或 FEISHU_WEBHOOK_URL
  */
 export async function runPeriodicFeishuDigest(
   env: Env,
   force = false,
 ): Promise<FeishuDigestResult> {
-  const webhookUrl = env.FEISHU_WEBHOOK_URL?.trim();
   const appId = env.FEISHU_APP_ID?.trim();
   const appSecret = env.FEISHU_APP_SECRET?.trim();
-  if (!webhookUrl || !appId || !appSecret) {
+  if (!appId || !appSecret || !hasFeishuTarget(env)) {
     return {
       sent: false,
-      skippedReason: "FEISHU_WEBHOOK_URL, FEISHU_APP_ID or FEISHU_APP_SECRET not configured",
+      skippedReason: "FEISHU_APP_ID/FEISHU_APP_SECRET or target (FEISHU_CHAT_ID / FEISHU_WEBHOOK_URL) not configured",
       imagesCount: 0,
     };
   }
@@ -868,7 +915,7 @@ export async function handlePersonDetectionAlert(
       ? input.frames.slice(0, 3)
       : [{ label: `${input.camName} · 现场抓拍`, r2Key: input.r2Key, capturedAtUtc: input.detectedAtUtc }];
 
-  if (appId && appSecret && env.FEISHU_WEBHOOK_URL?.trim()) {
+  if (appId && appSecret && hasFeishuTarget(env)) {
     try {
       const token = await fetchFeishuTenantToken(appId, appSecret);
       for (let i = 0; i < frameList.length; i += 1) {
