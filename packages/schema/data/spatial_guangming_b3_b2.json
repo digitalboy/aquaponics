@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "site_id": "guangming-01",
   "site_name": "深圳光明科学城迳口鱼菜共生数字化生产基地 (B2 + B3)",
-  "calibrated_at_utc": "2026-11-25T09:20:00.000Z",
+  "calibrated_at_utc": "2026-11-25T09:30:00.000Z",
   "coordinate_system": {
     "handedness": "right_handed_y_up",
     "unit": "meter",
@@ -132,15 +132,40 @@
       "height_m": { "value_m": null, "status": "pending_measurement" }
     },
     {
-      "object_id": "B3-FISH-PP-ROUND-GRP",
+      "object_id": "B3-FISH-8M-ROUND-GRP",
       "building_id": "B3",
       "kind": "fish_tank_round",
-      "name": "PP 板圆形养殖鱼池阵",
-      "count": 1,
-      "pose": { "x_m": null, "y_m": 0, "z_m": null, "yaw_deg": 0, "status": "pending_measurement" },
-      "diameter_m": { "value_m": null, "status": "pending_measurement" },
-      "height_m": { "value_m": null, "status": "pending_measurement" },
-      "note": "待补实测大圆池直径/高、数量及各自圆心坐标"
+      "name": "B3 8米 PP 板大圆鱼池组 (2个，不含未来中鱼池)",
+      "count": 2,
+      "pose": { "x_m": null, "y_m": 0, "z_m": null, "yaw_deg": 0, "status": "pending_measurement", "note": "距棚边缘 0.5m、池间净距 0.5m，两池中心距 8.5m，待确定所属外墙方位角后即可推算精确圆心坐标" },
+      "diameter_m": { "value_m": 8.0, "status": "confirmed" },
+      "height_m": { "value_m": 1.0, "status": "confirmed" },
+      "tank_spacing_m": { "value_m": 0.5, "status": "confirmed" },
+      "edge_clearance_m": { "value_m": 0.5, "status": "confirmed" },
+      "paired_filter_box": {
+        "count": 2,
+        "length_m": { "value_m": 1.0, "status": "confirmed" },
+        "width_m": { "value_m": 1.0, "status": "confirmed" },
+        "height_m": { "value_m": 1.0, "status": "confirmed" }
+      },
+      "note": "当前现场仅此 2 个 8 米大池；中鱼池目前不存在，属于未来扩建规划"
+    },
+    {
+      "object_id": "B3-FISH-3M-ROUND-GRP",
+      "building_id": "B3",
+      "kind": "fish_tank_round",
+      "name": "B3 3米 PP 板小鱼池组 (6个)",
+      "count": 6,
+      "pose": { "x_m": null, "y_m": 0, "z_m": null, "yaw_deg": 0, "status": "pending_measurement", "note": "待补实测池间间距与圆心阵列坐标" },
+      "diameter_m": { "value_m": 3.0, "status": "confirmed" },
+      "height_m": { "value_m": 1.2, "status": "confirmed" },
+      "paired_filter_box": {
+        "count": 6,
+        "length_m": { "value_m": 1.0, "status": "confirmed" },
+        "width_m": { "value_m": 1.0, "status": "confirmed" },
+        "height_m": { "value_m": 1.2, "status": "confirmed" }
+      },
+      "note": "小鱼池 6 个，配套过滤方箱 1.0m x 1.0m x 1.2m"
     },
     {
       "object_id": "B3-WATER-TREATMENT-01",

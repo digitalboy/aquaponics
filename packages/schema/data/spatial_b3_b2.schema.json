@@ -1044,6 +1044,183 @@
                   "status"
                 ],
                 "additionalProperties": false
+              },
+              "tank_spacing_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "edge_clearance_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "paired_filter_box": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "length_m": {
+                    "type": "object",
+                    "properties": {
+                      "value_m": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "status": {
+                        "type": "string",
+                        "enum": [
+                          "confirmed",
+                          "estimated",
+                          "pending_measurement"
+                        ]
+                      },
+                      "note": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "value_m",
+                      "status"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "width_m": {
+                    "type": "object",
+                    "properties": {
+                      "value_m": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "status": {
+                        "type": "string",
+                        "enum": [
+                          "confirmed",
+                          "estimated",
+                          "pending_measurement"
+                        ]
+                      },
+                      "note": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "value_m",
+                      "status"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "height_m": {
+                    "type": "object",
+                    "properties": {
+                      "value_m": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "status": {
+                        "type": "string",
+                        "enum": [
+                          "confirmed",
+                          "estimated",
+                          "pending_measurement"
+                        ]
+                      },
+                      "note": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "value_m",
+                      "status"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "count",
+                  "length_m",
+                  "width_m",
+                  "height_m"
+                ],
+                "additionalProperties": false
               }
             },
             "required": [

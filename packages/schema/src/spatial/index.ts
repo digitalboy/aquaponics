@@ -104,6 +104,16 @@ export const SpatialObjectSchema = z.discriminatedUnion('kind', [
     count: z.number().int().positive(),
     diameter_m: DimensionValueSchema,
     height_m: DimensionValueSchema,
+    tank_spacing_m: DimensionValueSchema.optional(),
+    edge_clearance_m: DimensionValueSchema.optional(),
+    paired_filter_box: z
+      .object({
+        count: z.number().int().positive(),
+        length_m: DimensionValueSchema,
+        width_m: DimensionValueSchema,
+        height_m: DimensionValueSchema,
+      })
+      .optional(),
   }),
   z.object({
     ...BaseSpatialObject,
