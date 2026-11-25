@@ -640,6 +640,38 @@
                 ],
                 "additionalProperties": false
               },
+              "curb_trough_width_each_side_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
               "surface": {
                 "default": "brick",
                 "type": "string"

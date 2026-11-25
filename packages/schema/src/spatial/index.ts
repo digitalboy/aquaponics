@@ -84,6 +84,7 @@ export const SpatialObjectSchema = z.discriminatedUnion('kind', [
     kind: z.literal('walkway'),
     length_m: DimensionValueSchema,
     width_m: DimensionValueSchema,
+    curb_trough_width_each_side_m: DimensionValueSchema.optional(),
     surface: z.string().default('brick'),
   }),
   z.object({

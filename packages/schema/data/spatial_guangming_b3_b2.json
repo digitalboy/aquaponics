@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "site_id": "guangming-01",
   "site_name": "深圳光明科学城迳口鱼菜共生数字化生产基地 (B2 + B3)",
-  "calibrated_at_utc": "2026-11-25T09:00:00.000Z",
+  "calibrated_at_utc": "2026-11-25T09:20:00.000Z",
   "coordinate_system": {
     "handedness": "right_handed_y_up",
     "unit": "meter",
@@ -79,10 +79,33 @@
       "object_id": "B3-WALKWAY-MAIN",
       "building_id": "B3",
       "kind": "walkway",
-      "name": "B3 砖砌主干道 (可通行电动三轮车)",
+      "name": "B3 通往不锈钢大门砖砌主干道 (可通行电动三轮车)",
       "pose": { "x_m": null, "y_m": 0, "z_m": null, "yaw_deg": 0, "status": "pending_measurement" },
       "length_m": { "value_m": null, "status": "pending_measurement" },
-      "width_m": { "value_m": null, "status": "pending_measurement" },
+      "width_m": { "value_m": 2.9, "status": "confirmed", "note": "实测净路面宽 2.90m" },
+      "curb_trough_width_each_side_m": { "value_m": 0.1, "status": "confirmed", "note": "两侧各有 10cm 宽线槽，含两侧线槽总宽 3.10m" },
+      "surface": "brick"
+    },
+    {
+      "object_id": "B3-WALKWAY-CROSS-01",
+      "building_id": "B3",
+      "kind": "walkway",
+      "name": "B3 横向砖砌通道 1 (垂直于主干道)",
+      "pose": { "x_m": null, "y_m": 0, "z_m": null, "yaw_deg": 90, "status": "pending_measurement" },
+      "length_m": { "value_m": null, "status": "pending_measurement" },
+      "width_m": { "value_m": 2.0, "status": "confirmed", "note": "实测净路面宽 2.00m" },
+      "curb_trough_width_each_side_m": { "value_m": 0.1, "status": "confirmed", "note": "两侧各有 10cm 宽线槽，含两侧线槽总宽 2.20m" },
+      "surface": "brick"
+    },
+    {
+      "object_id": "B3-WALKWAY-CROSS-02",
+      "building_id": "B3",
+      "kind": "walkway",
+      "name": "B3 横向砖砌通道 2 (垂直于主干道)",
+      "pose": { "x_m": null, "y_m": 0, "z_m": null, "yaw_deg": 90, "status": "pending_measurement" },
+      "length_m": { "value_m": null, "status": "pending_measurement" },
+      "width_m": { "value_m": 2.0, "status": "confirmed", "note": "实测净路面宽 2.00m" },
+      "curb_trough_width_each_side_m": { "value_m": 0.1, "status": "confirmed", "note": "两侧各有 10cm 宽线槽，含两侧线槽总宽 2.20m" },
       "surface": "brick"
     },
     {
