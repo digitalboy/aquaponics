@@ -33,6 +33,10 @@
     "./schedule": {
       "types": "./src/schedule/index.ts",
       "import": "./src/schedule/index.ts"
+    },
+    "./spatial": {
+      "types": "./src/spatial/index.ts",
+      "import": "./src/spatial/index.ts"
     }
   },
   "scripts": {

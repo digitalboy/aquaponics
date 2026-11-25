@@ -1,6 +1,6 @@
 # 数字化农业工厂：11_设施物理拓扑与多作物排产数据契约规范 (Facility & Agronomy Schema)
 
-> **文档状态**：Active | **最后校准时间**：2026-11-20T13:55:00.000Z (ISO 8601 UTC)
+> **文档状态**：Active | **最后校准时间**：2026-11-25T09:03:00.000Z (ISO 8601 UTC)
 
 > **核心定位**：本规范是鱼菜共生与多形态现代化设施农业在**大棚空间几何**、**生产单元（深水跑道/高架草莓/荷兰桶/鱼池）**、**水力循环回路**、**作物农艺生理主数据**以及**动态生产排产调度**之间的统一数据契约标准（SSOT）。基于 `@aquaponics/schema` 与 Zod V4 强类型规则引擎驱动，实现多大棚通用适配、主数据跨基地解耦复用与物理相容性自动拦截。
 
@@ -221,6 +221,8 @@ export const TargetQualityProfileSchema = z.object({
 * **独立蔬菜与作物知识库**：👉 [packages/schema/data/crops_catalog.json](../../packages/schema/data/crops_catalog.json)
 * **设施物理拓扑契约与定义**：👉 [packages/schema/src/facility/index.ts](../../packages/schema/src/facility/index.ts)
 * **深圳光明迳口大棚拓扑实例**：👉 [packages/schema/data/facility_guangming_jingkou.json](../../packages/schema/data/facility_guangming_jingkou.json)
+* **B3+B2 Three.js 三维空间契约**：👉 [packages/schema/src/spatial/index.ts](../../packages/schema/src/spatial/index.ts)（标准 JSON Schema：[spatial_b3_b2.schema.json](../../packages/schema/data/spatial_b3_b2.schema.json)）
+* **光明基地 B3+B2 三维空间实例（持续实测更新）**：👉 [packages/schema/data/spatial_guangming_b3_b2.json](../../packages/schema/data/spatial_guangming_b3_b2.json)
 * **排产计划契约与跨域校验器**：👉 [packages/schema/src/schedule/index.ts](../../packages/schema/src/schedule/index.ts)
 * **2026年Q4排产计划示范文件**：👉 [packages/schema/data/schedule_2026_q4.json](../../packages/schema/data/schedule_2026_q4.json)
 * **测试与相容性校验脚本**：👉 [scratch/validate_schemas.ts](../../scratch/validate_schemas.ts)

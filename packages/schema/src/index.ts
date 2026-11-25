@@ -11,3 +11,4 @@ export * from './hydraulic';
 export * from './agronomy';
 export * from './facility';
 export * from './schedule';
+export * from './spatial';

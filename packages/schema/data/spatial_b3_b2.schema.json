@@ -1,0 +1,1660 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "site_id": {
+      "type": "string"
+    },
+    "site_name": {
+      "type": "string"
+    },
+    "calibrated_at_utc": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+    },
+    "coordinate_system": {
+      "type": "object",
+      "properties": {
+        "handedness": {
+          "type": "string",
+          "const": "right_handed_y_up"
+        },
+        "unit": {
+          "type": "string",
+          "const": "meter"
+        },
+        "origin_description": {
+          "type": "string"
+        },
+        "axes_mapping": {
+          "type": "object",
+          "properties": {
+            "plus_x": {
+              "type": "string"
+            },
+            "plus_y": {
+              "type": "string"
+            },
+            "plus_z": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "plus_x",
+            "plus_y",
+            "plus_z"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "handedness",
+        "unit",
+        "origin_description",
+        "axes_mapping"
+      ],
+      "additionalProperties": false
+    },
+    "buildings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "building_id": {
+            "type": "string",
+            "enum": [
+              "B2",
+              "B3"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "origin_m": {
+            "type": "object",
+            "properties": {
+              "x_m": {
+                "type": "number"
+              },
+              "y_m": {
+                "default": 0,
+                "type": "number"
+              },
+              "z_m": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "x_m",
+              "y_m",
+              "z_m"
+            ],
+            "additionalProperties": false
+          },
+          "length_x_m": {
+            "type": "object",
+            "properties": {
+              "value_m": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "estimated",
+                  "pending_measurement"
+                ]
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value_m",
+              "status"
+            ],
+            "additionalProperties": false
+          },
+          "width_z_m": {
+            "type": "object",
+            "properties": {
+              "value_m": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "estimated",
+                  "pending_measurement"
+                ]
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value_m",
+              "status"
+            ],
+            "additionalProperties": false
+          },
+          "eave_height_m": {
+            "type": "object",
+            "properties": {
+              "value_m": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "estimated",
+                  "pending_measurement"
+                ]
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value_m",
+              "status"
+            ],
+            "additionalProperties": false
+          },
+          "ridge_height_m": {
+            "type": "object",
+            "properties": {
+              "value_m": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "estimated",
+                  "pending_measurement"
+                ]
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value_m",
+              "status"
+            ],
+            "additionalProperties": false
+          },
+          "column_grid": {
+            "type": "object",
+            "properties": {
+              "bay_spacing_x_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "span_spacing_z_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "column_section_m": {
+                "type": "array",
+                "prefixItems": [
+                  {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  },
+                  {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  }
+                ],
+                "items": false,
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "bay_spacing_x_m",
+              "span_spacing_z_m"
+            ],
+            "additionalProperties": false
+          },
+          "openings": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "opening_id": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "door",
+                    "wet_pad",
+                    "exhaust_fan_bank",
+                    "air_shower"
+                  ]
+                },
+                "name": {
+                  "type": "string"
+                },
+                "wall": {
+                  "type": "string",
+                  "enum": [
+                    "north",
+                    "south",
+                    "east",
+                    "west"
+                  ]
+                },
+                "offset_along_wall_m": {
+                  "type": "object",
+                  "properties": {
+                    "value_m": {
+                      "anyOf": [
+                        {
+                          "type": "number",
+                          "minimum": 0
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "confirmed",
+                        "estimated",
+                        "pending_measurement"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "value_m",
+                    "status"
+                  ],
+                  "additionalProperties": false
+                },
+                "width_m": {
+                  "type": "object",
+                  "properties": {
+                    "value_m": {
+                      "anyOf": [
+                        {
+                          "type": "number",
+                          "minimum": 0
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "confirmed",
+                        "estimated",
+                        "pending_measurement"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "value_m",
+                    "status"
+                  ],
+                  "additionalProperties": false
+                },
+                "height_m": {
+                  "type": "object",
+                  "properties": {
+                    "value_m": {
+                      "anyOf": [
+                        {
+                          "type": "number",
+                          "minimum": 0
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "confirmed",
+                        "estimated",
+                        "pending_measurement"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "value_m",
+                    "status"
+                  ],
+                  "additionalProperties": false
+                },
+                "sill_height_m": {
+                  "type": "object",
+                  "properties": {
+                    "value_m": {
+                      "anyOf": [
+                        {
+                          "type": "number",
+                          "minimum": 0
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "confirmed",
+                        "estimated",
+                        "pending_measurement"
+                      ]
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "value_m",
+                    "status"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "opening_id",
+                "kind",
+                "name",
+                "wall",
+                "offset_along_wall_m",
+                "width_m",
+                "height_m"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "building_id",
+          "name",
+          "role",
+          "origin_m",
+          "length_x_m",
+          "width_z_m",
+          "eave_height_m",
+          "ridge_height_m",
+          "column_grid",
+          "openings"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "objects": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "object_id": {
+                "type": "string"
+              },
+              "building_id": {
+                "type": "string",
+                "enum": [
+                  "B2",
+                  "B3"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "pose": {
+                "type": "object",
+                "properties": {
+                  "x_m": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "y_m": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "z_m": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "yaw_deg": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "x_m",
+                  "y_m",
+                  "z_m",
+                  "yaw_deg",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "note": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string",
+                "const": "walkway"
+              },
+              "length_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "width_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "surface": {
+                "default": "brick",
+                "type": "string"
+              }
+            },
+            "required": [
+              "object_id",
+              "building_id",
+              "name",
+              "pose",
+              "kind",
+              "length_m",
+              "width_m",
+              "surface"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "object_id": {
+                "type": "string"
+              },
+              "building_id": {
+                "type": "string",
+                "enum": [
+                  "B2",
+                  "B3"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "pose": {
+                "type": "object",
+                "properties": {
+                  "x_m": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "y_m": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "z_m": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "yaw_deg": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "x_m",
+                  "y_m",
+                  "z_m",
+                  "yaw_deg",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "note": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string",
+                "const": "hydro_raceway"
+              },
+              "unit_id": {
+                "type": "string"
+              },
+              "count": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "length_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "width_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "height_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "aisle_gap_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "object_id",
+              "building_id",
+              "name",
+              "pose",
+              "kind",
+              "count",
+              "length_m",
+              "width_m",
+              "height_m"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "object_id": {
+                "type": "string"
+              },
+              "building_id": {
+                "type": "string",
+                "enum": [
+                  "B2",
+                  "B3"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "pose": {
+                "type": "object",
+                "properties": {
+                  "x_m": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "y_m": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "z_m": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "yaw_deg": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "x_m",
+                  "y_m",
+                  "z_m",
+                  "yaw_deg",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "note": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string",
+                "const": "fish_tank_round"
+              },
+              "unit_id": {
+                "type": "string"
+              },
+              "count": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "diameter_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "height_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "object_id",
+              "building_id",
+              "name",
+              "pose",
+              "kind",
+              "count",
+              "diameter_m",
+              "height_m"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "object_id": {
+                "type": "string"
+              },
+              "building_id": {
+                "type": "string",
+                "enum": [
+                  "B2",
+                  "B3"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "pose": {
+                "type": "object",
+                "properties": {
+                  "x_m": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "y_m": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "z_m": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "yaw_deg": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "x_m",
+                  "y_m",
+                  "z_m",
+                  "yaw_deg",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "note": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string",
+                "const": "cold_room"
+              },
+              "length_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "width_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "height_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "object_id",
+              "building_id",
+              "name",
+              "pose",
+              "kind",
+              "length_m",
+              "width_m",
+              "height_m"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "object_id": {
+                "type": "string"
+              },
+              "building_id": {
+                "type": "string",
+                "enum": [
+                  "B2",
+                  "B3"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "pose": {
+                "type": "object",
+                "properties": {
+                  "x_m": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "y_m": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "z_m": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "yaw_deg": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "x_m",
+                  "y_m",
+                  "z_m",
+                  "yaw_deg",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "note": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string",
+                "const": "water_treatment"
+              },
+              "length_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "width_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "height_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "object_id",
+              "building_id",
+              "name",
+              "pose",
+              "kind",
+              "length_m",
+              "width_m",
+              "height_m"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "object_id": {
+                "type": "string"
+              },
+              "building_id": {
+                "type": "string",
+                "enum": [
+                  "B2",
+                  "B3"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "pose": {
+                "type": "object",
+                "properties": {
+                  "x_m": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "y_m": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "z_m": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "yaw_deg": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "x_m",
+                  "y_m",
+                  "z_m",
+                  "yaw_deg",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "note": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string",
+                "const": "cabinet"
+              },
+              "panel_id": {
+                "type": "string"
+              },
+              "width_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "depth_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "height_m": {
+                "type": "object",
+                "properties": {
+                  "value_m": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value_m",
+                  "status"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "object_id",
+              "building_id",
+              "name",
+              "pose",
+              "kind",
+              "width_m",
+              "depth_m",
+              "height_m"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "object_id": {
+                "type": "string"
+              },
+              "building_id": {
+                "type": "string",
+                "enum": [
+                  "B2",
+                  "B3"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "pose": {
+                "type": "object",
+                "properties": {
+                  "x_m": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "y_m": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "z_m": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "yaw_deg": {
+                    "default": 0,
+                    "type": "number"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "estimated",
+                      "pending_measurement"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "x_m",
+                  "y_m",
+                  "z_m",
+                  "yaw_deg",
+                  "status"
+                ],
+                "additionalProperties": false
+              },
+              "note": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string",
+                "const": "camera_mount"
+              },
+              "cam_id": {
+                "type": "string"
+              },
+              "pitch_deg": {
+                "default": -15,
+                "type": "number"
+              }
+            },
+            "required": [
+              "object_id",
+              "building_id",
+              "name",
+              "pose",
+              "kind",
+              "cam_id",
+              "pitch_deg"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "site_id",
+    "site_name",
+    "calibrated_at_utc",
+    "coordinate_system",
+    "buildings",
+    "objects"
+  ],
+  "additionalProperties": false
+}

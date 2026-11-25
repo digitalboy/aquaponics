@@ -1,0 +1,198 @@
+{
+  "schema_version": "1.0.0",
+  "site_id": "guangming-01",
+  "site_name": "深圳光明科学城迳口鱼菜共生数字化生产基地 (B2 + B3)",
+  "calibrated_at_utc": "2026-11-25T09:00:00.000Z",
+  "coordinate_system": {
+    "handedness": "right_handed_y_up",
+    "unit": "meter",
+    "origin_description": "B2 大棚西南角地面 (0, 0, 0)",
+    "axes_mapping": {
+      "plus_x": "向东 (SketchUp 红轴，从 B2 指向 B3)",
+      "plus_y": "竖直向上 (SketchUp 蓝轴，高度)",
+      "plus_z": "向南 (垂直红轴；向北为 -Z)"
+    }
+  },
+  "buildings": [
+    {
+      "building_id": "B2",
+      "name": "B2 扩展生产大棚 (SketchUp 蓝色外墙)",
+      "role": "规划扩展区",
+      "origin_m": { "x_m": 0, "y_m": 0, "z_m": 0 },
+      "length_x_m": { "value_m": 40.0, "status": "confirmed", "note": "SketchUp 标注 40000 mm" },
+      "width_z_m": { "value_m": 48.0, "status": "confirmed", "note": "SketchUp 标注 48000 mm" },
+      "eave_height_m": { "value_m": null, "status": "pending_measurement", "note": "待实测肩高" },
+      "ridge_height_m": { "value_m": 8.103, "status": "estimated", "note": "SketchUp 左下角标注 8103 mm，待现场复核" },
+      "column_grid": {
+        "bay_spacing_x_m": { "value_m": null, "status": "pending_measurement" },
+        "span_spacing_z_m": { "value_m": null, "status": "pending_measurement" },
+        "note": "待实测标准开间与跨度"
+      },
+      "openings": []
+    },
+    {
+      "building_id": "B3",
+      "name": "B3 主生产大棚 (SketchUp 棕色外墙，当前在产)",
+      "role": "鱼菜共生主力生产棚",
+      "origin_m": { "x_m": 46.952, "y_m": 0, "z_m": 0 },
+      "length_x_m": { "value_m": 72.0, "status": "confirmed", "note": "B2(40.0m) + 棚间距(6.952m) + B3(72.0m) = 118.952m" },
+      "width_z_m": { "value_m": null, "status": "pending_measurement", "note": "待定：SketchUp 截图被遮挡，待现场实测" },
+      "eave_height_m": { "value_m": 6.0, "status": "estimated", "note": "待定：用户口述横梁距地面约 6 米，待精准实测" },
+      "ridge_height_m": { "value_m": null, "status": "pending_measurement", "note": "待定：待实测屋脊最高点" },
+      "column_grid": {
+        "bay_spacing_x_m": { "value_m": null, "status": "pending_measurement", "note": "待实测纵向立柱中心距" },
+        "span_spacing_z_m": { "value_m": null, "status": "pending_measurement", "note": "待实测横向立柱跨距" }
+      },
+      "openings": [
+        {
+          "opening_id": "B3-DOOR-MAIN",
+          "kind": "door",
+          "name": "正门双开不锈钢大门 + 缓冲风淋",
+          "wall": "east",
+          "offset_along_wall_m": { "value_m": null, "status": "pending_measurement" },
+          "width_m": { "value_m": null, "status": "pending_measurement" },
+          "height_m": { "value_m": null, "status": "pending_measurement" }
+        },
+        {
+          "opening_id": "B3-WETPAD-01",
+          "kind": "wet_pad",
+          "name": "水培菜池/育苗侧降温湿帘墙",
+          "wall": "north",
+          "offset_along_wall_m": { "value_m": null, "status": "pending_measurement" },
+          "width_m": { "value_m": null, "status": "pending_measurement" },
+          "height_m": { "value_m": null, "status": "pending_measurement" }
+        },
+        {
+          "opening_id": "B3-FAN-BANK-01",
+          "kind": "exhaust_fan_bank",
+          "name": "负压排风机墙",
+          "wall": "south",
+          "offset_along_wall_m": { "value_m": null, "status": "pending_measurement" },
+          "width_m": { "value_m": null, "status": "pending_measurement" },
+          "height_m": { "value_m": null, "status": "pending_measurement" }
+        }
+      ]
+    }
+  ],
+  "objects": [
+    {
+      "object_id": "B3-WALKWAY-MAIN",
+      "building_id": "B3",
+      "kind": "walkway",
+      "name": "B3 砖砌主干道 (可通行电动三轮车)",
+      "pose": { "x_m": null, "y_m": 0, "z_m": null, "yaw_deg": 0, "status": "pending_measurement" },
+      "length_m": { "value_m": null, "status": "pending_measurement" },
+      "width_m": { "value_m": null, "status": "pending_measurement" },
+      "surface": "brick"
+    },
+    {
+      "object_id": "B3-HYDRO-TARPAULIN-GRP",
+      "building_id": "B3",
+      "kind": "hydro_raceway",
+      "name": "B3 蓝色刀刮布落地水培菜池组",
+      "count": 1,
+      "pose": { "x_m": null, "y_m": 0, "z_m": null, "yaw_deg": 0, "status": "pending_measurement" },
+      "length_m": { "value_m": null, "status": "pending_measurement" },
+      "width_m": { "value_m": null, "status": "pending_measurement" },
+      "height_m": { "value_m": null, "status": "pending_measurement" },
+      "aisle_gap_m": { "value_m": null, "status": "pending_measurement" },
+      "note": "待实测单池长宽高、池间过道与总条数"
+    },
+    {
+      "object_id": "B3-NURSERY-COLD-ROOM",
+      "building_id": "B3",
+      "kind": "cold_room",
+      "name": "育苗暗室保温房 (带黑网遮阳)",
+      "pose": { "x_m": null, "y_m": 0, "z_m": null, "yaw_deg": 0, "status": "pending_measurement" },
+      "length_m": { "value_m": null, "status": "pending_measurement" },
+      "width_m": { "value_m": null, "status": "pending_measurement" },
+      "height_m": { "value_m": null, "status": "pending_measurement" }
+    },
+    {
+      "object_id": "B3-FISH-PP-ROUND-GRP",
+      "building_id": "B3",
+      "kind": "fish_tank_round",
+      "name": "PP 板圆形养殖鱼池阵",
+      "count": 1,
+      "pose": { "x_m": null, "y_m": 0, "z_m": null, "yaw_deg": 0, "status": "pending_measurement" },
+      "diameter_m": { "value_m": null, "status": "pending_measurement" },
+      "height_m": { "value_m": null, "status": "pending_measurement" },
+      "note": "待补实测大圆池直径/高、数量及各自圆心坐标"
+    },
+    {
+      "object_id": "B3-WATER-TREATMENT-01",
+      "building_id": "B3",
+      "kind": "water_treatment",
+      "name": "阶梯式 PP 水处理与立式过滤塔区",
+      "pose": { "x_m": null, "y_m": 0, "z_m": null, "yaw_deg": 0, "status": "pending_measurement" },
+      "length_m": { "value_m": null, "status": "pending_measurement" },
+      "width_m": { "value_m": null, "status": "pending_measurement" },
+      "height_m": { "value_m": null, "status": "pending_measurement" }
+    },
+    {
+      "object_id": "B3-CABINET-AP-CTRL",
+      "building_id": "B3",
+      "kind": "cabinet",
+      "panel_id": "AP-CTRL",
+      "name": "B3 中央 PLC 主控制柜",
+      "pose": { "x_m": null, "y_m": 0, "z_m": null, "yaw_deg": 0, "status": "pending_measurement" },
+      "width_m": { "value_m": null, "status": "pending_measurement" },
+      "depth_m": { "value_m": null, "status": "pending_measurement" },
+      "height_m": { "value_m": null, "status": "pending_measurement" }
+    },
+    {
+      "object_id": "B3-CAM-GATE-IN-01",
+      "building_id": "B3",
+      "kind": "camera_mount",
+      "cam_id": "CAM-GATE-IN-01",
+      "name": "B3 · 正门内",
+      "pose": { "x_m": null, "y_m": 3.0, "z_m": null, "yaw_deg": 0, "status": "pending_measurement" },
+      "pitch_deg": -15
+    },
+    {
+      "object_id": "B3-CAM-GATE-OUT-01",
+      "building_id": "B3",
+      "kind": "camera_mount",
+      "cam_id": "CAM-GATE-OUT-01",
+      "name": "B3 · 正门厅",
+      "pose": { "x_m": null, "y_m": 3.0, "z_m": null, "yaw_deg": 0, "status": "pending_measurement" },
+      "pitch_deg": -15
+    },
+    {
+      "object_id": "B3-CAM-BACK-IN-01",
+      "building_id": "B3",
+      "kind": "camera_mount",
+      "cam_id": "CAM-BACK-IN-01",
+      "name": "B3 · 后门内",
+      "pose": { "x_m": null, "y_m": 3.0, "z_m": null, "yaw_deg": 0, "status": "pending_measurement" },
+      "pitch_deg": -15
+    },
+    {
+      "object_id": "B3-CAM-FISH-PAN-01",
+      "building_id": "B3",
+      "kind": "camera_mount",
+      "cam_id": "CAM-FISH-PAN-01",
+      "name": "B3 · 鱼池全景（向北）",
+      "pose": { "x_m": null, "y_m": 3.5, "z_m": null, "yaw_deg": 180, "status": "pending_measurement" },
+      "pitch_deg": -20
+    },
+    {
+      "object_id": "B3-CAM-SEEDLING-01",
+      "building_id": "B3",
+      "kind": "camera_mount",
+      "cam_id": "CAM-SEEDLING-01",
+      "name": "B3 · 育苗区",
+      "pose": { "x_m": null, "y_m": 3.0, "z_m": null, "yaw_deg": 0, "status": "pending_measurement" },
+      "pitch_deg": -20
+    },
+    {
+      "object_id": "B3-CAM-HYDRO-PAN-01",
+      "building_id": "B3",
+      "kind": "camera_mount",
+      "cam_id": "CAM-HYDRO-PAN-01",
+      "name": "B3 · 蔬菜全景（向西）",
+      "pose": { "x_m": null, "y_m": 3.5, "z_m": null, "yaw_deg": -90, "status": "pending_measurement" },
+      "pitch_deg": -20
+    }
+  ]
+}
