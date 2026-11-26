@@ -11,6 +11,8 @@ import {
 } from "./types";
 
 const BJT_OFFSET_MS = 8 * 3600 * 1000;
+const MONTH_RE = /^\d{4}-(0[1-9]|1[0-2])$/;
+const DATE_RE = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 
 function getBeijingTimeParts(utcMs: number): { dateStr: string; hour: number; minute: number } {
   const bjt = new Date(utcMs + BJT_OFFSET_MS);
@@ -19,6 +21,32 @@ function getBeijingTimeParts(utcMs: number): { dateStr: string; hour: number; mi
     dateStr: `${bjt.getUTCFullYear()}-${pad(bjt.getUTCMonth() + 1)}-${pad(bjt.getUTCDate())}`,
     hour: bjt.getUTCHours(),
     minute: bjt.getUTCMinutes(),
+  };
+}
+
+/** 将北京时间 YYYY-MM 转为严格 ISO 8601 UTC 起止边界 [startUtc, endUtc) */
+function getBeijingMonthUtcRange(monthStr: string): { month: string; startUtc: string; endUtc: string } {
+  const valid = MONTH_RE.test(monthStr)
+    ? monthStr
+    : getBeijingTimeParts(Date.now()).dateStr.slice(0, 7);
+  const [y, m] = valid.split("-").map(Number);
+  const startUtc = new Date(Date.UTC(y!, m! - 1, 1, 0, 0, 0) - BJT_OFFSET_MS).toISOString();
+  const endUtc = new Date(Date.UTC(y!, m!, 1, 0, 0, 0) - BJT_OFFSET_MS).toISOString();
+  return { month: valid, startUtc, endUtc };
+}
+
+/** 将北京时间 YYYY-MM-DD 转为严格 ISO 8601 UTC 起止边界 [startUtc, endUtc) */
+function getBeijingDateUtcRange(dateStr: string): { startUtc: string; endUtc: string } | null {
+  if (!DATE_RE.test(dateStr)) return null;
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const startMs = Date.UTC(y!, m! - 1, d!, 0, 0, 0) - BJT_OFFSET_MS;
+  const startDate = new Date(startMs);
+  // 校验日期未发生月份进位（例如 2026-02-31）
+  const check = getBeijingTimeParts(startMs);
+  if (check.dateStr !== dateStr) return null;
+  return {
+    startUtc: startDate.toISOString(),
+    endUtc: new Date(startMs + 24 * 3600 * 1000).toISOString(),
   };
 }
 
@@ -187,6 +215,141 @@ export default {
         .bind(limit)
         .all();
       return jsonResponse({ ok: true, count: rows.results.length, articles: rows.results });
+    }
+
+    if (url.pathname === "/api/public/summary" && request.method === "GET") {
+      const rawMonth = (url.searchParams.get("month") ?? "").trim();
+      const onlySelected = url.searchParams.get("onlySelected") !== "0";
+      const { month, startUtc, endUtc } = getBeijingMonthUtcRange(rawMonth);
+
+      const filterSql = onlySelected
+        ? "AND decision_relevant = 1 AND title_zh IS NOT NULL"
+        : "";
+
+      const rows = await env.INTEL_DB.prepare(
+        `SELECT
+           substr(datetime(created_at, '+8 hours'), 1, 10) AS day,
+           edition,
+           COUNT(*) AS cnt,
+           MAX(decision_score) AS max_score
+         FROM intel_articles
+         WHERE created_at >= ?1 AND created_at < ?2 ${filterSql}
+         GROUP BY day, edition`,
+      )
+        .bind(startUtc, endUtc)
+        .all<{ day: string; edition: string; cnt: number; max_score: number | null }>();
+
+      const days: Record<
+        string,
+        { total: number; industry: number; academic: number; maxScore: number }
+      > = {};
+      for (const r of rows.results) {
+        if (!r.day) continue;
+        if (!days[r.day]) {
+          days[r.day] = { total: 0, industry: 0, academic: 0, maxScore: 0 };
+        }
+        const count = Number(r.cnt) || 0;
+        const score = Number(r.max_score) || 0;
+        days[r.day].total += count;
+        if (r.edition === "industry") days[r.day].industry += count;
+        if (r.edition === "academic") days[r.day].academic += count;
+        if (score > days[r.day].maxScore) days[r.day].maxScore = score;
+      }
+
+      return jsonResponse({ ok: true, month, onlySelected, days });
+    }
+
+    if (url.pathname === "/api/public/articles" && request.method === "GET") {
+      const rawDate = (url.searchParams.get("date") ?? "").trim();
+      const rawMonth = (url.searchParams.get("month") ?? "").trim();
+      const edition = (url.searchParams.get("edition") ?? "all").trim();
+      const category = (url.searchParams.get("category") ?? "all").trim();
+      const q = (url.searchParams.get("q") ?? "").trim();
+      const onlySelected = url.searchParams.get("onlySelected") !== "0";
+      const limit = Math.min(Math.max(Number(url.searchParams.get("limit") ?? "60"), 1), 150);
+
+      let startUtc: string;
+      let endUtc: string;
+      if (rawDate) {
+        const range = getBeijingDateUtcRange(rawDate);
+        if (!range) {
+          return jsonResponse({ ok: false, error: "Invalid date format, expected YYYY-MM-DD" }, 400);
+        }
+        startUtc = range.startUtc;
+        endUtc = range.endUtc;
+      } else {
+        const range = getBeijingMonthUtcRange(rawMonth);
+        startUtc = range.startUtc;
+        endUtc = range.endUtc;
+      }
+
+      const clauses: string[] = ["created_at >= ?1", "created_at < ?2"];
+      const params: unknown[] = [startUtc, endUtc];
+
+      if (onlySelected) {
+        clauses.push("decision_relevant = 1", "title_zh IS NOT NULL");
+      }
+      if (edition === "industry" || edition === "academic") {
+        params.push(edition);
+        clauses.push(`edition = ?${params.length}`);
+      }
+      if (category && category !== "all") {
+        params.push(category);
+        clauses.push(`category = ?${params.length}`);
+      }
+      if (q) {
+        const like = `%${q}%`;
+        params.push(like, like, like, like);
+        const base = params.length - 3;
+        clauses.push(
+          `(title_zh LIKE ?${base} OR title_raw LIKE ?${base + 1} OR summary_zh LIKE ?${base + 2} OR source_name LIKE ?${base + 3})`,
+        );
+      }
+
+      params.push(limit);
+      const limitIdx = params.length;
+
+      const sql = `
+        SELECT
+          url_hash,
+          edition,
+          source_name,
+          category,
+          title_raw,
+          title_zh,
+          summary_zh,
+          url,
+          published_at,
+          decision_relevant,
+          decision_score,
+          decision_confidence,
+          sent_to_feishu_at,
+          created_at
+        FROM intel_articles
+        WHERE ${clauses.join(" AND ")}
+        ORDER BY substr(datetime(created_at, '+8 hours'), 1, 10) DESC, decision_score DESC, created_at DESC
+        LIMIT ?${limitIdx}
+      `;
+
+      const rows = await env.INTEL_DB.prepare(sql).bind(...params).all();
+      return jsonResponse({
+        ok: true,
+        count: rows.results.length,
+        articles: rows.results,
+      });
+    }
+
+    if (url.pathname === "/api/public/runs" && request.method === "GET") {
+      const limit = Math.min(Math.max(Number(url.searchParams.get("limit") ?? "14"), 1), 60);
+      const rows = await env.INTEL_DB.prepare(
+        `SELECT run_key, edition, fetched_count, new_count, selected_count, sent_count, status, detail, started_at, finished_at
+         FROM intel_runs
+         ORDER BY started_at DESC
+         LIMIT ?1`,
+      )
+        .bind(limit)
+        .all();
+      return jsonResponse({ ok: true, count: rows.results.length, runs: rows.results });
     }
 
     return jsonResponse({ error: "Not Found" }, 404);

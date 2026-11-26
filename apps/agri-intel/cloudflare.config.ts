@@ -3,8 +3,14 @@ import { bindings, defineConfig, triggers } from "cf/config";
 export default defineConfig({
 	worker: {
 		name: "aquaponics-agri-intel",
-		compatibilityDate: "2024-11-01",
+		compatibilityDate: "2026-11-17",
 		entrypoint: "src/index.ts",
+		assets: {
+			notFoundHandling: "single-page-application",
+		},
+		domains: [
+			"news.guoshu.dev",
+		],
 		triggers: [
 			triggers.scheduled({
 				schedule: "*/10 * * * *",

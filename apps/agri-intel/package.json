@@ -2,22 +2,34 @@
   "name": "@aquaponics/agri-intel",
   "version": "1.0.0",
   "private": true,
-  "description": "全球农业 AI 情报微服务（早 08:00 产业动态 + 晚 20:00 学术前沿，Decisions API 筛选 + Gemini 3.5 Flash-Lite 摘要）",
+  "description": "全球农业 AI 情报微服务（早 08:00 产业动态 + 晚 20:00 学术前沿，Decisions API 筛选 + Gemini 3.5 Flash-Lite 摘要 + news.guoshu.dev 日历看板）",
   "type": "module",
   "scripts": {
     "dev": "cf dev",
-    "build": "cf build",
-    "deploy": "cf deploy",
+    "dev:web": "vite",
+    "build": "tsc --noEmit && cf build",
+    "deploy": "pnpm build && cf deploy",
     "check": "tsc --noEmit"
   },
   "dependencies": {
-    "@google/genai": "^2.3.0"
+    "@aquaponics/ui": "workspace:*",
+    "@google/genai": "^2.3.0",
+    "lucide-react": "^1.76.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
   },
   "devDependencies": {
     "@aquaponics/tsconfig": "workspace:*",
+    "@cloudflare/vite-plugin": "2.0.0-rc.3",
     "@cloudflare/workers-types": "^5.20261119.1",
+    "@tailwindcss/vite": "^4.3.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
     "cf": "1.0.0-rc.1",
+    "tailwindcss": "^4.3.5",
     "typescript": "^7.0.2",
+    "vite": "^8.3.8",
     "wrangler": "^4.165.0"
   }
 }
