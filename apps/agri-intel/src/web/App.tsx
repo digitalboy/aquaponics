@@ -391,12 +391,14 @@ export function App() {
           <section className="flex min-w-0 flex-col gap-4">
             <Card>
               <CardContent className="flex flex-col gap-3 px-4 py-3.5">
+                {/* 第一行：版块切换 + AI 精选开关 */}
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <Tabs
                     value={edition}
                     onValueChange={(v) =>
                       setEdition(v as "all" | "industry" | "academic" | "dataset" | "policy")
                     }
+                    className="max-w-full overflow-x-auto"
                   >
                     <TabsList className="h-10 p-1">
                       <TabsTrigger value="all" className="px-3 text-sm">
@@ -421,27 +423,27 @@ export function App() {
                     </TabsList>
                   </Tabs>
 
-                  <div className="flex flex-1 flex-wrap items-center justify-end gap-2.5">
-                    <div className="relative min-w-[200px] flex-1 sm:max-w-xs">
-                      <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                      <Input
-                        value={searchInput}
-                        onChange={(e) => setSearchInput(e.target.value)}
-                        placeholder="搜索标题、摘要、标签或来源..."
-                        className="h-10 pl-9 text-sm"
-                      />
-                    </div>
-                    <Button
-                      type="button"
-                      size="sm"
-                      className="h-10 px-3.5 text-sm"
-                      variant={onlySelected ? "default" : "outline"}
-                      onClick={() => setOnlySelected((prev) => !prev)}
-                    >
-                      <Sparkles className="size-4" />
-                      {onlySelected ? "仅看 AI 精选" : "含未入选"}
-                    </Button>
-                  </div>
+                  <Button
+                    type="button"
+                    size="sm"
+                    className="h-10 shrink-0 px-3.5 text-sm"
+                    variant={onlySelected ? "default" : "outline"}
+                    onClick={() => setOnlySelected((prev) => !prev)}
+                  >
+                    <Sparkles className="size-4" />
+                    {onlySelected ? "仅看 AI 精选" : "含未入选"}
+                  </Button>
+                </div>
+
+                {/* 第二行：关键词搜索 */}
+                <div className="relative w-full">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    placeholder="搜索标题、摘要、标签或来源..."
+                    className="h-10 w-full pl-9 text-sm"
+                  />
                 </div>
 
                 {/* 主题领域快捷筛选 */}
