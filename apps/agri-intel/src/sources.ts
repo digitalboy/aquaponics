@@ -246,17 +246,23 @@ async function fetchOpenAlexPapers(): Promise<SourceBatchResult> {
 }
 
 /**
- * 直连 Hugging Face Datasets Hub 公开 API（免鉴权），按农业/水产/温室关键词拉取最新公开数据集
+ * 直连 Hugging Face Datasets Hub 公开 API（免鉴权）
+ * 兼顾「高下载经典标杆 (sort=downloads)」与「近期上新 (sort=lastModified)」
  */
 async function fetchHuggingFaceDatasets(): Promise<SourceBatchResult> {
   try {
+    const queries = HF_DATASET_KEYWORDS.flatMap((kw) => [
+      { kw, sort: "downloads", limit: "6" },
+      { kw, sort: "lastModified", limit: "4" },
+    ]);
+
     const batches = await Promise.all(
-      HF_DATASET_KEYWORDS.map(async (kw) => {
+      queries.map(async ({ kw, sort, limit }) => {
         const qs = new URLSearchParams({
           search: kw,
-          sort: "lastModified",
+          sort,
           direction: "-1",
-          limit: "6",
+          limit,
         });
         const res = await fetch(`https://huggingface.co/api/datasets?${qs.toString()}`, {
           headers: {
@@ -273,20 +279,30 @@ async function fetchHuggingFaceDatasets(): Promise<SourceBatchResult> {
           downloads?: number;
           tags?: string[];
           private?: boolean;
-          gated?: boolean | string;
         }>;
       }),
     );
 
     const seen = new Set<string>();
+    const merged = batches
+      .flat()
+      .filter((ds) => Boolean(ds.id) && !ds.private)
+      .sort((a, b) => (b.downloads ?? 0) - (a.downloads ?? 0));
+
     const items: RawIntelItem[] = [];
-    for (const ds of batches.flat()) {
-      if (!ds.id || ds.private || seen.has(ds.id)) continue;
+    for (const ds of merged) {
+      if (!ds.id || seen.has(ds.id)) continue;
       seen.add(ds.id);
       const url = canonicalizeUrl(`https://huggingface.co/datasets/${ds.id}`);
-      const tags = (ds.tags ?? []).filter((t) => !t.startsWith("region:") && !t.startsWith("arxiv:")).slice(0, 8);
-      const licenseTag = (ds.tags ?? []).find((t) => t.startsWith("license:"))?.replace("license:", "");
-      const modalityTag = (ds.tags ?? []).find((t) => t.startsWith("modality:"))?.replace("modality:", "");
+      const tags = (ds.tags ?? [])
+        .filter((t) => !t.startsWith("region:") && !t.startsWith("arxiv:"))
+        .slice(0, 8);
+      const licenseTag = (ds.tags ?? [])
+        .find((t) => t.startsWith("license:"))
+        ?.replace("license:", "");
+      const modalityTag = (ds.tags ?? [])
+        .find((t) => t.startsWith("modality:"))
+        ?.replace("modality:", "");
       const desc = (ds.description ?? "").trim();
       const excerpt = [
         desc,
@@ -531,19 +547,17 @@ export async function collectFreshArticles(
   const sourceReports = batchResults.map((b) => b.report);
   const flat = batchResults.flatMap((b) => b.items);
   const baseHours = Number(env.LOOKBACK_HOURS) || 48;
-  // 学术论文放宽至 14 天，公开数据集放宽至 30 天，配合 D1 url_hash 永久去重
-  const lookbackHours =
-    edition === "dataset"
-      ? Math.max(baseHours, 720)
-      : edition === "academic"
-        ? Math.max(baseHours, 336)
-        : baseHours;
+  // 学术论文放宽至 14 天；开源数据集作为长期资产库不做时间截断，全量依赖 D1 url_hash 永久去重
+  const skipCutoff = edition === "dataset";
+  const lookbackHours = edition === "academic" ? Math.max(baseHours, 336) : baseHours;
   const cutoffMs = Date.now() - lookbackHours * 3600 * 1000;
 
   const seenInBatch = new Map<string, RawIntelItem & { urlHash: string }>();
   for (const item of flat) {
-    const pubMs = Date.parse(item.publishedAtUtc);
-    if (!Number.isNaN(pubMs) && pubMs < cutoffMs) continue;
+    if (!skipCutoff) {
+      const pubMs = Date.parse(item.publishedAtUtc);
+      if (!Number.isNaN(pubMs) && pubMs < cutoffMs) continue;
+    }
 
     const urlHash = await sha256Hex(item.url);
     if (!seenInBatch.has(urlHash)) {
