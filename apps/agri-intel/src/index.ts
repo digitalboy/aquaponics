@@ -57,6 +57,12 @@ function isAuthorizedInternal(request: Request, env: Env): boolean {
   return auth === `Bearer ${expected}`;
 }
 
+function parseEditionParam(raw: string | null): IntelEdition {
+  const v = (raw ?? "industry").trim();
+  if (v === "academic" || v === "dataset") return v;
+  return "industry";
+}
+
 export async function runIntelPipeline(
   env: Env,
   edition: IntelEdition,
@@ -77,11 +83,11 @@ export async function runIntelPipeline(
     }
   }
 
-  const { totalFetched, freshItems } = await collectFreshArticles(env, edition);
+  const { totalFetched, freshItems, sourceReports } = await collectFreshArticles(env, edition);
   const minScore = Number(env.DECISION_MIN_SCORE) || 3.5;
   const maxItems = Math.min(Math.max(Number(env.MAX_DAILY_ITEMS) || 5, 1), 5);
 
-  // Stage 2: 判定 AI（Decisions API），限制单轮最多评估 30 篇新文章控制延迟
+  // Stage 2: 判定 AI（Decisions API），限制单轮最多评估 30 篇新条目控制延迟
   const toJudge = freshItems.slice(0, 30);
   const judged: JudgedIntelItem[] = [];
   const BATCH = 6;
@@ -91,21 +97,21 @@ export async function runIntelPipeline(
     judged.push(...res);
   }
 
-  // 选出高分相关文章（按重要度降序取前 4~5 条）
+  // 选出高分相关条目（按重要度降序取前 4~5 条）
   const passed = judged
     .filter((j) => j.relevant && j.category !== "irrelevant" && j.score >= minScore)
     .sort((a, b) => b.score - a.score || b.confidence - a.confidence)
     .slice(0, maxItems);
   const passedHashes = new Set(passed.map((p) => p.urlHash));
 
-  // Stage 3: 仅对入选文章调用 gemini-3.5-flash-lite 翻译与 4~5 句摘要
+  // Stage 3: 仅对入选条目调用 gemini-3.5-flash-lite 生成中文标题、摘要、标签与元数据
   const summarized: SummarizedIntelItem[] = [];
   for (const item of passed) {
     summarized.push(await summarizeIntelArticle(env, item));
   }
   const summaryMap = new Map(summarized.map((s) => [s.urlHash, s]));
 
-  // 推送飞书卡片（若当天无达标文章则静默跳过，避免水帖）
+  // 推送飞书卡片（若当天无达标条目则静默跳过，避免水帖）
   let feishuResult: { ok: boolean; detail: string } = { ok: true, detail: "no_qualified_articles" };
   let sentAt: string | null = null;
   if (summarized.length > 0) {
@@ -115,16 +121,20 @@ export async function runIntelPipeline(
     }
   }
 
-  // 所有判定过的文章均写入 D1（用于永久去重），入选的附带中文摘要与推送时间
+  // 所有判定过的条目均写入 D1（用于永久去重），入选的附带中文摘要、标签、元数据与推送时间
   const createdAt = nowIsoUtc();
   for (const j of judged) {
     const sum = summaryMap.get(j.urlHash);
+    const tagsJson = sum?.tags?.length ? JSON.stringify(sum.tags) : null;
+    const metaObj = sum?.meta ?? j.meta;
+    const metaJson = metaObj ? JSON.stringify(metaObj) : null;
+
     await env.INTEL_DB.prepare(
       `INSERT OR IGNORE INTO intel_articles (
         url_hash, edition, source_name, category, title_raw, title_zh, summary_zh,
         url, published_at, decision_relevant, decision_score, decision_confidence,
-        sent_to_feishu_at, created_at
-      ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)`,
+        sent_to_feishu_at, created_at, tags_json, meta_json
+      ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16)`,
     )
       .bind(
         j.urlHash,
@@ -141,12 +151,19 @@ export async function runIntelPipeline(
         j.confidence,
         passedHashes.has(j.urlHash) ? sentAt : null,
         createdAt,
+        tagsJson,
+        metaJson,
       )
       .run();
   }
 
   const finishedAt = nowIsoUtc();
   const status = feishuResult.ok ? "ok" : "error";
+  const runDetail = JSON.stringify({
+    feishu: feishuResult.detail,
+    sources: sourceReports,
+  });
+
   if (!force) {
     await env.INTEL_DB.prepare(
       `INSERT OR REPLACE INTO intel_runs (
@@ -161,7 +178,7 @@ export async function runIntelPipeline(
         summarized.length,
         sentAt ? summarized.length : 0,
         status,
-        feishuResult.detail,
+        runDetail,
         startedAt,
         finishedAt,
       )
@@ -175,12 +192,15 @@ export async function runIntelPipeline(
     totalFetched,
     freshEvaluated: judged.length,
     selectedCount: summarized.length,
+    sourceReports,
     feishu: feishuResult,
     articles: summarized.map((s) => ({
       titleZh: s.titleZh,
       category: s.category,
       score: s.score,
       sourceName: s.sourceName,
+      tags: s.tags,
+      meta: s.meta,
       url: s.url,
     })),
   };
@@ -197,8 +217,7 @@ export default {
       if (!isAuthorizedInternal(request, env)) {
         return jsonResponse({ error: "Unauthorized" }, 401);
       }
-      const rawEd = (url.searchParams.get("edition") ?? "industry").trim();
-      const edition: IntelEdition = rawEd === "academic" ? "academic" : "industry";
+      const edition = parseEditionParam(url.searchParams.get("edition"));
       const result = await runIntelPipeline(env, edition, true);
       return jsonResponse(result, result.ok ? 200 : 500);
     }
@@ -209,7 +228,7 @@ export default {
       }
       const limit = Math.min(Math.max(Number(url.searchParams.get("limit") ?? "20"), 1), 100);
       const rows = await env.INTEL_DB.prepare(
-        `SELECT edition, source_name, category, title_raw, title_zh, decision_relevant, decision_score, url, published_at, sent_to_feishu_at
+        `SELECT edition, source_name, category, title_raw, title_zh, decision_relevant, decision_score, url, published_at, sent_to_feishu_at, tags_json, meta_json
          FROM intel_articles ORDER BY created_at DESC LIMIT ?1`,
       )
         .bind(limit)
@@ -230,29 +249,35 @@ export default {
         `SELECT
            substr(datetime(created_at, '+8 hours'), 1, 10) AS day,
            edition,
+           category,
            COUNT(*) AS cnt,
            MAX(decision_score) AS max_score
          FROM intel_articles
          WHERE created_at >= ?1 AND created_at < ?2 ${filterSql}
-         GROUP BY day, edition`,
+         GROUP BY day, edition, category`,
       )
         .bind(startUtc, endUtc)
-        .all<{ day: string; edition: string; cnt: number; max_score: number | null }>();
+        .all<{ day: string; edition: string; category: string; cnt: number; max_score: number | null }>();
 
       const days: Record<
         string,
-        { total: number; industry: number; academic: number; maxScore: number }
+        { total: number; industry: number; academic: number; dataset: number; maxScore: number }
       > = {};
       for (const r of rows.results) {
         if (!r.day) continue;
         if (!days[r.day]) {
-          days[r.day] = { total: 0, industry: 0, academic: 0, maxScore: 0 };
+          days[r.day] = { total: 0, industry: 0, academic: 0, dataset: 0, maxScore: 0 };
         }
         const count = Number(r.cnt) || 0;
         const score = Number(r.max_score) || 0;
         days[r.day].total += count;
-        if (r.edition === "industry") days[r.day].industry += count;
-        if (r.edition === "academic") days[r.day].academic += count;
+        if (r.edition === "dataset" || r.category === "dataset_release") {
+          days[r.day].dataset += count;
+        } else if (r.edition === "industry") {
+          days[r.day].industry += count;
+        } else if (r.edition === "academic") {
+          days[r.day].academic += count;
+        }
         if (score > days[r.day].maxScore) days[r.day].maxScore = score;
       }
 
@@ -264,6 +289,7 @@ export default {
       const rawMonth = (url.searchParams.get("month") ?? "").trim();
       const edition = (url.searchParams.get("edition") ?? "all").trim();
       const category = (url.searchParams.get("category") ?? "all").trim();
+      const tag = (url.searchParams.get("tag") ?? "").trim();
       const q = (url.searchParams.get("q") ?? "").trim();
       const onlySelected = url.searchParams.get("onlySelected") !== "0";
       const limit = Math.min(Math.max(Number(url.searchParams.get("limit") ?? "60"), 1), 150);
@@ -289,7 +315,9 @@ export default {
       if (onlySelected) {
         clauses.push("decision_relevant = 1", "title_zh IS NOT NULL");
       }
-      if (edition === "industry" || edition === "academic") {
+      if (edition === "dataset") {
+        clauses.push("(edition = 'dataset' OR category = 'dataset_release')");
+      } else if (edition === "industry" || edition === "academic") {
         params.push(edition);
         clauses.push(`edition = ?${params.length}`);
       }
@@ -297,12 +325,18 @@ export default {
         params.push(category);
         clauses.push(`category = ?${params.length}`);
       }
+      if (tag) {
+        const tagLike = `%${tag}%`;
+        params.push(tagLike, tagLike, tagLike);
+        const base = params.length - 2;
+        clauses.push(`(tags_json LIKE ?${base} OR title_zh LIKE ?${base + 1} OR summary_zh LIKE ?${base + 2})`);
+      }
       if (q) {
         const like = `%${q}%`;
-        params.push(like, like, like, like);
-        const base = params.length - 3;
+        params.push(like, like, like, like, like);
+        const base = params.length - 4;
         clauses.push(
-          `(title_zh LIKE ?${base} OR title_raw LIKE ?${base + 1} OR summary_zh LIKE ?${base + 2} OR source_name LIKE ?${base + 3})`,
+          `(title_zh LIKE ?${base} OR title_raw LIKE ?${base + 1} OR summary_zh LIKE ?${base + 2} OR source_name LIKE ?${base + 3} OR tags_json LIKE ?${base + 4})`,
         );
       }
 
@@ -324,7 +358,9 @@ export default {
           decision_score,
           decision_confidence,
           sent_to_feishu_at,
-          created_at
+          created_at,
+          tags_json,
+          meta_json
         FROM intel_articles
         WHERE ${clauses.join(" AND ")}
         ORDER BY substr(datetime(created_at, '+8 hours'), 1, 10) DESC, decision_score DESC, created_at DESC
@@ -363,7 +399,11 @@ export default {
     if (hour === 8 && minute < 20) {
       tasks.push(runIntelPipeline(env, "industry", false));
     }
-    // 晚上 20:00 全球学术报道
+    // 中午 12:30 全球开源数据集抓取
+    if (hour === 12 && minute >= 30 && minute < 50) {
+      tasks.push(runIntelPipeline(env, "dataset", false));
+    }
+    // 晚上 20:00 全球学术前沿
     if (hour === 20 && minute < 20) {
       tasks.push(runIntelPipeline(env, "academic", false));
     }

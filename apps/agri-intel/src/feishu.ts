@@ -52,36 +52,59 @@ export async function sendIntelCardToFeishu(
     };
   }
 
-  const isIndustry = edition === "industry";
-  const title = isIndustry
-    ? `🌾 全球农业 AI 产业早报 · ${bjtDateStr}`
-    : `🎓 全球农业 AI 学术晚报 · ${bjtDateStr}`;
+  const title =
+    edition === "industry"
+      ? `🌾 全球农业 AI 产业早报 · ${bjtDateStr}`
+      : edition === "academic"
+        ? `🎓 全球农业 AI 学术晚报 · ${bjtDateStr}`
+        : `📦 全球农业 AI 开源数据集 · ${bjtDateStr}`;
+
+  const intro =
+    edition === "industry"
+      ? `今日精选 **${items.length}** 条全球农业科技与产业动态：`
+      : edition === "academic"
+        ? `今晚精选 **${items.length}** 篇全球农业 AI 科研论文与技术进展：`
+        : `今日新收录 **${items.length}** 个全球农业与水产 AI 公开数据集：`;
+
+  const headerTemplate =
+    edition === "industry" ? "blue" : edition === "academic" ? "indigo" : "purple";
 
   const elements: Array<Record<string, unknown>> = [
     {
       tag: "markdown",
-      content: isIndustry
-        ? `今日精选 **${items.length}** 条全球农业科技与产业动态：`
-        : `今晚精选 **${items.length}** 篇全球农业 AI 科研论文与技术进展：`,
+      content: `${intro}（完整归档见 [news.guoshu.dev](https://news.guoshu.dev)）`,
     },
   ];
 
   items.forEach((item, idx) => {
     elements.push({ tag: "hr" });
+    const metaBadges = [
+      item.meta?.platform,
+      item.meta?.modality,
+      item.meta?.task,
+      item.meta?.format,
+    ]
+      .filter(Boolean)
+      .join(" / ");
+    const tagLine = item.tags.length > 0 ? `标签：${item.tags.join(" · ")}` : "";
     elements.push({
       tag: "markdown",
       content: [
         `**${idx + 1}. 【${categoryLabel(item.category)}】${item.titleZh}**`,
         item.summaryZh,
-        `来源：${item.sourceName} · 重要度 ${item.score}/5 · [阅读原文](${item.url})`,
-      ].join("\n"),
+        metaBadges ? `规格：${metaBadges}` : "",
+        tagLine,
+        `来源：${item.sourceName} · 重要度 ${item.score}/5 · [查看详情](${item.url})`,
+      ]
+        .filter(Boolean)
+        .join("\n"),
     });
   });
 
   const card = {
     config: { wide_screen_mode: true },
     header: {
-      template: isIndustry ? "blue" : "indigo",
+      template: headerTemplate,
       title: { tag: "plain_text", content: title },
     },
     elements,

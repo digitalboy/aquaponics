@@ -1,4 +1,4 @@
-export type IntelEdition = "industry" | "academic";
+export type IntelEdition = "industry" | "academic" | "dataset";
 
 export type IntelCategory =
   | "industry_news"
@@ -6,6 +6,22 @@ export type IntelCategory =
   | "research_paper"
   | "dataset_release"
   | "irrelevant";
+
+export interface IntelArticleMeta {
+  platform?: string;
+  modality?: string;
+  task?: string;
+  format?: string;
+  license?: string;
+  venue?: string;
+  downloads?: number;
+}
+
+export interface SourceFetchReport {
+  source: string;
+  fetched: number;
+  error?: string;
+}
 
 export interface Env {
   INTEL_DB: D1Database;
@@ -28,6 +44,7 @@ export interface RawIntelItem {
   excerptRaw: string;
   url: string;
   publishedAtUtc: string;
+  meta?: IntelArticleMeta;
 }
 
 export interface JudgedIntelItem extends RawIntelItem {
@@ -41,6 +58,7 @@ export interface JudgedIntelItem extends RawIntelItem {
 export interface SummarizedIntelItem extends JudgedIntelItem {
   titleZh: string;
   summaryZh: string;
+  tags: string[];
 }
 
 const STRICT_ISO_UTC_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
