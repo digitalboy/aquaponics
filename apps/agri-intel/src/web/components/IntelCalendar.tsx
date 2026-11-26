@@ -5,6 +5,7 @@ export interface DailyIntelSummaryItem {
   total: number;
   industry: number;
   academic: number;
+  dataset: number;
   maxScore: number;
 }
 
@@ -30,8 +31,8 @@ function getTodayBjtStr(): string {
 }
 
 /**
- * 全球农业 AI 情报月历组件：
- * - 日历格内以双色进度条（绿：产业 / 蓝：学术）直观呈现每日情报分布
+ * 全球农业 + AI 情报月历组件：
+ * - 日历格内以三色进度条（绿：产业 / 蓝：学术 / 紫：数据集）直观呈现每日情报分布
  * - 鼠标悬停或键盘聚焦日期格时显示具体篇数（最小字号 13px）
  */
 export function IntelCalendar({
@@ -130,8 +131,9 @@ export function IntelCalendar({
                   ? "right-0 left-auto translate-x-0"
                   : "left-1/2 -translate-x-1/2";
 
+            const datasetCount = stat?.dataset ?? 0;
             const tooltipLabel = stat
-              ? `${mon}月${cell.day}日 · 产业 ${stat.industry} 篇 · 学术 ${stat.academic} 篇`
+              ? `${mon}月${cell.day}日 · 产业 ${stat.industry} · 学术 ${stat.academic} · 数据集 ${datasetCount}`
               : undefined;
 
             return (
@@ -177,6 +179,12 @@ export function IntelCalendar({
                           style={{ width: `${(stat.academic / stat.total) * 100}%` }}
                         />
                       )}
+                      {datasetCount > 0 && (
+                        <div
+                          className="h-full bg-violet-400 transition-all"
+                          style={{ width: `${(datasetCount / stat.total) * 100}%` }}
+                        />
+                      )}
                     </div>
                   )}
                 </button>
@@ -200,6 +208,12 @@ export function IntelCalendar({
                       <span className="size-2 rounded-full bg-sky-400" />
                       学术 {stat.academic}
                     </span>
+                    {datasetCount > 0 && (
+                      <span className="inline-flex items-center gap-1 text-violet-300">
+                        <span className="size-2 rounded-full bg-violet-400" />
+                        数据 {datasetCount}
+                      </span>
+                    )}
                   </div>
                 )}
               </div>
@@ -210,13 +224,17 @@ export function IntelCalendar({
         <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-border/60 pt-3 text-[13px] text-muted-foreground">
           <span className="inline-flex items-center gap-1.5">
             <span className="h-1.5 w-4 rounded-full bg-primary" />
-            产业动态
+            产业
           </span>
           <span className="inline-flex items-center gap-1.5">
             <span className="h-1.5 w-4 rounded-full bg-sky-400" />
-            学术前沿
+            学术
           </span>
-          <span className="text-muted-foreground/80">悬停日期查看篇数</span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-1.5 w-4 rounded-full bg-violet-400" />
+            数据集
+          </span>
+          <span className="text-muted-foreground/80">悬停查看篇数</span>
         </div>
       </CardContent>
     </Card>
