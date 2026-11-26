@@ -1,10 +1,11 @@
-export type IntelEdition = "industry" | "academic" | "dataset";
+export type IntelEdition = "industry" | "academic" | "dataset" | "policy";
 
 export type IntelCategory =
   | "industry_news"
   | "tech_breakthrough"
   | "research_paper"
   | "dataset_release"
+  | "policy_regulation"
   | "irrelevant";
 
 export interface IntelArticleMeta {
@@ -15,6 +16,9 @@ export interface IntelArticleMeta {
   license?: string;
   venue?: string;
   downloads?: number;
+  country?: string;
+  agency?: string;
+  policyType?: string;
 }
 
 export interface SourceFetchReport {

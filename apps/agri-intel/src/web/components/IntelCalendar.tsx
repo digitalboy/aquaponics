@@ -6,6 +6,7 @@ export interface DailyIntelSummaryItem {
   industry: number;
   academic: number;
   dataset: number;
+  policy?: number;
   maxScore: number;
 }
 
@@ -132,8 +133,9 @@ export function IntelCalendar({
                   : "left-1/2 -translate-x-1/2";
 
             const datasetCount = stat?.dataset ?? 0;
+            const policyCount = stat?.policy ?? 0;
             const tooltipLabel = stat
-              ? `${mon}月${cell.day}日 · 产业 ${stat.industry} · 学术 ${stat.academic} · 数据集 ${datasetCount}`
+              ? `${mon}月${cell.day}日 · 产业 ${stat.industry} · 学术 ${stat.academic} · 数据集 ${datasetCount} · 政策 ${policyCount}`
               : undefined;
 
             return (
@@ -185,6 +187,12 @@ export function IntelCalendar({
                           style={{ width: `${(datasetCount / stat.total) * 100}%` }}
                         />
                       )}
+                      {policyCount > 0 && (
+                        <div
+                          className="h-full bg-amber-400 transition-all"
+                          style={{ width: `${(policyCount / stat.total) * 100}%` }}
+                        />
+                      )}
                     </div>
                   )}
                 </button>
@@ -214,6 +222,12 @@ export function IntelCalendar({
                         数据 {datasetCount}
                       </span>
                     )}
+                    {policyCount > 0 && (
+                      <span className="inline-flex items-center gap-1 text-amber-300">
+                        <span className="size-2 rounded-full bg-amber-400" />
+                        政策 {policyCount}
+                      </span>
+                    )}
                   </div>
                 )}
               </div>
@@ -233,6 +247,10 @@ export function IntelCalendar({
           <span className="inline-flex items-center gap-1.5">
             <span className="h-1.5 w-4 rounded-full bg-violet-400" />
             数据集
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-1.5 w-4 rounded-full bg-amber-400" />
+            政策
           </span>
           <span className="text-muted-foreground/80">悬停查看篇数</span>
         </div>

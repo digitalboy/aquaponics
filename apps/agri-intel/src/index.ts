@@ -14,13 +14,19 @@ const BJT_OFFSET_MS = 8 * 3600 * 1000;
 const MONTH_RE = /^\d{4}-(0[1-9]|1[0-2])$/;
 const DATE_RE = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 
-function getBeijingTimeParts(utcMs: number): { dateStr: string; hour: number; minute: number } {
+function getBeijingTimeParts(utcMs: number): {
+  dateStr: string;
+  hour: number;
+  minute: number;
+  dayOfWeek: number;
+} {
   const bjt = new Date(utcMs + BJT_OFFSET_MS);
   const pad = (n: number) => String(n).padStart(2, "0");
   return {
     dateStr: `${bjt.getUTCFullYear()}-${pad(bjt.getUTCMonth() + 1)}-${pad(bjt.getUTCDate())}`,
     hour: bjt.getUTCHours(),
     minute: bjt.getUTCMinutes(),
+    dayOfWeek: bjt.getUTCDay(),
   };
 }
 
@@ -59,7 +65,7 @@ function isAuthorizedInternal(request: Request, env: Env): boolean {
 
 function parseEditionParam(raw: string | null): IntelEdition {
   const v = (raw ?? "industry").trim();
-  if (v === "academic" || v === "dataset") return v;
+  if (v === "academic" || v === "dataset" || v === "policy") return v;
   return "industry";
 }
 
@@ -261,18 +267,20 @@ export default {
 
       const days: Record<
         string,
-        { total: number; industry: number; academic: number; dataset: number; maxScore: number }
+        { total: number; industry: number; academic: number; dataset: number; policy: number; maxScore: number }
       > = {};
       for (const r of rows.results) {
         if (!r.day) continue;
         if (!days[r.day]) {
-          days[r.day] = { total: 0, industry: 0, academic: 0, dataset: 0, maxScore: 0 };
+          days[r.day] = { total: 0, industry: 0, academic: 0, dataset: 0, policy: 0, maxScore: 0 };
         }
         const count = Number(r.cnt) || 0;
         const score = Number(r.max_score) || 0;
         days[r.day].total += count;
         if (r.edition === "dataset" || r.category === "dataset_release") {
           days[r.day].dataset += count;
+        } else if (r.edition === "policy" || r.category === "policy_regulation") {
+          days[r.day].policy += count;
         } else if (r.edition === "industry") {
           days[r.day].industry += count;
         } else if (r.edition === "academic") {
@@ -317,6 +325,8 @@ export default {
       }
       if (edition === "dataset") {
         clauses.push("(edition = 'dataset' OR category = 'dataset_release')");
+      } else if (edition === "policy") {
+        clauses.push("(edition = 'policy' OR category = 'policy_regulation')");
       } else if (edition === "industry" || edition === "academic") {
         params.push(edition);
         clauses.push(`edition = ?${params.length}`);
@@ -392,12 +402,16 @@ export default {
   },
 
   async scheduled(_event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
-    const { hour, minute } = getBeijingTimeParts(Date.now());
+    const { hour, minute, dayOfWeek } = getBeijingTimeParts(Date.now());
     const tasks: Array<Promise<unknown>> = [];
 
     // 早上 08:00 全球产业报道
     if (hour === 8 && minute < 20) {
       tasks.push(runIntelPipeline(env, "industry", false));
+    }
+    // 每周一、三、五 10:00 全球高科技农业政策
+    if ([1, 3, 5].includes(dayOfWeek) && hour === 10 && minute < 20) {
+      tasks.push(runIntelPipeline(env, "policy", false));
     }
     // 中午 12:30 全球开源数据集抓取
     if (hour === 12 && minute >= 30 && minute < 50) {

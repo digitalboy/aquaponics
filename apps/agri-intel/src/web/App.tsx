@@ -22,6 +22,7 @@ import {
   Database,
   ExternalLink,
   Factory,
+  Landmark,
   Newspaper,
   RefreshCw,
   Search,
@@ -40,13 +41,22 @@ interface IntelArticleMeta {
   license?: string;
   venue?: string;
   downloads?: number;
+  country?: string;
+  agency?: string;
+  policyType?: string;
 }
 
 interface IntelArticleItem {
   url_hash: string;
-  edition: "industry" | "academic" | "dataset";
+  edition: "industry" | "academic" | "dataset" | "policy";
   source_name: string;
-  category: "industry_news" | "tech_breakthrough" | "research_paper" | "dataset_release" | "irrelevant";
+  category:
+    | "industry_news"
+    | "tech_breakthrough"
+    | "research_paper"
+    | "dataset_release"
+    | "policy_regulation"
+    | "irrelevant";
   title_raw: string;
   title_zh: string | null;
   summary_zh: string | null;
@@ -63,7 +73,7 @@ interface IntelArticleItem {
 
 interface IntelRunItem {
   run_key: string;
-  edition: "industry" | "academic" | "dataset";
+  edition: "industry" | "academic" | "dataset" | "policy";
   fetched_count: number;
   new_count: number;
   selected_count: number;
@@ -79,6 +89,7 @@ const CATEGORY_LABEL: Record<IntelArticleItem["category"], string> = {
   tech_breakthrough: "技术突破",
   research_paper: "学术论文",
   dataset_release: "开源数据集",
+  policy_regulation: "农科政策",
   irrelevant: "未入选",
 };
 
@@ -90,6 +101,7 @@ const QUICK_TAGS = [
   "机器人",
   "视觉",
   "大模型",
+  "政策补贴",
 ];
 
 function safeParseTags(raw: string | null | undefined): string[] {
@@ -140,6 +152,13 @@ function editionBadgeMeta(edition: IntelArticleItem["edition"], category?: Intel
       className: "border-violet-500/30 bg-violet-500/15 text-violet-300",
     };
   }
+  if (edition === "policy" || category === "policy_regulation") {
+    return {
+      label: "农科政策",
+      shortLabel: "政策",
+      className: "border-amber-500/30 bg-amber-500/15 text-amber-300",
+    };
+  }
   if (edition === "academic") {
     return {
       label: "学术前沿",
@@ -157,7 +176,7 @@ function editionBadgeMeta(edition: IntelArticleItem["edition"], category?: Intel
 export function App() {
   const [calendarMonth, setCalendarMonth] = useState<string>(getCurrentBjtMonth);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [edition, setEdition] = useState<"all" | "industry" | "academic" | "dataset">("all");
+  const [edition, setEdition] = useState<"all" | "industry" | "academic" | "dataset" | "policy">("all");
   const [activeTag, setActiveTag] = useState<string>("");
   const [onlySelected, setOnlySelected] = useState<boolean>(true);
   const [searchInput, setSearchInput] = useState<string>("");
@@ -273,11 +292,11 @@ export function App() {
               <div className="flex flex-wrap items-center gap-2.5">
                 <h1 className="text-lg font-bold tracking-tight sm:text-xl">国数AI农业 · 全球情报中心</h1>
                 <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-[13px] font-medium text-primary">
-                  news.guoshu.dev
+                  intel.guoshu.dev
                 </span>
               </div>
               <p className="mt-0.5 text-sm text-muted-foreground">
-                早 08:00 产业动态 · 午 12:30 开源数据集 · 晚 20:00 学术前沿 · AI 筛选与中文摘要归档
+                早 08:00 产业 · 一三五 10:00 政策 · 午 12:30 数据集 · 晚 20:00 学术 · AI 筛选归档
               </p>
             </div>
           </div>
@@ -376,7 +395,7 @@ export function App() {
                   <Tabs
                     value={edition}
                     onValueChange={(v) =>
-                      setEdition(v as "all" | "industry" | "academic" | "dataset")
+                      setEdition(v as "all" | "industry" | "academic" | "dataset" | "policy")
                     }
                   >
                     <TabsList className="h-10 p-1">
@@ -394,6 +413,10 @@ export function App() {
                       <TabsTrigger value="dataset" className="px-3 text-sm">
                         <Database className="size-4" />
                         开源数据集
+                      </TabsTrigger>
+                      <TabsTrigger value="policy" className="px-3 text-sm">
+                        <Landmark className="size-4" />
+                        农科政策
                       </TabsTrigger>
                     </TabsList>
                   </Tabs>
@@ -510,12 +533,19 @@ export function App() {
                   const meta = safeParseMeta(item.meta_json);
                   const isDataset =
                     item.edition === "dataset" || item.category === "dataset_release";
+                  const isPolicy =
+                    item.edition === "policy" || item.category === "policy_regulation";
                   const specChips = [
                     meta?.platform,
                     meta?.modality,
                     meta?.task,
                     meta?.format,
                     meta?.license,
+                  ].filter(Boolean) as string[];
+                  const policyChips = [
+                    meta?.country,
+                    meta?.agency,
+                    meta?.policyType,
                   ].filter(Boolean) as string[];
 
                   return (
@@ -537,7 +567,7 @@ export function App() {
                               >
                                 {ed.label}
                               </Badge>
-                              {!isDataset && (
+                              {!isDataset && !isPolicy && (
                                 <Badge variant="outline" className="px-2.5 py-0.5 text-xs">
                                   {CATEGORY_LABEL[item.category] ?? item.category}
                                 </Badge>
@@ -579,6 +609,18 @@ export function App() {
                               {specChips.map((chip, idx) => (
                                 <span key={`${chip}-${idx}`} className="inline-flex items-center gap-2">
                                   {idx > 0 && <span className="text-violet-400/40">·</span>}
+                                  <span>{chip}</span>
+                                </span>
+                              ))}
+                            </div>
+                          )}
+
+                          {isPolicy && policyChips.length > 0 && (
+                            <div className="flex flex-wrap items-center gap-2 rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2 text-[13px] text-amber-200">
+                              <Landmark className="size-3.5 shrink-0 text-amber-400" />
+                              {policyChips.map((chip, idx) => (
+                                <span key={`${chip}-${idx}`} className="inline-flex items-center gap-2">
+                                  {idx > 0 && <span className="text-amber-400/40">·</span>}
                                   <span>{chip}</span>
                                 </span>
                               ))}
@@ -740,6 +782,24 @@ export function App() {
                     <div>
                       <span className="text-muted-foreground">数据格式：</span>
                       <span>{detailMeta.format}</span>
+                    </div>
+                  )}
+                  {detailMeta?.country && (
+                    <div>
+                      <span className="text-muted-foreground">国家/地区：</span>
+                      <span>{detailMeta.country}</span>
+                    </div>
+                  )}
+                  {detailMeta?.agency && (
+                    <div>
+                      <span className="text-muted-foreground">发布机构：</span>
+                      <span>{detailMeta.agency}</span>
+                    </div>
+                  )}
+                  {detailMeta?.policyType && (
+                    <div>
+                      <span className="text-muted-foreground">政策类型：</span>
+                      <span>{detailMeta.policyType}</span>
                     </div>
                   )}
                 </div>

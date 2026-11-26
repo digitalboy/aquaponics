@@ -19,12 +19,14 @@ function normalizeCategory(raw: unknown, edition: IntelEdition): IntelCategory {
     s === "industry_news" ||
     s === "tech_breakthrough" ||
     s === "research_paper" ||
-    s === "dataset_release"
+    s === "dataset_release" ||
+    s === "policy_regulation"
   ) {
     return s;
   }
   if (s === "irrelevant") return "irrelevant";
   if (edition === "dataset") return "dataset_release";
+  if (edition === "policy") return "policy_regulation";
   return edition === "academic" ? "research_paper" : "industry_news";
 }
 
@@ -54,7 +56,9 @@ export async function judgeIntelArticle(
       ? "commercial controlled-environment agriculture, aquaponics, hydroponics, aquaculture automation, ag-robotics, AI farm deployment, or major agtech funding/products"
       : item.edition === "academic"
         ? "academic papers, computer vision (YOLO/segmentation/biomass estimation for fish or plants), greenhouse environmental MPC/RL/LLM control, or aquaculture/hydroponics AI research"
-        : "open-source downloadable datasets (images, videos, sensor time-series, spectral/remote sensing) genuinely useful for agriculture AI, plant disease/phenotyping, fish/aquaculture vision, or greenhouse automation; exclude toy/empty repos or unrelated generic datasets";
+        : item.edition === "dataset"
+          ? "open-source downloadable datasets (images, videos, sensor time-series, spectral/remote sensing) genuinely useful for agriculture AI, plant disease/phenotyping, fish/aquaculture vision, or greenhouse automation; exclude toy/empty repos or unrelated generic datasets"
+          : "national or international government policies, subsidies, grants, action plans, or AI/automation regulations specifically targeting smart agriculture, controlled-environment agriculture, aquaponics/aquaculture modernization, or agricultural AI; strictly exclude generic commodity tariffs, routine trade disputes, or non-tech farm politics";
 
   // 1) 优先尝试 Decisions API (gemini-decision-1)
   try {
@@ -73,6 +77,7 @@ export async function judgeIntelArticle(
             "tech_breakthrough",
             "research_paper",
             "dataset_release",
+            "policy_regulation",
             "irrelevant",
           ],
           instructions: "Pick the single best category for this item.",
@@ -171,17 +176,24 @@ export async function summarizeIntelArticle(
   });
 
   const isDataset = item.edition === "dataset" || item.category === "dataset_release";
+  const isPolicy = item.edition === "policy" || item.category === "policy_regulation";
   const schemaHint = isDataset
     ? `{"titleZh": "...", "summaryZh": "...", "tags": ["标签1", "标签2"], "datasetMeta": {"modality": "图像/视频/时序/多光谱/文本", "task": "目标检测/语义分割/分类/生物量估计/环控预测", "format": "YOLO/COCO/CSV/Parquet等(未知留空)"}}`
-    : `{"titleZh": "...", "summaryZh": "...", "tags": ["标签1", "标签2"]}`;
+    : isPolicy
+      ? `{"titleZh": "...", "summaryZh": "...", "tags": ["标签1", "标签2"], "policyMeta": {"country": "中国/美国/欧盟/新加坡/日本/国际", "agency": "发布机构简称", "policyType": "资金补贴/行动计划/法规监管/行业标准"}}`
+      : `{"titleZh": "...", "summaryZh": "...", "tags": ["标签1", "标签2"]}`;
+
+  const summaryRule = isPolicy
+    ? `2. summaryZh：严格控制在 4 到 5 句话之间（约 140~220 字），涵盖：政策发布背景与支持方向、关键资金规模/指标或合规要求、以及对国内设施农业/水产养殖/农业 AI 研发与申报的参考价值。`
+    : `2. summaryZh：严格控制在 4 到 5 句话之间（约 140~220 字），涵盖：核心内容/方法或数据集构成、关键指标或标注特点、以及对智慧温室/水产养殖/农业 AI 研发的参考价值。`;
 
   const prompt = [
     `你是一位服务于现代化鱼菜共生与设施农业研发团队的资深情报编辑。`,
     `请将下面这篇资料翻译并提炼为中文简报，严格返回 JSON：${schemaHint}。`,
     `要求：`,
     `1. titleZh：准确、简洁的中文标题（不超过 36 个汉字）。`,
-    `2. summaryZh：严格控制在 4 到 5 句话之间（约 140~220 字），涵盖：核心内容/方法或数据集构成、关键指标或标注特点、以及对智慧温室/水产养殖/农业 AI 研发的参考价值。`,
-    `3. tags：给出 2 到 4 个简洁中文领域标签，优先从以下规范标签中选用（也可补充精准词）：水产养殖、温室环控、植物表型、病虫害识别、农业机器人、视觉检测、大模型决策、开源数据集。`,
+    summaryRule,
+    `3. tags：给出 2 到 4 个简洁中文领域标签，优先从以下规范标签中选用（也可补充精准词）：水产养殖、温室环控、植物表型、病虫害识别、农业机器人、视觉检测、大模型决策、开源数据集、政策补贴。`,
     `4. 严禁编造原文未提供的数字或结论。`,
     ``,
     `版块：${item.edition}`,
@@ -209,6 +221,11 @@ export async function summarizeIntelArticle(
       task?: string;
       format?: string;
     };
+    policyMeta?: {
+      country?: string;
+      agency?: string;
+      policyType?: string;
+    };
   };
 
   const tags = Array.isArray(parsed.tags)
@@ -219,12 +236,15 @@ export async function summarizeIntelArticle(
     : [];
 
   const mergedMeta: IntelArticleMeta | undefined =
-    item.meta || parsed.datasetMeta
+    item.meta || parsed.datasetMeta || parsed.policyMeta
       ? {
           ...item.meta,
           ...(parsed.datasetMeta?.modality ? { modality: parsed.datasetMeta.modality.trim() } : {}),
           ...(parsed.datasetMeta?.task ? { task: parsed.datasetMeta.task.trim() } : {}),
           ...(parsed.datasetMeta?.format ? { format: parsed.datasetMeta.format.trim() } : {}),
+          ...(parsed.policyMeta?.country ? { country: parsed.policyMeta.country.trim() } : {}),
+          ...(parsed.policyMeta?.agency ? { agency: parsed.policyMeta.agency.trim() } : {}),
+          ...(parsed.policyMeta?.policyType ? { policyType: parsed.policyMeta.policyType.trim() } : {}),
         }
       : undefined;
 

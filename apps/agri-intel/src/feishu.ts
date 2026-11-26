@@ -10,6 +10,8 @@ function categoryLabel(cat: IntelCategory): string {
       return "前沿论文";
     case "dataset_release":
       return "开源数据";
+    case "policy_regulation":
+      return "农科政策";
     default:
       return "行业资讯";
   }
@@ -57,28 +59,41 @@ export async function sendIntelCardToFeishu(
       ? `🌾 全球农业 AI 产业早报 · ${bjtDateStr}`
       : edition === "academic"
         ? `🎓 全球农业 AI 学术晚报 · ${bjtDateStr}`
-        : `📦 全球农业 AI 开源数据集 · ${bjtDateStr}`;
+        : edition === "dataset"
+          ? `📦 全球农业 AI 开源数据集 · ${bjtDateStr}`
+          : `🏛️ 全球高科技农业政策 · ${bjtDateStr}`;
 
   const intro =
     edition === "industry"
       ? `今日精选 **${items.length}** 条全球农业科技与产业动态：`
       : edition === "academic"
         ? `今晚精选 **${items.length}** 篇全球农业 AI 科研论文与技术进展：`
-        : `今日新收录 **${items.length}** 个全球农业与水产 AI 公开数据集：`;
+        : edition === "dataset"
+          ? `今日新收录 **${items.length}** 个全球农业与水产 AI 公开数据集：`
+          : `今日精选 **${items.length}** 项全球智慧农业与水产科技政策：`;
 
   const headerTemplate =
-    edition === "industry" ? "blue" : edition === "academic" ? "indigo" : "purple";
+    edition === "industry"
+      ? "blue"
+      : edition === "academic"
+        ? "indigo"
+        : edition === "dataset"
+          ? "purple"
+          : "orange";
 
   const elements: Array<Record<string, unknown>> = [
     {
       tag: "markdown",
-      content: `${intro}（完整归档见 [news.guoshu.dev](https://news.guoshu.dev)）`,
+      content: `${intro}（完整归档见 [intel.guoshu.dev](https://intel.guoshu.dev)）`,
     },
   ];
 
   items.forEach((item, idx) => {
     elements.push({ tag: "hr" });
     const metaBadges = [
+      item.meta?.country,
+      item.meta?.agency,
+      item.meta?.policyType,
       item.meta?.platform,
       item.meta?.modality,
       item.meta?.task,

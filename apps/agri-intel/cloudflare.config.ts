@@ -9,6 +9,7 @@ export default defineConfig({
 			notFoundHandling: "single-page-application",
 		},
 		domains: [
+			"intel.guoshu.dev",
 			"news.guoshu.dev",
 		],
 		triggers: [

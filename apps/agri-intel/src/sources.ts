@@ -26,6 +26,12 @@ const INDUSTRY_RSS_SOURCES: RssSourceConfig[] = [
   { name: "FutureFarming", url: "https://www.futurefarming.com/feed/" },
 ];
 
+// 国际农业政策与标准官方 RSS 源
+const POLICY_RSS_SOURCES: RssSourceConfig[] = [
+  { name: "USDA", url: "https://www.usda.gov/rss/latest-releases.xml" },
+  { name: "FAO", url: "https://www.fao.org/feeds/fao-newsroom-rss/en" },
+];
+
 const ARXIV_QUERY =
   'all:(aquaponics OR hydroponics OR aquaculture OR greenhouse OR "precision agriculture" OR "smart agriculture" OR "plant phenotyping" OR "fish detection") AND ("artificial intelligence" OR "deep learning" OR "computer vision" OR YOLO OR "large language model" OR "digital twin" OR "neural network")';
 
@@ -110,7 +116,7 @@ async function fetchRssOrAtom(
   try {
     const res = await fetch(source.url, {
       headers: {
-        "User-Agent": "GuoshuAgriIntelBot/1.0 (+https://news.guoshu.dev)",
+        "User-Agent": "GuoshuAgriIntelBot/1.0 (+https://intel.guoshu.dev)",
         Accept: "application/rss+xml, application/atom+xml, application/xml, text/xml",
       },
     });
@@ -190,7 +196,7 @@ async function fetchOpenAlexPapers(): Promise<SourceBatchResult> {
     });
     const res = await fetch(`https://api.openalex.org/works?${qs.toString()}`, {
       headers: {
-        "User-Agent": "GuoshuAgriIntelBot/1.0 (+https://news.guoshu.dev)",
+        "User-Agent": "GuoshuAgriIntelBot/1.0 (+https://intel.guoshu.dev)",
         Accept: "application/json",
       },
     });
@@ -266,7 +272,7 @@ async function fetchHuggingFaceDatasets(): Promise<SourceBatchResult> {
         });
         const res = await fetch(`https://huggingface.co/api/datasets?${qs.toString()}`, {
           headers: {
-            "User-Agent": "GuoshuAgriIntelBot/1.0 (+https://news.guoshu.dev)",
+            "User-Agent": "GuoshuAgriIntelBot/1.0 (+https://intel.guoshu.dev)",
             Accept: "application/json",
           },
         });
@@ -353,7 +359,7 @@ async function fetchZenodoDatasets(): Promise<SourceBatchResult> {
     });
     const res = await fetch(`https://zenodo.org/api/records?${qs.toString()}`, {
       headers: {
-        "User-Agent": "GuoshuAgriIntelBot/1.0 (+https://news.guoshu.dev)",
+        "User-Agent": "GuoshuAgriIntelBot/1.0 (+https://intel.guoshu.dev)",
         Accept: "application/json",
       },
     });
@@ -416,8 +422,10 @@ async function fetchZenodoDatasets(): Promise<SourceBatchResult> {
 async function searchViaGeminiGrounding(
   env: Env,
   edition: IntelEdition,
+  customPrompt?: string,
+  customLabel?: string,
 ): Promise<SourceBatchResult> {
-  const sourceLabel = `GeminiSearch(${edition})`;
+  const sourceLabel = customLabel ?? `GeminiSearch(${edition})`;
   const apiKey = env.GOOGLE_AI_STUDIO_API_KEY?.trim();
   if (!apiKey) {
     return { items: [], report: { source: sourceLabel, fetched: 0, error: "missing_api_key" } };
@@ -429,11 +437,14 @@ async function searchViaGeminiGrounding(
     const today = new Date().toISOString().slice(0, 10);
 
     const prompt =
-      edition === "industry"
+      customPrompt ??
+      (edition === "industry"
         ? `Today is ${today}. Use Google Search to find 5 recent (past 48 hours) global agriculture AI, smart greenhouse, aquaponics/aquaculture automation, or agri-robotics industry news articles. Return ONLY a JSON array of objects with fields: title, url, source, published_date (ISO or YYYY-MM-DD), summary.`
         : edition === "academic"
           ? `Today is ${today}. Use Google Search to find 5 recent (past 14 days) academic papers or technical breakthroughs in agricultural AI, plant phenotyping computer vision, fish biomass estimation, aquaculture AI, or smart greenhouse MPC/LLM control. Return ONLY a JSON array of objects with fields: title, url, source, published_date (ISO or YYYY-MM-DD), summary.`
-          : `Today is ${today}. Use Google Search (especially site:kaggle.com/datasets OR site:universe.roboflow.com OR site:github.com OR site:zenodo.org) to find 5 recent open-source datasets for agriculture AI, plant disease/weed/crop vision, fish detection/aquaculture, or greenhouse sensor time-series. Return ONLY a JSON array of objects with fields: title, url, source, published_date (ISO or YYYY-MM-DD), summary, platform.`;
+          : edition === "dataset"
+            ? `Today is ${today}. Use Google Search (especially site:kaggle.com/datasets OR site:universe.roboflow.com OR site:github.com OR site:zenodo.org) to find 5 open-source datasets for agriculture AI, plant disease/weed/crop vision, fish detection/aquaculture, or greenhouse sensor time-series. Return ONLY a JSON array of objects with fields: title, url, source, published_date (ISO or YYYY-MM-DD), summary, platform.`
+            : `Today is ${today}. Use Google Search to find 5 recent (past 30 days) global government policies, subsidies, grants, or AI/automation regulations for smart agriculture, controlled-environment agriculture, aquaculture modernization, or agri-robotics (e.g. USDA NIFA, EU CAP/AI Act, Singapore SFA 30by30, Japan MAFF, Netherlands greenhouse policy). Return ONLY a JSON array of objects with fields: title, url, source, published_date (ISO or YYYY-MM-DD), summary, country, agency.`);
 
     const response = await ai.models.generateContent({
       model: "gemini-3.5-flash-lite",
@@ -474,6 +485,8 @@ async function searchViaGeminiGrounding(
       published_date?: string;
       summary?: string;
       platform?: string;
+      country?: string;
+      agency?: string;
     }>;
     if (!Array.isArray(parsed)) {
       return {
@@ -498,7 +511,12 @@ async function searchViaGeminiGrounding(
         excerptRaw: String(row.summary ?? "").trim().slice(0, 1000),
         url,
         publishedAtUtc: normalizeIsoUtc(row.published_date),
-        meta: edition === "dataset" ? { platform: row.platform || sourceName } : undefined,
+        meta:
+          edition === "dataset"
+            ? { platform: row.platform || sourceName }
+            : edition === "policy"
+              ? { country: row.country, agency: row.agency || sourceName }
+              : undefined,
       });
     });
 
@@ -526,6 +544,7 @@ export async function collectFreshArticles(
   freshItems: Array<RawIntelItem & { urlHash: string }>;
   sourceReports: SourceFetchReport[];
 }> {
+  const today = new Date().toISOString().slice(0, 10);
   const batchResults: SourceBatchResult[] =
     edition === "industry"
       ? await Promise.all([
@@ -538,18 +557,34 @@ export async function collectFreshArticles(
             fetchOpenAlexPapers(),
             searchViaGeminiGrounding(env, "academic"),
           ])
-        : await Promise.all([
-            fetchHuggingFaceDatasets(),
-            fetchZenodoDatasets(),
-            searchViaGeminiGrounding(env, "dataset"),
-          ]);
+        : edition === "dataset"
+          ? await Promise.all([
+              fetchHuggingFaceDatasets(),
+              fetchZenodoDatasets(),
+              searchViaGeminiGrounding(env, "dataset"),
+            ])
+          : await Promise.all([
+              ...POLICY_RSS_SOURCES.map((s) => fetchRssOrAtom(s, "policy")),
+              searchViaGeminiGrounding(
+                env,
+                "policy",
+                `今天是 ${today}。请使用 Google Search 检索最近 30 天中国农业农村部、发改委或地方农业农村厅发布的关于智慧农业、设施农业现代化、工厂化水产养殖、农业人工智能或现代农业补贴的最新政策文件或解读（优先 site:moa.gov.cn OR site:gov.cn）。仅返回 JSON 数组，字段：title, url, source, published_date, summary, country, agency。`,
+                "GeminiSearch(policy-zh)",
+              ),
+              searchViaGeminiGrounding(env, "policy", undefined, "GeminiSearch(policy-global)"),
+            ]);
 
   const sourceReports = batchResults.map((b) => b.report);
   const flat = batchResults.flatMap((b) => b.items);
   const baseHours = Number(env.LOOKBACK_HOURS) || 48;
-  // 学术论文放宽至 14 天；开源数据集作为长期资产库不做时间截断，全量依赖 D1 url_hash 永久去重
+  // 学术论文 14 天；农科政策 30 天；开源数据集不做时间截断
   const skipCutoff = edition === "dataset";
-  const lookbackHours = edition === "academic" ? Math.max(baseHours, 336) : baseHours;
+  const lookbackHours =
+    edition === "policy"
+      ? Math.max(baseHours, 720)
+      : edition === "academic"
+        ? Math.max(baseHours, 336)
+        : baseHours;
   const cutoffMs = Date.now() - lookbackHours * 3600 * 1000;
 
   const seenInBatch = new Map<string, RawIntelItem & { urlHash: string }>();
