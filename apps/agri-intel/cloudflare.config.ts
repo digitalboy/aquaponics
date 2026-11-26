@@ -10,7 +10,6 @@ export default defineConfig({
 		},
 		domains: [
 			"intel.guoshu.dev",
-			"news.guoshu.dev",
 		],
 		triggers: [
 			triggers.scheduled({
